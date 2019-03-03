@@ -1,0 +1,31 @@
+{
+  "name": "reflector",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel src/index.html",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/nanoid": "^1.2.1",
+    "@types/react": "^16.8.6",
+    "@types/react-dom": "^16.8.2",
+    "parcel-bundler": "^1.11.0",
+    "typescript": "^3.3.3333"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.2.5",
+    "nanoid": "^2.0.1",
+    "react": "^16.8.3",
+    "react-dom": "^16.8.3",
+    "redux": "^4.0.1",
+    "redux-devtools-extension": "^2.13.8",
+    "redux-react-hook": "^3.2.0",
+    "redux-saga": "^1.0.2",
+    "rot-js": "^2.0.3",
+    "typesafe-actions": "^3.2.1"
+  }
+}
