@@ -3,9 +3,11 @@ import * as selectors from "./selectors";
 import * as actions from "./actions";
 import { getType } from "typesafe-actions";
 import { PLAYER_ID } from "../constants";
+import { getPosKey } from "./utils";
 
 const initialState: GameState = {
-  entities: {}
+  entities: {},
+  entitiesByPosition: {}
 };
 
 export default function reducer(
@@ -14,85 +16,51 @@ export default function reducer(
 ): GameState {
   switch (action.type) {
     case getType(actions.addEntity): {
+      const { entity } = action.payload;
+      const prev = selectors.entity(state, action.payload.entity.id);
+      let { entitiesByPosition } = state;
+      if (prev && prev.position) {
+        const key = getPosKey(prev.position);
+        entitiesByPosition = {
+          ...entitiesByPosition,
+          [key]: entitiesByPosition[key].filter(id => id !== prev.id)
+        };
+      }
+      if (entity.position) {
+        const key = getPosKey(entity.position);
+        entitiesByPosition = {
+          ...entitiesByPosition,
+          [key]: [...(entitiesByPosition[key] || []), entity.id]
+        };
+      }
       return {
         ...state,
+        entitiesByPosition,
         entities: {
           ...state.entities,
-          [action.payload.entity.id]: action.payload.entity
+          [entity.id]: entity
         }
       };
     }
 
     case getType(actions.removeEntity): {
-      return {
-        ...state,
-        entities: selectors
-          .entityList(state)
-          .filter(entity => entity.id !== action.payload.entityId)
-          .reduce((acc, cur) => ({ ...acc, [cur.id]: cur }), {})
-      };
-    }
-
-    case getType(actions.move): {
-      const entity = selectors.entity(state, action.payload.entityId);
-      const { position, actor } = entity;
-      if (actor && !actor.ready) {
-        console.warn(
-          `Unready entity ${action.payload.entityId} tried to act ${
-            action.type
-          }`
-        );
-        return state;
-      }
-      if (!position) {
-        console.warn(
-          `Entity with no position ${action.payload.entityId} tried to act ${
-            action.type
-          }`
-        );
-        return state;
-      }
-      const newPosition = {
-        x: position.x + action.payload.dx,
-        y: position.y + action.payload.dy
-      };
-      const entitiesAtNewPosition = selectors.entitiesAtPosition(
-        state,
-        newPosition
-      );
-      if (entitiesAtNewPosition.some(entity => !!entity.blocking)) {
-        return state;
-      }
-      return {
-        ...state,
-        entities: {
-          ...state.entities,
-          [action.payload.entityId]: {
-            ...entity,
-            position: newPosition,
-            actor: { ready: false }
-          }
-        }
-      };
-    }
-
-    case getType(actions.ready): {
-      const { entityId } = action.payload;
-      const entity = selectors.entity(state, entityId);
-      const { actor } = entity;
-      if (actor) {
-        return {
-          ...state,
-          entities: {
-            ...state.entities,
-            [entityId]: {
-              ...entity,
-              actor: { ready: true }
-            }
-          }
+      const prev = selectors.entity(state, action.payload.entityId);
+      let { entitiesByPosition } = state;
+      if (prev.position) {
+        const key = getPosKey(prev.position);
+        entitiesByPosition = {
+          ...entitiesByPosition,
+          [key]: entitiesByPosition[key].filter(id => id !== prev.id)
         };
       }
-      return state;
+      return {
+        ...state,
+        entitiesByPosition,
+        entities: selectors
+          .entityList(state)
+          .filter(entity => entity.id !== prev.id)
+          .reduce((acc, cur) => ({ ...acc, [cur.id]: cur }), {})
+      };
     }
 
     case getType(actions.activateWeapon): {
@@ -116,19 +84,15 @@ export default function reducer(
       };
     }
 
-    case getType(actions.fireWeapon): {
-      const player = selectors.entity(state, PLAYER_ID);
-      return {
-        ...state,
-        entities: {
-          ...state.entities,
-          [PLAYER_ID]: {
-            ...player,
-            actor: { ready: false }
-          }
-        }
-      };
-    }
+    // case getType(actions.playerTookTurn): {
+    //   for (let entity of Object.values(state.entities)) {
+    //     if (entity.position) {
+    //       const key = getPosKey(entity.position);
+    //       console.assert(state.entitiesByPosition[key].includes(entity.id));
+    //     }
+    //   }
+    //   return state;
+    // }
 
     default: {
       return state;

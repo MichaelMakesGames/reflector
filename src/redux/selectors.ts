@@ -1,4 +1,6 @@
-import { GameState, Position } from "../types";
+import { GameState, Position, Entity } from "../types";
+import { PLAYER_ID } from "../constants";
+import { getPosKey } from "./utils";
 
 export function gameState(state: GameState) {
   return state;
@@ -12,13 +14,17 @@ export function entityList(state: GameState) {
   return Object.values(state.entities);
 }
 
+export function entity(state: GameState, entityId: string) {
+  return state.entities[entityId];
+}
+
+export function player(state: GameState) {
+  return state.entities[PLAYER_ID] as Entity | null;
+}
+
 export function entitiesAtPosition(state: GameState, position: Position) {
-  return Object.values(entities(state)).filter(
-    entity =>
-      entity.position &&
-      entity.position.x === position.x &&
-      entity.position.y === position.y
-  );
+  const key = getPosKey(position);
+  return (state.entitiesByPosition[key] || []).map(id => state.entities[id]);
 }
 
 export function weapons(state: GameState) {
@@ -50,6 +56,9 @@ export function activeWeapon(state: GameState) {
 export function targetingLasers(state: GameState) {
   return entityList(state).filter(entity => entity.targeting);
 }
-export function entity(state: GameState, entityId: string) {
-  return state.entities[entityId];
+
+export function throwingTarget(state: GameState) {
+  const entities = entityList(state).filter(entity => entity.throwing);
+  if (entities.length) return entities[0];
+  return null;
 }

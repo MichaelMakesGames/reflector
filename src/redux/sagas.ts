@@ -4,85 +4,29 @@ import nanoid from "nanoid";
 
 import * as actions from "./actions";
 import * as selectors from "./selectors";
-import { PlayerAction, playerActions, Entity, Position } from "../types";
-import { PLAYER_ID, WHITE, MAP_WIDTH, MAP_HEIGHT } from "../constants";
-import {
-  makeWall,
-  makeTargetingLaser,
-  makeReflector,
-  reflect,
-  makeSplitter
-} from "./utils";
+import { Position, Action } from "../types";
+import { PLAYER_ID, WHITE } from "../constants";
+import { makeTargetingLaser, reflect, getDistance, isPosEqual } from "./utils";
+import { getAIAction } from "./ai";
+import { generateMap } from "./mapgen";
 
-export function* init(action: ReturnType<typeof actions.init>) {
-  console.log("init");
+function* init() {
+  const entities = generateMap();
+  for (let entity of entities) {
+    yield put(
+      actions.addEntity({
+        entity
+      })
+    );
+  }
   yield put(
     actions.addEntity({
       entity: {
         id: PLAYER_ID,
         position: { x: 1, y: 2 },
         glyph: { glyph: "@", color: WHITE },
-        actor: { ready: true },
-        blocking: {}
-      }
-    })
-  );
-  for (let x = 0; x < MAP_WIDTH; x++) {
-    for (let y = 0; y < MAP_HEIGHT; y++) {
-      if (x === 0 || y === 0 || x === MAP_WIDTH - 1 || y === MAP_HEIGHT - 1) {
-        yield put(
-          actions.addEntity({
-            entity: makeWall(x, y)
-          })
-        );
-      }
-    }
-  }
-  yield put(
-    actions.addEntity({
-      entity: makeWall(3, 1, true)
-    })
-  );
-  yield put(
-    actions.addEntity({
-      entity: makeWall(3, 2, true)
-    })
-  );
-  yield put(
-    actions.addEntity({
-      entity: makeWall(3, 3, true)
-    })
-  );
-  yield put(
-    actions.addEntity({
-      entity: makeWall(5, 2, true)
-    })
-  );
-  yield put(
-    actions.addEntity({
-      entity: makeReflector(1, 5, "\\")
-    })
-  );
-  yield put(
-    actions.addEntity({
-      entity: makeSplitter(7, 5, "vertical")
-    })
-  );
-  yield put(
-    actions.addEntity({
-      entity: makeSplitter(5, 5, "horizontal")
-    })
-  );
-  yield put(
-    actions.addEntity({
-      entity: {
-        id: nanoid(),
-        position: { x: 7, y: 2 },
-        glyph: { glyph: "r", color: WHITE },
-        actor: { ready: true },
         blocking: {},
-        ai: {},
-        destructible: {}
+        hitPoints: { current: 3, max: 3 }
       }
     })
   );
@@ -102,46 +46,22 @@ export function* init(action: ReturnType<typeof actions.init>) {
   );
 }
 
-export function* processTurns(action: PlayerAction) {
-  console.log("processTurns");
-  if (action.payload.entityId !== PLAYER_ID) {
-    return;
-  }
-  const player: Entity = yield select(
-    selectors.entity,
-    action.payload.entityId
+function* processTurns() {
+  const gameState: ReturnType<typeof selectors.gameState> = yield select(
+    selectors.gameState
   );
-  if (!player.actor) {
-    console.warn("player missing actor component");
+  const entities = selectors.entityList(gameState);
+  for (let entity of entities.filter(entity => entity.ai)) {
+    const action: Action | null = getAIAction(entity, gameState);
+    if (action) {
+      yield put(action);
+    }
   }
-  if (player.actor && !player.actor.ready) {
-    console.log("player acted");
-    const entities: ReturnType<typeof selectors.entities> = yield select(
-      selectors.entities
-    );
-    yield all(
-      Object.values(entities)
-        .filter(entity => entity.actor)
-        .map(entity => put(actions.ready({ entityId: entity.id })))
-    );
-    yield all(
-      Object.values(entities)
-        .filter(entity => entity.actor && entity.ai)
-        .map(entity =>
-          put(
-            actions.move({
-              entityId: entity.id,
-              dx: Math.floor(Math.random() * 3) - 1,
-              dy: Math.floor(Math.random() * 3) - 1
-            })
-          )
-        )
-    );
-    yield* processEnvironment();
-  }
+  yield* processCooldowns();
+  yield* processPickups();
 }
 
-export function* processEnvironment() {
+function* processCooldowns() {
   const weapons: ReturnType<typeof selectors.weapons> = yield select(
     selectors.weapons
   );
@@ -153,7 +73,7 @@ export function* processEnvironment() {
             ...entity,
             weapon: {
               ...entity.weapon,
-              readyIn: entity.weapon.readyIn && entity.weapon.readyIn - 1
+              readyIn: entity.weapon.readyIn > 0 ? entity.weapon.readyIn - 1 : 0
             }
           }
         })
@@ -162,12 +82,64 @@ export function* processEnvironment() {
   }
 }
 
-export function* targetWeapon(
+function* processPickups() {
+  const gameState: ReturnType<typeof selectors.gameState> = yield select(
+    selectors.gameState
+  );
+  const player = selectors.player(gameState);
+  for (let entity of selectors.entityList(gameState)) {
+    if (
+      player &&
+      player.position &&
+      entity.pickup &&
+      entity.position &&
+      isPosEqual(player.position, entity.position)
+    ) {
+      if (entity.pickup.effect === "NONE") {
+        yield put(actions.removeEntity({ entityId: entity.id }));
+      }
+      if (entity.pickup.effect === "HEAL") {
+        yield put(actions.removeEntity({ entityId: entity.id }));
+        if (
+          player.hitPoints &&
+          player.hitPoints.current < player.hitPoints.max
+        ) {
+          yield put(
+            actions.addEntity({
+              entity: {
+                ...player,
+                hitPoints: {
+                  ...player.hitPoints,
+                  current: player.hitPoints.current + 1
+                }
+              }
+            })
+          );
+        }
+      }
+      if (entity.pickup.effect === "RECHARGE") {
+        yield put(actions.removeEntity({ entityId: entity.id }));
+        for (let weapon of selectors.weapons(gameState)) {
+          if (weapon.weapon && weapon.weapon.readyIn) {
+            yield put(
+              actions.addEntity({
+                entity: { ...weapon, weapon: { ...weapon.weapon, readyIn: 0 } }
+              })
+            );
+          }
+        }
+      } // TODO
+      if (entity.pickup.effect === "EQUIP") {
+      } // TODO
+    }
+  }
+}
+
+function* targetWeapon(
   action: ReturnType<
     typeof actions.targetWeapon | typeof actions.activateWeapon
   >
 ) {
-  console.log("targetWeapon");
   const targetingLasers: ReturnType<
     typeof selectors.targetingLasers
   > = yield select(selectors.targetingLasers);
@@ -268,8 +240,7 @@ export function* targetWeapon(
   }
 }
 
-export function* fireWeapon() {
-  console.log("fireWeapon");
+function* fireWeapon() {
   const activeWeapon: ReturnType<typeof selectors.activeWeapon> = yield select(
     selectors.activeWeapon
   );
@@ -306,15 +277,151 @@ export function* fireWeapon() {
       }
     })
   );
-  yield put(actions.fireWeaponSuccess({ entityId: PLAYER_ID }));
+  yield put(actions.playerTookTurn());
+}
+
+function* activateThrow(action: ReturnType<typeof actions.activateThrow>) {
+  const { entity } = action.payload;
+  entity.throwing = { range: 5 };
+  yield put(actions.addEntity({ entity }));
+}
+
+function* rotateThrow() {
+  let entity: ReturnType<typeof selectors.throwingTarget> = yield select(
+    selectors.throwingTarget
+  );
+  if (!entity) return;
+  if (entity.reflector && entity.glyph) {
+    entity = {
+      ...entity,
+      reflector: { type: entity.reflector.type === "\\" ? "/" : "\\" },
+      glyph: {
+        ...entity.glyph,
+        glyph: entity.glyph.glyph === "\\" ? "/" : "\\"
+      }
+    };
+  }
+  if (entity.splitter && entity.glyph) {
+    entity = {
+      ...entity,
+      splitter: {
+        type: entity.splitter.type === "horizontal" ? "vertical" : "horizontal"
+      },
+      glyph: { ...entity.glyph, glyph: entity.glyph.glyph === "⬍" ? "⬌" : "⬍" }
+    };
+  }
+  yield put(actions.addEntity({ entity }));
+}
+
+function* cancelThrow() {
+  const entity: ReturnType<typeof selectors.throwingTarget> = yield select(
+    selectors.throwingTarget
+  );
+  if (!entity) return;
+  yield put(actions.removeEntity({ entityId: entity.id }));
+}
+
+function* executeThrow() {
+  const gameState: ReturnType<typeof selectors.gameState> = yield select(
+    selectors.gameState
+  );
+  const entity = selectors.throwingTarget(gameState);
+  if (!entity || !entity.position || !entity.throwing) return;
+  const player = selectors.player(gameState);
+  if (!player || !player.position) return;
+  const { position } = entity;
+  const distance = getDistance(position, player.position);
+  if (distance > entity.throwing.range) return;
+  const entitiesAtPosition = selectors.entitiesAtPosition(gameState, position);
+  if (entitiesAtPosition.some(e => e.id !== entity.id && !!e.blocking)) return;
+  yield put(
+    actions.addEntity({
+      entity: {
+        ...entity,
+        throwing: undefined
+      }
+    })
+  );
+  yield put(actions.playerTookTurn());
+}
+
+function* move(action: ReturnType<typeof actions.move>) {
+  const entity: ReturnType<typeof selectors.entity> = yield select(
+    selectors.entity,
+    action.payload.entityId
+  );
+  const { position } = entity;
+  if (!position) {
+    console.warn(
+      `Entity with no position ${action.payload.entityId} tried to act ${
+        action.type
+      }`
+    );
+    return;
+  }
+  const newPosition = {
+    x: position.x + action.payload.dx,
+    y: position.y + action.payload.dy
+  };
+  const entitiesAtNewPosition: ReturnType<
+    typeof selectors.entitiesAtPosition
+  > = yield select(selectors.entitiesAtPosition, newPosition);
+  if (
+    entity.blocking &&
+    entitiesAtNewPosition.some(
+      other => !!(other.blocking && !(entity.id === PLAYER_ID && other.pickup))
+    )
+  ) {
+    return;
+  }
+  yield put(
+    actions.addEntity({
+      entity: {
+        ...entity,
+        position: newPosition
+      }
+    })
+  );
+  if (entity.id === PLAYER_ID) {
+    yield put(actions.playerTookTurn());
+  }
+}
+
+export function* attack(action: ReturnType<typeof actions.attack>) {
+  const gameState: ReturnType<typeof selectors.gameState> = yield select(
+    selectors.gameState
+  );
+  const target = selectors.entity(gameState, action.payload.target);
+  if (target.hitPoints) {
+    yield put(
+      actions.addEntity({
+        entity: {
+          ...target,
+          hitPoints: {
+            ...target.hitPoints,
+            current: target.hitPoints.current - 1
+          }
+        }
+      })
+    );
+  }
+  if (target.destructible) {
+    yield put(actions.removeEntity({ entityId: target.id }));
+  }
 }
 
 export function* rootSaga() {
   yield takeEvery(getType(actions.fireWeapon), fireWeapon);
-  yield takeEvery(playerActions, processTurns);
+  yield takeEvery(getType(actions.playerTookTurn), processTurns);
   yield takeEvery(getType(actions.init), init);
   yield takeEvery(
     [getType(actions.activateWeapon), getType(actions.targetWeapon)],
     targetWeapon
   );
+  yield takeEvery(getType(actions.activateThrow), activateThrow);
+  yield takeEvery(getType(actions.rotateThrow), rotateThrow);
+  yield takeEvery(getType(actions.cancelThrow), cancelThrow);
+  yield takeEvery(getType(actions.executeThrow), executeThrow);
+  yield takeEvery(getType(actions.move), move);
+  yield takeEvery(getType(actions.attack), attack);
 }

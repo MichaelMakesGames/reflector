@@ -1,7 +1,18 @@
-import { GameState, Position, Entity } from "../types";
-import * as selectors from "./selectors";
-import { WHITE, RED, RIGHT, DOWN, LEFT, UP } from "../constants";
+import { GameState, Position, Entity, AIType } from "../types";
+import { WHITE, RED, RIGHT, DOWN, LEFT, UP, GREEN } from "../constants";
 import nanoid from "nanoid";
+
+export function getPosKey(pos: Position) {
+  return `${pos.x},${pos.y}`;
+}
+
+export function isPosEqual(pos1: Position, pos2: Position) {
+  return pos1.x === pos2.x && pos1.y === pos2.y;
+}
+
+export function getDistance(from: Position, to: Position) {
+  return Math.max(Math.abs(from.x - to.x), Math.abs(from.y - to.y));
+}
 
 export function makeWall(x: number, y: number, destructible = false): Entity {
   const base: Entity = {
@@ -12,6 +23,17 @@ export function makeWall(x: number, y: number, destructible = false): Entity {
   };
   if (destructible) return { ...base, destructible: {} };
   return base;
+}
+
+export function makeEnemy(x: number, y: number, type: AIType): Entity {
+  return {
+    id: nanoid(),
+    position: { x, y },
+    glyph: { glyph: type[0], color: WHITE },
+    blocking: {},
+    ai: { type },
+    destructible: {}
+  };
 }
 
 function getLaserChar(power: number, direction: { dx: number; dy: number }) {
@@ -37,6 +59,23 @@ export function makeTargetingLaser(
   };
 }
 
+export function makeFirstAidKit(x: number, y: number): Entity {
+  return {
+    id: nanoid(),
+    position: { x, y },
+    glyph: { glyph: "✚", color: RED },
+    pickup: { effect: "HEAL" }
+  };
+}
+
+export function makeRechargeKit(x: number, y: number): Entity {
+  return {
+    id: nanoid(),
+    position: { x, y },
+    glyph: { glyph: "⇮", color: GREEN },
+    pickup: { effect: "RECHARGE" }
+  };
+}
 export function makeReflector(x: number, y: number, type: "\\" | "/"): Entity {
   return {
     id: nanoid(),
@@ -44,7 +83,8 @@ export function makeReflector(x: number, y: number, type: "\\" | "/"): Entity {
     glyph: { glyph: type, color: WHITE },
     blocking: {},
     reflector: { type },
-    destructible: {}
+    destructible: {},
+    pickup: { effect: "NONE" }
   };
 }
 
@@ -59,7 +99,8 @@ export function makeSplitter(
     glyph: { glyph: type === "horizontal" ? "⬌" : "⬍", color: WHITE },
     blocking: {},
     destructible: {},
-    splitter: { type }
+    splitter: { type },
+    pickup: { effect: "NONE" }
   };
 }
 
