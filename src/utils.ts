@@ -1,4 +1,4 @@
-import { GameState, Position, Entity, AIType } from "../types";
+import { GameState, Position, Entity, AIType } from "./types";
 import {
   WHITE,
   RED,
@@ -9,7 +9,7 @@ import {
   GREEN,
   BLUE,
   GRAY
-} from "../constants";
+} from "./constants";
 import nanoid from "nanoid";
 import * as ROT from "rot-js";
 

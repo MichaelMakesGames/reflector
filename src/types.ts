@@ -1,5 +1,5 @@
 import { ActionType, getType } from "typesafe-actions";
-import * as actions from "./redux/actions";
+import * as actions from "./actions";
 import { RED, WHITE, GREEN, BLUE, GRAY } from "./constants";
 
 export type Action = ActionType<typeof actions>;

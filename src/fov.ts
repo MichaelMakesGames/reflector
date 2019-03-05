@@ -1,4 +1,4 @@
-import { GameState, Position } from "../types";
+import { GameState, Position } from "./types";
 import * as selectors from "./selectors";
 import * as ROT from "rot-js";
 import { isPosEqual } from "./utils";

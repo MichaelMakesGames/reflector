@@ -1,6 +1,6 @@
 import * as ROT from "rot-js";
-import { MAZE_SIZE, MAP_HEIGHT, MAP_WIDTH, ROOM_SIZE } from "../constants";
-import { Entity, Level, AIType } from "../types";
+import { MAZE_SIZE, MAP_HEIGHT, MAP_WIDTH, ROOM_SIZE } from "./constants";
+import { Entity, Level, AIType } from "./types";
 import {
   makeWall,
   makeEnemy,

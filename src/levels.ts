@@ -1,4 +1,4 @@
-import { Level } from "../types";
+import { Level } from "./types";
 import { RNG } from "rot-js";
 
 export function getLevels(): Level[] {

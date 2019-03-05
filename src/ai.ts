@@ -1,4 +1,4 @@
-import { Entity, GameState, Action, Position, Direction } from "../types";
+import { Entity, GameState, Action, Position, Direction } from "./types";
 import * as actions from "./actions";
 import * as selectors from "./selectors";
 import * as ROT from "rot-js";
@@ -14,7 +14,7 @@ import {
   ANGLER_RANGE,
   BOMBER_RANGE,
   BOMBER_COOLDOWN
-} from "../constants";
+} from "./constants";
 
 function isPassable(gameState: GameState, position: Position) {
   return selectors

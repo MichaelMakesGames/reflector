@@ -1,5 +1,5 @@
-import { GameState, Position, Entity } from "../types";
-import { PLAYER_ID } from "../constants";
+import { GameState, Position, Entity } from "./types";
+import { PLAYER_ID } from "./constants";
 import { getPosKey } from "./utils";
 
 export function gameState(state: GameState) {

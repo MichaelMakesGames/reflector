@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import * as actions from "../redux/actions";
-import * as selectors from "../redux/selectors";
+import * as actions from "../actions";
+import * as selectors from "../selectors";
 import { Action, Entity, Position } from "../types";
 import { useDispatch, useMappedState } from "redux-react-hook";
 import { PLAYER_ID, UP, LEFT, DOWN, RIGHT } from "../constants";
 import { action } from "typesafe-actions";
-import { makeReflector, makeSplitter } from "../redux/utils";
+import { makeReflector, makeSplitter } from "../utils";
 
 function getKeyMap(
   activeWeapon: Entity | null,

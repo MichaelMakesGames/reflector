@@ -1,6 +1,6 @@
 import React from "react";
 import { useMappedState } from "redux-react-hook";
-import * as selectors from "../redux/selectors";
+import * as selectors from "../selectors";
 
 export default function() {
   const player = useMappedState(selectors.player);

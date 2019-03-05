@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import * as ROT from "rot-js";
 import { useMappedState } from "redux-react-hook";
 
-import * as selectors from "../redux/selectors";
+import * as selectors from "../selectors";
 import {
   MAP_WIDTH,
   MAP_HEIGHT,

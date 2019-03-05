@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import { StoreContext } from "redux-react-hook";
 import "@babel/polyfill";
 
-import store from "./redux/store";
+import store from "./store";
 import Game from "./components/Game";
 
 const app = (
