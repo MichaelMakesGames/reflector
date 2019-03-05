@@ -10,6 +10,9 @@ export function getLevels(): Level[] {
       depth: 0,
       seed: 0,
       aiWeights: {},
+      numSplitters: 0,
+      numReflectors: 0,
+      numPickups: 0,
       numEnemies: 0
     },
     {
@@ -18,6 +21,9 @@ export function getLevels(): Level[] {
       depth: 1,
       seed: rng.getUniform(),
       numEnemies: 10,
+      numSplitters: 1,
+      numReflectors: 5,
+      numPickups: 3,
       aiWeights: {
         RUSHER: 10
         // ANGLER: 10,
@@ -31,6 +37,9 @@ export function getLevels(): Level[] {
       depth: 2,
       seed: rng.getUniform(),
       numEnemies: 15,
+      numSplitters: 1,
+      numReflectors: 5,
+      numPickups: 3,
       aiWeights: {
         RUSHER: 10,
         ANGLER: 10
@@ -44,6 +53,9 @@ export function getLevels(): Level[] {
       depth: 3,
       seed: rng.getUniform(),
       numEnemies: 20,
+      numSplitters: 1,
+      numReflectors: 5,
+      numPickups: 3,
       aiWeights: {
         RUSHER: 10,
         ANGLER: 10,
@@ -57,6 +69,9 @@ export function getLevels(): Level[] {
       depth: 4,
       seed: rng.getUniform(),
       numEnemies: 20,
+      numSplitters: 1,
+      numReflectors: 5,
+      numPickups: 3,
       aiWeights: {
         RUSHER: 10,
         ANGLER: 10,
@@ -70,6 +85,9 @@ export function getLevels(): Level[] {
       depth: 5,
       seed: rng.getUniform(),
       numEnemies: 20,
+      numSplitters: 1,
+      numReflectors: 5,
+      numPickups: 3,
       aiWeights: {
         RUSHER: 10,
         SMASHER: 10,

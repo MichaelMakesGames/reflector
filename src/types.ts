@@ -79,6 +79,9 @@ export interface Level extends Component {
   current: boolean;
   final: boolean;
   numEnemies: number;
+  numReflectors: number;
+  numSplitters: number;
+  numPickups: number;
   aiWeights: { [type: string]: number };
 }
 
