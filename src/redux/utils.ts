@@ -1,6 +1,17 @@
 import { GameState, Position, Entity, AIType } from "../types";
-import { WHITE, RED, RIGHT, DOWN, LEFT, UP, GREEN } from "../constants";
+import {
+  WHITE,
+  RED,
+  RIGHT,
+  DOWN,
+  LEFT,
+  UP,
+  GREEN,
+  BLUE,
+  GRAY
+} from "../constants";
 import nanoid from "nanoid";
+import * as ROT from "rot-js";
 
 export function getPosKey(pos: Position) {
   return `${pos.x},${pos.y}`;
@@ -14,15 +25,59 @@ export function getDistance(from: Position, to: Position) {
   return Math.max(Math.abs(from.x - to.x), Math.abs(from.y - to.y));
 }
 
+export function getClosestPosition(
+  options: Position[],
+  to: Position
+): Position | null {
+  return (
+    [...options].sort((a, b) => {
+      const aDistance = getDistance(a, to);
+      const bDistance = getDistance(b, to);
+      return aDistance - bDistance;
+    })[0] || null
+  );
+}
+
+export function getAdjacentPositions(pos: Position): Position[] {
+  return [
+    { x: pos.x + 1, y: pos.y },
+    { x: pos.x - 1, y: pos.y },
+    { y: pos.y + 1, x: pos.x },
+    { y: pos.y - 1, x: pos.x },
+    { x: pos.x + 1, y: pos.y + 1 },
+    { x: pos.x - 1, y: pos.y + 1 },
+    { x: pos.x + 1, y: pos.y - 1 },
+    { x: pos.x - 1, y: pos.y - 1 }
+  ];
+}
+
+export function makeFovMarker(x: number, y: number): Entity {
+  return {
+    id: nanoid(),
+    position: { x, y },
+    glyph: { glyph: ".", color: GREEN },
+    fov: {}
+  };
+}
+
 export function makeWall(x: number, y: number, destructible = false): Entity {
   const base: Entity = {
     id: nanoid(),
     position: { x, y },
-    glyph: { glyph: "#", color: WHITE },
+    glyph: { glyph: "#", color: GRAY },
     blocking: {}
   };
   if (destructible) return { ...base, destructible: {} };
   return base;
+}
+
+export function makeStairs(position: Position): Entity {
+  return {
+    id: nanoid(),
+    position,
+    glyph: { glyph: "<", color: WHITE },
+    stairs: {}
+  };
 }
 
 export function makeEnemy(x: number, y: number, type: AIType): Entity {
@@ -32,7 +87,19 @@ export function makeEnemy(x: number, y: number, type: AIType): Entity {
     glyph: { glyph: type[0], color: WHITE },
     blocking: {},
     ai: { type },
-    destructible: {}
+    destructible: {},
+    cooldown: { time: 0 }
+  };
+}
+
+export function makeBomb(x: number, y: number): Entity {
+  return {
+    id: nanoid(),
+    position: { x, y },
+    glyph: { glyph: "b", color: BLUE },
+    blocking: {},
+    destructible: {},
+    bomb: { time: 1 }
   };
 }
 
@@ -84,7 +151,7 @@ export function makeReflector(x: number, y: number, type: "\\" | "/"): Entity {
     blocking: {},
     reflector: { type },
     destructible: {},
-    pickup: { effect: "NONE" }
+    pickup: { effect: "PICKUP" }
   };
 }
 
@@ -100,7 +167,7 @@ export function makeSplitter(
     blocking: {},
     destructible: {},
     splitter: { type },
-    pickup: { effect: "NONE" }
+    pickup: { effect: "PICKUP" }
   };
 }
 

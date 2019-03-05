@@ -103,8 +103,12 @@ export default function Controls() {
     return () => document.removeEventListener("keydown", listener);
   });
 
+  if (!player) return null;
+  const inventory = player.inventory;
+
   return (
     <div>
+      <pre>{JSON.stringify(inventory, undefined, 2)}</pre>
       <ul>
         {weapons.map(entity => (
           <pre key={entity.id}>

@@ -45,6 +45,12 @@ export default function reducer(
 
     case getType(actions.removeEntity): {
       const prev = selectors.entity(state, action.payload.entityId);
+      if (!prev) {
+        console.warn(
+          `tried to remove nonexistant entity ${action.payload.entityId}`
+        );
+        return state;
+      }
       let { entitiesByPosition } = state;
       if (prev.position) {
         const key = getPosKey(prev.position);

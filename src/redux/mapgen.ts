@@ -1,9 +1,18 @@
 import * as ROT from "rot-js";
 import { MAZE_SIZE, MAP_HEIGHT, MAP_WIDTH, ROOM_SIZE } from "../constants";
-import { Entity } from "../types";
-import { makeWall, makeEnemy, makeFirstAidKit, makeRechargeKit } from "./utils";
+import { Entity, Level, AIType } from "../types";
+import {
+  makeWall,
+  makeEnemy,
+  makeFirstAidKit,
+  makeRechargeKit,
+  makeStairs
+} from "./utils";
 
-export function generateMap(): Entity[] {
+export function generateMap(level: Level): Entity[] {
+  const rng = ROT.RNG.clone();
+  rng.setSeed(level.seed);
+
   const result: Entity[] = [];
   const mazeGenerator = new ROT.Map.DividedMaze(MAZE_SIZE, MAZE_SIZE);
   const maze: { [key: string]: number } = {};
@@ -19,7 +28,13 @@ export function generateMap(): Entity[] {
       const key = `${mazeX},${mazeY}`;
       if (maze[key]) {
         row.push(true);
-        result.push(makeWall(x, y));
+        result.push(
+          makeWall(
+            x,
+            y,
+            x !== 0 && y !== 0 && x !== MAP_WIDTH - 1 && y !== MAP_HEIGHT - 1
+          )
+        );
       } else {
         row.push(false);
       }
@@ -28,7 +43,9 @@ export function generateMap(): Entity[] {
         y % (ROOM_SIZE + 1) === (ROOM_SIZE + 1) / 2
       ) {
         if (Math.random() > 0.5) {
-          result.push(makeEnemy(x, y, "RUSHER"));
+          result.push(
+            makeEnemy(x, y, rng.getWeightedValue(level.aiWeights) as AIType)
+          );
         } else if (Math.random() > 0.5) {
           result.push(makeFirstAidKit(x, y));
         } else {
@@ -41,5 +58,13 @@ export function generateMap(): Entity[] {
   console.log(
     rows.map(row => row.map(b => (b ? "#" : " ")).join("")).join("\n")
   );
+
+  if (!level.final) {
+    if (level.depth % 2 === 0) {
+      result.push(makeStairs({ x: 1, y: 1 }));
+    } else {
+      result.push(makeStairs({ x: MAP_WIDTH - 2, y: MAP_HEIGHT - 2 }));
+    }
+  }
   return result;
 }

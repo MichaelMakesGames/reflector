@@ -1,6 +1,9 @@
 export const PLAYER_ID = "PLAYER";
 
-export const THROWING_RANGE = 10;
+export const THROWING_RANGE = 5;
+export const ANGLER_RANGE = 3;
+export const BOMBER_RANGE = 5;
+export const BOMBER_COOLDOWN = 2;
 
 export const ROOMS = 3;
 export const ROOM_SIZE = 5;
@@ -15,6 +18,8 @@ export const FONT_FAMILY = "Roboto";
 export const WHITE = "#EEE";
 export const RED = "#F88";
 export const GREEN = "#8F8";
+export const BLUE = "#88F";
+export const GRAY = "#888";
 
 export const RIGHT = { dx: 1, dy: 0 };
 export const DOWN = { dx: 0, dy: 1 };

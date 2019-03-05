@@ -1,32 +1,40 @@
 import { getType, isActionOf } from "typesafe-actions";
 import { all, put, select, takeEvery } from "redux-saga/effects";
 import nanoid from "nanoid";
+import * as ROT from "rot-js";
 
 import * as actions from "./actions";
 import * as selectors from "./selectors";
-import { Position, Action } from "../types";
-import { PLAYER_ID, WHITE } from "../constants";
-import { makeTargetingLaser, reflect, getDistance, isPosEqual } from "./utils";
-import { getAIAction } from "./ai";
+import { Position, Action, Level } from "../types";
+import { PLAYER_ID, WHITE, THROWING_RANGE } from "../constants";
+import {
+  makeTargetingLaser,
+  reflect,
+  getDistance,
+  isPosEqual,
+  getAdjacentPositions,
+  makeFovMarker
+} from "./utils";
+import { getAIActions } from "./ai";
 import { generateMap } from "./mapgen";
+import { computeFOV } from "./fov";
+import { getLevels } from "./levels";
 
 function* init() {
-  const entities = generateMap();
-  for (let entity of entities) {
-    yield put(
-      actions.addEntity({
-        entity
-      })
-    );
+  const levels = getLevels();
+  for (let level of levels) {
+    yield put(actions.addEntity({ entity: { id: nanoid(), level } }));
   }
+
   yield put(
     actions.addEntity({
       entity: {
         id: PLAYER_ID,
-        position: { x: 1, y: 2 },
+        position: { x: 1, y: 1 },
         glyph: { glyph: "@", color: WHITE },
         blocking: {},
-        hitPoints: { current: 3, max: 3 }
+        hitPoints: { current: 3, max: 3 },
+        inventory: { reflectors: 3, splitters: 1 }
       }
     })
   );
@@ -44,28 +52,132 @@ function* init() {
       }
     })
   );
+
+  yield* makeLevel();
+}
+
+function* makeLevel() {
+  const gameState: ReturnType<typeof selectors.gameState> = yield select(
+    selectors.gameState
+  );
+  const lastLevelEntity = selectors
+    .entityList(gameState)
+    .filter(e => e.level && e.level.current)[0];
+  if (!lastLevelEntity || !lastLevelEntity.level) return;
+  const lastLevel = lastLevelEntity.level;
+  const nextLevelEntity = selectors
+    .entityList(gameState)
+    .filter(e => e.level && e.level.depth === lastLevel.depth + 1)[0];
+  if (!nextLevelEntity || !nextLevelEntity.level) return;
+  const nextLevel = nextLevelEntity.level;
+
+  yield put(
+    actions.addEntity({
+      entity: { ...lastLevelEntity, level: { ...lastLevel, current: false } }
+    })
+  );
+  yield put(
+    actions.addEntity({
+      entity: { ...nextLevelEntity, level: { ...nextLevel, current: true } }
+    })
+  );
+
+  for (let entity of selectors.entityList(gameState)) {
+    if (entity.position && entity.id !== PLAYER_ID) {
+      yield put(actions.removeEntity({ entityId: entity.id }));
+    } else if (entity.id === PLAYER_ID) {
+      // yield put(
+      //   actions.addEntity({ entity: { ...entity, position: { x: 1, y: 1 } } })
+      // );
+    }
+  }
+
+  for (let entity of generateMap(nextLevel)) {
+    yield put(actions.addEntity({ entity }));
+  }
 }
 
 function* processTurns() {
+  yield* processAI();
+  yield* processBombs();
+  yield* processCooldowns();
+  yield* processPickups();
+  yield* processStairs();
+}
+
+function* processAI() {
   const gameState: ReturnType<typeof selectors.gameState> = yield select(
     selectors.gameState
   );
   const entities = selectors.entityList(gameState);
   for (let entity of entities.filter(entity => entity.ai)) {
-    const action: Action | null = getAIAction(entity, gameState);
-    if (action) {
+    const aiActions = getAIActions(entity, gameState);
+    for (let action of aiActions) {
       yield put(action);
     }
   }
-  yield* processCooldowns();
-  yield* processPickups();
+}
+
+function* processStairs() {
+  const gameState: ReturnType<typeof selectors.gameState> = yield select(
+    selectors.gameState
+  );
+  const player = selectors.player(gameState);
+  const stairs = selectors.entityList(gameState).filter(e => e.stairs)[0];
+  if (!player || !stairs || !player.position || !stairs.position) return;
+  if (isPosEqual(player.position, stairs.position)) {
+    yield* makeLevel();
+  }
+}
+
+function* processBombs() {
+  const gameState: ReturnType<typeof selectors.gameState> = yield select(
+    selectors.gameState
+  );
+  for (let entity of selectors.entityList(gameState)) {
+    if (entity.bomb && entity.position) {
+      if (entity.bomb.time <= 0 && entity) {
+        yield put(actions.removeEntity({ entityId: entity.id }));
+        for (let pos of getAdjacentPositions(entity.position)) {
+          for (let e of selectors.entitiesAtPosition(gameState, pos)) {
+            if (e.hitPoints || e.destructible) {
+              yield put(actions.attack({ target: e.id }));
+            }
+          }
+        }
+      } else {
+        yield put(
+          actions.addEntity({
+            entity: {
+              ...entity,
+              bomb: { time: entity.bomb.time - 1 }
+            }
+          })
+        );
+      }
+    }
+  }
 }
 
 function* processCooldowns() {
-  const weapons: ReturnType<typeof selectors.weapons> = yield select(
-    selectors.weapons
+  const gameState: ReturnType<typeof selectors.gameState> = yield select(
+    selectors.gameState
   );
-  for (const entity of weapons) {
+  for (const entity of selectors
+    .entityList(gameState)
+    .filter(e => e.cooldown)) {
+    if (entity.cooldown) {
+      yield put(
+        actions.addEntity({
+          entity: {
+            ...entity,
+            cooldown: { time: entity.cooldown.time && entity.cooldown.time - 1 }
+          }
+        })
+      );
+    }
+  }
+  for (const entity of selectors.weapons(gameState)) {
     if (entity.weapon) {
       yield put(
         actions.addEntity({
@@ -98,6 +210,24 @@ function* processPickups() {
       if (entity.pickup.effect === "NONE") {
         yield put(actions.removeEntity({ entityId: entity.id }));
       }
+      if (entity.pickup.effect === "PICKUP") {
+        yield put(actions.removeEntity({ entityId: entity.id }));
+        if (player.inventory) {
+          yield put(
+            actions.addEntity({
+              entity: {
+                ...player,
+                inventory: {
+                  reflectors:
+                    player.inventory.reflectors + (entity.reflector ? 1 : 0),
+                  splitters:
+                    player.inventory.splitters + (entity.splitter ? 1 : 0)
+                }
+              }
+            })
+          );
+        }
+      }
       if (entity.pickup.effect === "HEAL") {
         yield put(actions.removeEntity({ entityId: entity.id }));
         if (
@@ -128,7 +258,7 @@ function* processPickups() {
             );
           }
         }
-      } // TODO
+      }
       if (entity.pickup.effect === "EQUIP") {
       } // TODO
     }
@@ -281,8 +411,19 @@ function* fireWeapon() {
 }
 
 function* activateThrow(action: ReturnType<typeof actions.activateThrow>) {
+  const gameState: ReturnType<typeof selectors.gameState> = yield select(
+    selectors.gameState
+  );
+  const player = selectors.player(gameState);
+  if (!player || !player.position) return;
+
+  const fovPositions = computeFOV(gameState, player.position, THROWING_RANGE);
+  for (let pos of fovPositions) {
+    yield put(actions.addEntity({ entity: makeFovMarker(pos.x, pos.y) }));
+  }
+
   const { entity } = action.payload;
-  entity.throwing = { range: 5 };
+  entity.throwing = { range: THROWING_RANGE };
   yield put(actions.addEntity({ entity }));
 }
 
@@ -314,9 +455,13 @@ function* rotateThrow() {
 }
 
 function* cancelThrow() {
-  const entity: ReturnType<typeof selectors.throwingTarget> = yield select(
-    selectors.throwingTarget
+  const gameState: ReturnType<typeof selectors.gameState> = yield select(
+    selectors.gameState
   );
+  for (let entity of selectors.entityList(gameState).filter(e => e.fov)) {
+    yield put(actions.removeEntity({ entityId: entity.id }));
+  }
+  const entity = selectors.throwingTarget(gameState);
   if (!entity) return;
   yield put(actions.removeEntity({ entityId: entity.id }));
 }
@@ -325,10 +470,16 @@ function* executeThrow() {
   const gameState: ReturnType<typeof selectors.gameState> = yield select(
     selectors.gameState
   );
+  for (let entity of selectors.entityList(gameState).filter(e => e.fov)) {
+    yield put(actions.removeEntity({ entityId: entity.id }));
+  }
   const entity = selectors.throwingTarget(gameState);
   if (!entity || !entity.position || !entity.throwing) return;
   const player = selectors.player(gameState);
-  if (!player || !player.position) return;
+  if (!player || !player.position || !player.inventory) return;
+  const { inventory } = player;
+  if (entity.reflector && !inventory.reflectors) return;
+  if (entity.splitter && !inventory.splitters) return;
   const { position } = entity;
   const distance = getDistance(position, player.position);
   if (distance > entity.throwing.range) return;
@@ -342,7 +493,21 @@ function* executeThrow() {
       }
     })
   );
-  yield put(actions.playerTookTurn());
+  yield put(
+    actions.addEntity({
+      entity: {
+        ...player,
+        inventory: {
+          splitters: entity.splitter
+            ? inventory.splitters - 1
+            : inventory.splitters,
+          reflectors: entity.reflector
+            ? inventory.reflectors - 1
+            : inventory.reflectors
+        }
+      }
+    })
+  );
 }
 
 function* move(action: ReturnType<typeof actions.move>) {
@@ -352,11 +517,6 @@ function* move(action: ReturnType<typeof actions.move>) {
   );
   const { position } = entity;
   if (!position) {
-    console.warn(
-      `Entity with no position ${action.payload.entityId} tried to act ${
-        action.type
-      }`
-    );
     return;
   }
   const newPosition = {
@@ -368,6 +528,7 @@ function* move(action: ReturnType<typeof actions.move>) {
   > = yield select(selectors.entitiesAtPosition, newPosition);
   if (
     entity.blocking &&
+    !entity.throwing &&
     entitiesAtNewPosition.some(
       other => !!(other.blocking && !(entity.id === PLAYER_ID && other.pickup))
     )

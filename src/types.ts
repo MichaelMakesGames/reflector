@@ -1,10 +1,15 @@
 import { ActionType, getType } from "typesafe-actions";
 import * as actions from "./redux/actions";
-import { RED, WHITE, GREEN } from "./constants";
+import { RED, WHITE, GREEN, BLUE, GRAY } from "./constants";
 
 export type Action = ActionType<typeof actions>;
 
-export type Color = typeof WHITE | typeof RED | typeof GREEN;
+export type Color =
+  | typeof WHITE
+  | typeof RED
+  | typeof GREEN
+  | typeof BLUE
+  | typeof GRAY;
 
 export interface Direction {
   dx: number;
@@ -43,7 +48,7 @@ export interface Throwing extends Component {
 }
 
 export interface PickUp extends Component {
-  effect: "NONE" | "HEAL" | "RECHARGE" | "EQUIP";
+  effect: "NONE" | "HEAL" | "RECHARGE" | "EQUIP" | "PICKUP";
 }
 
 export interface Reflector extends Component {
@@ -54,6 +59,30 @@ export interface Splitter extends Component {
   type: "horizontal" | "vertical";
 }
 
+export interface Cooldown extends Component {
+  time: number;
+}
+export interface Bomb extends Component {
+  time: number;
+}
+
+export interface Inventory extends Component {
+  reflectors: number;
+  splitters: number;
+}
+
+export interface FOV extends Component {}
+
+export interface Level extends Component {
+  depth: number;
+  seed: number;
+  current: boolean;
+  final: boolean;
+  numEnemies: number;
+  aiWeights: { [type: string]: number };
+}
+
+export interface Stairs extends Component {}
 export interface Weapon extends Component {
   power: number;
   cooldown: number;
@@ -76,6 +105,12 @@ export interface Entity {
   hitPoints?: HitPoints;
   throwing?: Throwing;
   pickup?: PickUp;
+  bomb?: Bomb;
+  inventory?: Inventory;
+  fov?: FOV;
+  cooldown?: Cooldown;
+  level?: Level;
+  stairs?: Stairs;
 }
 
 export interface GameState {
