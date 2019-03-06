@@ -1,6 +1,7 @@
 import { ActionType, getType } from "typesafe-actions";
 import * as actions from "./actions";
-import { RED, WHITE, GREEN, BLUE, GRAY } from "./constants";
+import { RED, WHITE, GREEN, BLUE, GRAY, TRANSPARENT, BLACK } from "./constants";
+import { number } from "prop-types";
 
 export type Action = ActionType<typeof actions>;
 
@@ -9,7 +10,9 @@ export type Color =
   | typeof RED
   | typeof GREEN
   | typeof BLUE
-  | typeof GRAY;
+  | typeof GRAY
+  | typeof BLACK
+  | typeof TRANSPARENT;
 
 export interface Direction {
   dx: number;
@@ -25,6 +28,7 @@ export interface Position extends Component {
 export interface Glyph extends Component {
   glyph: string;
   color: Color;
+  background?: Color;
 }
 
 export type AIType = "RUSHER" | "ANGLER" | "SMASHER" | "BOMBER";
@@ -32,7 +36,10 @@ export interface AI extends Component {
   type: AIType;
 }
 
-export interface Blocking extends Component {}
+export interface Blocking extends Component {
+  moving: boolean;
+  throwing: boolean;
+}
 
 export interface Targeting extends Component {}
 
@@ -46,6 +53,8 @@ export interface HitPoints extends Component {
 export interface Throwing extends Component {
   range: number;
 }
+
+export interface Equipping extends Component {}
 
 export interface PickUp extends Component {
   effect: "NONE" | "HEAL" | "RECHARGE" | "EQUIP" | "PICKUP";
@@ -86,12 +95,28 @@ export interface Level extends Component {
 }
 
 export interface Stairs extends Component {}
+
+export interface Conductive extends Component {}
+
+export type WeaponType =
+  | "LASER"
+  | "EXPLOSIVE"
+  | "TELEPORT"
+  | "ELECTRIC"
+  | "STASIS"
+  | "OMEGA";
 export interface Weapon extends Component {
   power: number;
   cooldown: number;
   readyIn: number;
   slot: number;
   active: boolean;
+  type: WeaponType;
+}
+
+interface Factory extends Component {
+  type: AIType;
+  cooldown: number;
 }
 
 export interface Entity {
@@ -114,6 +139,9 @@ export interface Entity {
   cooldown?: Cooldown;
   level?: Level;
   stairs?: Stairs;
+  conductive?: Conductive;
+  equipping?: Equipping;
+  factory?: Factory;
 }
 
 export interface GameState {

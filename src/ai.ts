@@ -19,7 +19,7 @@ import {
 function isPassable(gameState: GameState, position: Position) {
   return selectors
     .entitiesAtPosition(gameState, position)
-    .every(entity => !entity.blocking);
+    .every(entity => !entity.blocking || !entity.blocking.moving);
 }
 
 function moveToward(gameState: GameState, entity: Entity, to: Position) {
@@ -188,7 +188,7 @@ export function getAIActions(entity: Entity, gameState: GameState): Action[] {
     return [
       actions.addEntity({ entity: makeBomb(target.x, target.y) }),
       actions.addEntity({
-        entity: { ...entity, cooldown: { time: BOMBER_COOLDOWN } }
+        entity: { ...entity, cooldown: { time: BOMBER_COOLDOWN + 1 } }
       })
     ];
   }

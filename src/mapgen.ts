@@ -1,6 +1,6 @@
 import * as ROT from "rot-js";
 import { MAZE_SIZE, MAP_HEIGHT, MAP_WIDTH, ROOM_SIZE } from "./constants";
-import { Entity, Level, AIType, Position } from "./types";
+import { Entity, Level, AIType, Position, WeaponType } from "./types";
 import {
   makeWall,
   makeEnemy,
@@ -9,7 +9,9 @@ import {
   makeStairs,
   isPosEqual,
   makeReflector,
-  makeSplitter
+  makeSplitter,
+  makeWeapon,
+  makeFactory
 } from "./utils";
 
 export function generateMap(level: Level): Entity[] {
@@ -39,14 +41,6 @@ export function generateMap(level: Level): Entity[] {
     }
   }
 
-  if (!level.final) {
-    if (level.depth % 2 === 0) {
-      result.push(makeStairs({ x: 1, y: 1 }));
-    } else {
-      result.push(makeStairs({ x: MAP_WIDTH - 2, y: MAP_HEIGHT - 2 }));
-    }
-  }
-
   function getRandomPos(): Position {
     let pos: Position = { x: 0, y: 0 };
     while (
@@ -62,6 +56,20 @@ export function generateMap(level: Level): Entity[] {
       };
     }
     return pos;
+  }
+
+  if (!level.final) {
+    if (level.depth % 2 === 0) {
+      result.push(makeStairs({ x: 1, y: 1 }));
+    } else {
+      result.push(makeStairs({ x: MAP_WIDTH - 2, y: MAP_HEIGHT - 2 }));
+    }
+  } else {
+    const aiTypes: AIType[] = ["ANGLER", "BOMBER", "SMASHER", "RUSHER"];
+    for (let type of aiTypes) {
+      const pos = getRandomPos();
+      result.push(makeFactory(pos, type, 2));
+    }
   }
 
   for (let i = 0; i < level.numEnemies; i++) {
@@ -95,6 +103,27 @@ export function generateMap(level: Level): Entity[] {
       result.push(makeFirstAidKit(pos.x, pos.y));
     } else {
       result.push(makeRechargeKit(pos.y, pos.y));
+    }
+  }
+
+  for (let i = 0; i < 1; i++) {
+    const pos = getRandomPos();
+    const weaponType = rng.getItem<WeaponType>([
+      "LASER",
+      "EXPLOSIVE",
+      "TELEPORT",
+      "ELECTRIC"
+    ]);
+    if (weaponType) {
+      result.push(
+        makeWeapon(
+          weaponType === "TELEPORT" ? 1 : rng.getUniformInt(1, 3),
+          rng.getUniformInt(2, 4),
+          0,
+          weaponType,
+          pos
+        )
+      );
     }
   }
   return result;

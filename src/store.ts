@@ -11,6 +11,7 @@ const initialState: GameState = {
 function reducer(state: GameState = initialState, action: Action): GameState {
   return handleAction(state, action);
 }
-const store = createStore(reducer, composeWithDevTools());
+const store = createStore(reducer);
+// const store = createStore(reducer, composeWithDevTools());
 
 export default store;

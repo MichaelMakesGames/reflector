@@ -1,4 +1,4 @@
-import { GameState, Position, Entity, AIType } from "./types";
+import { GameState, Position, Entity, AIType, WeaponType } from "./types";
 import {
   WHITE,
   RED,
@@ -8,7 +8,9 @@ import {
   UP,
   GREEN,
   BLUE,
-  GRAY
+  GRAY,
+  BACKGROUND_COLOR,
+  BLACK
 } from "./constants";
 import nanoid from "nanoid";
 import * as ROT from "rot-js";
@@ -51,6 +53,45 @@ export function getAdjacentPositions(pos: Position): Position[] {
   ];
 }
 
+export function makeWeapon(
+  power: number,
+  cooldown: number,
+  slot: number,
+  type: WeaponType,
+  position?: Position
+): Entity {
+  return {
+    id: nanoid(),
+    weapon: {
+      power,
+      cooldown,
+      readyIn: 0,
+      slot,
+      active: false,
+      type
+    },
+    position,
+    glyph: { glyph: "w", color: RED },
+    pickup: { effect: "EQUIP" }
+  };
+}
+
+export function makeFactory(
+  position: Position,
+  type: AIType,
+  cooldown: number
+): Entity {
+  return {
+    id: nanoid(),
+    position,
+    glyph: { glyph: type[0], color: BLACK, background: WHITE },
+    factory: { type, cooldown },
+    destructible: {},
+    cooldown: { time: 0 },
+    blocking: { moving: true, throwing: true }
+  };
+}
+
 export function makeFovMarker(x: number, y: number): Entity {
   return {
     id: nanoid(),
@@ -65,7 +106,7 @@ export function makeWall(x: number, y: number, destructible = false): Entity {
     id: nanoid(),
     position: { x, y },
     glyph: { glyph: "#", color: GRAY },
-    blocking: {}
+    blocking: { throwing: true, moving: true }
   };
   if (destructible) return { ...base, destructible: {} };
   return base;
@@ -85,10 +126,11 @@ export function makeEnemy(x: number, y: number, type: AIType): Entity {
     id: nanoid(),
     position: { x, y },
     glyph: { glyph: type[0], color: WHITE },
-    blocking: {},
+    blocking: { throwing: false, moving: true },
     ai: { type },
     destructible: {},
-    cooldown: { time: 0 }
+    cooldown: { time: 0 },
+    conductive: {}
   };
 }
 
@@ -97,7 +139,7 @@ export function makeBomb(x: number, y: number): Entity {
     id: nanoid(),
     position: { x, y },
     glyph: { glyph: "b", color: BLUE },
-    blocking: {},
+    blocking: { throwing: false, moving: true },
     destructible: {},
     bomb: { time: 1 }
   };
@@ -148,7 +190,7 @@ export function makeReflector(x: number, y: number, type: "\\" | "/"): Entity {
     id: nanoid(),
     position: { x, y },
     glyph: { glyph: type, color: WHITE },
-    blocking: {},
+    blocking: { throwing: false, moving: true },
     reflector: { type },
     destructible: {},
     pickup: { effect: "PICKUP" }
@@ -164,7 +206,7 @@ export function makeSplitter(
     id: nanoid(),
     position: { x, y },
     glyph: { glyph: type === "horizontal" ? "⬌" : "⬍", color: WHITE },
-    blocking: {},
+    blocking: { throwing: false, moving: true },
     destructible: {},
     splitter: { type },
     pickup: { effect: "PICKUP" }

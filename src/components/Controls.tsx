@@ -10,7 +10,8 @@ import { makeReflector, makeSplitter } from "../utils";
 function getKeyMap(
   activeWeapon: Entity | null,
   playerPosition: Position,
-  throwing: Entity | null
+  throwing: Entity | null,
+  equipping: Entity | null
 ): { [key: string]: Action } {
   const movePlayer = {
     w: actions.move({ entityId: PLAYER_ID, ...UP }),
@@ -73,6 +74,16 @@ function getKeyMap(
       Enter: actions.executeThrow()
     };
   }
+
+  if (equipping) {
+    return {
+      1: actions.executeEquip({ slot: 1 }),
+      2: actions.executeEquip({ slot: 2 }),
+      3: actions.executeEquip({ slot: 3 }),
+      4: actions.executeEquip({ slot: 4 }),
+      Escape: actions.executeEquip({ slot: 0 })
+    };
+  }
   return {
     ...movePlayer,
     ...activateWeapon,
@@ -84,12 +95,13 @@ function getKeyMap(
 export default function Controls() {
   const dispatch = useDispatch();
   const weapons = useMappedState(selectors.weapons);
+  const equipping = weapons.filter(weapon => weapon.equipping)[0] || null;
   const activeWeapon = useMappedState(selectors.activeWeapon);
   const player = useMappedState(selectors.player);
   const throwing = useMappedState(selectors.throwingTarget);
 
   const position = player && player.position ? player.position : { x: 0, y: 0 };
-  const keyMap = getKeyMap(activeWeapon, position, throwing);
+  const keyMap = getKeyMap(activeWeapon, position, throwing, equipping);
 
   function listener(event: KeyboardEvent) {
     const { key } = event;
@@ -110,11 +122,15 @@ export default function Controls() {
     <div>
       <pre>{JSON.stringify(inventory, undefined, 2)}</pre>
       <ul>
-        {weapons.map(entity => (
-          <pre key={entity.id}>
-            {JSON.stringify(entity.weapon, undefined, 2)}
-          </pre>
-        ))}
+        {weapons
+          .filter(
+            weapon => weapon.weapon && (weapon.weapon.slot || weapon.equipping)
+          )
+          .map(entity => (
+            <pre key={entity.id}>
+              {JSON.stringify(entity.weapon, undefined, 2)}
+            </pre>
+          ))}
       </ul>
     </div>
   );

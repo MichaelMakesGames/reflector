@@ -8,7 +8,8 @@ import {
   MAP_HEIGHT,
   BACKGROUND_COLOR,
   FONT_SIZE,
-  FONT_FAMILY
+  FONT_FAMILY,
+  TRANSPARENT
 } from "../constants";
 
 const display = new ROT.Display({
@@ -16,7 +17,7 @@ const display = new ROT.Display({
   height: MAP_HEIGHT,
   forceSquareRatio: true,
   bg: BACKGROUND_COLOR,
-  fontSize: FONT_SIZE,
+  fontSize: Math.min(FONT_SIZE, document.body.clientWidth / MAP_WIDTH),
   fontFamily: FONT_FAMILY
 });
 
@@ -40,7 +41,7 @@ export default function Map() {
         position.y,
         glyph.glyph,
         glyph.color,
-        BACKGROUND_COLOR
+        glyph.background || TRANSPARENT
       );
     }
   });
