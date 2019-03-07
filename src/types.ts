@@ -1,6 +1,16 @@
 import { ActionType, getType } from "typesafe-actions";
 import * as actions from "./actions";
-import { RED, WHITE, GREEN, BLUE, GRAY, TRANSPARENT, BLACK } from "./constants";
+import {
+  RED,
+  WHITE,
+  GREEN,
+  BLUE,
+  GRAY,
+  TRANSPARENT,
+  BLACK,
+  YELLOW,
+  PURPLE
+} from "./constants";
 import { number } from "prop-types";
 
 export type Action = ActionType<typeof actions>;
@@ -12,6 +22,8 @@ export type Color =
   | typeof BLUE
   | typeof GRAY
   | typeof BLACK
+  | typeof YELLOW
+  | typeof PURPLE
   | typeof TRANSPARENT;
 
 export interface Direction {
@@ -29,6 +41,7 @@ export interface Glyph extends Component {
   glyph: string;
   color: Color;
   background?: Color;
+  priority: number;
 }
 
 export type AIType = "RUSHER" | "ANGLER" | "SMASHER" | "BOMBER";
@@ -151,4 +164,6 @@ export interface GameState {
   entitiesByPosition: {
     [position: string]: string[];
   };
+  messageLog: string[];
+  gameOver: boolean;
 }

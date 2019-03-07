@@ -6,6 +6,14 @@ export function gameState(state: GameState) {
   return state;
 }
 
+export function messageLog(state: GameState) {
+  return state.messageLog;
+}
+
+export function gameOver(state: GameState) {
+  return state.gameOver;
+}
+
 export function entities(state: GameState) {
   return state.entities;
 }

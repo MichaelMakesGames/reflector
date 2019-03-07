@@ -7,89 +7,244 @@ import { PLAYER_ID, UP, LEFT, DOWN, RIGHT } from "../constants";
 import { action } from "typesafe-actions";
 import { makeReflector, makeSplitter } from "../utils";
 
-function getKeyMap(
+interface Control {
+  key: string;
+  action: Action;
+  label: string;
+  hidden?: boolean;
+}
+function getControls(
   activeWeapon: Entity | null,
   playerPosition: Position,
   throwing: Entity | null,
   equipping: Entity | null
-): { [key: string]: Action } {
-  const movePlayer = {
-    w: actions.move({ entityId: PLAYER_ID, ...UP }),
-    a: actions.move({ entityId: PLAYER_ID, ...LEFT }),
-    s: actions.move({ entityId: PLAYER_ID, ...DOWN }),
-    d: actions.move({ entityId: PLAYER_ID, ...RIGHT }),
-    ArrowUp: actions.move({ entityId: PLAYER_ID, ...UP }),
-    ArrowLeft: actions.move({ entityId: PLAYER_ID, ...LEFT }),
-    ArrowDown: actions.move({ entityId: PLAYER_ID, ...DOWN }),
-    ArrowRight: actions.move({ entityId: PLAYER_ID, ...RIGHT })
-  };
-  const activateWeapon = {
-    1: actions.activateWeapon({ slot: 1 }),
-    2: actions.activateWeapon({ slot: 2 }),
-    3: actions.activateWeapon({ slot: 3 }),
-    4: actions.activateWeapon({ slot: 4 })
-  };
-  const activateThrow = {
-    r: actions.activateThrow({
-      entity: makeReflector(playerPosition.x, playerPosition.y, "/")
-    }),
-    t: actions.activateThrow({
-      entity: makeSplitter(playerPosition.x, playerPosition.y, "horizontal")
-    })
-  };
-  const wait = {
-    ".": actions.playerTookTurn()
-  };
+): Control[] {
+  const movePlayer = [
+    {
+      key: "w",
+      action: actions.move({ entityId: PLAYER_ID, ...UP }),
+      label: "Move Up"
+    },
+    {
+      key: "a",
+      action: actions.move({ entityId: PLAYER_ID, ...LEFT }),
+      label: "Move Left"
+    },
+    {
+      key: "s",
+      action: actions.move({ entityId: PLAYER_ID, ...DOWN }),
+      label: "Move Down"
+    },
+    {
+      key: "d",
+      action: actions.move({ entityId: PLAYER_ID, ...RIGHT }),
+      label: "Move Right"
+    },
+    {
+      key: "ArrowUp",
+      action: actions.move({ entityId: PLAYER_ID, ...UP }),
+      label: "Move Up",
+      hidden: true
+    },
+    {
+      key: "ArrowLeft",
+      action: actions.move({ entityId: PLAYER_ID, ...LEFT }),
+      label: "Move Left",
+      hidden: true
+    },
+    {
+      key: "ArrowDown",
+      action: actions.move({ entityId: PLAYER_ID, ...DOWN }),
+      label: "Move Down",
+      hidden: true
+    },
+    {
+      key: "ArrowRight",
+      action: actions.move({ entityId: PLAYER_ID, ...RIGHT }),
+      label: "Move Right",
+      hidden: true
+    }
+  ];
+  const activateWeapon = [
+    {
+      key: "1",
+      action: actions.activateWeapon({ slot: 1 }),
+      label: "Activate Weapon 1"
+    },
+    {
+      key: "2",
+      action: actions.activateWeapon({ slot: 2 }),
+      label: "Activate Weapon 2"
+    },
+    {
+      key: "3",
+      action: actions.activateWeapon({ slot: 3 }),
+      label: "Activate Weapon 3"
+    },
+    {
+      key: "4",
+      action: actions.activateWeapon({ slot: 4 }),
+      label: "Activate Weapon 4"
+    }
+  ];
+  const activateThrow = [
+    {
+      key: "r",
+      action: actions.activateThrow({
+        entity: makeReflector(playerPosition.x, playerPosition.y, "/")
+      }),
+      label: "Throw Reflector"
+    },
+    {
+      key: "t",
+      action: actions.activateThrow({
+        entity: makeSplitter(playerPosition.x, playerPosition.y, "horizontal")
+      }),
+      label: "Throw Splitter"
+    }
+  ];
+  const wait = [{ key: ".", action: actions.playerTookTurn(), label: "Wait" }];
 
   if (activeWeapon) {
-    return {
+    return [
       ...activateWeapon,
-      w: actions.targetWeapon(UP),
-      a: actions.targetWeapon(LEFT),
-      s: actions.targetWeapon(DOWN),
-      d: actions.targetWeapon(RIGHT),
-      ArrowUp: actions.targetWeapon(UP),
-      ArrowLeft: actions.targetWeapon(LEFT),
-      ArrowDown: actions.targetWeapon(DOWN),
-      ArrowRight: actions.targetWeapon(RIGHT),
-      Enter: actions.fireWeapon(),
-      Escape: actions.activateWeapon({
-        slot: activeWeapon.weapon ? activeWeapon.weapon.slot : 0
-      })
-    };
+      {
+        key: "w",
+        action: actions.targetWeapon(UP),
+        label: "Target Up"
+      },
+      {
+        key: "a",
+        action: actions.targetWeapon(LEFT),
+        label: "Target Left"
+      },
+      {
+        key: "s",
+        action: actions.targetWeapon(DOWN),
+        label: "Target Down"
+      },
+      {
+        key: "d",
+        action: actions.targetWeapon(RIGHT),
+        label: "Target Right"
+      },
+      {
+        key: "ArrowUp",
+        action: actions.targetWeapon(UP),
+        label: "Target Up",
+        hidden: true
+      },
+      {
+        key: "ArrowLeft",
+        action: actions.targetWeapon(LEFT),
+        label: "Target Left",
+        hidden: true
+      },
+      {
+        key: "ArrowDown",
+        action: actions.targetWeapon(DOWN),
+        label: "Target Down",
+        hidden: true
+      },
+      {
+        key: "ArrowRight",
+        action: actions.targetWeapon(RIGHT),
+        label: "Target Right",
+        hidden: true
+      },
+      { key: "Enter", action: actions.fireWeapon(), label: "Fire" },
+      {
+        key: "Escape",
+        action: actions.activateWeapon({
+          slot: activeWeapon.weapon ? activeWeapon.weapon.slot : 0
+        }),
+        label: "Cancel"
+      }
+    ];
   }
 
   if (throwing && throwing.throwing) {
-    return {
-      w: actions.move({ entityId: throwing.id, ...UP }),
-      a: actions.move({ entityId: throwing.id, ...LEFT }),
-      s: actions.move({ entityId: throwing.id, ...DOWN }),
-      d: actions.move({ entityId: throwing.id, ...RIGHT }),
-      ArrowUp: actions.move({ entityId: throwing.id, ...UP }),
-      ArrowLeft: actions.move({ entityId: throwing.id, ...LEFT }),
-      ArrowDown: actions.move({ entityId: throwing.id, ...DOWN }),
-      ArrowRight: actions.move({ entityId: throwing.id, ...RIGHT }),
-      r: actions.rotateThrow(),
-      Escape: actions.cancelThrow(),
-      Enter: actions.executeThrow()
-    };
+    return [
+      {
+        key: "w",
+        action: actions.move({ entityId: throwing.id, ...UP }),
+        label: "Move Target Up"
+      },
+      {
+        key: "a",
+        action: actions.move({ entityId: throwing.id, ...LEFT }),
+        label: "Move Target Left"
+      },
+      {
+        key: "s",
+        action: actions.move({ entityId: throwing.id, ...DOWN }),
+        label: "Move Target Down"
+      },
+      {
+        key: "d",
+        action: actions.move({ entityId: throwing.id, ...RIGHT }),
+        label: "Move Target Right"
+      },
+      {
+        key: "ArrowUp",
+        action: actions.move({ entityId: throwing.id, ...UP }),
+        label: "Move Target Up",
+        hidden: true
+      },
+      {
+        key: "ArrowLeft",
+        action: actions.move({ entityId: throwing.id, ...LEFT }),
+        label: "Move Target Left",
+        hidden: true
+      },
+      {
+        key: "ArrowDown",
+        action: actions.move({ entityId: throwing.id, ...DOWN }),
+        label: "Move Target Down",
+        hidden: true
+      },
+      {
+        key: "ArrowRight",
+        action: actions.move({ entityId: throwing.id, ...RIGHT }),
+        label: "Move Target Right",
+        hidden: true
+      },
+      { key: "r", action: actions.rotateThrow(), label: "Rotate" },
+      { key: "Escape", action: actions.cancelThrow(), label: "Cancel" },
+      { key: "Enter", action: actions.executeThrow(), label: "Throw" }
+    ];
   }
 
   if (equipping) {
-    return {
-      1: actions.executeEquip({ slot: 1 }),
-      2: actions.executeEquip({ slot: 2 }),
-      3: actions.executeEquip({ slot: 3 }),
-      4: actions.executeEquip({ slot: 4 }),
-      Escape: actions.executeEquip({ slot: 0 })
-    };
+    return [
+      {
+        key: "1",
+        action: actions.executeEquip({ slot: 1 }),
+        label: "Equip to Slot 1"
+      },
+      {
+        key: "2",
+        action: actions.executeEquip({ slot: 2 }),
+        label: "Equip to Slot 2"
+      },
+      {
+        key: "3",
+        action: actions.executeEquip({ slot: 3 }),
+        label: "Equip to Slot 3"
+      },
+      {
+        key: "4",
+        action: actions.executeEquip({ slot: 4 }),
+        label: "Equip to Slot 4"
+      },
+      {
+        key: "Escape",
+        action: actions.executeEquip({ slot: 0 }),
+        label: "Cancel"
+      }
+    ];
   }
-  return {
-    ...movePlayer,
-    ...activateWeapon,
-    ...activateThrow,
-    ...wait
-  };
+  return [...movePlayer, ...activateWeapon, ...activateThrow, ...wait];
 }
 
 export default function Controls() {
@@ -99,13 +254,18 @@ export default function Controls() {
   const activeWeapon = useMappedState(selectors.activeWeapon);
   const player = useMappedState(selectors.player);
   const throwing = useMappedState(selectors.throwingTarget);
+  const gameOver = useMappedState(selectors.gameOver);
 
   const position = player && player.position ? player.position : { x: 0, y: 0 };
-  const keyMap = getKeyMap(activeWeapon, position, throwing, equipping);
+  const controls = getControls(activeWeapon, position, throwing, equipping);
+  const keyMap: { [key: string]: Action } = controls.reduce(
+    (acc, cur) => ({ ...acc, [cur.key]: cur.action }),
+    {}
+  );
 
   function listener(event: KeyboardEvent) {
     const { key } = event;
-    if (keyMap[key]) {
+    if (!gameOver && keyMap[key]) {
       dispatch(keyMap[key]);
     }
   }
@@ -115,23 +275,17 @@ export default function Controls() {
     return () => document.removeEventListener("keydown", listener);
   });
 
-  if (!player) return null;
-  const inventory = player.inventory;
-
   return (
-    <div>
-      <pre>{JSON.stringify(inventory, undefined, 2)}</pre>
-      <ul>
-        {weapons
-          .filter(
-            weapon => weapon.weapon && (weapon.weapon.slot || weapon.equipping)
-          )
-          .map(entity => (
-            <pre key={entity.id}>
-              {JSON.stringify(entity.weapon, undefined, 2)}
-            </pre>
-          ))}
-      </ul>
+    <div className="controls box">
+      <div className="box__label">Controls</div>
+      {controls
+        .filter(control => !control.hidden)
+        .map(control => (
+          <div key={control.key} className="control">
+            <kbd>{control.key}</kbd>
+            <span>{control.label}</span>
+          </div>
+        ))}
     </div>
   );
 }

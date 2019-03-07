@@ -5,7 +5,9 @@ import handleAction from "./actionHandlers/handleAction";
 
 const initialState: GameState = {
   entities: {},
-  entitiesByPosition: {}
+  entitiesByPosition: {},
+  messageLog: [],
+  gameOver: false
 };
 
 function reducer(state: GameState = initialState, action: Action): GameState {

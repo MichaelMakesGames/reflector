@@ -102,7 +102,7 @@ export function generateMap(level: Level): Entity[] {
     if (rng.getUniform() > 0.5) {
       result.push(makeFirstAidKit(pos.x, pos.y));
     } else {
-      result.push(makeRechargeKit(pos.y, pos.y));
+      result.push(makeRechargeKit(pos.x, pos.y));
     }
   }
 

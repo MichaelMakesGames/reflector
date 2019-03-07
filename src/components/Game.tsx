@@ -3,7 +3,10 @@ import { useDispatch } from "redux-react-hook";
 import Map from "./Map";
 import Controls from "./Controls";
 import * as actions from "../actions";
-import Health from "./Health";
+import Weapons from "./Weapons";
+import Status from "./Status";
+import Legend from "./Legend";
+import MessageLog from "./MessageLog";
 
 export default function Game() {
   const dispatch = useDispatch();
@@ -12,10 +15,23 @@ export default function Game() {
   }, []);
 
   return (
-    <div>
-      <Map />
-      <Health />
-      <Controls />
-    </div>
+    <main>
+      <div className="row">
+        <div className="left">
+          <Weapons />
+        </div>
+        <div className="center">
+          <MessageLog />
+          <Map />
+          <Status />
+        </div>
+        <div className="right">
+          <Legend />
+        </div>
+      </div>
+      <div className="row">
+        <Controls />
+      </div>
+    </main>
   );
 }

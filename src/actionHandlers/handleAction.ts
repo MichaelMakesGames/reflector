@@ -5,7 +5,14 @@ import * as ROT from "rot-js";
 import * as actions from "../actions";
 import * as selectors from "../selectors";
 import { Position, Action, Level, GameState, Entity } from "../types";
-import { PLAYER_ID, WHITE, THROWING_RANGE, RIGHT } from "../constants";
+import {
+  PLAYER_ID,
+  WHITE,
+  THROWING_RANGE,
+  RIGHT,
+  PRIORITY_LASER,
+  PRIORITY_PLAYER
+} from "../constants";
 import {
   makeTargetingLaser,
   reflect,
@@ -37,7 +44,7 @@ function init(state: GameState, action: Action): GameState {
       entity: {
         id: PLAYER_ID,
         position: { x: 1, y: 1 },
-        glyph: { glyph: "@", color: WHITE },
+        glyph: { glyph: "@", color: WHITE, priority: PRIORITY_PLAYER },
         blocking: { moving: true, throwing: false },
         hitPoints: { current: 3, max: 3 },
         inventory: { reflectors: 3, splitters: 1 },
@@ -110,13 +117,24 @@ function processGameOver(state: GameState): GameState {
   const player = selectors.player(state);
   const currentLevel = entities.filter(e => e.level && e.level.current)[0];
   if (player && player.hitPoints && player.hitPoints.current <= 0) {
-    alert("You died. Refresh to try again");
+    state = {
+      ...state,
+      gameOver: true,
+      messageLog: [...state.messageLog, "You died. Refresh to try again."]
+    };
   } else if (
     currentLevel.level &&
     currentLevel.level.final &&
     entities.filter(e => e.factory).length === 0
   ) {
-    alert("You destroyed all enemy factories. You win!");
+    state = {
+      ...state,
+      gameOver: true,
+      messageLog: [
+        ...state.messageLog,
+        "You destroyed all enemy factories. You win!"
+      ]
+    };
   }
   return state;
 }
@@ -297,6 +315,10 @@ function processPickups(state: GameState): GameState {
               }
             })
           );
+          state = {
+            ...state,
+            messageLog: [...state.messageLog, "You heal 1."]
+          };
         }
       }
       if (entity.pickup.effect === "RECHARGE") {
@@ -304,6 +326,10 @@ function processPickups(state: GameState): GameState {
           state,
           actions.removeEntity({ entityId: entity.id })
         );
+        state = {
+          ...state,
+          messageLog: [...state.messageLog, "All weapons ready."]
+        };
         for (let weapon of selectors.weapons(state)) {
           if (weapon.weapon && weapon.weapon.readyIn) {
             state = handleAction(
@@ -350,6 +376,9 @@ function targetWeapon(state: GameState, action: Action): GameState {
     }
   ];
 
+  const explosionCenters: Position[] = [];
+  const spreadElectricity: Entity[] = [];
+
   while (beams.length) {
     const beam = beams[beams.length - 1];
     beams.pop();
@@ -360,6 +389,7 @@ function targetWeapon(state: GameState, action: Action): GameState {
       };
       const entitiesAtPos = selectors.entitiesAtPosition(state, nextPos);
       const solidEntity = entitiesAtPos.find(entity => !!entity.blocking);
+
       if (!solidEntity) {
         state = handleAction(
           state,
@@ -369,7 +399,8 @@ function targetWeapon(state: GameState, action: Action): GameState {
               nextPos.y,
               beam,
               beam.power,
-              false
+              false,
+              weapon.type
             )
           })
         );
@@ -396,7 +427,7 @@ function targetWeapon(state: GameState, action: Action): GameState {
         const newDirection = reflect(beam, solidEntity.reflector.type);
         beam.dx = newDirection.dx;
         beam.dy = newDirection.dy;
-      } else if (solidEntity.destructible) {
+      } else if (solidEntity.destructible && weapon.type !== "ELECTRIC") {
         state = handleAction(
           state,
           actions.addEntity({
@@ -405,17 +436,76 @@ function targetWeapon(state: GameState, action: Action): GameState {
               nextPos.y,
               beam,
               beam.power,
-              true
+              true,
+              weapon.type
             )
           })
         );
+        if (weapon.type === "EXPLOSIVE") {
+          explosionCenters.push(nextPos);
+        }
+        beam.power--;
+      } else if (weapon.type === "ELECTRIC" && solidEntity.conductive) {
+        spreadElectricity.push(solidEntity);
         beam.power--;
       } else {
         beam.power = 0;
+        if (weapon.type === "EXPLOSIVE") {
+          explosionCenters.push(beam.lastPos);
+        }
       }
       beam.lastPos = nextPos;
     }
   }
+
+  for (let pos of explosionCenters) {
+    for (let adjacentPos of getAdjacentPositions(pos)) {
+      const entities = selectors.entitiesAtPosition(state, adjacentPos);
+      if (entities.every(e => !e.targeting)) {
+        state = handleAction(
+          state,
+          actions.addEntity({
+            entity: makeTargetingLaser(
+              adjacentPos.x,
+              adjacentPos.y,
+              { dx: 1, dy: 1 },
+              1,
+              true,
+              weapon.type
+            )
+          })
+        );
+      }
+    }
+  }
+
+  while (spreadElectricity.length) {
+    const from = spreadElectricity.pop() as Entity;
+    const pos = from.position as Position;
+    const entitiesAtPos = selectors.entitiesAtPosition(state, pos);
+    if (from.conductive && entitiesAtPos.every(e => !e.targeting)) {
+      const newEntity = makeTargetingLaser(
+        pos.x,
+        pos.y,
+        { dx: 1, dy: 1 },
+        1,
+        true,
+        weapon.type
+      );
+      state = handleAction(
+        state,
+        actions.addEntity({
+          entity: newEntity
+        })
+      );
+      for (let adjacentPos of getAdjacentPositions(pos)) {
+        for (let to of selectors.entitiesAtPosition(state, adjacentPos)) {
+          spreadElectricity.push(to);
+        }
+      }
+    }
+  }
+
   return state;
 }
 
@@ -433,36 +523,16 @@ function fireWeapon(state: GameState, action: Action) {
     const { position } = laser;
     if (position) {
       const entitiesAtPos = selectors.entitiesAtPosition(state, position);
-      for (let entity of entitiesAtPos.filter(entity => entity.destructible)) {
-        if (activeWeapon.weapon.type === "TELEPORT") {
+      for (let entity of entitiesAtPos) {
+        if (entity.destructible && activeWeapon.weapon.type === "TELEPORT") {
           entitiesToSwap.push(entity);
-        } else if (activeWeapon.weapon.type === "LASER") {
+        } else if (
+          entity.conductive &&
+          activeWeapon.weapon.type === "ELECTRIC"
+        ) {
           entitiesToRemove.push(entity.id);
-        } else if (activeWeapon.weapon.type === "EXPLOSIVE") {
+        } else if (entity.destructible) {
           entitiesToRemove.push(entity.id);
-          for (let adjacentPos of getAdjacentPositions(position)) {
-            for (let e of selectors
-              .entitiesAtPosition(state, adjacentPos)
-              .filter(e => e.hitPoints || e.destructible)) {
-              entitiesToRemove.push(e.id);
-            }
-          }
-        } else if (activeWeapon.weapon.type === "ELECTRIC") {
-          const spreadElectricity = [entity];
-          while (spreadElectricity.length) {
-            const from = spreadElectricity.pop() as Entity;
-            if (from.conductive && !entitiesToRemove.includes(from.id)) {
-              entitiesToRemove.push(from.id);
-              for (let adjacentPos of getAdjacentPositions(position)) {
-                for (let to of selectors.entitiesAtPosition(
-                  state,
-                  adjacentPos
-                )) {
-                  spreadElectricity.push(to);
-                }
-              }
-            }
-          }
         }
       }
     }
@@ -509,7 +579,13 @@ function fireWeapon(state: GameState, action: Action) {
 function activateThrow(state: GameState, action: Action): GameState {
   if (!isActionOf(actions.activateThrow, action)) return state;
   const player = selectors.player(state);
-  if (!player || !player.position) return state;
+  if (!player || !player.position || !player.inventory) return state;
+  if (action.payload.entity.reflector && !player.inventory.reflectors) {
+    return state;
+  }
+  if (action.payload.entity.splitter && !player.inventory.splitters) {
+    return state;
+  }
 
   const fovPositions = computeThrowFOV(state, player.position, THROWING_RANGE);
   for (let pos of fovPositions) {
@@ -665,6 +741,12 @@ export function attack(state: GameState, action: Action): GameState {
   if (target.destructible) {
     state = handleAction(state, actions.removeEntity({ entityId: target.id }));
   }
+  if (target.id === PLAYER_ID) {
+    state = {
+      ...state,
+      messageLog: [...state.messageLog, "You receive one damage"]
+    };
+  }
   return state;
 }
 
@@ -770,7 +852,7 @@ function removeEntity(state: GameState, action: Action): GameState {
 
 function activateEquip(state: GameState, action: Action) {
   if (!isActionOf(actions.activateEquip, action)) return state;
-  return handleAction(
+  state = handleAction(
     state,
     actions.addEntity({
       entity: {
@@ -779,6 +861,26 @@ function activateEquip(state: GameState, action: Action) {
       }
     })
   );
+
+  if (!selectors.weaponInSlot(state, 1)) {
+    state = executeEquip(state, actions.executeEquip({ slot: 1 }));
+  } else if (!selectors.weaponInSlot(state, 2)) {
+    state = executeEquip(state, actions.executeEquip({ slot: 2 }));
+  } else if (!selectors.weaponInSlot(state, 3)) {
+    state = executeEquip(state, actions.executeEquip({ slot: 3 }));
+  } else if (!selectors.weaponInSlot(state, 4)) {
+    state = executeEquip(state, actions.executeEquip({ slot: 4 }));
+  } else {
+    state = {
+      ...state,
+      messageLog: [
+        ...state.messageLog,
+        "Equipping weapon... Please select slot."
+      ]
+    };
+  }
+
+  return state;
 }
 
 function executeEquip(state: GameState, action: Action) {
@@ -809,6 +911,15 @@ function executeEquip(state: GameState, action: Action) {
         }
       })
     );
+    state = {
+      ...state,
+      messageLog: [...state.messageLog, `Equipped to slot ${slot}.`]
+    };
+  } else {
+    state = {
+      ...state,
+      messageLog: [...state.messageLog, "Discarded."]
+    };
   }
   return state;
 }

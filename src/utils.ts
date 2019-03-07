@@ -1,4 +1,11 @@
-import { GameState, Position, Entity, AIType, WeaponType } from "./types";
+import {
+  GameState,
+  Position,
+  Entity,
+  AIType,
+  WeaponType,
+  Color
+} from "./types";
 import {
   WHITE,
   RED,
@@ -10,7 +17,13 @@ import {
   BLUE,
   GRAY,
   BACKGROUND_COLOR,
-  BLACK
+  BLACK,
+  PRIORITY_ENEMY,
+  PRIORITY_TERRAIN,
+  PRIORITY_ITEM,
+  PRIORITY_LASER,
+  PURPLE,
+  YELLOW
 } from "./constants";
 import nanoid from "nanoid";
 import * as ROT from "rot-js";
@@ -71,7 +84,7 @@ export function makeWeapon(
       type
     },
     position,
-    glyph: { glyph: "w", color: RED },
+    glyph: { glyph: "w", color: RED, priority: PRIORITY_ITEM },
     pickup: { effect: "EQUIP" }
   };
 }
@@ -84,7 +97,12 @@ export function makeFactory(
   return {
     id: nanoid(),
     position,
-    glyph: { glyph: type[0], color: BLACK, background: WHITE },
+    glyph: {
+      glyph: type[0],
+      color: BLACK,
+      background: WHITE,
+      priority: PRIORITY_ENEMY
+    },
     factory: { type, cooldown },
     destructible: {},
     cooldown: { time: 0 },
@@ -96,7 +114,7 @@ export function makeFovMarker(x: number, y: number): Entity {
   return {
     id: nanoid(),
     position: { x, y },
-    glyph: { glyph: ".", color: GREEN },
+    glyph: { glyph: ".", color: GREEN, priority: PRIORITY_TERRAIN },
     fov: {}
   };
 }
@@ -105,7 +123,7 @@ export function makeWall(x: number, y: number, destructible = false): Entity {
   const base: Entity = {
     id: nanoid(),
     position: { x, y },
-    glyph: { glyph: "#", color: GRAY },
+    glyph: { glyph: "#", color: GRAY, priority: PRIORITY_TERRAIN },
     blocking: { throwing: true, moving: true }
   };
   if (destructible) return { ...base, destructible: {} };
@@ -116,7 +134,7 @@ export function makeStairs(position: Position): Entity {
   return {
     id: nanoid(),
     position,
-    glyph: { glyph: "<", color: WHITE },
+    glyph: { glyph: "<", color: WHITE, priority: PRIORITY_TERRAIN },
     stairs: {}
   };
 }
@@ -125,7 +143,7 @@ export function makeEnemy(x: number, y: number, type: AIType): Entity {
   return {
     id: nanoid(),
     position: { x, y },
-    glyph: { glyph: type[0], color: WHITE },
+    glyph: { glyph: type[0], color: BLUE, priority: PRIORITY_ENEMY },
     blocking: { throwing: false, moving: true },
     ai: { type },
     destructible: {},
@@ -138,7 +156,7 @@ export function makeBomb(x: number, y: number): Entity {
   return {
     id: nanoid(),
     position: { x, y },
-    glyph: { glyph: "b", color: BLUE },
+    glyph: { glyph: "b", color: BLUE, priority: PRIORITY_ENEMY },
     blocking: { throwing: false, moving: true },
     destructible: {},
     bomb: { time: 1 }
@@ -158,12 +176,20 @@ export function makeTargetingLaser(
   y: number,
   direction: { dx: number; dy: number },
   power: number,
-  hit: boolean
+  hit: boolean,
+  type: WeaponType
 ): Entity {
+  let color: Color = RED;
+  if (type === "TELEPORT") color = PURPLE;
+  if (type === "ELECTRIC") color = YELLOW;
   return {
     id: nanoid(),
     position: { x, y },
-    glyph: { glyph: hit ? "*" : getLaserChar(power, direction), color: RED },
+    glyph: {
+      glyph: hit ? "*" : getLaserChar(power, direction),
+      color,
+      priority: PRIORITY_LASER
+    },
     targeting: {}
   };
 }
@@ -172,7 +198,7 @@ export function makeFirstAidKit(x: number, y: number): Entity {
   return {
     id: nanoid(),
     position: { x, y },
-    glyph: { glyph: "✚", color: RED },
+    glyph: { glyph: "✚", color: RED, priority: PRIORITY_ITEM },
     pickup: { effect: "HEAL" }
   };
 }
@@ -181,7 +207,7 @@ export function makeRechargeKit(x: number, y: number): Entity {
   return {
     id: nanoid(),
     position: { x, y },
-    glyph: { glyph: "⇮", color: GREEN },
+    glyph: { glyph: "⇮", color: GREEN, priority: PRIORITY_ITEM },
     pickup: { effect: "RECHARGE" }
   };
 }
@@ -189,7 +215,7 @@ export function makeReflector(x: number, y: number, type: "\\" | "/"): Entity {
   return {
     id: nanoid(),
     position: { x, y },
-    glyph: { glyph: type, color: WHITE },
+    glyph: { glyph: type, color: WHITE, priority: PRIORITY_ITEM },
     blocking: { throwing: false, moving: true },
     reflector: { type },
     destructible: {},
@@ -205,7 +231,11 @@ export function makeSplitter(
   return {
     id: nanoid(),
     position: { x, y },
-    glyph: { glyph: type === "horizontal" ? "⬌" : "⬍", color: WHITE },
+    glyph: {
+      glyph: type === "horizontal" ? "⬌" : "⬍",
+      color: WHITE,
+      priority: PRIORITY_ITEM
+    },
     blocking: { throwing: false, moving: true },
     destructible: {},
     splitter: { type },

@@ -1,0 +1,127 @@
+body {
+  --white: #eee;
+  --red: #f88;
+  --green: #8f8;
+  --blue: #88f;
+  --gray: #888;
+  --yellow: #ff8;
+  --purple: #f8f;
+  --black: #111;
+
+  background: var(--black);
+  color: var(--white);
+
+  font-size: 16px;
+  font-family: Roboto;
+}
+
+main {
+  display: flex;
+  flex-flow: column;
+  max-width: 1280px;
+}
+
+.row {
+  display: flex;
+  flex-flow: row;
+}
+
+.left,
+.right {
+  flex: 1 1 0;
+}
+
+.center {
+  flex: 0 0 auto;
+}
+
+.map {
+  border: 1px solid var(--white);
+  border-radius: 0.25rem;
+  margin: 1rem;
+}
+
+.box {
+  border: 1px solid var(--white);
+  border-radius: 0.25rem;
+  margin: 1.5rem 0.75rem;
+  padding: 1rem;
+  position: relative;
+}
+
+.box__label {
+  position: absolute;
+  top: -1.25rem;
+  left: 0.5rem;
+  background: var(--black);
+  padding: 0 0.5rem;
+  font-family: Nova Mono;
+  font-size: 1.5rem;
+}
+
+.status {
+  position: relative;
+  top: 7px;
+  display: flex;
+  flex-flow: row;
+}
+
+.status > * {
+  flex: 1 1 0;
+}
+
+.controls {
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  margin-top: 0;
+}
+
+.control {
+  flex: 0 0 20%;
+}
+.control > kbd {
+  background: #333;
+  padding: 0.25rem;
+  margin-right: 0.25rem;
+  border-radius: 0.25rem;
+  font-family: monospace;
+}
+.control:not(:last-child) {
+  padding-bottom: 0.5rem;
+}
+
+.weapon {
+  height: 8rem;
+}
+
+.message-log {
+  height: 8rem;
+}
+
+.messages {
+  height: 100%;
+  overflow: auto;
+}
+
+.message {
+  padding-bottom: 0.25rem;
+}
+
+.legend {
+  height: 46rem;
+}
+
+.legend__item {
+  margin-left: 1rem;
+  text-indent: -1rem;
+}
+
+.legend__glyph {
+  padding: 0.25rem;
+  font-family: Nova Mono;
+}
+
+.legend__item:not(:last-child) {
+  padding-bottom: 0.5rem;
+}

@@ -9,8 +9,10 @@ import {
   BACKGROUND_COLOR,
   FONT_SIZE,
   FONT_FAMILY,
-  TRANSPARENT
+  TRANSPARENT,
+  PLAYER_ID
 } from "../constants";
+import { Glyph } from "../types";
 
 const display = new ROT.Display({
   width: MAP_WIDTH,
@@ -33,18 +35,28 @@ export default function Map() {
   }, []);
 
   display.clear();
-  Object.values(gameState.entities).forEach(entity => {
-    if (entity.position && entity.glyph) {
-      const { position, glyph } = entity;
+  Object.entries(gameState.entitiesByPosition)
+    .filter(([_, ids]) => ids.length)
+    .forEach(([key, ids]) => {
+      const [x, y] = key.split(",").map(parseFloat);
+      const glyphs = ids
+        .map(id => gameState.entities[id].glyph)
+        .filter(Boolean) as Glyph[];
+      glyphs.sort((a, b) => b.priority - a.priority);
+      const glyph = glyphs[0];
       display.draw(
-        position.x,
-        position.y,
+        x,
+        y,
         glyph.glyph,
         glyph.color,
         glyph.background || TRANSPARENT
       );
-    }
-  });
+    });
 
-  return <div id="map" />;
+  return (
+    <div className="box map">
+      <div className="box__label">Map</div>
+      <div id="map" />
+    </div>
+  );
 }
