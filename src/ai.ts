@@ -5,21 +5,33 @@ import * as ROT from "rot-js";
 import {
   getDistance,
   isPosEqual,
-  makeBomb,
   getAdjacentPositions,
-  getClosestPosition
+  getClosestPosition,
 } from "./utils";
 import {
   PLAYER_ID,
   ANGLER_RANGE,
   BOMBER_RANGE,
-  BOMBER_COOLDOWN
+  BOMBER_COOLDOWN,
 } from "./constants";
+import { createEntityFromTemplate } from "./templates";
 
 function isPassable(gameState: GameState, position: Position) {
   return selectors
     .entitiesAtPosition(gameState, position)
     .every(entity => !entity.blocking || !entity.blocking.moving);
+}
+
+function isDestructibleNonEnemy(gameState: GameState, position: Position) {
+  return selectors
+    .entitiesAtPosition(gameState, position)
+    .every(entity =>
+      Boolean(
+        !entity.blocking ||
+          !entity.blocking.moving ||
+          (entity.destructible && !entity.ai),
+      ),
+    );
 }
 
 function moveToward(gameState: GameState, entity: Entity, to: Position) {
@@ -32,12 +44,13 @@ function moveToward(gameState: GameState, entity: Entity, to: Position) {
 function getDirectionTowardTarget(
   from: Position,
   to: Position,
-  gameState: GameState
+  gameState: GameState,
+  passableFunc = isPassable,
 ): Direction | null {
   const passable = (x: number, y: number) =>
     (x === from.x && y === from.y) ||
     (x === to.x && y === to.y) ||
-    isPassable(gameState, { x, y });
+    passableFunc(gameState, { x, y });
   const path: Position[] = [];
   const aStar = new ROT.Path.AStar(to.x, to.y, passable);
   aStar.compute(from.x, from.y, (x, y) => {
@@ -64,28 +77,50 @@ export function getAIActions(entity: Entity, gameState: GameState): Action[] {
     if (getDistance(entity.position, player.position) <= 1) {
       return [actions.attack({ target: player.id })];
     }
-    return moveToward(gameState, entity, player.position);
+    const direction = getDirectionTowardTarget(
+      entity.position,
+      player.position,
+      gameState,
+      isDestructibleNonEnemy,
+    );
+    if (!direction) return [];
+    const targetPos = {
+      x: entity.position.x + direction.dx,
+      y: entity.position.y + direction.dy,
+    };
+    const entitiesAtTargetPos = selectors.entitiesAtPosition(
+      gameState,
+      targetPos,
+    );
+    const destructibleAtTargetPos = entitiesAtTargetPos.find(
+      e => !!e.destructible,
+    );
+    if (destructibleAtTargetPos) {
+      return [actions.attack({ target: destructibleAtTargetPos.id })];
+    } else {
+      return [actions.move({ entityId: entity.id, ...direction })];
+    }
   }
 
   if (ai.type === "SMASHER") {
     if (!entity.position) return [];
-    const reflectorsAndSplitters = selectors
+    const reflectorsAndSplittersAndPlayer = selectors
       .entityList(gameState)
-      .filter(e => e.reflector || e.splitter);
+      .filter(e => e.reflector || e.splitter || e.id === PLAYER_ID);
 
-    const adjacent = reflectorsAndSplitters.find(
+    const adjacent = reflectorsAndSplittersAndPlayer.find(
       e =>
         !!(
           e.position &&
           entity.position &&
           getDistance(e.position, entity.position) <= 1
-        )
+        ),
     );
     if (adjacent) {
       return [actions.attack({ target: adjacent.id })];
     }
 
-    const closest = reflectorsAndSplitters.sort((a, b) => {
+    const closest = reflectorsAndSplittersAndPlayer.sort((a, b) => {
       const aDistance =
         a.position && entity.position
           ? getDistance(a.position, entity.position)
@@ -114,19 +149,19 @@ export function getAIActions(entity: Entity, gameState: GameState): Action[] {
     for (let delta = 1; delta <= ANGLER_RANGE; delta++) {
       possiblePositions.push({
         x: playerPos.x + delta,
-        y: playerPos.y + delta
+        y: playerPos.y + delta,
       });
       possiblePositions.push({
         x: playerPos.x + delta,
-        y: playerPos.y - delta
+        y: playerPos.y - delta,
       });
       possiblePositions.push({
         x: playerPos.x - delta,
-        y: playerPos.y - delta
+        y: playerPos.y - delta,
       });
       possiblePositions.push({
         x: playerPos.x - delta,
-        y: playerPos.y + delta
+        y: playerPos.y + delta,
       });
     }
     const attackablePositions = possiblePositions.filter(pos => {
@@ -151,7 +186,7 @@ export function getAIActions(entity: Entity, gameState: GameState): Action[] {
       return [actions.attack({ target: PLAYER_ID })];
     }
     const passableAttackablePosition = attackablePositions.filter(pos =>
-      isPassable(gameState, pos)
+      isPassable(gameState, pos),
     );
     const closest = getClosestPosition(passableAttackablePosition, entityPos);
     if (!closest) return [];
@@ -178,18 +213,20 @@ export function getAIActions(entity: Entity, gameState: GameState): Action[] {
       return moveToward(gameState, entity, playerPos);
     const target = possiblePositions.sort((a, b) => {
       const aNumAdjacentAIs = getAdjacentPositions(a).filter(pos =>
-        selectors.entitiesAtPosition(gameState, pos).some(e => !!e.ai)
+        selectors.entitiesAtPosition(gameState, pos).some(e => !!e.ai),
       ).length;
       const bNumAdjacentAIs = getAdjacentPositions(b).filter(pos =>
-        selectors.entitiesAtPosition(gameState, pos).some(e => !!e.ai)
+        selectors.entitiesAtPosition(gameState, pos).some(e => !!e.ai),
       ).length;
       return aNumAdjacentAIs - bNumAdjacentAIs;
     })[0];
     return [
-      actions.addEntity({ entity: makeBomb(target.x, target.y) }),
       actions.addEntity({
-        entity: { ...entity, cooldown: { time: BOMBER_COOLDOWN + 1 } }
-      })
+        entity: createEntityFromTemplate("BOMB", { position: target }),
+      }),
+      actions.addEntity({
+        entity: { ...entity, cooldown: { time: BOMBER_COOLDOWN + 1 } },
+      }),
     ];
   }
 

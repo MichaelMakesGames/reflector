@@ -6,6 +6,7 @@ export const BOMBER_RANGE = 5;
 export const BOMBER_COOLDOWN = 2;
 
 export const PRIORITY_LASER = 20;
+export const PRIORITY_THROWING = 17;
 export const PRIORITY_PLAYER = 15;
 export const PRIORITY_ENEMY = 10;
 export const PRIORITY_ITEM = 5;

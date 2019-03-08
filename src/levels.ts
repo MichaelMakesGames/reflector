@@ -13,7 +13,8 @@ export function getLevels(): Level[] {
       numSplitters: 0,
       numReflectors: 0,
       numPickups: 0,
-      numEnemies: 0
+      numEnemies: 0,
+      possibleWeapons: [],
     },
     {
       current: false,
@@ -25,11 +26,12 @@ export function getLevels(): Level[] {
       numReflectors: 5,
       numPickups: 3,
       aiWeights: {
-        RUSHER: 10
-        // ANGLER: 10,
-        // SMASHER: 10,
-        // BOMBER: 10
-      }
+        ENEMY_RUSHER: 10,
+        // ENEMY_ANGLER: 10,
+        // ENEMY_SMASHER: 10,
+        // ENEMY_BOMBER: 10
+      },
+      possibleWeapons: ["WEAPON_TELEPORTER", "WEAPON_FAST_LASER"],
     },
     {
       current: false,
@@ -41,11 +43,16 @@ export function getLevels(): Level[] {
       numReflectors: 5,
       numPickups: 3,
       aiWeights: {
-        RUSHER: 10,
-        ANGLER: 10
-        // SMASHER: 10,
-        // BOMBER: 10
-      }
+        ENEMY_RUSHER: 10,
+        ENEMY_ANGLER: 10,
+        // ENEMY_SMASHER: 10,
+        // ENEMY_BOMBER: 10
+      },
+      possibleWeapons: [
+        "WEAPON_TELEPORTER",
+        "WEAPON_LIGHTNING_GUN",
+        "WEAPON_COMBUSTION_BEAM",
+      ],
     },
     {
       current: false,
@@ -57,11 +64,16 @@ export function getLevels(): Level[] {
       numReflectors: 5,
       numPickups: 3,
       aiWeights: {
-        RUSHER: 10,
-        ANGLER: 10,
-        SMASHER: 10
-        // BOMBER: 10
-      }
+        ENEMY_RUSHER: 10,
+        ENEMY_ANGLER: 10,
+        ENEMY_SMASHER: 10,
+        // ENEMY_BOMBER: 10
+      },
+      possibleWeapons: [
+        "WEAPON_HEAVY_LASER",
+        "WEAPON_LIGHTNING_GUN",
+        "WEAPON_COMBUSTION_BEAM",
+      ],
     },
     {
       current: false,
@@ -73,11 +85,12 @@ export function getLevels(): Level[] {
       numReflectors: 5,
       numPickups: 3,
       aiWeights: {
-        RUSHER: 10,
-        ANGLER: 10,
-        SMASHER: 10,
-        BOMBER: 10
-      }
+        ENEMY_RUSHER: 10,
+        ENEMY_ANGLER: 10,
+        ENEMY_SMASHER: 10,
+        ENEMY_BOMBER: 10,
+      },
+      possibleWeapons: ["WEAPON_END_BRINGER", "WEAPON_STORM_CANNON"],
     },
     {
       current: false,
@@ -89,11 +102,12 @@ export function getLevels(): Level[] {
       numReflectors: 5,
       numPickups: 3,
       aiWeights: {
-        RUSHER: 10,
-        SMASHER: 10,
-        ANGLER: 10,
-        BOMBER: 10
-      }
-    }
+        ENEMY_RUSHER: 10,
+        ENEMY_SMASHER: 10,
+        ENEMY_ANGLER: 10,
+        ENEMY_BOMBER: 10,
+      },
+      possibleWeapons: [],
+    },
   ];
 }

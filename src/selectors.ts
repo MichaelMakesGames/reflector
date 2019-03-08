@@ -41,7 +41,7 @@ export function weapons(state: GameState) {
 
 export function weaponInSlot(state: GameState, slot: number) {
   const weaponsInSlot = weapons(state).filter(
-    entity => entity.weapon && entity.weapon.slot === slot
+    entity => entity.weapon && entity.weapon.slot === slot,
   );
   if (weaponsInSlot.length) {
     return weaponsInSlot[0];
@@ -52,7 +52,7 @@ export function weaponInSlot(state: GameState, slot: number) {
 
 export function activeWeapon(state: GameState) {
   const activeWeapons = weapons(state).filter(
-    entity => entity.weapon && entity.weapon.active
+    entity => entity.weapon && entity.weapon.active,
   );
   if (activeWeapons.length) {
     return activeWeapons[0];

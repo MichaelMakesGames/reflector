@@ -9,7 +9,7 @@ import {
   TRANSPARENT,
   BLACK,
   YELLOW,
-  PURPLE
+  PURPLE,
 } from "./constants";
 import { number } from "prop-types";
 
@@ -105,6 +105,7 @@ export interface Level extends Component {
   numSplitters: number;
   numPickups: number;
   aiWeights: { [type: string]: number };
+  possibleWeapons: string[];
 }
 
 export interface Stairs extends Component {}
@@ -119,6 +120,7 @@ export type WeaponType =
   | "STASIS"
   | "OMEGA";
 export interface Weapon extends Component {
+  name: string;
   power: number;
   cooldown: number;
   readyIn: number;
@@ -128,12 +130,13 @@ export interface Weapon extends Component {
 }
 
 interface Factory extends Component {
-  type: AIType;
+  type: string;
   cooldown: number;
 }
 
 export interface Entity {
   id: string;
+  parentTemplate?: string;
   position?: Position;
   glyph?: Glyph;
   ai?: AI;

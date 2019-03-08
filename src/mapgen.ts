@@ -1,18 +1,9 @@
 import * as ROT from "rot-js";
 import { MAZE_SIZE, MAP_HEIGHT, MAP_WIDTH, ROOM_SIZE } from "./constants";
 import { Entity, Level, AIType, Position, WeaponType } from "./types";
-import {
-  makeWall,
-  makeEnemy,
-  makeFirstAidKit,
-  makeRechargeKit,
-  makeStairs,
-  isPosEqual,
-  makeReflector,
-  makeSplitter,
-  makeWeapon,
-  makeFactory
-} from "./utils";
+import { isPosEqual } from "./utils";
+import { createEntityFromTemplate } from "./templates";
+import weaponTemplates from "./templates/weapons";
 
 export function generateMap(level: Level): Entity[] {
   const rng = ROT.RNG.clone();
@@ -31,11 +22,13 @@ export function generateMap(level: Level): Entity[] {
       const key = `${mazeX},${mazeY}`;
       if (maze[key]) {
         result.push(
-          makeWall(
-            x,
-            y,
-            x !== 0 && y !== 0 && x !== MAP_WIDTH - 1 && y !== MAP_HEIGHT - 1
-          )
+          createEntityFromTemplate("WALL", {
+            position: { x, y },
+            destructible:
+              x !== 0 && y !== 0 && x !== MAP_WIDTH - 1 && y !== MAP_HEIGHT - 1
+                ? {}
+                : undefined,
+          }),
         );
       }
     }
@@ -45,14 +38,14 @@ export function generateMap(level: Level): Entity[] {
     let pos: Position = { x: 0, y: 0 };
     while (
       result.some(
-        entity => !!(entity.position && isPosEqual(pos, entity.position))
+        entity => !!(entity.position && isPosEqual(pos, entity.position)),
       ) ||
       isPosEqual(pos, { x: 1, y: 1 }) ||
       isPosEqual(pos, { x: MAP_WIDTH - 2, y: MAP_HEIGHT - 2 })
     ) {
       pos = {
         x: rng.getUniformInt(0, MAP_WIDTH - 1),
-        y: rng.getUniformInt(0, MAP_HEIGHT - 1)
+        y: rng.getUniformInt(0, MAP_HEIGHT - 1),
       };
     }
     return pos;
@@ -60,70 +53,72 @@ export function generateMap(level: Level): Entity[] {
 
   if (!level.final) {
     if (level.depth % 2 === 0) {
-      result.push(makeStairs({ x: 1, y: 1 }));
+      result.push(
+        createEntityFromTemplate("STAIRS", { position: { x: 1, y: 1 } }),
+      );
     } else {
-      result.push(makeStairs({ x: MAP_WIDTH - 2, y: MAP_HEIGHT - 2 }));
+      result.push(
+        createEntityFromTemplate("STAIRS", {
+          position: { x: MAP_WIDTH - 2, y: MAP_HEIGHT - 2 },
+        }),
+      );
     }
   } else {
-    const aiTypes: AIType[] = ["ANGLER", "BOMBER", "SMASHER", "RUSHER"];
-    for (let type of aiTypes) {
-      const pos = getRandomPos();
-      result.push(makeFactory(pos, type, 2));
+    const factoryTemplates = ["ANGLER", "BOMBER", "SMASHER", "RUSHER"];
+    for (let template of factoryTemplates) {
+      const position = getRandomPos();
+      result.push(createEntityFromTemplate(template, { position }));
     }
   }
 
   for (let i = 0; i < level.numEnemies; i++) {
-    let pos = getRandomPos();
+    let position = getRandomPos();
     result.push(
-      makeEnemy(pos.x, pos.y, rng.getWeightedValue(level.aiWeights) as AIType)
+      createEntityFromTemplate(
+        rng.getWeightedValue(level.aiWeights) as string,
+        {
+          position,
+        },
+      ),
     );
   }
 
   for (let i = 0; i < level.numReflectors; i++) {
-    let pos = getRandomPos();
+    let position = getRandomPos();
     result.push(
-      makeReflector(pos.x, pos.y, rng.getUniform() > 0.5 ? "\\" : "/")
+      createEntityFromTemplate(
+        rng.getUniform() > 0.5 ? "REFLECTOR_UP_RIGHT" : "REFLECTOR_DOWN_RIGHT",
+        { position },
+      ),
     );
   }
 
   for (let i = 0; i < level.numSplitters; i++) {
-    let pos = getRandomPos();
+    let position = getRandomPos();
     result.push(
-      makeSplitter(
-        pos.x,
-        pos.y,
-        rng.getUniform() > 0.5 ? "horizontal" : "vertical"
-      )
+      createEntityFromTemplate(
+        rng.getUniform() > 0.5 ? "SPLITTER_HORIZONTAL" : "SPLITTER_VERTICAL",
+        { position },
+      ),
     );
   }
 
   for (let i = 0; i < level.numPickups; i++) {
-    let pos = getRandomPos();
+    let position = getRandomPos();
     if (rng.getUniform() > 0.5) {
-      result.push(makeFirstAidKit(pos.x, pos.y));
+      result.push(createEntityFromTemplate("MED_KIT", { position }));
     } else {
-      result.push(makeRechargeKit(pos.x, pos.y));
+      result.push(createEntityFromTemplate("RECHARGE_KIT", { position }));
     }
   }
 
   for (let i = 0; i < 1; i++) {
-    const pos = getRandomPos();
-    const weaponType = rng.getItem<WeaponType>([
-      "LASER",
-      "EXPLOSIVE",
-      "TELEPORT",
-      "ELECTRIC"
-    ]);
-    if (weaponType) {
-      result.push(
-        makeWeapon(
-          weaponType === "TELEPORT" ? 1 : rng.getUniformInt(1, 3),
-          rng.getUniformInt(2, 4),
-          0,
-          weaponType,
-          pos
-        )
-      );
+    const position = getRandomPos();
+    const weaponTemplate = rng.getItem<string>(
+      Object.keys(weaponTemplates).filter(t => !t.includes("BASE")),
+    );
+    if (weaponTemplate) {
+      result.push(createEntityFromTemplate(weaponTemplate, { position }));
     }
   }
   return result;

@@ -5,7 +5,7 @@ import { Action, Entity, Position } from "../types";
 import { useDispatch, useMappedState } from "redux-react-hook";
 import { PLAYER_ID, UP, LEFT, DOWN, RIGHT } from "../constants";
 import { action } from "typesafe-actions";
-import { makeReflector, makeSplitter } from "../utils";
+import { createEntityFromTemplate } from "../templates";
 
 interface Control {
   key: string;
@@ -17,91 +17,95 @@ function getControls(
   activeWeapon: Entity | null,
   playerPosition: Position,
   throwing: Entity | null,
-  equipping: Entity | null
+  equipping: Entity | null,
 ): Control[] {
   const movePlayer = [
     {
       key: "w",
       action: actions.move({ entityId: PLAYER_ID, ...UP }),
-      label: "Move Up"
+      label: "Move Up",
     },
     {
       key: "a",
       action: actions.move({ entityId: PLAYER_ID, ...LEFT }),
-      label: "Move Left"
+      label: "Move Left",
     },
     {
       key: "s",
       action: actions.move({ entityId: PLAYER_ID, ...DOWN }),
-      label: "Move Down"
+      label: "Move Down",
     },
     {
       key: "d",
       action: actions.move({ entityId: PLAYER_ID, ...RIGHT }),
-      label: "Move Right"
+      label: "Move Right",
     },
     {
       key: "ArrowUp",
       action: actions.move({ entityId: PLAYER_ID, ...UP }),
       label: "Move Up",
-      hidden: true
+      hidden: true,
     },
     {
       key: "ArrowLeft",
       action: actions.move({ entityId: PLAYER_ID, ...LEFT }),
       label: "Move Left",
-      hidden: true
+      hidden: true,
     },
     {
       key: "ArrowDown",
       action: actions.move({ entityId: PLAYER_ID, ...DOWN }),
       label: "Move Down",
-      hidden: true
+      hidden: true,
     },
     {
       key: "ArrowRight",
       action: actions.move({ entityId: PLAYER_ID, ...RIGHT }),
       label: "Move Right",
-      hidden: true
-    }
+      hidden: true,
+    },
   ];
   const activateWeapon = [
     {
       key: "1",
       action: actions.activateWeapon({ slot: 1 }),
-      label: "Activate Weapon 1"
+      label: "Activate Weapon 1",
     },
     {
       key: "2",
       action: actions.activateWeapon({ slot: 2 }),
-      label: "Activate Weapon 2"
+      label: "Activate Weapon 2",
     },
     {
       key: "3",
       action: actions.activateWeapon({ slot: 3 }),
-      label: "Activate Weapon 3"
+      label: "Activate Weapon 3",
     },
     {
       key: "4",
       action: actions.activateWeapon({ slot: 4 }),
-      label: "Activate Weapon 4"
-    }
+      label: "Activate Weapon 4",
+    },
   ];
   const activateThrow = [
     {
       key: "r",
       action: actions.activateThrow({
-        entity: makeReflector(playerPosition.x, playerPosition.y, "/")
+        entity: createEntityFromTemplate("REFLECTOR_UP_RIGHT", {
+          position: playerPosition,
+        }),
       }),
-      label: "Throw Reflector"
+      label: "Throw Reflector",
     },
     {
       key: "t",
       action: actions.activateThrow({
-        entity: makeSplitter(playerPosition.x, playerPosition.y, "horizontal")
+        entity: createEntityFromTemplate("SPLITTER_HORIZONTAL", {
+          position: playerPosition,
+        }),
       }),
-      label: "Throw Splitter"
-    }
+      label: "Throw Splitter",
+    },
   ];
   const wait = [{ key: ".", action: actions.playerTookTurn(), label: "Wait" }];
 
@@ -111,55 +115,55 @@ function getControls(
       {
         key: "w",
         action: actions.targetWeapon(UP),
-        label: "Target Up"
+        label: "Target Up",
       },
       {
         key: "a",
         action: actions.targetWeapon(LEFT),
-        label: "Target Left"
+        label: "Target Left",
       },
       {
         key: "s",
         action: actions.targetWeapon(DOWN),
-        label: "Target Down"
+        label: "Target Down",
       },
       {
         key: "d",
         action: actions.targetWeapon(RIGHT),
-        label: "Target Right"
+        label: "Target Right",
       },
       {
         key: "ArrowUp",
         action: actions.targetWeapon(UP),
         label: "Target Up",
-        hidden: true
+        hidden: true,
       },
       {
         key: "ArrowLeft",
         action: actions.targetWeapon(LEFT),
         label: "Target Left",
-        hidden: true
+        hidden: true,
       },
       {
         key: "ArrowDown",
         action: actions.targetWeapon(DOWN),
         label: "Target Down",
-        hidden: true
+        hidden: true,
       },
       {
         key: "ArrowRight",
         action: actions.targetWeapon(RIGHT),
         label: "Target Right",
-        hidden: true
+        hidden: true,
       },
       { key: "Enter", action: actions.fireWeapon(), label: "Fire" },
       {
         key: "Escape",
         action: actions.activateWeapon({
-          slot: activeWeapon.weapon ? activeWeapon.weapon.slot : 0
+          slot: activeWeapon.weapon ? activeWeapon.weapon.slot : 0,
         }),
-        label: "Cancel"
-      }
+        label: "Cancel",
+      },
     ];
   }
 
@@ -168,50 +172,50 @@ function getControls(
       {
         key: "w",
         action: actions.move({ entityId: throwing.id, ...UP }),
-        label: "Move Target Up"
+        label: "Move Target Up",
       },
       {
         key: "a",
         action: actions.move({ entityId: throwing.id, ...LEFT }),
-        label: "Move Target Left"
+        label: "Move Target Left",
       },
       {
         key: "s",
         action: actions.move({ entityId: throwing.id, ...DOWN }),
-        label: "Move Target Down"
+        label: "Move Target Down",
       },
       {
         key: "d",
         action: actions.move({ entityId: throwing.id, ...RIGHT }),
-        label: "Move Target Right"
+        label: "Move Target Right",
       },
       {
         key: "ArrowUp",
         action: actions.move({ entityId: throwing.id, ...UP }),
         label: "Move Target Up",
-        hidden: true
+        hidden: true,
       },
       {
         key: "ArrowLeft",
         action: actions.move({ entityId: throwing.id, ...LEFT }),
         label: "Move Target Left",
-        hidden: true
+        hidden: true,
       },
       {
         key: "ArrowDown",
         action: actions.move({ entityId: throwing.id, ...DOWN }),
         label: "Move Target Down",
-        hidden: true
+        hidden: true,
       },
       {
         key: "ArrowRight",
         action: actions.move({ entityId: throwing.id, ...RIGHT }),
         label: "Move Target Right",
-        hidden: true
+        hidden: true,
       },
       { key: "r", action: actions.rotateThrow(), label: "Rotate" },
       { key: "Escape", action: actions.cancelThrow(), label: "Cancel" },
-      { key: "Enter", action: actions.executeThrow(), label: "Throw" }
+      { key: "Enter", action: actions.executeThrow(), label: "Throw" },
     ];
   }
 
@@ -220,28 +224,28 @@ function getControls(
       {
         key: "1",
         action: actions.executeEquip({ slot: 1 }),
-        label: "Equip to Slot 1"
+        label: "Equip to Slot 1",
       },
       {
         key: "2",
         action: actions.executeEquip({ slot: 2 }),
-        label: "Equip to Slot 2"
+        label: "Equip to Slot 2",
       },
       {
         key: "3",
         action: actions.executeEquip({ slot: 3 }),
-        label: "Equip to Slot 3"
+        label: "Equip to Slot 3",
       },
       {
         key: "4",
         action: actions.executeEquip({ slot: 4 }),
-        label: "Equip to Slot 4"
+        label: "Equip to Slot 4",
       },
       {
         key: "Escape",
         action: actions.executeEquip({ slot: 0 }),
-        label: "Cancel"
-      }
+        label: "Cancel",
+      },
     ];
   }
   return [...movePlayer, ...activateWeapon, ...activateThrow, ...wait];
@@ -260,7 +264,7 @@ export default function Controls() {
   const controls = getControls(activeWeapon, position, throwing, equipping);
   const keyMap: { [key: string]: Action } = controls.reduce(
     (acc, cur) => ({ ...acc, [cur.key]: cur.action }),
-    {}
+    {},
   );
 
   function listener(event: KeyboardEvent) {

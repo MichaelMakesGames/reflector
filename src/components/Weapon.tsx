@@ -2,17 +2,16 @@ import React from "react";
 import { Weapon } from "../types";
 
 export default function Weapon({
-  label,
-  weapon
+  slot,
+  weapon,
 }: {
-  label: string;
+  slot: string;
   weapon: Weapon | null;
 }) {
   if (!weapon) {
     return (
       <div className="box weapon">
-        <div className="box__label weapon__label">{label}</div>
-        <div>None</div>
+        <div className="box__label weapon__label">{slot}: None</div>
       </div>
     );
   }
@@ -22,7 +21,9 @@ export default function Weapon({
 
   return (
     <div className="box weapon">
-      <div className="box__label weapon__label">{label}</div>
+      <div className="box__label weapon__label">
+        {slot}: {weapon.name}
+      </div>
       <div>Type: {weapon.type}</div>
       <div>Status: {status}</div>
       <div>Power: {weapon.power}</div>

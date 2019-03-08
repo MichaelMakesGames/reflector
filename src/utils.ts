@@ -1,29 +1,13 @@
+import { Position, WeaponType, Color, Direction, Glyph } from "./types";
 import {
-  GameState,
-  Position,
-  Entity,
-  AIType,
-  WeaponType,
-  Color
-} from "./types";
-import {
-  WHITE,
   RED,
   RIGHT,
   DOWN,
   LEFT,
   UP,
-  GREEN,
-  BLUE,
-  GRAY,
-  BACKGROUND_COLOR,
-  BLACK,
-  PRIORITY_ENEMY,
-  PRIORITY_TERRAIN,
-  PRIORITY_ITEM,
   PRIORITY_LASER,
   PURPLE,
-  YELLOW
+  YELLOW,
 } from "./constants";
 import nanoid from "nanoid";
 import * as ROT from "rot-js";
@@ -42,7 +26,7 @@ export function getDistance(from: Position, to: Position) {
 
 export function getClosestPosition(
   options: Position[],
-  to: Position
+  to: Position,
 ): Position | null {
   return (
     [...options].sort((a, b) => {
@@ -62,105 +46,8 @@ export function getAdjacentPositions(pos: Position): Position[] {
     { x: pos.x + 1, y: pos.y + 1 },
     { x: pos.x - 1, y: pos.y + 1 },
     { x: pos.x + 1, y: pos.y - 1 },
-    { x: pos.x - 1, y: pos.y - 1 }
+    { x: pos.x - 1, y: pos.y - 1 },
   ];
-}
-
-export function makeWeapon(
-  power: number,
-  cooldown: number,
-  slot: number,
-  type: WeaponType,
-  position?: Position
-): Entity {
-  return {
-    id: nanoid(),
-    weapon: {
-      power,
-      cooldown,
-      readyIn: 0,
-      slot,
-      active: false,
-      type
-    },
-    position,
-    glyph: { glyph: "w", color: RED, priority: PRIORITY_ITEM },
-    pickup: { effect: "EQUIP" }
-  };
-}
-
-export function makeFactory(
-  position: Position,
-  type: AIType,
-  cooldown: number
-): Entity {
-  return {
-    id: nanoid(),
-    position,
-    glyph: {
-      glyph: type[0],
-      color: BLACK,
-      background: WHITE,
-      priority: PRIORITY_ENEMY
-    },
-    factory: { type, cooldown },
-    destructible: {},
-    cooldown: { time: 0 },
-    blocking: { moving: true, throwing: true }
-  };
-}
-
-export function makeFovMarker(x: number, y: number): Entity {
-  return {
-    id: nanoid(),
-    position: { x, y },
-    glyph: { glyph: ".", color: GREEN, priority: PRIORITY_TERRAIN },
-    fov: {}
-  };
-}
-
-export function makeWall(x: number, y: number, destructible = false): Entity {
-  const base: Entity = {
-    id: nanoid(),
-    position: { x, y },
-    glyph: { glyph: "#", color: GRAY, priority: PRIORITY_TERRAIN },
-    blocking: { throwing: true, moving: true }
-  };
-  if (destructible) return { ...base, destructible: {} };
-  return base;
-}
-
-export function makeStairs(position: Position): Entity {
-  return {
-    id: nanoid(),
-    position,
-    glyph: { glyph: "<", color: WHITE, priority: PRIORITY_TERRAIN },
-    stairs: {}
-  };
-}
-
-export function makeEnemy(x: number, y: number, type: AIType): Entity {
-  return {
-    id: nanoid(),
-    position: { x, y },
-    glyph: { glyph: type[0], color: BLUE, priority: PRIORITY_ENEMY },
-    blocking: { throwing: false, moving: true },
-    ai: { type },
-    destructible: {},
-    cooldown: { time: 0 },
-    conductive: {}
-  };
-}
-
-export function makeBomb(x: number, y: number): Entity {
-  return {
-    id: nanoid(),
-    position: { x, y },
-    glyph: { glyph: "b", color: BLUE, priority: PRIORITY_ENEMY },
-    blocking: { throwing: false, moving: true },
-    destructible: {},
-    bomb: { time: 1 }
-  };
 }
 
 function getLaserChar(power: number, direction: { dx: number; dy: number }) {
@@ -171,75 +58,19 @@ function getLaserChar(power: number, direction: { dx: number; dy: number }) {
   if (getConstDir(direction) === UP) return "↑⇑⤊"[index];
   return "*";
 }
-export function makeTargetingLaser(
-  x: number,
-  y: number,
-  direction: { dx: number; dy: number },
+export function getLaserGlyph(
+  direction: Direction,
   power: number,
   hit: boolean,
-  type: WeaponType
-): Entity {
+  type: WeaponType,
+): Glyph {
   let color: Color = RED;
   if (type === "TELEPORT") color = PURPLE;
   if (type === "ELECTRIC") color = YELLOW;
   return {
-    id: nanoid(),
-    position: { x, y },
-    glyph: {
-      glyph: hit ? "*" : getLaserChar(power, direction),
-      color,
-      priority: PRIORITY_LASER
-    },
-    targeting: {}
-  };
-}
-
-export function makeFirstAidKit(x: number, y: number): Entity {
-  return {
-    id: nanoid(),
-    position: { x, y },
-    glyph: { glyph: "✚", color: RED, priority: PRIORITY_ITEM },
-    pickup: { effect: "HEAL" }
-  };
-}
-
-export function makeRechargeKit(x: number, y: number): Entity {
-  return {
-    id: nanoid(),
-    position: { x, y },
-    glyph: { glyph: "⇮", color: GREEN, priority: PRIORITY_ITEM },
-    pickup: { effect: "RECHARGE" }
-  };
-}
-export function makeReflector(x: number, y: number, type: "\\" | "/"): Entity {
-  return {
-    id: nanoid(),
-    position: { x, y },
-    glyph: { glyph: type, color: WHITE, priority: PRIORITY_ITEM },
-    blocking: { throwing: false, moving: true },
-    reflector: { type },
-    destructible: {},
-    pickup: { effect: "PICKUP" }
-  };
-}
-
-export function makeSplitter(
-  x: number,
-  y: number,
-  type: "horizontal" | "vertical"
-): Entity {
-  return {
-    id: nanoid(),
-    position: { x, y },
-    glyph: {
-      glyph: type === "horizontal" ? "⬌" : "⬍",
-      color: WHITE,
-      priority: PRIORITY_ITEM
-    },
-    blocking: { throwing: false, moving: true },
-    destructible: {},
-    splitter: { type },
-    pickup: { effect: "PICKUP" }
+    glyph: hit ? "*" : getLaserChar(power, direction),
+    color,
+    priority: PRIORITY_LASER,
   };
 }
 
@@ -254,7 +85,7 @@ export function getConstDir(direction: { dx: number; dy: number }) {
 
 export function reflect(
   direction: { dx: number; dy: number },
-  reflectorType: "\\" | "/"
+  reflectorType: "\\" | "/",
 ): { dx: number; dy: number } {
   const d = direction;
   if (reflectorType === "\\") {

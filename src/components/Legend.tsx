@@ -66,7 +66,10 @@ export default function Legend() {
         <span className="legend__glyph" style={{ color: BLUE }}>
           R
         </span>
-        <span className="legend__desc">Rusher - attacks at close range</span>
+        <span className="legend__desc">
+          Rusher - takes the shortest path for you, destroying anything in its
+          path (except other enemies)
+        </span>
       </div>
       <div className="legend__item">
         <span className="legend__glyph" style={{ color: BLUE }}>
@@ -81,7 +84,8 @@ export default function Legend() {
           S
         </span>
         <span className="legend__desc">
-          Smasher - destroys your reflectors and splitters
+          Smasher - targets you, your reflectors, or your splitters, whatever is
+          closest.
         </span>
       </div>
       <div className="legend__item">

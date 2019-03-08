@@ -7,7 +7,7 @@ const initialState: GameState = {
   entities: {},
   entitiesByPosition: {},
   messageLog: [],
-  gameOver: false
+  gameOver: false,
 };
 
 function reducer(state: GameState = initialState, action: Action): GameState {

@@ -10,7 +10,7 @@ import {
   FONT_SIZE,
   FONT_FAMILY,
   TRANSPARENT,
-  PLAYER_ID
+  PLAYER_ID,
 } from "../constants";
 import { Glyph } from "../types";
 
@@ -20,7 +20,7 @@ const display = new ROT.Display({
   forceSquareRatio: true,
   bg: BACKGROUND_COLOR,
   fontSize: Math.min(FONT_SIZE, document.body.clientWidth / MAP_WIDTH),
-  fontFamily: FONT_FAMILY
+  fontFamily: FONT_FAMILY,
 });
 
 export default function Map() {
@@ -49,7 +49,7 @@ export default function Map() {
         y,
         glyph.glyph,
         glyph.color,
-        glyph.background || TRANSPARENT
+        glyph.background || TRANSPARENT,
       );
     });
 

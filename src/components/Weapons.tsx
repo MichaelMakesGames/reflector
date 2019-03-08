@@ -12,13 +12,13 @@ export default function Weapons() {
   return (
     <div>
       <Weapon
-        label="Equipping"
+        slot="Equipping"
         weapon={equipping && equipping.weapon ? equipping.weapon : null}
       />
-      <Weapon label="Weapon 1" weapon={getSlot(1)} />
-      <Weapon label="Weapon 2" weapon={getSlot(2)} />
-      <Weapon label="Weapon 3" weapon={getSlot(3)} />
-      <Weapon label="Weapon 4" weapon={getSlot(4)} />
+      <Weapon slot="1" weapon={getSlot(1)} />
+      <Weapon slot="2" weapon={getSlot(2)} />
+      <Weapon slot="3" weapon={getSlot(3)} />
+      <Weapon slot="4" weapon={getSlot(4)} />
     </div>
   );
 }
