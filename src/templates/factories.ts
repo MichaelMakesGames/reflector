@@ -1,5 +1,5 @@
 import { Entity } from "../types";
-import { BLUE, WHITE, PRIORITY_ENEMY } from "../constants";
+import { BLUE, WHITE, PRIORITY_ENEMY, BLACK } from "../constants";
 
 const templates: { [id: string]: Partial<Entity> } = {
   FACTORY_BASE: {
@@ -11,8 +11,8 @@ const templates: { [id: string]: Partial<Entity> } = {
     parentTemplate: "FACTORY_BASE",
     glyph: {
       glyph: "R",
-      color: BLUE,
-      background: WHITE,
+      color: BLACK,
+      background: BLUE,
       priority: PRIORITY_ENEMY,
     },
     factory: { type: "ENEMY_RUSHER", cooldown: 2 },
@@ -21,8 +21,8 @@ const templates: { [id: string]: Partial<Entity> } = {
     parentTemplate: "FACTORY_BASE",
     glyph: {
       glyph: "A",
-      color: BLUE,
-      background: WHITE,
+      color: BLACK,
+      background: BLUE,
       priority: PRIORITY_ENEMY,
     },
     factory: { type: "ENEMY_ANGLER", cooldown: 2 },
@@ -31,8 +31,8 @@ const templates: { [id: string]: Partial<Entity> } = {
     parentTemplate: "FACTORY_BASE",
     glyph: {
       glyph: "S",
-      color: BLUE,
-      background: WHITE,
+      color: BLACK,
+      background: BLUE,
       priority: PRIORITY_ENEMY,
     },
     factory: { type: "ENEMY_SMASHER", cooldown: 2 },
@@ -41,8 +41,8 @@ const templates: { [id: string]: Partial<Entity> } = {
     parentTemplate: "FACTORY_BASE",
     glyph: {
       glyph: "B",
-      color: BLUE,
-      background: WHITE,
+      color: BLACK,
+      background: BLUE,
       priority: PRIORITY_ENEMY,
     },
     factory: { type: "ENEMY_BOMBER", cooldown: 2 },

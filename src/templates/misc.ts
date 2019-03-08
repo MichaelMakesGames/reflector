@@ -24,7 +24,7 @@ const templates: { [id: string]: Partial<Entity> } = {
     glyph: { glyph: "b", color: BRIGHT_RED, priority: PRIORITY_ENEMY },
     blocking: { throwing: false, moving: true },
     destructible: {},
-    bomb: { time: 1 },
+    bomb: { time: 0 },
   },
   LASER: {
     targeting: {},

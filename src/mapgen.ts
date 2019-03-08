@@ -3,7 +3,6 @@ import { MAZE_SIZE, MAP_HEIGHT, MAP_WIDTH, ROOM_SIZE } from "./constants";
 import { Entity, Level, AIType, Position, WeaponType } from "./types";
 import { isPosEqual } from "./utils";
 import { createEntityFromTemplate } from "./templates";
-import weaponTemplates from "./templates/weapons";
 
 export function generateMap(level: Level): Entity[] {
   const rng = ROT.RNG.clone();
@@ -64,7 +63,12 @@ export function generateMap(level: Level): Entity[] {
       );
     }
   } else {
-    const factoryTemplates = ["ANGLER", "BOMBER", "SMASHER", "RUSHER"];
+    const factoryTemplates = [
+      "FACTORY_ANGLER",
+      "FACTORY_BOMBER",
+      "FACTORY_SMASHER",
+      "FACTORY_RUSHER",
+    ];
     for (let template of factoryTemplates) {
       const position = getRandomPos();
       result.push(createEntityFromTemplate(template, { position }));
@@ -114,12 +118,15 @@ export function generateMap(level: Level): Entity[] {
 
   for (let i = 0; i < 1; i++) {
     const position = getRandomPos();
-    const weaponTemplate = rng.getItem<string>(
-      Object.keys(weaponTemplates).filter(t => !t.includes("BASE")),
-    );
+    const weaponTemplate = rng.getItem<string>(level.possibleWeapons);
     if (weaponTemplate) {
       result.push(createEntityFromTemplate(weaponTemplate, { position }));
     }
+  }
+
+  for (let i = 0; i < 2; i++) {
+    const position = getRandomPos();
+    result.push(createEntityFromTemplate("TELEPORTER", { position }));
   }
   return result;
 }

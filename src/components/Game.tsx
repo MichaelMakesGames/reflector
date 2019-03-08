@@ -7,6 +7,7 @@ import Weapons from "./Weapons";
 import Status from "./Status";
 import Legend from "./Legend";
 import MessageLog from "./MessageLog";
+import DamageFlash from "./DamageFlash";
 
 export default function Game() {
   const dispatch = useDispatch();
@@ -32,6 +33,7 @@ export default function Game() {
       <div className="row">
         <Controls />
       </div>
+      <DamageFlash />
     </main>
   );
 }

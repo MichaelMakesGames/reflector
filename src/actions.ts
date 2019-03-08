@@ -9,6 +9,10 @@ export const removeEntity = createStandardAction("REMOVE_ENTITY")<{
   entityId: string;
 }>();
 
+export const removeEntities = createStandardAction("REMOVE_ENTITIES")<{
+  entityIds: string[];
+}>();
+
 export const move = createStandardAction("MOVE")<{
   entityId: string;
   dx: number;
@@ -43,7 +47,10 @@ export const cancelThrow = createStandardAction("CANCEL_THROW")();
 export const rotateThrow = createStandardAction("ROTATE_THROW")();
 export const executeThrow = createStandardAction("THROW")();
 
-export const attack = createStandardAction("ATTACK")<{ target: string }>();
+export const attack = createStandardAction("ATTACK")<{
+  target: string;
+  message: string;
+}>();
 
 export const playerTookTurn = createStandardAction("PLAYER_TOOK_TURN")();
 

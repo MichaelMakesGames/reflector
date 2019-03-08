@@ -1,4 +1,4 @@
-import { GameState, Position, Entity } from "./types";
+import { GameState, Position, Entity, Level } from "./types";
 import { PLAYER_ID } from "./constants";
 import { getPosKey } from "./utils";
 
@@ -69,4 +69,11 @@ export function throwingTarget(state: GameState) {
   const entities = entityList(state).filter(entity => entity.throwing);
   if (entities.length) return entities[0];
   return null;
+}
+
+export function currentLevel(state: GameState): Level | null {
+  const entity = entityList(state).find(e =>
+    Boolean(e.level && e.level.current),
+  );
+  return entity && entity.level ? entity.level : null;
 }

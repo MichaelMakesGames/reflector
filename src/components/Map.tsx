@@ -25,6 +25,7 @@ const display = new ROT.Display({
 
 export default function Map() {
   const gameState = useMappedState(selectors.gameState);
+  const currentLevel = useMappedState(selectors.currentLevel);
 
   useEffect(() => {
     const container = display.getContainer();
@@ -55,7 +56,9 @@ export default function Map() {
 
   return (
     <div className="box map">
-      <div className="box__label">Map</div>
+      <div className="box__label">
+        Map, Level {currentLevel ? currentLevel.depth : 0}
+      </div>
       <div id="map" />
     </div>
   );

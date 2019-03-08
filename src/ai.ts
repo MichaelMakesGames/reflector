@@ -75,7 +75,12 @@ export function getAIActions(entity: Entity, gameState: GameState): Action[] {
       return [];
     }
     if (getDistance(entity.position, player.position) <= 1) {
-      return [actions.attack({ target: player.id })];
+      return [
+        actions.attack({
+          target: player.id,
+          message: "The Rusher attacks you!",
+        }),
+      ];
     }
     const direction = getDirectionTowardTarget(
       entity.position,
@@ -96,7 +101,12 @@ export function getAIActions(entity: Entity, gameState: GameState): Action[] {
       e => !!e.destructible,
     );
     if (destructibleAtTargetPos) {
-      return [actions.attack({ target: destructibleAtTargetPos.id })];
+      return [
+        actions.attack({
+          target: destructibleAtTargetPos.id,
+          message: "The Rusher attacks you!",
+        }),
+      ];
     } else {
       return [actions.move({ entityId: entity.id, ...direction })];
     }
@@ -117,7 +127,12 @@ export function getAIActions(entity: Entity, gameState: GameState): Action[] {
         ),
     );
     if (adjacent) {
-      return [actions.attack({ target: adjacent.id })];
+      return [
+        actions.attack({
+          target: adjacent.id,
+          message: "The Smasher attacks you!",
+        }),
+      ];
     }
 
     const closest = reflectorsAndSplittersAndPlayer.sort((a, b) => {
@@ -183,7 +198,12 @@ export function getAIActions(entity: Entity, gameState: GameState): Action[] {
       return true;
     });
     if (attackablePositions.some(pos => isPosEqual(pos, entityPos))) {
-      return [actions.attack({ target: PLAYER_ID })];
+      return [
+        actions.attack({
+          target: PLAYER_ID,
+          message: "The Angler attacks you!",
+        }),
+      ];
     }
     const passableAttackablePosition = attackablePositions.filter(pos =>
       isPassable(gameState, pos),

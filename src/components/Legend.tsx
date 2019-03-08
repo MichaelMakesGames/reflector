@@ -10,6 +10,7 @@ import {
   GRAY,
   BRIGHT_RED,
   ANGLER_RANGE,
+  PURPLE,
 } from "../constants";
 
 export default function Legend() {
@@ -51,6 +52,14 @@ export default function Legend() {
         </span>
         <span className="legend__desc">
           Wall - interior walls are destructible
+        </span>
+      </div>
+      <div className="legend__item">
+        <span className="legend__glyph" style={{ color: PURPLE }}>
+          ◉
+        </span>
+        <span className="legend__desc">
+          Teleporter - swap positions with the other teleporter
         </span>
       </div>
       <div className="legend__item">

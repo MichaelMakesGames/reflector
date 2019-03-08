@@ -1,5 +1,5 @@
 import { Entity } from "../types";
-import { GRAY, PRIORITY_TERRAIN, WHITE } from "../constants";
+import { GRAY, PRIORITY_TERRAIN, WHITE, PURPLE } from "../constants";
 
 const templates: { [id: string]: Partial<Entity> } = {
   WALL: {
@@ -9,6 +9,10 @@ const templates: { [id: string]: Partial<Entity> } = {
   STAIRS: {
     glyph: { glyph: "<", color: WHITE, priority: PRIORITY_TERRAIN },
     stairs: {},
+  },
+  TELEPORTER: {
+    glyph: { glyph: "◉", color: PURPLE, priority: PRIORITY_TERRAIN },
+    teleporter: {},
   },
 };
 

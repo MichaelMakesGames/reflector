@@ -123,6 +123,8 @@ interface Factory extends Component {
   cooldown: number;
 }
 
+interface Teleporter extends Component {}
+
 export interface Entity {
   id: string;
   parentTemplate?: string;
@@ -147,6 +149,7 @@ export interface Entity {
   conductive?: Conductive;
   equipping?: Equipping;
   factory?: Factory;
+  teleporter?: Teleporter;
 }
 
 export interface GameState {
