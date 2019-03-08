@@ -78,7 +78,7 @@ main {
 }
 
 .control {
-  flex: 0 0 20%;
+  flex: 0 0 25%;
 }
 .control > kbd {
   background: #333;

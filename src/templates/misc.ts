@@ -7,6 +7,7 @@ import {
   PLAYER_ID,
   WHITE,
   PRIORITY_PLAYER,
+  BRIGHT_RED,
 } from "../constants";
 
 const templates: { [id: string]: Partial<Entity> } = {
@@ -20,7 +21,7 @@ const templates: { [id: string]: Partial<Entity> } = {
     conductive: {},
   },
   BOMB: {
-    glyph: { glyph: "b", color: BLUE, priority: PRIORITY_ENEMY },
+    glyph: { glyph: "b", color: BRIGHT_RED, priority: PRIORITY_ENEMY },
     blocking: { throwing: false, moving: true },
     destructible: {},
     bomb: { time: 1 },

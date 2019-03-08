@@ -15,17 +15,6 @@ import { number } from "prop-types";
 
 export type Action = ActionType<typeof actions>;
 
-export type Color =
-  | typeof WHITE
-  | typeof RED
-  | typeof GREEN
-  | typeof BLUE
-  | typeof GRAY
-  | typeof BLACK
-  | typeof YELLOW
-  | typeof PURPLE
-  | typeof TRANSPARENT;
-
 export interface Direction {
   dx: number;
   dy: number;
@@ -39,8 +28,8 @@ export interface Position extends Component {
 
 export interface Glyph extends Component {
   glyph: string;
-  color: Color;
-  background?: Color;
+  color: string;
+  background?: string;
   priority: number;
 }
 

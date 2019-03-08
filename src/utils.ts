@@ -1,4 +1,4 @@
-import { Position, WeaponType, Color, Direction, Glyph } from "./types";
+import { Position, WeaponType, Direction, Glyph } from "./types";
 import {
   RED,
   RIGHT,
@@ -64,7 +64,7 @@ export function getLaserGlyph(
   hit: boolean,
   type: WeaponType,
 ): Glyph {
-  let color: Color = RED;
+  let color = RED;
   if (type === "TELEPORT") color = PURPLE;
   if (type === "ELECTRIC") color = YELLOW;
   return {

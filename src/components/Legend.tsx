@@ -1,7 +1,16 @@
 import React from "react";
 import { useMappedState } from "redux-react-hook";
 import * as selectors from "../selectors";
-import { WHITE, RED, GREEN, BLUE, BLACK, GRAY } from "../constants";
+import {
+  WHITE,
+  RED,
+  GREEN,
+  BLUE,
+  BLACK,
+  GRAY,
+  BRIGHT_RED,
+  ANGLER_RANGE,
+} from "../constants";
 
 export default function Legend() {
   const entities = useMappedState(selectors.entityList);
@@ -76,7 +85,8 @@ export default function Legend() {
           A
         </span>
         <span className="legend__desc">
-          Angler - attacks at range from a 45 degree angle
+          Angler - attacks from a 45 degree angle at a range of up to{" "}
+          {ANGLER_RANGE}
         </span>
       </div>
       <div className="legend__item">
@@ -93,7 +103,17 @@ export default function Legend() {
           B
         </span>
         <span className="legend__desc">
-          Bomber - throws a bomb that damages everything adjacent
+          Bomber - throws a bomb that damages everything adjacent, but cannot
+          throw every turn.
+        </span>
+      </div>
+      <div className="legend__item">
+        <span className="legend__glyph" style={{ color: BRIGHT_RED }}>
+          b
+        </span>
+        <span className="legend__desc">
+          Bomb - explodes damages everything adjacent. Does not explode if
+          destroyed.
         </span>
       </div>
       <div className="legend__item">

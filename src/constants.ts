@@ -30,6 +30,7 @@ export const GRAY = "#888";
 export const YELLOW = "#FF8";
 export const PURPLE = "#F8F";
 export const BLACK = BACKGROUND_COLOR;
+export const BRIGHT_RED = "#F00";
 export const TRANSPARENT = "transparent";
 
 export const RIGHT = { dx: 1, dy: 0 };

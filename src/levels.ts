@@ -26,7 +26,7 @@ export function getLevels(): Level[] {
       numReflectors: 5,
       numPickups: 3,
       aiWeights: {
-        ENEMY_RUSHER: 10,
+        ENEMY_BOMBER: 10,
         // ENEMY_ANGLER: 10,
         // ENEMY_SMASHER: 10,
         // ENEMY_BOMBER: 10
