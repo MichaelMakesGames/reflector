@@ -2,6 +2,7 @@ import React from "react";
 import * as selectors from "../selectors";
 import { useMappedState } from "redux-react-hook";
 import Weapon from "./Weapon";
+import { BLACK } from "../constants";
 export default function Weapons() {
   const weapons = useMappedState(selectors.weapons);
 
@@ -11,10 +12,23 @@ export default function Weapons() {
   const equipping = weapons.find(w => !!w.equipping);
   return (
     <div>
-      <Weapon
-        slot="Equipping"
-        weapon={equipping && equipping.weapon ? equipping.weapon : null}
-      />
+      <div
+        style={{
+          position: "fixed",
+          width: "20em",
+          left: "50%",
+          top: "20vh",
+          background: BLACK,
+          transform: "translateX(-50%)",
+          zIndex: 10,
+        }}
+        hidden={!equipping || !equipping.weapon}
+      >
+        <Weapon
+          slot=""
+          weapon={equipping && equipping.weapon ? equipping.weapon : null}
+        />
+      </div>
       <Weapon slot="1" weapon={getSlot(1)} />
       <Weapon slot="2" weapon={getSlot(2)} />
       <Weapon slot="3" weapon={getSlot(3)} />

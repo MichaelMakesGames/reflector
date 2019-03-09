@@ -28,19 +28,22 @@ export default function Weapon({
   if (status.startsWith("CHARGING")) statusStyle.color = RED;
   if (status === "TARGETING") statusStyle = { background: GREEN, color: BLACK };
 
+  const itemStyle: React.CSSProperties = { flex: "0 0 50%" };
   return (
     <div className="box weapon">
       <div className="box__label weapon__label">
         {slot}: {weapon.name}
       </div>
-      <div>
-        Type: <span style={{ color: weaponTypeColor }}>{weapon.type}</span>
+      <div style={{ display: "flex", flexFlow: "row wrap" }}>
+        <div style={itemStyle}>
+          Status: <span style={statusStyle}>{status}</span>
+        </div>
+        <div style={itemStyle}>
+          Type: <span style={{ color: weaponTypeColor }}>{weapon.type}</span>
+        </div>
+        <div style={itemStyle}>Power: {weapon.power}</div>
+        <div style={itemStyle}>Cooldown: {weapon.cooldown}</div>
       </div>
-      <div>
-        Status: <span style={statusStyle}>{status}</span>
-      </div>
-      <div>Power: {weapon.power}</div>
-      <div>Cooldown: {weapon.cooldown}</div>
     </div>
   );
 }

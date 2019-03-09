@@ -19,7 +19,7 @@ export const MAP_WIDTH = ROOMS * ROOM_SIZE + ROOMS + 1;
 export const MAP_HEIGHT = MAP_WIDTH;
 
 export const BACKGROUND_COLOR = "#111";
-export const FONT_SIZE = 22;
+export const FONT_SIZE = 18;
 export const FONT_FAMILY = "Nova Mono";
 
 export const WHITE = "#EEE";

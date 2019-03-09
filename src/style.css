@@ -19,6 +19,8 @@ main {
   display: flex;
   flex-flow: column;
   max-width: 1280px;
+  height: 767px;
+  overflow: hidden;
 }
 
 .row {
@@ -60,10 +62,12 @@ main {
 }
 
 .status {
-  position: relative;
-  top: 7px;
+  /* position: relative; */
+  /* top: 7px; */
   display: flex;
   flex-flow: row;
+  height: 5rem;
+  /* height: 5.3rem; */
 }
 
 .status > * {
@@ -92,11 +96,11 @@ main {
 }
 
 .weapon {
-  height: 8rem;
+  height: 5.3rem;
 }
 
 .message-log {
-  height: 8rem;
+  height: 5rem;
 }
 
 .messages {
@@ -109,12 +113,17 @@ main {
 }
 
 .legend {
-  height: 46rem;
+  height: 32.3rem;
+  display: flex;
+  flex-flow: row wrap;
 }
 
 .legend__item {
-  margin-left: 1rem;
-  text-indent: -1rem;
+  flex: 0 0 calc(100% - 2rem);
+}
+
+.legend__item--half {
+  flex: 0 0 calc(50% - 1rem);
 }
 
 .legend__glyph {

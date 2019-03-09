@@ -19,12 +19,12 @@ export default function Game() {
     <main>
       <div className="row">
         <div className="left">
+          <Status />
           <Weapons />
         </div>
         <div className="center">
           <MessageLog />
           <Map />
-          <Status />
         </div>
         <div className="right">
           <Legend />
