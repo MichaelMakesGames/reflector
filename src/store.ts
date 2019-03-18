@@ -1,18 +1,6 @@
 import { createStore } from "redux";
-import { composeWithDevTools } from "redux-devtools-extension";
-import { GameState, Action } from "./types";
-import handleAction from "./actionHandlers/handleAction";
+import reducer from "./reducer";
 
-const initialState: GameState = {
-  entities: {},
-  entitiesByPosition: {},
-  messageLog: [],
-  gameOver: false,
-};
-
-function reducer(state: GameState = initialState, action: Action): GameState {
-  return handleAction(state, action);
-}
 const store = createStore(reducer);
 // const store = createStore(reducer, composeWithDevTools());
 

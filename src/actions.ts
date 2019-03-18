@@ -1,4 +1,4 @@
-import { createStandardAction, ActionType, getType } from "typesafe-actions";
+import { createStandardAction } from "typesafe-actions";
 import { Entity } from "./types";
 
 export const addEntity = createStandardAction("ADD_ENTITY")<{
@@ -31,14 +31,12 @@ export const targetWeapon = createStandardAction("TARGET_WEAPON")<{
 export const activateEquip = createStandardAction("ACTIVATE_EQUIP")<{
   entity: Entity;
 }>();
+
 export const executeEquip = createStandardAction("EXECUTE_EQUIP")<{
   slot: number;
 }>();
 
 export const fireWeapon = createStandardAction("FIRE_WEAPON")();
-export const fireWeaponSuccess = createStandardAction("FIRE_WEAPON_SUCCESS")<{
-  entityId: string;
-}>();
 
 export const activateThrow = createStandardAction("ACTIVATE_THROW")<{
   entity: Entity;

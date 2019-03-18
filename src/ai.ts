@@ -1,20 +1,28 @@
-import { Entity, GameState, Action, Position, Direction } from "./types";
-import * as actions from "./actions";
-import * as selectors from "./selectors";
 import * as ROT from "rot-js";
+import { ActionType } from "typesafe-actions";
+import * as actions from "./actions";
 import {
-  getDistance,
-  isPosEqual,
+  ANGLER_RANGE,
+  BOMBER_COOLDOWN,
+  BOMBER_RANGE,
+  PLAYER_ID,
+} from "./constants";
+import * as selectors from "./selectors";
+import { createEntityFromTemplate } from "./templates";
+import { Direction, Entity, GameState, Position } from "./types";
+import {
   getAdjacentPositions,
   getClosestPosition,
+  getDistance,
+  isPosEqual,
 } from "./utils";
-import {
-  PLAYER_ID,
-  ANGLER_RANGE,
-  BOMBER_RANGE,
-  BOMBER_COOLDOWN,
-} from "./constants";
-import { createEntityFromTemplate } from "./templates";
+
+const aiActions = {
+  move: actions.move,
+  attack: actions.attack,
+  addEntity: actions.addEntity,
+};
+type AIAction = ActionType<typeof aiActions>;
 
 function isPassable(gameState: GameState, position: Position) {
   return selectors
@@ -65,7 +73,7 @@ function getDirectionTowardTarget(
   return null;
 }
 
-export function getAIActions(entity: Entity, gameState: GameState): Action[] {
+export function getAIActions(entity: Entity, gameState: GameState): AIAction[] {
   const ai = entity.ai;
   if (!ai) return [];
   const player = selectors.player(gameState);
