@@ -2,8 +2,8 @@ import * as actions from "../actions";
 import { RIGHT } from "../constants";
 import * as selectors from "../selectors";
 import { GameState } from "../types";
-import { addEntity } from "./addEntity";
 import { targetWeapon } from "./targetWeapon";
+import { updateEntity } from "./updateEntity";
 
 export function activateWeapon(
   state: GameState,
@@ -14,15 +14,13 @@ export function activateWeapon(
 
   for (let weapon of selectors.weapons(state)) {
     if (weapon !== weaponInSlot && weapon.weapon && weapon.weapon.active) {
-      state = addEntity(
+      state = updateEntity(
         state,
-        actions.addEntity({
-          entity: {
-            ...weapon,
-            weapon: {
-              ...weapon.weapon,
-              active: false,
-            },
+        actions.updateEntity({
+          id: weapon.id,
+          weapon: {
+            ...weapon.weapon,
+            active: false,
           },
         }),
       );

@@ -2,8 +2,8 @@ import * as actions from "../actions";
 import * as selectors from "../selectors";
 import { GameState } from "../types";
 import { getDistance } from "../utils";
-import { addEntity } from "./addEntity";
 import { removeEntities } from "./removeEntities";
+import { updateEntity } from "./updateEntity";
 
 export function executeThrow(
   state: GameState,
@@ -36,29 +36,25 @@ export function executeThrow(
   if (entitiesAtPosition.some(e => e.id !== entity.id && !!e.blocking))
     return state;
 
-  state = addEntity(
+  state = updateEntity(
     state,
-    actions.addEntity({
-      entity: {
-        ...entity,
-        throwing: undefined,
-      },
+    actions.updateEntity({
+      id: entity.id,
+      throwing: undefined,
     }),
   );
 
-  state = addEntity(
+  state = updateEntity(
     state,
-    actions.addEntity({
-      entity: {
-        ...player,
-        inventory: {
-          splitters: entity.splitter
-            ? inventory.splitters - 1
-            : inventory.splitters,
-          reflectors: entity.reflector
-            ? inventory.reflectors - 1
-            : inventory.reflectors,
-        },
+    actions.updateEntity({
+      id: player.id,
+      inventory: {
+        splitters: entity.splitter
+          ? inventory.splitters - 1
+          : inventory.splitters,
+        reflectors: entity.reflector
+          ? inventory.reflectors - 1
+          : inventory.reflectors,
       },
     }),
   );

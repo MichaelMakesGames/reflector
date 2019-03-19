@@ -1,7 +1,7 @@
 import * as actions from "../actions";
 import * as selectors from "../selectors";
 import { GameState } from "../types";
-import { addEntity } from "./addEntity";
+import { updateEntity } from "./updateEntity";
 
 export function rotateThrow(
   state: GameState,
@@ -28,6 +28,6 @@ export function rotateThrow(
       glyph: { ...entity.glyph, glyph: entity.glyph.glyph === "⬍" ? "⬌" : "⬍" },
     };
   }
-  state = addEntity(state, actions.addEntity({ entity }));
+  state = updateEntity(state, actions.updateEntity(entity));
   return state;
 }

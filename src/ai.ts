@@ -21,6 +21,7 @@ const aiActions = {
   move: actions.move,
   attack: actions.attack,
   addEntity: actions.addEntity,
+  updateEntity: actions.updateEntity,
 };
 type AIAction = ActionType<typeof aiActions>;
 
@@ -252,8 +253,9 @@ export function getAIActions(entity: Entity, gameState: GameState): AIAction[] {
       actions.addEntity({
         entity: createEntityFromTemplate("BOMB", { position: target }),
       }),
-      actions.addEntity({
-        entity: { ...entity, cooldown: { time: BOMBER_COOLDOWN + 1 } },
+      actions.updateEntity({
+        id: entity.id,
+        cooldown: { time: BOMBER_COOLDOWN + 1 },
       }),
     ];
   }

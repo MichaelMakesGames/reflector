@@ -13,6 +13,8 @@ export const removeEntities = createStandardAction("REMOVE_ENTITIES")<{
   entityIds: string[];
 }>();
 
+export const updateEntity = createStandardAction("UPDATE_ENTITY")<Entity>();
+
 export const move = createStandardAction("MOVE")<{
   entityId: string;
   dx: number;

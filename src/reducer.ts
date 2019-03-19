@@ -17,6 +17,7 @@ import { removeEntity } from "./handlers/removeEntity";
 import { rotateThrow } from "./handlers/rotateThrow";
 import { targetWeapon } from "./handlers/targetWeapon";
 import { Action, GameState } from "./types";
+import { updateEntity } from "./handlers/updateEntity";
 
 const initialState: GameState = {
   entities: {},
@@ -62,6 +63,8 @@ export default function reducer(
       return removeEntities(state, action);
     case getType(actions.removeEntity):
       return removeEntity(state, action);
+    case getType(actions.updateEntity):
+      return updateEntity(state, action);
     default: {
       if (!(action as { type: string }).type.startsWith("@@")) {
         console.warn("Unhandled action in reducer", action);

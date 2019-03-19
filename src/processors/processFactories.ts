@@ -1,5 +1,6 @@
 import * as actions from "../actions";
 import { addEntity } from "../handlers/addEntity";
+import { updateEntity } from "../handlers/updateEntity";
 import * as selectors from "../selectors";
 import { createEntityFromTemplate } from "../templates";
 import { GameState } from "../types";
@@ -26,13 +27,11 @@ export default function processFactories(state: GameState): GameState {
         }),
       }),
     );
-    state = addEntity(
+    state = updateEntity(
       state,
-      actions.addEntity({
-        entity: {
-          ...entity,
-          cooldown: { time: entity.factory.cooldown + 1 },
-        },
+      actions.updateEntity({
+        id: entity.id,
+        cooldown: { time: entity.factory.cooldown + 1 },
       }),
     );
   }

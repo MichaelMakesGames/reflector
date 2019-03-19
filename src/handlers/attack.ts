@@ -2,8 +2,8 @@ import * as actions from "../actions";
 import { PLAYER_ID } from "../constants";
 import * as selectors from "../selectors";
 import { GameState } from "../types";
-import { addEntity } from "./addEntity";
 import { removeEntity } from "./removeEntity";
+import { updateEntity } from "./updateEntity";
 
 export function attack(
   state: GameState,
@@ -11,15 +11,13 @@ export function attack(
 ): GameState {
   const target = selectors.entity(state, action.payload.target);
   if (target.hitPoints) {
-    state = addEntity(
+    state = updateEntity(
       state,
-      actions.addEntity({
-        entity: {
-          ...target,
-          hitPoints: {
-            ...target.hitPoints,
-            current: target.hitPoints.current - 1,
-          },
+      actions.updateEntity({
+        id: target.id,
+        hitPoints: {
+          ...target.hitPoints,
+          current: target.hitPoints.current - 1,
         },
       }),
     );

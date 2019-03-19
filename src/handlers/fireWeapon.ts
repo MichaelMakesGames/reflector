@@ -1,10 +1,10 @@
 import * as actions from "../actions";
 import * as selectors from "../selectors";
 import { GameState } from "../types";
-import { addEntity } from "./addEntity";
 import { attack } from "./attack";
 import { playerTookTurn } from "./playerTookTurn";
 import { removeEntities } from "./removeEntities";
+import { updateEntity } from "./updateEntity";
 
 export function fireWeapon(
   state: GameState,
@@ -68,28 +68,24 @@ export function fireWeapon(
   if (entitiesToSwap.length > 1) {
     const positions = entitiesToSwap.map(e => e.position);
     entitiesToSwap.forEach((entity, index) => {
-      state = addEntity(
+      state = updateEntity(
         state,
-        actions.addEntity({
-          entity: {
-            ...entity,
-            position: positions[(index + 1) % positions.length],
-          },
+        actions.updateEntity({
+          id: entity.id,
+          position: positions[(index + 1) % positions.length],
         }),
       );
     });
   }
 
-  state = addEntity(
+  state = updateEntity(
     state,
-    actions.addEntity({
-      entity: {
-        ...activeWeapon,
-        weapon: {
-          ...activeWeapon.weapon,
-          readyIn: activeWeapon.weapon.cooldown + 1,
-          active: false,
-        },
+    actions.updateEntity({
+      id: activeWeapon.id,
+      weapon: {
+        ...activeWeapon.weapon,
+        readyIn: activeWeapon.weapon.cooldown + 1,
+        active: false,
       },
     }),
   );

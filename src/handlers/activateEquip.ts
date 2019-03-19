@@ -1,20 +1,18 @@
 import * as actions from "../actions";
 import * as selectors from "../selectors";
 import { GameState } from "../types";
-import { addEntity } from "./addEntity";
 import { executeEquip } from "./executeEquip";
+import { updateEntity } from "./updateEntity";
 
 export function activateEquip(
   state: GameState,
   action: ReturnType<typeof actions.activateEquip>,
 ) {
-  state = addEntity(
+  state = updateEntity(
     state,
-    actions.addEntity({
-      entity: {
-        ...action.payload.entity,
-        equipping: {},
-      },
+    actions.updateEntity({
+      id: action.payload.entity.id,
+      equipping: {},
     }),
   );
 

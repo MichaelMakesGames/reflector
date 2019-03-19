@@ -1,7 +1,7 @@
 import * as actions from "../actions";
 import { activateEquip } from "../handlers/activateEquip";
-import { addEntity } from "../handlers/addEntity";
 import { removeEntity } from "../handlers/removeEntity";
+import { updateEntity } from "../handlers/updateEntity";
 import * as selectors from "../selectors";
 import { GameState } from "../types";
 import { isPosEqual } from "../utils";
@@ -28,17 +28,15 @@ export default function processPickups(state: GameState): GameState {
           actions.removeEntity({ entityId: entity.id }),
         );
         if (player.inventory) {
-          state = addEntity(
+          state = updateEntity(
             state,
-            actions.addEntity({
-              entity: {
-                ...player,
-                inventory: {
-                  reflectors:
-                    player.inventory.reflectors + (entity.reflector ? 1 : 0),
-                  splitters:
-                    player.inventory.splitters + (entity.splitter ? 1 : 0),
-                },
+            actions.updateEntity({
+              id: player.id,
+              inventory: {
+                reflectors:
+                  player.inventory.reflectors + (entity.reflector ? 1 : 0),
+                splitters:
+                  player.inventory.splitters + (entity.splitter ? 1 : 0),
               },
             }),
           );
@@ -53,15 +51,13 @@ export default function processPickups(state: GameState): GameState {
           player.hitPoints &&
           player.hitPoints.current < player.hitPoints.max
         ) {
-          state = addEntity(
+          state = updateEntity(
             state,
-            actions.addEntity({
-              entity: {
-                ...player,
-                hitPoints: {
-                  ...player.hitPoints,
-                  current: player.hitPoints.current + 1,
-                },
+            actions.updateEntity({
+              id: player.id,
+              hitPoints: {
+                ...player.hitPoints,
+                current: player.hitPoints.current + 1,
               },
             }),
           );
@@ -82,10 +78,11 @@ export default function processPickups(state: GameState): GameState {
         };
         for (let weapon of selectors.weapons(state)) {
           if (weapon.weapon && weapon.weapon.readyIn) {
-            state = addEntity(
+            state = updateEntity(
               state,
-              actions.addEntity({
-                entity: { ...weapon, weapon: { ...weapon.weapon, readyIn: 0 } },
+              actions.updateEntity({
+                id: weapon.id,
+                weapon: { ...weapon.weapon, readyIn: 0 },
               }),
             );
           }

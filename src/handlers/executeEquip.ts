@@ -1,8 +1,8 @@
 import * as actions from "../actions";
 import * as selectors from "../selectors";
 import { GameState } from "../types";
-import { addEntity } from "./addEntity";
 import { removeEntity } from "./removeEntity";
+import { updateEntity } from "./updateEntity";
 
 export function executeEquip(
   state: GameState,
@@ -20,17 +20,15 @@ export function executeEquip(
         actions.removeEntity({ entityId: weaponInSlot.id }),
       );
     }
-    state = addEntity(
+    state = updateEntity(
       state,
-      actions.addEntity({
-        entity: {
-          ...equipping,
-          equipping: undefined,
-          position: undefined,
-          weapon: {
-            ...equipping.weapon,
-            slot,
-          },
+      actions.updateEntity({
+        id: equipping.id,
+        equipping: undefined,
+        position: undefined,
+        weapon: {
+          ...equipping.weapon,
+          slot,
         },
       }),
     );

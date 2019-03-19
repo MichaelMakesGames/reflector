@@ -6,6 +6,7 @@ import { attack } from "../handlers/attack";
 import { move } from "../handlers/move";
 import * as selectors from "../selectors";
 import { GameState } from "../types";
+import { updateEntity } from "../handlers/updateEntity";
 
 export default function processAI(state: GameState): GameState {
   const entities = selectors.entityList(state);
@@ -16,6 +17,8 @@ export default function processAI(state: GameState): GameState {
         state = move(state, action);
       } else if (isActionOf(actions.attack, action)) {
         state = attack(state, action);
+      } else if (isActionOf(actions.updateEntity, action)) {
+        state = updateEntity(state, action);
       } else if (isActionOf(actions.addEntity)) {
         state = addEntity(state, action);
       } else {

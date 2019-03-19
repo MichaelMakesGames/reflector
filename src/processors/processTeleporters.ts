@@ -1,5 +1,5 @@
 import * as actions from "../actions";
-import { addEntity } from "../handlers/addEntity";
+import { updateEntity } from "../handlers/updateEntity";
 import * as selectors from "../selectors";
 import { GameState } from "../types";
 import { isPosEqual } from "../utils";
@@ -23,13 +23,11 @@ export default function processTeleporters(state: GameState): GameState {
         .entitiesAtPosition(state, teleporter2.position)
         .every(e => !e.blocking)
     ) {
-      state = addEntity(
+      state = updateEntity(
         state,
-        actions.addEntity({
-          entity: {
-            ...player,
-            position: { ...teleporter2.position },
-          },
+        actions.updateEntity({
+          id: player.id,
+          position: { ...teleporter2.position },
         }),
       );
     } else if (
@@ -38,13 +36,11 @@ export default function processTeleporters(state: GameState): GameState {
         .entitiesAtPosition(state, teleporter1.position)
         .every(e => !e.blocking)
     ) {
-      state = addEntity(
+      state = updateEntity(
         state,
-        actions.addEntity({
-          entity: {
-            ...player,
-            position: { ...teleporter1.position },
-          },
+        actions.updateEntity({
+          id: player.id,
+          position: { ...teleporter1.position },
         }),
       );
     }

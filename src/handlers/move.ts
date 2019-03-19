@@ -2,8 +2,8 @@ import * as actions from "../actions";
 import { PLAYER_ID } from "../constants";
 import * as selectors from "../selectors";
 import { GameState } from "../types";
-import { addEntity } from "./addEntity";
 import { playerTookTurn } from "./playerTookTurn";
+import { updateEntity } from "./updateEntity";
 
 export function move(
   state: GameState,
@@ -31,13 +31,11 @@ export function move(
   ) {
     return state;
   }
-  state = addEntity(
+  state = updateEntity(
     state,
-    actions.addEntity({
-      entity: {
-        ...entity,
-        position: newPosition,
-      },
+    actions.updateEntity({
+      id: entity.id,
+      position: newPosition,
     }),
   );
   if (entity.id === PLAYER_ID) {

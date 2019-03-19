@@ -1,7 +1,7 @@
 import * as actions from "../actions";
-import { addEntity } from "../handlers/addEntity";
 import { attack } from "../handlers/attack";
 import { removeEntity } from "../handlers/removeEntity";
+import { updateEntity } from "../handlers/updateEntity";
 import * as selectors from "../selectors";
 import { GameState } from "../types";
 import { getAdjacentPositions } from "../utils";
@@ -28,13 +28,11 @@ export default function processBombs(state: GameState): GameState {
           }
         }
       } else {
-        state = addEntity(
+        state = updateEntity(
           state,
-          actions.addEntity({
-            entity: {
-              ...entity,
-              bomb: { time: entity.bomb.time - 1 },
-            },
+          actions.updateEntity({
+            id: entity.id,
+            bomb: { time: entity.bomb.time - 1 },
           }),
         );
       }

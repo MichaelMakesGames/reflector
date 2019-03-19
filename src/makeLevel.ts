@@ -2,6 +2,7 @@ import * as actions from "./actions";
 import { PLAYER_ID } from "./constants";
 import { addEntity } from "./handlers/addEntity";
 import { removeEntities } from "./handlers/removeEntities";
+import { updateEntity } from "./handlers/updateEntity";
 import { generateMap } from "./mapgen";
 import * as selectors from "./selectors";
 import { GameState } from "./types";
@@ -18,16 +19,18 @@ export default function makeLevel(state: GameState): GameState {
   if (!nextLevelEntity || !nextLevelEntity.level) return state;
   const nextLevel = nextLevelEntity.level;
 
-  state = addEntity(
+  state = updateEntity(
     state,
-    actions.addEntity({
-      entity: { ...lastLevelEntity, level: { ...lastLevel, current: false } },
+    actions.updateEntity({
+      id: lastLevelEntity.id,
+      level: { ...lastLevel, current: false },
     }),
   );
-  state = addEntity(
+  state = updateEntity(
     state,
-    actions.addEntity({
-      entity: { ...nextLevelEntity, level: { ...nextLevel, current: true } },
+    actions.updateEntity({
+      id: nextLevelEntity.id,
+      level: { ...nextLevel, current: true },
     }),
   );
 
