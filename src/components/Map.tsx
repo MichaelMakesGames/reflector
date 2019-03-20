@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import * as ROT from "rot-js";
 import { useMappedState } from "redux-react-hook";
 
-import * as selectors from "../selectors";
+import * as selectors from "../state/selectors";
 import {
   MAP_WIDTH,
   MAP_HEIGHT,
@@ -12,7 +12,7 @@ import {
   TRANSPARENT,
   PLAYER_ID,
 } from "../constants";
-import { Glyph } from "../types";
+import { Glyph } from "../types/types";
 
 const display = new ROT.Display({
   width: MAP_WIDTH,

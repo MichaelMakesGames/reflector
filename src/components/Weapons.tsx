@@ -1,5 +1,5 @@
 import React from "react";
-import * as selectors from "../selectors";
+import * as selectors from "../state/selectors";
 import { useMappedState } from "redux-react-hook";
 import Weapon from "./Weapon";
 import { BLACK } from "../constants";

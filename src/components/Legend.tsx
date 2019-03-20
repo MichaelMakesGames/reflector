@@ -1,6 +1,6 @@
 import React from "react";
 import { useMappedState } from "redux-react-hook";
-import * as selectors from "../selectors";
+import * as selectors from "../state/selectors";
 import {
   WHITE,
   RED,

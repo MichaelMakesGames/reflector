@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useMappedState } from "redux-react-hook";
-import * as selectors from "../selectors";
+import * as selectors from "../state/selectors";
 import { BRIGHT_RED } from "../constants";
 
 export default function DamageFlash() {

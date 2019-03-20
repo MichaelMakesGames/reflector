@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import * as actions from "../actions";
-import * as selectors from "../selectors";
-import { Action, Entity, Position } from "../types";
+import * as actions from "../state/actions";
+import * as selectors from "../state/selectors";
+import { Action, Entity, Position } from "../types/types";
 import { useDispatch, useMappedState } from "redux-react-hook";
 import { PLAYER_ID, UP, LEFT, DOWN, RIGHT } from "../constants";
 import { action } from "typesafe-actions";
-import { createEntityFromTemplate } from "../templates";
+import { createEntityFromTemplate } from "../utils";
 
 interface Control {
   key: string;
