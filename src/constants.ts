@@ -11,6 +11,7 @@ export const PRIORITY_PLAYER = 15;
 export const PRIORITY_ENEMY = 10;
 export const PRIORITY_ITEM = 5;
 export const PRIORITY_TERRAIN = 0;
+export const PRIORITY_FLOOR = -5;
 
 export const ROOMS = 5;
 export const ROOM_SIZE = 3;
@@ -27,6 +28,7 @@ export const RED = "#F88";
 export const GREEN = "#8F8";
 export const BLUE = "#88F";
 export const GRAY = "#888";
+export const DARK_GRAY = "#444";
 export const YELLOW = "#FF8";
 export const PURPLE = "#F8F";
 export const BLACK = BACKGROUND_COLOR;

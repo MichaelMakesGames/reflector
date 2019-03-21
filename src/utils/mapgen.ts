@@ -9,6 +9,7 @@ export function generateMap(level: Level): Entity[] {
   rng.setSeed(level.seed);
 
   const result: Entity[] = [];
+  const floors: Entity[] = [];
   const mazeGenerator = new ROT.Map.DividedMaze(MAZE_SIZE, MAZE_SIZE);
   const maze: { [key: string]: number } = {};
   mazeGenerator.create((x, y, contents) => (maze[`${x},${y}`] = contents));
@@ -30,6 +31,11 @@ export function generateMap(level: Level): Entity[] {
           }),
         );
       }
+      floors.push(
+        createEntityFromTemplate("FLOOR", {
+          position: { x, y },
+        }),
+      );
     }
   }
 
@@ -129,5 +135,5 @@ export function generateMap(level: Level): Entity[] {
     const position = getRandomPos();
     result.push(createEntityFromTemplate("TELEPORTER", { position }));
   }
-  return result;
+  return [...floors, ...result];
 }

@@ -6,7 +6,7 @@ import "@babel/polyfill";
 import store from "./state/store";
 import Game from "./components/Game";
 
-import "./style.css";
+import "./assets/style.css";
 
 const app = (
   <StoreContext.Provider value={store}>
