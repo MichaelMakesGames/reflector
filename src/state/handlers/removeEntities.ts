@@ -12,12 +12,15 @@ export function removeEntities(
       id => !action.payload.entityIds.includes(id),
     );
   }
+  const entities = {
+    ...state.entities,
+  };
+  for (let id of action.payload.entityIds) {
+    delete entities[id];
+  }
   return {
     ...state,
     entitiesByPosition: { ...entitiesByPosition },
-    entities: selectors
-      .entityList(state)
-      .filter(entity => !action.payload.entityIds.includes(entity.id))
-      .reduce((acc, cur) => ({ ...acc, [cur.id]: cur }), {}),
+    entities,
   };
 }

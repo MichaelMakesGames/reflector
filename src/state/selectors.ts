@@ -36,7 +36,7 @@ export function entitiesAtPosition(state: GameState, position: Position) {
 }
 
 export function weapons(state: GameState) {
-  return Object.values(entities(state)).filter(entity => entity.weapon);
+  return entityList(state).filter(entity => entity.weapon);
 }
 
 export function weaponInSlot(state: GameState, slot: number) {

@@ -22,12 +22,11 @@ export function removeEntity(
       [key]: entitiesByPosition[key].filter(id => id !== prev.id),
     };
   }
+  const entities = { ...state.entities };
+  delete entities[action.payload.entityId];
   return {
     ...state,
     entitiesByPosition,
-    entities: selectors
-      .entityList(state)
-      .filter(entity => entity.id !== prev.id)
-      .reduce((acc, cur) => ({ ...acc, [cur.id]: cur }), {}),
+    entities,
   };
 }
