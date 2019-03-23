@@ -1,4 +1,4 @@
-import { Entity } from "../../types/types";
+import { Entity } from "../../types/Entity";
 import {
   PRIORITY_ENEMY,
   GREEN,
@@ -12,7 +12,7 @@ import {
 const templates: { [id: string]: Partial<Entity> } = {
   PLAYER: {
     id: PLAYER_ID,
-    position: { x: 1, y: 1 },
+    pos: { x: 1, y: 1 },
     glyph: { glyph: "@", color: WHITE, priority: PRIORITY_PLAYER },
     blocking: { moving: true, throwing: false },
     hitPoints: { current: 3, max: 3 },

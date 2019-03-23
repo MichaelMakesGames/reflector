@@ -8,10 +8,9 @@ import { getAdjacentPositions } from "../../utils";
 
 export default function processFactories(state: GameState): GameState {
   for (let entity of selectors
-    .entityList(state)
-    .filter(e => e.factory && e.cooldown && !e.cooldown.time)) {
-    if (!entity.factory || !entity.position) continue;
-    const emptyAdjacentPositions = getAdjacentPositions(entity.position).filter(
+    .entitiesWithComps(state, "factory", "cooldown", "pos")
+    .filter(e => !e.cooldown.time)) {
+    const emptyAdjacentPositions = getAdjacentPositions(entity.pos).filter(
       pos => selectors.entitiesAtPosition(state, pos).every(e => !e.blocking),
     );
     if (!emptyAdjacentPositions.length) continue;
@@ -23,7 +22,7 @@ export default function processFactories(state: GameState): GameState {
       state,
       actions.addEntity({
         entity: createEntityFromTemplate(entity.factory.type, {
-          position: choice,
+          pos: choice,
         }),
       }),
     );

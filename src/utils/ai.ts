@@ -9,7 +9,7 @@ import {
 } from "../constants";
 import * as selectors from "../state/selectors";
 import { createEntityFromTemplate } from "./createEntityFromTemplate";
-import { Direction, Entity, GameState, Position } from "../types/types";
+import { Direction, Entity, GameState, Pos } from "../types";
 import {
   getAdjacentPositions,
   getClosestPosition,
@@ -25,13 +25,13 @@ const aiActions = {
 };
 type AIAction = ActionType<typeof aiActions>;
 
-function isPassable(gameState: GameState, position: Position) {
+function isPassable(gameState: GameState, position: Pos) {
   return selectors
     .entitiesAtPosition(gameState, position)
     .every(entity => !entity.blocking || !entity.blocking.moving);
 }
 
-function isDestructibleNonEnemy(gameState: GameState, position: Position) {
+function isDestructibleNonEnemy(gameState: GameState, position: Pos) {
   return selectors
     .entitiesAtPosition(gameState, position)
     .every(entity =>
@@ -43,16 +43,16 @@ function isDestructibleNonEnemy(gameState: GameState, position: Position) {
     );
 }
 
-function moveToward(gameState: GameState, entity: Entity, to: Position) {
-  if (!entity.position) return [];
-  const direction = getDirectionTowardTarget(entity.position, to, gameState);
+function moveToward(gameState: GameState, entity: Entity, to: Pos) {
+  if (!entity.pos) return [];
+  const direction = getDirectionTowardTarget(entity.pos, to, gameState);
   if (!direction) return [];
   return [actions.move({ entityId: entity.id, ...direction })];
 }
 
 function getDirectionTowardTarget(
-  from: Position,
-  to: Position,
+  from: Pos,
+  to: Pos,
   gameState: GameState,
   passableFunc = isPassable,
 ): Direction | null {
@@ -60,7 +60,7 @@ function getDirectionTowardTarget(
     (x === from.x && y === from.y) ||
     (x === to.x && y === to.y) ||
     passableFunc(gameState, { x, y });
-  const path: Position[] = [];
+  const path: Pos[] = [];
   const aStar = new ROT.Path.AStar(to.x, to.y, passable);
   aStar.compute(from.x, from.y, (x, y) => {
     const pos = { x, y };
@@ -80,10 +80,10 @@ export function getAIActions(entity: Entity, gameState: GameState): AIAction[] {
   const player = selectors.player(gameState);
 
   if (ai.type === "RUSHER") {
-    if (!player || !player.position || !entity.position) {
+    if (!player || !entity.pos) {
       return [];
     }
-    if (getDistance(entity.position, player.position) <= 1) {
+    if (getDistance(entity.pos, player.pos) <= 1) {
       return [
         actions.attack({
           target: player.id,
@@ -92,15 +92,15 @@ export function getAIActions(entity: Entity, gameState: GameState): AIAction[] {
       ];
     }
     const direction = getDirectionTowardTarget(
-      entity.position,
-      player.position,
+      entity.pos,
+      player.pos,
       gameState,
       isDestructibleNonEnemy,
     );
     if (!direction) return [];
     const targetPos = {
-      x: entity.position.x + direction.dx,
-      y: entity.position.y + direction.dy,
+      x: entity.pos.x + direction.dx,
+      y: entity.pos.y + direction.dy,
     };
     const entitiesAtTargetPos = selectors.entitiesAtPosition(
       gameState,
@@ -122,18 +122,13 @@ export function getAIActions(entity: Entity, gameState: GameState): AIAction[] {
   }
 
   if (ai.type === "SMASHER") {
-    if (!entity.position) return [];
+    if (!entity.pos) return [];
     const reflectorsAndSplittersAndPlayer = selectors
       .entityList(gameState)
       .filter(e => e.reflector || e.splitter || e.id === PLAYER_ID);
 
     const adjacent = reflectorsAndSplittersAndPlayer.find(
-      e =>
-        !!(
-          e.position &&
-          entity.position &&
-          getDistance(e.position, entity.position) <= 1
-        ),
+      e => !!(e.pos && entity.pos && getDistance(e.pos, entity.pos) <= 1),
     );
     if (adjacent) {
       return [
@@ -146,30 +141,26 @@ export function getAIActions(entity: Entity, gameState: GameState): AIAction[] {
 
     const closest = reflectorsAndSplittersAndPlayer.sort((a, b) => {
       const aDistance =
-        a.position && entity.position
-          ? getDistance(a.position, entity.position)
-          : Infinity;
+        a.pos && entity.pos ? getDistance(a.pos, entity.pos) : Infinity;
       const bDistance =
-        b.position && entity.position
-          ? getDistance(b.position, entity.position)
-          : Infinity;
+        b.pos && entity.pos ? getDistance(b.pos, entity.pos) : Infinity;
       return aDistance - bDistance;
     })[0];
     if (closest) {
-      if (!closest.position) return [];
-      return moveToward(gameState, entity, closest.position);
+      if (!closest.pos) return [];
+      return moveToward(gameState, entity, closest.pos);
     }
   }
 
   if (ai.type === "ANGLER") {
-    if (!player || !player.position || !entity.position) return [];
-    const playerPos = player.position;
-    const entityPos = entity.position;
+    if (!player || !entity.pos) return [];
+    const playerPos = player.pos;
+    const entityPos = entity.pos;
     if (getDistance(playerPos, entityPos) > ANGLER_RANGE * 2) {
       return moveToward(gameState, entity, playerPos);
     }
 
-    const possiblePositions: Position[] = [];
+    const possiblePositions: Pos[] = [];
     for (let delta = 1; delta <= ANGLER_RANGE; delta++) {
       possiblePositions.push({
         x: playerPos.x + delta,
@@ -223,9 +214,9 @@ export function getAIActions(entity: Entity, gameState: GameState): AIAction[] {
   }
 
   if (ai.type === "BOMBER") {
-    if (!player || !player.position || !entity.position) return [];
-    const playerPos = player.position;
-    const entityPos = entity.position;
+    if (!player || !entity.pos) return [];
+    const playerPos = player.pos;
+    const entityPos = entity.pos;
     if (getDistance(playerPos, entityPos) > BOMBER_RANGE) {
       return moveToward(gameState, entity, playerPos);
     }
@@ -251,7 +242,7 @@ export function getAIActions(entity: Entity, gameState: GameState): AIAction[] {
     })[0];
     return [
       actions.addEntity({
-        entity: createEntityFromTemplate("BOMB", { position: target }),
+        entity: createEntityFromTemplate("BOMB", { pos: target }),
       }),
       actions.updateEntity({
         id: entity.id,

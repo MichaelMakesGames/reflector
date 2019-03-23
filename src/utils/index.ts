@@ -4,3 +4,4 @@ export * from "./ai";
 export * from "./mapgen";
 export * from "./fov";
 export * from "./makeLevel";
+export * from "./filterEntitiesWithComps";

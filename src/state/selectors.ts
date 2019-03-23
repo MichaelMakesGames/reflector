@@ -1,6 +1,6 @@
-import { GameState, Position, Entity, Level } from "../types/types";
+import { GameState, Pos, Entity, Level, MakeRequired } from "../types";
 import { PLAYER_ID } from "../constants";
-import { getPosKey } from "../utils";
+import { getPosKey, filterEntitiesWithComps } from "../utils";
 
 export function gameState(state: GameState) {
   return state;
@@ -14,12 +14,15 @@ export function gameOver(state: GameState) {
   return state.gameOver;
 }
 
-export function entities(state: GameState) {
-  return state.entities;
-}
-
 export function entityList(state: GameState) {
   return Object.values(state.entities);
+}
+
+export function entitiesWithComps<C extends keyof Entity>(
+  state: GameState,
+  ...comps: C[]
+): MakeRequired<Entity, C>[] {
+  return filterEntitiesWithComps(entityList(state), ...comps);
 }
 
 export function entity(state: GameState, entityId: string) {
@@ -27,16 +30,21 @@ export function entity(state: GameState, entityId: string) {
 }
 
 export function player(state: GameState) {
-  return state.entities[PLAYER_ID] as Entity | null;
+  return state.entities[PLAYER_ID] as MakeRequired<
+    Entity,
+    "pos" | "hitPoints" | "inventory" | "glyph" | "conductive"
+  > | null;
 }
 
-export function entitiesAtPosition(state: GameState, position: Position) {
+export function entitiesAtPosition(state: GameState, position: Pos) {
   const key = getPosKey(position);
-  return (state.entitiesByPosition[key] || []).map(id => state.entities[id]);
+  return (state.entitiesByPosition[key] || []).map(
+    id => state.entities[id],
+  ) as MakeRequired<Entity, "pos">[];
 }
 
 export function weapons(state: GameState) {
-  return entityList(state).filter(entity => entity.weapon);
+  return entitiesWithComps(state, "weapon");
 }
 
 export function weaponInSlot(state: GameState, slot: number) {
@@ -62,11 +70,11 @@ export function activeWeapon(state: GameState) {
 }
 
 export function targetingLasers(state: GameState) {
-  return entityList(state).filter(entity => entity.targeting);
+  return entitiesWithComps(state, "targeting", "pos");
 }
 
 export function throwingTarget(state: GameState) {
-  const entities = entityList(state).filter(entity => entity.throwing);
+  const entities = entitiesWithComps(state, "throwing", "pos");
   if (entities.length) return entities[0];
   return null;
 }

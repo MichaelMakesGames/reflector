@@ -10,13 +10,13 @@ export function move(
   action: ReturnType<typeof actions.move>,
 ): GameState {
   const entity = selectors.entity(state, action.payload.entityId);
-  const { position } = entity;
-  if (!position) {
+  const { pos } = entity;
+  if (!pos) {
     return state;
   }
   const newPosition = {
-    x: position.x + action.payload.dx,
-    y: position.y + action.payload.dy,
+    x: pos.x + action.payload.dx,
+    y: pos.y + action.payload.dy,
   };
   const entitiesAtNewPosition = selectors.entitiesAtPosition(
     state,
@@ -35,7 +35,7 @@ export function move(
     state,
     actions.updateEntity({
       id: entity.id,
-      position: newPosition,
+      pos: newPosition,
     }),
   );
   if (entity.id === PLAYER_ID) {

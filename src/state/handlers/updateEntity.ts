@@ -14,16 +14,16 @@ export function updateEntity(
   }
   const entity = { ...prev, ...partial };
   let { entitiesByPosition } = state;
-  if (Object.hasOwnProperty.call(partial, "position")) {
-    if (prev && prev.position) {
-      const key = getPosKey(prev.position);
+  if (Object.hasOwnProperty.call(partial, "pos")) {
+    if (prev && prev.pos) {
+      const key = getPosKey(prev.pos);
       entitiesByPosition = {
         ...entitiesByPosition,
         [key]: entitiesByPosition[key].filter(id => id !== prev.id),
       };
     }
-    if (entity.position) {
-      const key = getPosKey(entity.position);
+    if (entity.pos) {
+      const key = getPosKey(entity.pos);
       entitiesByPosition = {
         ...entitiesByPosition,
         [key]: [...(entitiesByPosition[key] || []), entity.id],

@@ -9,8 +9,8 @@ export function addEntity(
 ): GameState {
   const { entity } = action.payload;
   let { entitiesByPosition } = state;
-  if (entity.position) {
-    const key = getPosKey(entity.position);
+  if (entity.pos) {
+    const key = getPosKey(entity.pos);
     entitiesByPosition = {
       ...entitiesByPosition,
       [key]: [...(entitiesByPosition[key] || []), entity.id],

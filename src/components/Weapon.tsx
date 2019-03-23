@@ -1,5 +1,5 @@
 import React from "react";
-import { Weapon } from "../types/types";
+import { Weapon } from "../types/Entity";
 import { RED, YELLOW, PURPLE, BLACK, GREEN } from "../constants";
 
 export default function Weapon({

@@ -5,7 +5,7 @@ import { removeEntities } from "../state/handlers/removeEntities";
 import { updateEntity } from "../state/handlers/updateEntity";
 import { generateMap } from "./mapgen";
 import * as selectors from "../state/selectors";
-import { GameState } from "../types/types";
+import { GameState } from "../types";
 
 export function makeLevel(state: GameState): GameState {
   const lastLevelEntity = selectors
@@ -39,7 +39,7 @@ export function makeLevel(state: GameState): GameState {
     actions.removeEntities({
       entityIds: selectors
         .entityList(state)
-        .filter(e => e.position && e.id !== PLAYER_ID)
+        .filter(e => e.pos && e.id !== PLAYER_ID)
         .map(e => e.id),
     }),
   );

@@ -1,4 +1,4 @@
-import { Entity } from "../../types/types";
+import { Entity } from "../../types/Entity";
 import { BLUE, PRIORITY_ENEMY } from "../../constants";
 
 const templates: { [id: string]: Partial<Entity> } = {

@@ -1,6 +1,6 @@
 import nanoid from "nanoid";
 import templates from "../data/templates";
-import { Entity } from "../types/types";
+import { Entity } from "../types/Entity";
 
 export function createEntityFromTemplate(
   templateId: string,

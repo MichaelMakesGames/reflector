@@ -1,4 +1,4 @@
-import { Entity } from "../../types/types";
+import { Entity } from "../../types/Entity";
 import {
   GRAY,
   PRIORITY_TERRAIN,

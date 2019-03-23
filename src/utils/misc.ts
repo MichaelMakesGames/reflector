@@ -1,4 +1,4 @@
-import { Position, WeaponType, Direction, Glyph } from "../types/types";
+import { Pos, WeaponType, Direction, Glyph } from "../types";
 import {
   RED,
   RIGHT,
@@ -9,25 +9,20 @@ import {
   PURPLE,
   YELLOW,
 } from "../constants";
-import nanoid from "nanoid";
-import * as ROT from "rot-js";
 
-export function getPosKey(pos: Position) {
+export function getPosKey(pos: Pos) {
   return `${pos.x},${pos.y}`;
 }
 
-export function arePositionsEqual(pos1: Position, pos2: Position) {
+export function arePositionsEqual(pos1: Pos, pos2: Pos) {
   return pos1.x === pos2.x && pos1.y === pos2.y;
 }
 
-export function getDistance(from: Position, to: Position) {
+export function getDistance(from: Pos, to: Pos) {
   return Math.max(Math.abs(from.x - to.x), Math.abs(from.y - to.y));
 }
 
-export function getClosestPosition(
-  options: Position[],
-  to: Position,
-): Position | null {
+export function getClosestPosition(options: Pos[], to: Pos): Pos | null {
   return (
     [...options].sort((a, b) => {
       const aDistance = getDistance(a, to);
@@ -37,7 +32,7 @@ export function getClosestPosition(
   );
 }
 
-export function getAdjacentPositions(pos: Position): Position[] {
+export function getAdjacentPositions(pos: Pos): Pos[] {
   return [
     { x: pos.x + 1, y: pos.y },
     { x: pos.x - 1, y: pos.y },

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import * as actions from "../state/actions";
 import * as selectors from "../state/selectors";
-import { Action, Entity, Position } from "../types/types";
+import { Action, Entity, Pos } from "../types/Entity";
 import { useDispatch, useMappedState } from "redux-react-hook";
 import { PLAYER_ID, UP, LEFT, DOWN, RIGHT } from "../constants";
 import { action } from "typesafe-actions";
@@ -15,7 +15,7 @@ interface Control {
 }
 function getControls(
   activeWeapon: Entity | null,
-  playerPosition: Position,
+  playerPosition: Pos,
   throwing: Entity | null,
   equipping: Entity | null,
 ): Control[] {
@@ -92,7 +92,7 @@ function getControls(
       key: "r",
       action: actions.activateThrow({
         entity: createEntityFromTemplate("REFLECTOR_UP_RIGHT", {
-          position: playerPosition,
+          pos: playerPosition,
         }),
       }),
       label: "Throw Reflector",
@@ -101,7 +101,7 @@ function getControls(
       key: "t",
       action: actions.activateThrow({
         entity: createEntityFromTemplate("SPLITTER_HORIZONTAL", {
-          position: playerPosition,
+          pos: playerPosition,
         }),
       }),
       label: "Throw Splitter",
@@ -260,8 +260,8 @@ export default function Controls() {
   const throwing = useMappedState(selectors.throwingTarget);
   const gameOver = useMappedState(selectors.gameOver);
 
-  const position = player && player.position ? player.position : { x: 0, y: 0 };
-  const controls = getControls(activeWeapon, position, throwing, equipping);
+  const pos = player ? player.pos : { x: 0, y: 0 };
+  const controls = getControls(activeWeapon, pos, throwing, equipping);
   const keyMap: { [key: string]: Action } = controls.reduce(
     (acc, cur) => ({ ...acc, [cur.key]: cur.action }),
     {},

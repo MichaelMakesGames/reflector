@@ -5,7 +5,7 @@ export default function processGameOver(state: GameState): GameState {
   const entities = selectors.entityList(state);
   const player = selectors.player(state);
   const currentLevel = entities.filter(e => e.level && e.level.current)[0];
-  if (player && player.hitPoints && player.hitPoints.current <= 0) {
+  if (player && player.hitPoints.current <= 0) {
     state = {
       ...state,
       gameOver: true,

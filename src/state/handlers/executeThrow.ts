@@ -19,20 +19,20 @@ export function executeThrow(
     }),
   );
   const entity = selectors.throwingTarget(state);
-  if (!entity || !entity.position || !entity.throwing) return state;
+  if (!entity) return state;
 
   const player = selectors.player(state);
-  if (!player || !player.position || !player.inventory) return state;
+  if (!player) return state;
 
   const { inventory } = player;
   if (entity.reflector && !inventory.reflectors) return state;
   if (entity.splitter && !inventory.splitters) return state;
 
-  const { position } = entity;
-  const distance = getDistance(position, player.position);
+  const { pos } = entity;
+  const distance = getDistance(pos, player.pos);
   if (distance > entity.throwing.range) return state;
 
-  const entitiesAtPosition = selectors.entitiesAtPosition(state, position);
+  const entitiesAtPosition = selectors.entitiesAtPosition(state, pos);
   if (entitiesAtPosition.some(e => e.id !== entity.id && !!e.blocking))
     return state;
 

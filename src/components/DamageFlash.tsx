@@ -5,7 +5,7 @@ import { BRIGHT_RED } from "../constants";
 
 export default function DamageFlash() {
   const player = useMappedState(selectors.player);
-  const hp = player && player.hitPoints ? player.hitPoints.current : 0;
+  const hp = player ? player.hitPoints.current : 0;
   const [prevHp, setPrevHp] = useState(0);
 
   const ms = 75;

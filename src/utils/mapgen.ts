@@ -1,6 +1,6 @@
 import * as ROT from "rot-js";
 import { MAZE_SIZE, MAP_HEIGHT, MAP_WIDTH, ROOM_SIZE } from "../constants";
-import { Entity, Level, AIType, Position, WeaponType } from "../types/types";
+import { Entity, Level, AIType, Pos, WeaponType } from "../types/Entity";
 import { arePositionsEqual } from "./misc";
 import { createEntityFromTemplate } from "./createEntityFromTemplate";
 
@@ -23,7 +23,7 @@ export function generateMap(level: Level): Entity[] {
       if (maze[key]) {
         result.push(
           createEntityFromTemplate("WALL", {
-            position: { x, y },
+            pos: { x, y },
             destructible:
               x !== 0 && y !== 0 && x !== MAP_WIDTH - 1 && y !== MAP_HEIGHT - 1
                 ? {}
@@ -33,18 +33,17 @@ export function generateMap(level: Level): Entity[] {
       }
       floors.push(
         createEntityFromTemplate("FLOOR", {
-          position: { x, y },
+          pos: { x, y },
         }),
       );
     }
   }
 
-  function getRandomPos(): Position {
-    let pos: Position = { x: 0, y: 0 };
+  function getRandomPos(): Pos {
+    let pos: Pos = { x: 0, y: 0 };
     while (
       result.some(
-        entity =>
-          !!(entity.position && arePositionsEqual(pos, entity.position)),
+        entity => !!(entity.pos && arePositionsEqual(pos, entity.pos)),
       ) ||
       arePositionsEqual(pos, { x: 1, y: 1 }) ||
       arePositionsEqual(pos, { x: MAP_WIDTH - 2, y: MAP_HEIGHT - 2 })
@@ -59,13 +58,11 @@ export function generateMap(level: Level): Entity[] {
 
   if (!level.final) {
     if (level.depth % 2 === 0) {
-      result.push(
-        createEntityFromTemplate("STAIRS", { position: { x: 1, y: 1 } }),
-      );
+      result.push(createEntityFromTemplate("STAIRS", { pos: { x: 1, y: 1 } }));
     } else {
       result.push(
         createEntityFromTemplate("STAIRS", {
-          position: { x: MAP_WIDTH - 2, y: MAP_HEIGHT - 2 },
+          pos: { x: MAP_WIDTH - 2, y: MAP_HEIGHT - 2 },
         }),
       );
     }
@@ -78,7 +75,7 @@ export function generateMap(level: Level): Entity[] {
     ];
     for (let template of factoryTemplates) {
       const position = getRandomPos();
-      result.push(createEntityFromTemplate(template, { position }));
+      result.push(createEntityFromTemplate(template, { pos: position }));
     }
   }
 
@@ -88,7 +85,7 @@ export function generateMap(level: Level): Entity[] {
       createEntityFromTemplate(
         rng.getWeightedValue(level.aiWeights) as string,
         {
-          position,
+          pos: position,
         },
       ),
     );
@@ -99,7 +96,7 @@ export function generateMap(level: Level): Entity[] {
     result.push(
       createEntityFromTemplate(
         rng.getUniform() > 0.5 ? "REFLECTOR_UP_RIGHT" : "REFLECTOR_DOWN_RIGHT",
-        { position },
+        { pos: position },
       ),
     );
   }
@@ -109,7 +106,7 @@ export function generateMap(level: Level): Entity[] {
     result.push(
       createEntityFromTemplate(
         rng.getUniform() > 0.5 ? "SPLITTER_HORIZONTAL" : "SPLITTER_VERTICAL",
-        { position },
+        { pos: position },
       ),
     );
   }
@@ -117,9 +114,9 @@ export function generateMap(level: Level): Entity[] {
   for (let i = 0; i < level.numPickups; i++) {
     let position = getRandomPos();
     if (rng.getUniform() > 0.5) {
-      result.push(createEntityFromTemplate("MED_KIT", { position }));
+      result.push(createEntityFromTemplate("MED_KIT", { pos: position }));
     } else {
-      result.push(createEntityFromTemplate("RECHARGE_KIT", { position }));
+      result.push(createEntityFromTemplate("RECHARGE_KIT", { pos: position }));
     }
   }
 
@@ -127,13 +124,13 @@ export function generateMap(level: Level): Entity[] {
     const position = getRandomPos();
     const weaponTemplate = rng.getItem<string>(level.possibleWeapons);
     if (weaponTemplate) {
-      result.push(createEntityFromTemplate(weaponTemplate, { position }));
+      result.push(createEntityFromTemplate(weaponTemplate, { pos: position }));
     }
   }
 
   for (let i = 0; i < 2; i++) {
     const position = getRandomPos();
-    result.push(createEntityFromTemplate("TELEPORTER", { position }));
+    result.push(createEntityFromTemplate("TELEPORTER", { pos: position }));
   }
   return [...floors, ...result];
 }

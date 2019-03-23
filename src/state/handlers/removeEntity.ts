@@ -15,8 +15,8 @@ export function removeEntity(
     return state;
   }
   let { entitiesByPosition } = state;
-  if (prev.position) {
-    const key = getPosKey(prev.position);
+  if (prev.pos) {
+    const key = getPosKey(prev.pos);
     entitiesByPosition = {
       ...entitiesByPosition,
       [key]: entitiesByPosition[key].filter(id => id !== prev.id),

@@ -5,42 +5,37 @@ import { updateEntity } from "../handlers/updateEntity";
 import * as selectors from "../selectors";
 
 export default function processTeleporters(state: GameState): GameState {
-  const [teleporter1, teleporter2] = selectors
-    .entityList(state)
-    .filter(e => e.teleporter);
+  const [teleporter1, teleporter2] = selectors.entitiesWithComps(
+    state,
+    "teleporter",
+    "pos",
+  );
   const player = selectors.player(state);
-  if (
-    player &&
-    player.position &&
-    teleporter1 &&
-    teleporter1.position &&
-    teleporter2 &&
-    teleporter2.position
-  ) {
+  if (player && teleporter1 && teleporter2) {
     if (
-      arePositionsEqual(player.position, teleporter1.position) &&
+      arePositionsEqual(player.pos, teleporter1.pos) &&
       selectors
-        .entitiesAtPosition(state, teleporter2.position)
+        .entitiesAtPosition(state, teleporter2.pos)
         .every(e => !e.blocking)
     ) {
       state = updateEntity(
         state,
         actions.updateEntity({
           id: player.id,
-          position: { ...teleporter2.position },
+          pos: { ...teleporter2.pos },
         }),
       );
     } else if (
-      arePositionsEqual(player.position, teleporter2.position) &&
+      arePositionsEqual(player.pos, teleporter2.pos) &&
       selectors
-        .entitiesAtPosition(state, teleporter1.position)
+        .entitiesAtPosition(state, teleporter1.pos)
         .every(e => !e.blocking)
     ) {
       state = updateEntity(
         state,
         actions.updateEntity({
           id: player.id,
-          position: { ...teleporter1.position },
+          pos: { ...teleporter1.pos },
         }),
       );
     }

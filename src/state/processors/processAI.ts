@@ -9,8 +9,7 @@ import { GameState } from "../../types";
 import { updateEntity } from "../handlers/updateEntity";
 
 export default function processAI(state: GameState): GameState {
-  const entities = selectors.entityList(state);
-  for (let entity of entities.filter(entity => entity.ai)) {
+  for (let entity of selectors.entitiesWithComps(state, "ai")) {
     const aiActions = getAIActions(entity, state);
     for (let action of aiActions) {
       if (isActionOf(actions.move, action)) {

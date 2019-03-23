@@ -12,8 +12,7 @@ export function fireWeapon(
 ) {
   const activeWeapon = selectors.activeWeapon(state);
   const player = selectors.player(state);
-  if (!player || !player.position || !activeWeapon || !activeWeapon.weapon)
-    return state;
+  if (!player || !activeWeapon) return state;
 
   const targetingLasers = selectors.targetingLasers(state);
 
@@ -21,26 +20,21 @@ export function fireWeapon(
   const entitiesToRemove: string[] = [];
   const entitiesToAttack: string[] = [];
   for (const laser of targetingLasers) {
-    const { position } = laser;
-    if (position) {
-      const entitiesAtPos = selectors.entitiesAtPosition(state, position);
-      for (let entity of entitiesAtPos) {
-        if (entity.destructible && activeWeapon.weapon.type === "TELEPORT") {
-          entitiesToSwap.push(entity);
-        } else if (
-          entity.conductive &&
-          activeWeapon.weapon.type === "ELECTRIC"
-        ) {
-          if (entity.destructible) {
-            entitiesToRemove.push(entity.id);
-          } else {
-            entitiesToAttack.push(entity.id);
-          }
-        } else if (entity.destructible) {
+    const { pos } = laser;
+    const entitiesAtPos = selectors.entitiesAtPosition(state, pos);
+    for (let entity of entitiesAtPos) {
+      if (entity.destructible && activeWeapon.weapon.type === "TELEPORT") {
+        entitiesToSwap.push(entity);
+      } else if (entity.conductive && activeWeapon.weapon.type === "ELECTRIC") {
+        if (entity.destructible) {
           entitiesToRemove.push(entity.id);
-        } else if (entity.hitPoints) {
+        } else {
           entitiesToAttack.push(entity.id);
         }
+      } else if (entity.destructible) {
+        entitiesToRemove.push(entity.id);
+      } else if (entity.hitPoints) {
+        entitiesToAttack.push(entity.id);
       }
     }
   }
@@ -66,13 +60,13 @@ export function fireWeapon(
   }
 
   if (entitiesToSwap.length > 1) {
-    const positions = entitiesToSwap.map(e => e.position);
+    const positions = entitiesToSwap.map(e => e.pos);
     entitiesToSwap.forEach((entity, index) => {
       state = updateEntity(
         state,
         actions.updateEntity({
           id: entity.id,
-          position: positions[(index + 1) % positions.length],
+          pos: positions[(index + 1) % positions.length],
         }),
       );
     });

@@ -5,7 +5,7 @@ import {
   WHITE,
   PRIORITY_THROWING,
 } from "../../constants";
-import { Entity } from "../../types/types";
+import { Entity } from "../../types/Entity";
 
 const templates: { [id: string]: Partial<Entity> } = {
   MED_KIT: {

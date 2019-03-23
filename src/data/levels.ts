@@ -1,4 +1,4 @@
-import { Level } from "../types/types";
+import { Level } from "../types/Entity";
 import { RNG } from "rot-js";
 
 const rng = RNG.clone();

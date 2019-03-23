@@ -11,7 +11,7 @@ export function activateThrow(
   action: ReturnType<typeof actions.activateThrow>,
 ): GameState {
   const player = selectors.player(state);
-  if (!player || !player.position || !player.inventory) return state;
+  if (!player) return state;
   if (action.payload.entity.reflector && !player.inventory.reflectors) {
     return state;
   }
@@ -19,12 +19,12 @@ export function activateThrow(
     return state;
   }
 
-  const fovPositions = computeThrowFOV(state, player.position, THROWING_RANGE);
+  const fovPositions = computeThrowFOV(state, player.pos, THROWING_RANGE);
   for (let pos of fovPositions) {
     state = addEntity(
       state,
       actions.addEntity({
-        entity: createEntityFromTemplate("FOV_MARKER", { position: pos }),
+        entity: createEntityFromTemplate("FOV_MARKER", { pos: pos }),
       }),
     );
   }

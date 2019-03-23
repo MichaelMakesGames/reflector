@@ -12,7 +12,7 @@ import {
   TRANSPARENT,
   PLAYER_ID,
 } from "../constants";
-import { Glyph } from "../types/types";
+import { Glyph } from "../types/Entity";
 
 const display = new ROT.Display({
   width: MAP_WIDTH,

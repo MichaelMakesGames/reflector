@@ -25,7 +25,7 @@ export function executeEquip(
       actions.updateEntity({
         id: equipping.id,
         equipping: undefined,
-        position: undefined,
+        pos: undefined,
         weapon: {
           ...equipping.weapon,
           slot,

@@ -6,9 +6,7 @@ export default function Status() {
   const player = useMappedState(selectors.player);
   if (!player) return null;
   const inventory = player.inventory;
-  if (!inventory) return null;
   const hp = player.hitPoints;
-  if (!hp) return null;
 
   return (
     <div className="box status">

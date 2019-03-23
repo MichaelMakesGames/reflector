@@ -8,14 +8,8 @@ import { arePositionsEqual } from "../../utils";
 
 export default function processPickups(state: GameState): GameState {
   const player = selectors.player(state);
-  for (let entity of selectors.entityList(state)) {
-    if (
-      player &&
-      player.position &&
-      entity.pickup &&
-      entity.position &&
-      arePositionsEqual(player.position, entity.position)
-    ) {
+  for (let entity of selectors.entitiesWithComps(state, "pickup", "pos")) {
+    if (player && arePositionsEqual(player.pos, entity.pos)) {
       if (entity.pickup.effect === "NONE") {
         state = removeEntity(
           state,
@@ -27,30 +21,24 @@ export default function processPickups(state: GameState): GameState {
           state,
           actions.removeEntity({ entityId: entity.id }),
         );
-        if (player.inventory) {
-          state = updateEntity(
-            state,
-            actions.updateEntity({
-              id: player.id,
-              inventory: {
-                reflectors:
-                  player.inventory.reflectors + (entity.reflector ? 1 : 0),
-                splitters:
-                  player.inventory.splitters + (entity.splitter ? 1 : 0),
-              },
-            }),
-          );
-        }
+        state = updateEntity(
+          state,
+          actions.updateEntity({
+            id: player.id,
+            inventory: {
+              reflectors:
+                player.inventory.reflectors + (entity.reflector ? 1 : 0),
+              splitters: player.inventory.splitters + (entity.splitter ? 1 : 0),
+            },
+          }),
+        );
       }
       if (entity.pickup.effect === "HEAL") {
         state = removeEntity(
           state,
           actions.removeEntity({ entityId: entity.id }),
         );
-        if (
-          player.hitPoints &&
-          player.hitPoints.current < player.hitPoints.max
-        ) {
+        if (player.hitPoints.current < player.hitPoints.max) {
           state = updateEntity(
             state,
             actions.updateEntity({

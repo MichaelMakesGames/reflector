@@ -2,7 +2,7 @@ import * as actions from "../actions";
 import { PLAYER_ID } from "../../constants";
 import * as selectors from "../selectors";
 import { createEntityFromTemplate } from "../../utils";
-import { Entity, GameState, Position } from "../../types";
+import { Entity, GameState, Pos } from "../../types";
 import { getAdjacentPositions, getLaserGlyph, reflect } from "../../utils";
 import { addEntity } from "./addEntity";
 import { removeEntities } from "./removeEntities";
@@ -20,13 +20,12 @@ export function targetWeapon(
   );
 
   const player = selectors.entity(state, PLAYER_ID);
-  let playerPosition = player.position;
+  let playerPosition = player.pos;
   if (!playerPosition) return state;
 
   const activeWeapon = selectors.activeWeapon(state);
   if (!activeWeapon) return state;
   const { weapon } = activeWeapon;
-  if (!weapon) return state;
 
   const beams = [
     {
@@ -37,14 +36,14 @@ export function targetWeapon(
     },
   ];
 
-  const explosionCenters: Position[] = [];
+  const explosionCenters: Pos[] = [];
   const spreadElectricity: Entity[] = [];
 
   while (beams.length) {
     const beam = beams[beams.length - 1];
     beams.pop();
     while (beam.power) {
-      const nextPos: Position = {
+      const nextPos: Pos = {
         x: beam.lastPos.x + beam.dx,
         y: beam.lastPos.y + beam.dy,
       };
@@ -56,7 +55,7 @@ export function targetWeapon(
           state,
           actions.addEntity({
             entity: createEntityFromTemplate("LASER", {
-              position: nextPos,
+              pos: nextPos,
               glyph: getLaserGlyph(beam, beam.power, false, weapon.type),
             }),
           }),
@@ -89,7 +88,7 @@ export function targetWeapon(
           state,
           actions.addEntity({
             entity: createEntityFromTemplate("LASER", {
-              position: nextPos,
+              pos: nextPos,
               glyph: getLaserGlyph(beam, beam.power, true, weapon.type),
             }),
           }),
@@ -119,7 +118,7 @@ export function targetWeapon(
           state,
           actions.addEntity({
             entity: createEntityFromTemplate("LASER", {
-              position: adjacentPos,
+              pos: adjacentPos,
               glyph: getLaserGlyph({ dx: 1, dy: 1 }, 1, true, weapon.type),
             }),
           }),
@@ -130,11 +129,11 @@ export function targetWeapon(
 
   while (spreadElectricity.length) {
     const from = spreadElectricity.pop() as Entity;
-    const pos = from.position as Position;
+    const pos = from.pos as Pos;
     const entitiesAtPos = selectors.entitiesAtPosition(state, pos);
     if (from.conductive && entitiesAtPos.every(e => !e.targeting)) {
       const newEntity = createEntityFromTemplate("LASER", {
-        position: pos,
+        pos: pos,
         glyph: getLaserGlyph({ dx: 1, dy: 1 }, 1, true, weapon.type),
       });
       state = addEntity(

@@ -1,14 +1,14 @@
-import { GameState, Position } from "../types/types";
+import { GameState, Pos } from "../types";
 import * as selectors from "../state/selectors";
 import * as ROT from "rot-js";
 import { arePositionsEqual } from "./misc";
 
 export function computeThrowFOV(
   gameState: GameState,
-  pos: Position,
+  pos: Pos,
   range: number,
-): Position[] {
-  const results: Position[] = [];
+): Pos[] {
+  const results: Pos[] = [];
   const fov = new ROT.FOV.PreciseShadowcasting(
     (x, y) =>
       arePositionsEqual({ x, y }, pos) ||

@@ -16,7 +16,7 @@ import { removeEntities } from "./handlers/removeEntities";
 import { removeEntity } from "./handlers/removeEntity";
 import { rotateThrow } from "./handlers/rotateThrow";
 import { targetWeapon } from "./handlers/targetWeapon";
-import { Action, GameState } from "../types/types";
+import { Action, GameState } from "../types";
 import { updateEntity } from "./handlers/updateEntity";
 
 const initialState: GameState = {
