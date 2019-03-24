@@ -2,6 +2,7 @@ import * as actions from "../actions";
 import * as selectors from "../selectors";
 import { GameState } from "../../types";
 import { getPosKey } from "../../utils";
+import { removeSprite } from "../../renderer";
 
 export function removeEntity(
   state: GameState,
@@ -22,6 +23,11 @@ export function removeEntity(
       [key]: entitiesByPosition[key].filter(id => id !== prev.id),
     };
   }
+
+  if (prev.pos && prev.glyph) {
+    removeSprite(prev.id);
+  }
+
   const entities = { ...state.entities };
   delete entities[action.payload.entityId];
   return {

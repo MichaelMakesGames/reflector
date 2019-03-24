@@ -1,7 +1,8 @@
 import * as actions from "../actions";
 import * as selectors from "../selectors";
-import { GameState } from "../../types";
+import { GameState, MakeRequired, Entity } from "../../types";
 import { getPosKey } from "../../utils";
+import { updateSprite, removeSprite, addSprite } from "../../renderer";
 
 export function updateEntity(
   state: GameState,
@@ -30,13 +31,25 @@ export function updateEntity(
       };
     }
   }
+
+  if (partial.hasOwnProperty("pos") || partial.hasOwnProperty("glyph")) {
+    if (entity.pos && entity.glyph) {
+      if (!prev.pos || !prev.glyph) {
+        addSprite(entity as MakeRequired<Entity, "pos" | "glyph">);
+      } else {
+        updateSprite(entity as MakeRequired<Entity, "pos" | "glyph">);
+      }
+    } else {
+      removeSprite(entity.id);
+    }
+  }
+
   state = {
     ...state,
     entitiesByPosition,
     entities: {
       ...state.entities,
       [entity.id]: {
-        ...prev,
         ...entity,
       },
     },
