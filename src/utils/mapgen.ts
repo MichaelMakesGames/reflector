@@ -13,16 +13,35 @@ export function generateMap(level: Level): Entity[] {
   const mazeGenerator = new ROT.Map.DividedMaze(MAZE_SIZE, MAZE_SIZE);
   const maze: { [key: string]: number } = {};
   mazeGenerator.create((x, y, contents) => (maze[`${x},${y}`] = contents));
+
+  function isWall(x: number, y: number) {
+    const mazeX =
+      Math.ceil(x / (ROOM_SIZE + 1)) + Math.floor(x / (ROOM_SIZE + 1));
+    const mazeY =
+      Math.ceil(y / (ROOM_SIZE + 1)) + Math.floor(y / (ROOM_SIZE + 1));
+    const key = `${mazeX},${mazeY}`;
+    return maze[key];
+  }
+
   for (let y = 0; y < MAP_HEIGHT; y++) {
     for (let x = 0; x < MAP_WIDTH; x++) {
-      const mazeX =
-        Math.ceil(x / (ROOM_SIZE + 1)) + Math.floor(x / (ROOM_SIZE + 1));
-      const mazeY =
-        Math.ceil(y / (ROOM_SIZE + 1)) + Math.floor(y / (ROOM_SIZE + 1));
-      const key = `${mazeX},${mazeY}`;
-      if (maze[key]) {
+      if (isWall(x, y)) {
+        let wallBitmap = 0;
+        if (isWall(x, y - 1)) {
+          wallBitmap += 1;
+        }
+        if (isWall(x + 1, y)) {
+          wallBitmap += 2;
+        }
+        if (isWall(x, y + 1)) {
+          wallBitmap += 4;
+        }
+        if (isWall(x - 1, y)) {
+          wallBitmap += 8;
+        }
+
         result.push(
-          createEntityFromTemplate("WALL", {
+          createEntityFromTemplate(`WALL_${wallBitmap}`, {
             pos: { x, y },
             destructible:
               x !== 0 && y !== 0 && x !== MAP_WIDTH - 1 && y !== MAP_HEIGHT - 1

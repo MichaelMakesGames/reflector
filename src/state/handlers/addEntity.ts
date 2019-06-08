@@ -2,7 +2,7 @@ import * as actions from "../actions";
 import * as selectors from "../selectors";
 import { GameState, MakeRequired, Entity } from "../../types";
 import { getPosKey } from "../../utils";
-import { addSprite } from "../../renderer";
+import { addRenderEntity } from "../../renderer";
 
 export function addEntity(
   state: GameState,
@@ -18,8 +18,8 @@ export function addEntity(
     };
   }
 
-  if (entity.pos && entity.glyph) {
-    addSprite(entity as MakeRequired<Entity, "pos" | "glyph">);
+  if (entity.pos && entity.display) {
+    addRenderEntity(entity as MakeRequired<Entity, "pos" | "display">);
   }
 
   state = {

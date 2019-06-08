@@ -19,7 +19,7 @@ main {
   display: flex;
   flex-flow: column;
   max-width: 1280px;
-  height: 767px;
+  height: auto;
   overflow: hidden;
 }
 

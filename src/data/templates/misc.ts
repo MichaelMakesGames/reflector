@@ -13,14 +13,24 @@ const templates: { [id: string]: Partial<Entity> } = {
   PLAYER: {
     id: PLAYER_ID,
     pos: { x: 1, y: 1 },
-    glyph: { glyph: "@", color: WHITE, priority: PRIORITY_PLAYER },
+    display: {
+      tile: "player",
+      glyph: "@",
+      color: WHITE,
+      priority: PRIORITY_PLAYER,
+    },
     blocking: { moving: true, throwing: false },
     hitPoints: { current: 3, max: 3 },
     inventory: { reflectors: 3, splitters: 1 },
     conductive: {},
   },
   BOMB: {
-    glyph: { glyph: "b", color: BRIGHT_RED, priority: PRIORITY_ENEMY },
+    display: {
+      tile: "bomb",
+      glyph: "b",
+      color: BRIGHT_RED,
+      priority: PRIORITY_ENEMY,
+    },
     blocking: { throwing: false, moving: true },
     destructible: {},
     bomb: { time: 0 },
@@ -29,7 +39,7 @@ const templates: { [id: string]: Partial<Entity> } = {
     targeting: {},
   },
   FOV_MARKER: {
-    glyph: { glyph: ".", color: GREEN, priority: PRIORITY_TERRAIN },
+    display: { glyph: ".", color: GREEN, priority: PRIORITY_TERRAIN },
     fov: {},
   },
 };

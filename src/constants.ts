@@ -20,7 +20,7 @@ export const MAP_WIDTH = ROOMS * ROOM_SIZE + ROOMS + 1;
 export const MAP_HEIGHT = MAP_WIDTH;
 
 export const BACKGROUND_COLOR = "#111111";
-export const TILE_SIZE = 18;
+export const TILE_SIZE = 32;
 export const FONT_FAMILY = "Nova Mono";
 
 export const WHITE = "#EEEEEE";

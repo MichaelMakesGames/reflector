@@ -2,7 +2,7 @@ import * as actions from "../actions";
 import * as selectors from "../selectors";
 import { GameState } from "../../types";
 import { getPosKey } from "../../utils";
-import { removeSprite } from "../../renderer";
+import { removeRenderEntity } from "../../renderer";
 
 export function removeEntity(
   state: GameState,
@@ -24,8 +24,8 @@ export function removeEntity(
     };
   }
 
-  if (prev.pos && prev.glyph) {
-    removeSprite(prev.id);
+  if (prev.pos && prev.display) {
+    removeRenderEntity(prev.id);
   }
 
   const entities = { ...state.entities };

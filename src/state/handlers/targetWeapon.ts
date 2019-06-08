@@ -56,7 +56,7 @@ export function targetWeapon(
           actions.addEntity({
             entity: createEntityFromTemplate("LASER", {
               pos: nextPos,
-              glyph: getLaserGlyph(beam, beam.power, false, weapon.type),
+              display: getLaserGlyph(beam, beam.power, false, weapon.type),
             }),
           }),
         );
@@ -89,7 +89,7 @@ export function targetWeapon(
           actions.addEntity({
             entity: createEntityFromTemplate("LASER", {
               pos: nextPos,
-              glyph: getLaserGlyph(beam, beam.power, true, weapon.type),
+              display: getLaserGlyph(beam, beam.power, true, weapon.type),
             }),
           }),
         );
@@ -119,7 +119,7 @@ export function targetWeapon(
           actions.addEntity({
             entity: createEntityFromTemplate("LASER", {
               pos: adjacentPos,
-              glyph: getLaserGlyph({ dx: 1, dy: 1 }, 1, true, weapon.type),
+              display: getLaserGlyph({ dx: 1, dy: 1 }, 1, true, weapon.type),
             }),
           }),
         );
@@ -134,7 +134,7 @@ export function targetWeapon(
     if (from.conductive && entitiesAtPos.every(e => !e.targeting)) {
       const newEntity = createEntityFromTemplate("LASER", {
         pos: pos,
-        glyph: getLaserGlyph({ dx: 1, dy: 1 }, 1, true, weapon.type),
+        display: getLaserGlyph({ dx: 1, dy: 1 }, 1, true, weapon.type),
       });
       state = addEntity(
         state,

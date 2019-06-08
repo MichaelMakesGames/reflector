@@ -2,7 +2,11 @@ import * as actions from "../actions";
 import * as selectors from "../selectors";
 import { GameState, MakeRequired, Entity } from "../../types";
 import { getPosKey } from "../../utils";
-import { updateSprite, removeSprite, addSprite } from "../../renderer";
+import {
+  updateRenderEntity,
+  removeRenderEntity,
+  addRenderEntity,
+} from "../../renderer";
 
 export function updateEntity(
   state: GameState,
@@ -32,15 +36,15 @@ export function updateEntity(
     }
   }
 
-  if (partial.hasOwnProperty("pos") || partial.hasOwnProperty("glyph")) {
-    if (entity.pos && entity.glyph) {
-      if (!prev.pos || !prev.glyph) {
-        addSprite(entity as MakeRequired<Entity, "pos" | "glyph">);
+  if (partial.hasOwnProperty("pos") || partial.hasOwnProperty("display")) {
+    if (entity.pos && entity.display) {
+      if (!prev.pos || !prev.display) {
+        addRenderEntity(entity as MakeRequired<Entity, "pos" | "display">);
       } else {
-        updateSprite(entity as MakeRequired<Entity, "pos" | "glyph">);
+        updateRenderEntity(entity as MakeRequired<Entity, "pos" | "display">);
       }
     } else {
-      removeSprite(entity.id);
+      removeRenderEntity(entity.id);
     }
   }
 

@@ -6,8 +6,22 @@ import {
   BACKGROUND_COLOR,
   FONT_FAMILY,
 } from "./constants";
-import { Entity, MakeRequired, Glyph, Pos } from "./types";
+import { Entity, MakeRequired, Display, Pos } from "./types";
 import { arePositionsEqual } from "./utils";
+
+// @ts-ignore
+import tiles from "./assets/tiles/*.png";
+
+const loadPromise = new Promise(resolve => {
+  PIXI.loader
+    .add(
+      Object.entries(tiles).map(([name, file]) => ({
+        name,
+        url: `.${file}`,
+      })),
+    )
+    .load(resolve);
+});
 
 PIXI.autoDetectRenderer().destroy();
 
@@ -19,53 +33,152 @@ export const app = new PIXI.Application({
   roundPixels: true,
 });
 
-const sprites: {
+PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
+
+const renderEntities: {
   [id: string]: {
-    glyph: Glyph;
+    displayComp: Display;
     pos: Pos;
-    displayObject: PIXI.Text;
+    text: PIXI.Text;
+    sprite?: PIXI.Sprite;
   };
 } = {};
 
-export function addSprite(entity: MakeRequired<Entity, "glyph" | "pos">) {
-  const { pos, glyph } = entity;
-  const displayObject = new PIXI.Text(glyph.glyph, {
-    fontFamily: FONT_FAMILY,
-    fontSize: TILE_SIZE,
-    fill: glyph.color,
-  });
-  displayObject.position.set(pos.x * TILE_SIZE, pos.y * TILE_SIZE);
-  sprites[entity.id] = { glyph: { ...glyph }, pos: { ...pos }, displayObject };
-  app.stage.addChild(displayObject);
-}
-
-export function removeSprite(entityId: string) {
-  const sprite = sprites[entityId];
-  if (sprite) {
-    delete sprites[entityId];
-    app.stage.removeChild(sprite.displayObject);
+const layers: {
+  [priority: number]: PIXI.Container;
+} = {};
+function getLayer(priority: number) {
+  if (layers[priority]) {
+    return layers[priority];
+  } else {
+    const layer = new PIXI.Container();
+    layer.name = priority.toString();
+    layers[priority] = layer;
+    app.stage.addChild(layer);
+    app.stage.children.sort((a, b) => {
+      const aPriority = parseFloat(a.name || "0") || 0;
+      const bPriority = parseFloat(b.name || "0") || 0;
+      return aPriority - bPriority;
+    });
+    return layer;
   }
 }
 
-export function updateSprite(entity: MakeRequired<Entity, "glyph" | "pos">) {
-  const sprite = sprites[entity.id];
-  if (sprite) {
-    if (!arePositionsEqual(sprite.pos, entity.pos)) {
-      sprite.pos = entity.pos;
-      sprite.displayObject.position.set(
+export async function addRenderEntity(
+  entity: MakeRequired<Entity, "display" | "pos">,
+) {
+  await loadPromise;
+  const { pos, display } = entity;
+  const text = new PIXI.Text(display.glyph, {
+    fontFamily: FONT_FAMILY,
+    fontSize: TILE_SIZE,
+    fill: display.color,
+  });
+  text.position.set(pos.x * TILE_SIZE, pos.y * TILE_SIZE);
+  renderEntities[entity.id] = {
+    displayComp: { ...display },
+    pos: { ...pos },
+    text,
+  };
+  if (display.tile) {
+    const sprite = createSprite(pos, display);
+    renderEntities[entity.id].sprite = sprite;
+    getLayer(display.priority).addChild(sprite);
+  } else {
+    getLayer(display.priority).addChild(text);
+  }
+}
+
+function createSprite(pos: Pos, display: Display) {
+  const sprite = new PIXI.Sprite(
+    PIXI.utils.TextureCache[display.tile || "unknown"],
+  );
+  sprite.position.set(pos.x * TILE_SIZE, pos.y * TILE_SIZE);
+  sprite.width = TILE_SIZE;
+  sprite.height = TILE_SIZE;
+  sprite.tint = parseInt((display.color || "#FFFFFF").substr(1), 16);
+  return sprite;
+}
+
+export async function removeRenderEntity(entityId: string) {
+  await loadPromise;
+  const renderEntity = renderEntities[entityId];
+  if (renderEntity) {
+    delete renderEntities[entityId];
+    if (renderEntity.sprite) {
+      getLayer(renderEntity.displayComp.priority).removeChild(
+        renderEntity.sprite,
+      );
+    } else {
+      getLayer(renderEntity.displayComp.priority).removeChild(
+        renderEntity.text,
+      );
+    }
+  }
+}
+
+export async function updateRenderEntity(
+  entity: MakeRequired<Entity, "display" | "pos">,
+) {
+  await loadPromise;
+  const renderEntity = renderEntities[entity.id];
+  if (renderEntity) {
+    if (!arePositionsEqual(renderEntity.pos, entity.pos)) {
+      renderEntity.pos = entity.pos;
+      renderEntity.text.position.set(
         entity.pos.x * TILE_SIZE,
         entity.pos.y * TILE_SIZE,
       );
+      if (renderEntity.sprite) {
+        renderEntity.sprite.position.set(
+          entity.pos.x * TILE_SIZE,
+          entity.pos.y * TILE_SIZE,
+        );
+      }
     }
 
-    if (sprite.glyph.glyph !== entity.glyph.glyph) {
-      sprite.glyph.glyph = entity.glyph.glyph;
-      sprite.displayObject.text = sprite.glyph.glyph;
+    if (
+      renderEntity.displayComp.tile !== entity.display.tile ||
+      renderEntity.displayComp.glyph !== entity.display.glyph ||
+      renderEntity.displayComp.color !== entity.display.color ||
+      renderEntity.displayComp.priority !== entity.display.priority
+    ) {
+      await removeRenderEntity(entity.id);
+      await addRenderEntity(entity);
     }
 
-    if (sprite.glyph.color !== entity.glyph.color) {
-      sprite.glyph.color = entity.glyph.color;
-      sprite.displayObject.style.fill = sprite.glyph.color;
-    }
+    // if (sprite.displayComp.tile !== entity.display.tile) {
+    //   sprite.displayComp.tile = entity.display.tile;
+    //   if (sprite.sprite) {
+    //     getLayer(sprite.displayComp.priority).removeChild(sprite.sprite);
+    //     delete sprite.sprite;
+    //   } else {
+    //     getLayer(sprite.displayComp.priority).removeChild(sprite.text);
+    //   }
+
+    //   if (sprite.displayComp.tile) {
+    //     const newSprite = createSprite(sprite.pos, sprite.displayComp);
+    //     getLayer(sprite.displayComp.priority).addChild(newSprite);
+    //     sprite.sprite = newSprite;
+    //   } else {
+    //     getLayer(sprite.displayComp.priority).addChild(sprite.text);
+    //   }
+    // }
+
+    // if (sprite.displayComp.glyph !== entity.display.glyph) {
+    //   sprite.displayComp.glyph = entity.display.glyph;
+    //   sprite.text.text = sprite.displayComp.glyph;
+    // }
+
+    // if (sprite.displayComp.color !== entity.display.color) {
+    //   sprite.displayComp.color = entity.display.color;
+    //   sprite.text.style.fill = sprite.displayComp.color;
+    //   if (sprite.sprite) {
+    //     sprite.sprite.tint = parseInt(
+    //       (entity.display.color || "#FFFFFF").substr(1),
+    //       16,
+    //     );
+    //   }
+    // }
   }
 }

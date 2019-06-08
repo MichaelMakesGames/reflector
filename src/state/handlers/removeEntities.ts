@@ -1,7 +1,7 @@
 import * as actions from "../actions";
 import * as selectors from "../selectors";
 import { GameState } from "../../types";
-import { removeSprite } from "../../renderer";
+import { removeRenderEntity } from "../../renderer";
 
 export function removeEntities(
   state: GameState,
@@ -17,8 +17,8 @@ export function removeEntities(
     ...state.entities,
   };
   for (let id of action.payload.entityIds) {
-    if (entities[id].pos && entities[id].glyph) {
-      removeSprite(id);
+    if (entities[id].pos && entities[id].display) {
+      removeRenderEntity(id);
     }
     delete entities[id];
   }

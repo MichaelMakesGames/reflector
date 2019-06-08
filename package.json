@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "parcel src/index.html",
+    "start": "parcel --no-hmr src/index.html",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "parcel build src/index.html --public-url ./"
   },

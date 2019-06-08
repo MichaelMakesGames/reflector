@@ -6,14 +6,14 @@ export interface HasPos {
   pos: Pos;
 }
 
-export interface Glyph {
+export interface Display {
+  tile?: string;
   glyph: string;
   color: string;
-  background?: string;
   priority: number;
 }
-export interface HasGlyph {
-  glyph: Glyph;
+export interface HasDisplay {
+  display: Display;
 }
 
 export type AIType = "RUSHER" | "ANGLER" | "SMASHER" | "BOMBER";
@@ -171,7 +171,7 @@ export interface HasTeleporter {
 
 export interface Entity
   extends Partial<HasPos>,
-    Partial<HasGlyph>,
+    Partial<HasDisplay>,
     Partial<HasAI>,
     Partial<HasBlocking>,
     Partial<HasWeapon>,
