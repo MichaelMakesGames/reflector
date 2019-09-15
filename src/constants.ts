@@ -32,7 +32,7 @@ export const DARK_GRAY = "#444444";
 export const YELLOW = "#FFFF88";
 export const PURPLE = "#FF88FF";
 export const BLACK = BACKGROUND_COLOR;
-export const BRIGHT_RED = "orangered";
+export const BRIGHT_RED = "#FF4400";
 export const TRANSPARENT = "transparent";
 
 export const RIGHT = { dx: 1, dy: 0 };

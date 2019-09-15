@@ -26,9 +26,9 @@ export default function Game() {
           <MessageLog />
           <Map />
         </div>
-        <div className="right">
+        {/* <div className="right">
           <Legend />
-        </div>
+        </div> */}
       </div>
       <div className="row">
         <Controls />

@@ -3,7 +3,7 @@ import { PLAYER_ID } from "../../constants";
 import * as selectors from "../selectors";
 import { createEntityFromTemplate } from "../../utils";
 import { Entity, GameState, Pos } from "../../types";
-import { getAdjacentPositions, getLaserGlyph, reflect } from "../../utils";
+import { getAdjacentPositions, createLaser, reflect } from "../../utils";
 import { addEntity } from "./addEntity";
 import { removeEntities } from "./removeEntities";
 
@@ -54,10 +54,7 @@ export function targetWeapon(
         state = addEntity(
           state,
           actions.addEntity({
-            entity: createEntityFromTemplate("LASER", {
-              pos: nextPos,
-              display: getLaserGlyph(beam, beam.power, false, weapon.type),
-            }),
+            entity: createLaser(beam, beam.power, false, weapon.type, nextPos),
           }),
         );
       } else if (
@@ -87,10 +84,7 @@ export function targetWeapon(
         state = addEntity(
           state,
           actions.addEntity({
-            entity: createEntityFromTemplate("LASER", {
-              pos: nextPos,
-              display: getLaserGlyph(beam, beam.power, true, weapon.type),
-            }),
+            entity: createLaser(beam, beam.power, true, weapon.type, nextPos),
           }),
         );
         if (weapon.type === "EXPLOSIVE") {
@@ -117,10 +111,7 @@ export function targetWeapon(
         state = addEntity(
           state,
           actions.addEntity({
-            entity: createEntityFromTemplate("LASER", {
-              pos: adjacentPos,
-              display: getLaserGlyph({ dx: 1, dy: 1 }, 1, true, weapon.type),
-            }),
+            entity: createLaser({ dx: 1, dy: 1 }, 1, true, weapon.type, adjacentPos),
           }),
         );
       }
@@ -132,10 +123,7 @@ export function targetWeapon(
     const pos = from.pos as Pos;
     const entitiesAtPos = selectors.entitiesAtPosition(state, pos);
     if (from.conductive && entitiesAtPos.every(e => !e.targeting)) {
-      const newEntity = createEntityFromTemplate("LASER", {
-        pos: pos,
-        display: getLaserGlyph({ dx: 1, dy: 1 }, 1, true, weapon.type),
-      });
+      const newEntity = createLaser({ dx: 1, dy: 1 }, 1, true, weapon.type, pos);
       state = addEntity(
         state,
         actions.addEntity({

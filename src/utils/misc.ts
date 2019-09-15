@@ -1,14 +1,14 @@
-import { Pos, WeaponType, Direction, Display } from "../types";
+import { Pos, WeaponType, Direction, HasDisplay, Entity } from "../types";
 import {
   RED,
   RIGHT,
   DOWN,
   LEFT,
   UP,
-  PRIORITY_LASER,
   PURPLE,
   YELLOW,
 } from "../constants";
+import { createEntityFromTemplate } from "./createEntityFromTemplate";
 
 export function getPosKey(pos: Pos) {
   return `${pos.x},${pos.y}`;
@@ -53,19 +53,43 @@ function getLaserChar(power: number, direction: { dx: number; dy: number }) {
   if (getConstDir(direction) === UP) return "↑⇑⤊"[index];
   return "*";
 }
-export function getLaserGlyph(
+export function createLaser(
   direction: Direction,
   power: number,
   hit: boolean,
   type: WeaponType,
-): Display {
+  pos: Pos,
+): Entity {
   let color = RED;
   if (type === "TELEPORT") color = PURPLE;
   if (type === "ELECTRIC") color = YELLOW;
+
+  let templateName = 'LASER_'
+  if (hit) {
+    templateName += 'BURST'
+  } else {
+    let constDir = getConstDir(direction);
+    if (constDir === UP || constDir === DOWN) {
+      templateName += 'VERTICAL_';
+    } else {
+      templateName += 'HORIZONTAL_';
+    }
+    if (power >= 3) {
+      templateName += 'THICK';
+    } else if (power === 2) {
+      templateName += 'MEDIUM';
+    } else {
+      templateName += 'THIN';
+    }
+  }
+
+  const template = createEntityFromTemplate(templateName, { pos }) as Entity & HasDisplay;
   return {
-    glyph: hit ? "*" : getLaserChar(power, direction),
-    color,
-    priority: PRIORITY_LASER,
+    ...template,
+    display: {
+      ...template.display,
+      color,
+    },
   };
 }
 

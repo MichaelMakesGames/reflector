@@ -35,11 +35,13 @@ const templates: { [id: string]: Partial<Entity> } = {
     destructible: {},
     bomb: { time: 0 },
   },
-  LASER: {
-    targeting: {},
-  },
   FOV_MARKER: {
-    display: { glyph: ".", color: GREEN, priority: PRIORITY_TERRAIN },
+    display: {
+      glyph: ".",
+      tile: "floor",
+      color: GREEN,
+      priority: PRIORITY_TERRAIN,
+    },
     fov: {},
   },
 };

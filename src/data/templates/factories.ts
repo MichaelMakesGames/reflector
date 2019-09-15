@@ -8,6 +8,7 @@ const templates: { [id: string]: Partial<Entity> } = {
     blocking: { moving: true, throwing: true },
     display: {
       glyph: "F",
+      tile: 'factory',
       color: BLUE,
       priority: PRIORITY_ENEMY,
     },

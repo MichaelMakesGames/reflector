@@ -279,6 +279,7 @@ export default function Controls() {
     return () => document.removeEventListener("keydown", listener);
   });
 
+  return null;
   return (
     <div className="controls box">
       <div className="box__label">Controls</div>
