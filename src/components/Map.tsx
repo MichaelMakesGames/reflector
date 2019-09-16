@@ -1,3 +1,4 @@
+/* global document */
 import React, { useEffect } from "react";
 import { useMappedState } from "redux-react-hook";
 

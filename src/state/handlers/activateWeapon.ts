@@ -9,13 +9,14 @@ export function activateWeapon(
   state: GameState,
   action: ReturnType<typeof actions.activateWeapon>,
 ): GameState {
-  const weaponInSlot = selectors.weaponInSlot(state, action.payload.slot);
-  if (!weaponInSlot) return state;
+  let newState = state;
+  const weaponInSlot = selectors.weaponInSlot(newState, action.payload.slot);
+  if (!weaponInSlot) return newState;
 
-  for (let weapon of selectors.weapons(state)) {
+  for (const weapon of selectors.weapons(newState)) {
     if (weapon !== weaponInSlot && weapon.weapon && weapon.weapon.active) {
-      state = updateEntity(
-        state,
+      newState = updateEntity(
+        newState,
         actions.updateEntity({
           id: weapon.id,
           weapon: {
@@ -29,11 +30,11 @@ export function activateWeapon(
 
   const entity = weaponInSlot;
   const { weapon } = entity;
-  if (!weapon) return state;
-  state = {
-    ...state,
+  if (!weapon) return newState;
+  newState = {
+    ...newState,
     entities: {
-      ...state.entities,
+      ...newState.entities,
       [entity.id]: {
         ...entity,
         weapon: {
@@ -43,6 +44,6 @@ export function activateWeapon(
       },
     },
   };
-  state = targetWeapon(state, actions.targetWeapon(RIGHT));
-  return state;
+  newState = targetWeapon(newState, actions.targetWeapon(RIGHT));
+  return newState;
 }

@@ -1,7 +1,7 @@
 import * as actions from "../actions";
 import * as selectors from "../selectors";
 import { GameState } from "../../types";
-import { getPosKey } from "../../utils";
+import { getPosKey } from "../../utils/geometry";
 import { removeRenderEntity } from "../../renderer";
 
 export function removeEntity(

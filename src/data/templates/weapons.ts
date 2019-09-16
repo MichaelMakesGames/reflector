@@ -1,4 +1,4 @@
-import { RED, PRIORITY_ITEM, TILE_SIZE } from "../../constants";
+import { RED, PRIORITY_ITEM } from "../../constants";
 import { Entity } from "../../types/Entity";
 
 const templates: { [id: string]: Partial<Entity> } = {

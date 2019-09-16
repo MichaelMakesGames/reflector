@@ -5,24 +5,79 @@
   "main": "index.js",
   "scripts": {
     "start": "parcel --no-hmr src/index.html",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "parcel build src/index.html --public-url ./"
+    "test": "npm run format:check && npm run lint:check",
+    "build": "parcel build src/index.html --public-url ./",
+    "lint:check": "eslint src/**/*.{ts,tsx}",
+    "lint:fix": "eslint --fix src/**/*.{ts,tsx}",
+    "format:check": "prettier --check src/**/*.{ts,tsx}",
+    "format:fix": "prettier --write src/**/*.{ts,tsx}"
   },
   "author": "",
   "license": "MIT",
   "prettier": {
     "trailingComma": "all"
   },
+  "eslintConfig": {
+    "extends": [
+      "airbnb-typescript",
+      "prettier"
+    ],
+    "rules": {
+      "no-use-before-define": [
+        "error",
+        {
+          "functions": false
+        }
+      ],
+      "no-plusplus": "off",
+      "no-restricted-syntax": [
+        "error",
+        {
+          "selector": "ForInStatement",
+          "message": "for..in loops iterate over the entire prototype chain, which is virtually never what you want. Use Object.{keys,values,entries}, and iterate over the resulting array."
+        },
+        {
+          "selector": "LabeledStatement",
+          "message": "Labels are a form of GOTO; using them makes code confusing and hard to maintain and understand."
+        },
+        {
+          "selector": "WithStatement",
+          "message": "`with` is disallowed in strict mode because it makes code impossible to predict and optimize."
+        }
+      ],
+      "no-loop-func": "warn",
+      "no-shadow": "warn",
+      "import/prefer-default-export": "off",
+      "import/no-cycle": "warn",
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          "args": "none"
+        }
+      ],
+      "@typescript-eslint/indent": "off",
+      "react/jsx-one-expression-per-line": "off"
+    }
+  },
   "devDependencies": {
     "@types/nanoid": "^1.2.1",
     "@types/pixi.js": "^4.8.6",
     "@types/react": "^16.8.6",
     "@types/react-dom": "^16.8.2",
+    "@typescript-eslint/eslint-plugin": "^1.13.0",
+    "eslint": "^6.4.0",
+    "eslint-config-airbnb-typescript": "^4.0.1",
+    "eslint-config-prettier": "^6.3.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.14.3",
     "parcel-bundler": "^1.11.0",
+    "prettier": "^1.18.2",
     "typescript": "^3.3.3333"
   },
   "dependencies": {
     "@babel/polyfill": "^7.2.5",
+    "has": "^1.0.3",
     "nanoid": "^2.0.1",
     "pixi.js": "^4.8.7",
     "react": "^16.8.3",

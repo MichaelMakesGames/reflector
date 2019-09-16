@@ -1,5 +1,5 @@
-import { Level } from "../types/Entity";
 import { RNG } from "rot-js";
+import { Level } from "../types/Entity";
 
 const rng = RNG.clone();
 

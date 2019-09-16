@@ -9,10 +9,11 @@ export function attack(
   state: GameState,
   action: ReturnType<typeof actions.attack>,
 ): GameState {
-  const target = selectors.entity(state, action.payload.target);
+  let newState = state;
+  const target = selectors.entity(newState, action.payload.target);
   if (target.hitPoints) {
-    state = updateEntity(
-      state,
+    newState = updateEntity(
+      newState,
       actions.updateEntity({
         id: target.id,
         hitPoints: {
@@ -23,13 +24,16 @@ export function attack(
     );
   }
   if (target.destructible) {
-    state = removeEntity(state, actions.removeEntity({ entityId: target.id }));
+    newState = removeEntity(
+      newState,
+      actions.removeEntity({ entityId: target.id }),
+    );
   }
   if (target.id === PLAYER_ID) {
-    state = {
-      ...state,
-      messageLog: [...state.messageLog, action.payload.message],
+    newState = {
+      ...newState,
+      messageLog: [...newState.messageLog, action.payload.message],
     };
   }
-  return state;
+  return newState;
 }

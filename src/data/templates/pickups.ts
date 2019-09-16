@@ -4,7 +4,6 @@ import {
   GREEN,
   WHITE,
   PRIORITY_THROWING,
-  TILE_SIZE,
 } from "../../constants";
 import { Entity } from "../../types/Entity";
 

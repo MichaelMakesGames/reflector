@@ -9,8 +9,8 @@ export default function Inventory() {
       <div className="box__label">Log</div>
       <div className="messages">
         {messages
-          .map((m, i) => (
-            <div key={i} className="message">
+          .map(m => (
+            <div key={m} className="message">
               {m}
             </div>
           ))

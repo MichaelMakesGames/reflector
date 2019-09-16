@@ -5,7 +5,7 @@ import * as selectors from "../state/selectors";
 export default function Status() {
   const player = useMappedState(selectors.player);
   if (!player) return null;
-  const inventory = player.inventory;
+  const { inventory } = player;
   const hp = player.hitPoints;
 
   return (
@@ -14,8 +14,14 @@ export default function Status() {
       <div>
         Health: {hp.current} / {hp.max}
       </div>
-      <div>Reflectors: {inventory.reflectors}</div>
-      <div>Splitters: {inventory.splitters}</div>
+      <div>
+        Reflectors:
+        {inventory.reflectors}
+      </div>
+      <div>
+        Splitters:
+        {inventory.splitters}
+      </div>
     </div>
   );
 }

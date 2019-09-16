@@ -1,6 +1,7 @@
 import { GameState, Pos, Entity, Level, MakeRequired } from "../types";
 import { PLAYER_ID } from "../constants";
-import { getPosKey, filterEntitiesWithComps } from "../utils";
+import { getPosKey } from "../utils/geometry";
+import { filterEntitiesWithComps } from "../utils/entities";
 
 export function gameState(state: GameState) {
   return state;
@@ -32,7 +33,7 @@ export function entity(state: GameState, entityId: string) {
 export function player(state: GameState) {
   return state.entities[PLAYER_ID] as MakeRequired<
     Entity,
-    "pos" | "hitPoints" | "inventory" | "glyph" | "conductive"
+    "pos" | "hitPoints" | "inventory" | "display" | "conductive"
   > | null;
 }
 
@@ -53,9 +54,8 @@ export function weaponInSlot(state: GameState, slot: number) {
   );
   if (weaponsInSlot.length) {
     return weaponsInSlot[0];
-  } else {
-    return null;
   }
+  return null;
 }
 
 export function activeWeapon(state: GameState) {
@@ -64,9 +64,8 @@ export function activeWeapon(state: GameState) {
   );
   if (activeWeapons.length) {
     return activeWeapons[0];
-  } else {
-    return null;
   }
+  return null;
 }
 
 export function targetingLasers(state: GameState) {

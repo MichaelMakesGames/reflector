@@ -8,31 +8,32 @@ export function activateEquip(
   state: GameState,
   action: ReturnType<typeof actions.activateEquip>,
 ) {
-  state = updateEntity(
-    state,
+  let newState = state;
+  newState = updateEntity(
+    newState,
     actions.updateEntity({
       id: action.payload.entity.id,
       equipping: {},
     }),
   );
 
-  if (!selectors.weaponInSlot(state, 1)) {
-    state = executeEquip(state, actions.executeEquip({ slot: 1 }));
-  } else if (!selectors.weaponInSlot(state, 2)) {
-    state = executeEquip(state, actions.executeEquip({ slot: 2 }));
-  } else if (!selectors.weaponInSlot(state, 3)) {
-    state = executeEquip(state, actions.executeEquip({ slot: 3 }));
-  } else if (!selectors.weaponInSlot(state, 4)) {
-    state = executeEquip(state, actions.executeEquip({ slot: 4 }));
+  if (!selectors.weaponInSlot(newState, 1)) {
+    newState = executeEquip(newState, actions.executeEquip({ slot: 1 }));
+  } else if (!selectors.weaponInSlot(newState, 2)) {
+    newState = executeEquip(newState, actions.executeEquip({ slot: 2 }));
+  } else if (!selectors.weaponInSlot(newState, 3)) {
+    newState = executeEquip(newState, actions.executeEquip({ slot: 3 }));
+  } else if (!selectors.weaponInSlot(newState, 4)) {
+    newState = executeEquip(newState, actions.executeEquip({ slot: 4 }));
   } else {
-    state = {
-      ...state,
+    newState = {
+      ...newState,
       messageLog: [
-        ...state.messageLog,
+        ...newState.messageLog,
         "Equipping weapon... Please select slot.",
       ],
     };
   }
 
-  return state;
+  return newState;
 }

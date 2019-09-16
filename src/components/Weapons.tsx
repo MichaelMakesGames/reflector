@@ -1,8 +1,9 @@
 import React from "react";
-import * as selectors from "../state/selectors";
 import { useMappedState } from "redux-react-hook";
+import * as selectors from "../state/selectors";
 import Weapon from "./Weapon";
 import { BLACK } from "../constants";
+
 export default function Weapons() {
   const weapons = useMappedState(selectors.weapons);
 

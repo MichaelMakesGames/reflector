@@ -1,15 +1,15 @@
 import * as actions from "../actions";
-import * as selectors from "../selectors";
 import { GameState, MakeRequired, Entity } from "../../types";
-import { getPosKey } from "../../utils";
+import { getPosKey } from "../../utils/geometry";
 import { addRenderEntity } from "../../renderer";
 
 export function addEntity(
   state: GameState,
   action: ReturnType<typeof actions.addEntity>,
 ): GameState {
+  let newState = state;
   const { entity } = action.payload;
-  let { entitiesByPosition } = state;
+  let { entitiesByPosition } = newState;
   if (entity.pos) {
     const key = getPosKey(entity.pos);
     entitiesByPosition = {
@@ -22,13 +22,13 @@ export function addEntity(
     addRenderEntity(entity as MakeRequired<Entity, "pos" | "display">);
   }
 
-  state = {
-    ...state,
+  newState = {
+    ...newState,
     entitiesByPosition,
     entities: {
-      ...state.entities,
+      ...newState.entities,
       [entity.id]: entity,
     },
   };
-  return state;
+  return newState;
 }

@@ -7,8 +7,9 @@ export function rotateThrow(
   state: GameState,
   action: ReturnType<typeof actions.rotateThrow>,
 ): GameState {
-  let entity = selectors.throwingTarget(state);
-  if (!entity) return state;
+  let newState = state;
+  let entity = selectors.throwingTarget(newState);
+  if (!entity) return newState;
   if (entity.reflector && entity.display) {
     entity = {
       ...entity,
@@ -35,6 +36,6 @@ export function rotateThrow(
       },
     };
   }
-  state = updateEntity(state, actions.updateEntity(entity));
-  return state;
+  newState = updateEntity(newState, actions.updateEntity(entity));
+  return newState;
 }

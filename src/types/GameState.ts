@@ -1,4 +1,5 @@
 import { Entity } from "./Entity";
+
 export interface GameState {
   entities: {
     [id: string]: Entity;

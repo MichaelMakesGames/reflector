@@ -1,13 +1,15 @@
 import { GameState } from "../../types";
-import { arePositionsEqual, makeLevel } from "../../utils";
+import { arePositionsEqual } from "../../utils/geometry";
+import makeLevel from "../../utils/makeLevel";
 import * as selectors from "../selectors";
 
 export default function processStairs(state: GameState): GameState {
-  const player = selectors.player(state);
-  const stairs = selectors.entitiesWithComps(state, "stairs", "pos")[0];
-  if (!player || !stairs) return state;
+  let newState = state;
+  const player = selectors.player(newState);
+  const stairs = selectors.entitiesWithComps(newState, "stairs", "pos")[0];
+  if (!player || !stairs) return newState;
   if (arePositionsEqual(player.pos, stairs.pos)) {
-    state = makeLevel(state);
+    newState = makeLevel(newState);
   }
-  return state;
+  return newState;
 }

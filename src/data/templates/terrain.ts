@@ -6,7 +6,6 @@ import {
   PURPLE,
   PRIORITY_FLOOR,
   DARK_GRAY,
-  BLACK,
 } from "../../constants";
 
 const templates: { [id: string]: Partial<Entity> } = {

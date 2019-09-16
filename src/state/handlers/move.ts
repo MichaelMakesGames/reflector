@@ -9,17 +9,18 @@ export function move(
   state: GameState,
   action: ReturnType<typeof actions.move>,
 ): GameState {
-  const entity = selectors.entity(state, action.payload.entityId);
+  let newState = state;
+  const entity = selectors.entity(newState, action.payload.entityId);
   const { pos } = entity;
   if (!pos) {
-    return state;
+    return newState;
   }
   const newPosition = {
     x: pos.x + action.payload.dx,
     y: pos.y + action.payload.dy,
   };
   const entitiesAtNewPosition = selectors.entitiesAtPosition(
-    state,
+    newState,
     newPosition,
   );
   if (
@@ -29,17 +30,17 @@ export function move(
       other => !!(other.blocking && !(entity.id === PLAYER_ID && other.pickup)),
     )
   ) {
-    return state;
+    return newState;
   }
-  state = updateEntity(
-    state,
+  newState = updateEntity(
+    newState,
     actions.updateEntity({
       id: entity.id,
       pos: newPosition,
     }),
   );
   if (entity.id === PLAYER_ID) {
-    state = playerTookTurn(state, actions.playerTookTurn());
+    newState = playerTookTurn(newState, actions.playerTookTurn());
   }
-  return state;
+  return newState;
 }

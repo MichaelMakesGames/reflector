@@ -4,25 +4,26 @@ import { removeEntity } from "../handlers/removeEntity";
 import { updateEntity } from "../handlers/updateEntity";
 import * as selectors from "../selectors";
 import { GameState } from "../../types";
-import { arePositionsEqual } from "../../utils";
+import { arePositionsEqual } from "../../utils/geometry";
 
 export default function processPickups(state: GameState): GameState {
-  const player = selectors.player(state);
-  for (let entity of selectors.entitiesWithComps(state, "pickup", "pos")) {
+  let newState = state;
+  const player = selectors.player(newState);
+  for (const entity of selectors.entitiesWithComps(newState, "pickup", "pos")) {
     if (player && arePositionsEqual(player.pos, entity.pos)) {
       if (entity.pickup.effect === "NONE") {
-        state = removeEntity(
-          state,
+        newState = removeEntity(
+          newState,
           actions.removeEntity({ entityId: entity.id }),
         );
       }
       if (entity.pickup.effect === "PICKUP") {
-        state = removeEntity(
-          state,
+        newState = removeEntity(
+          newState,
           actions.removeEntity({ entityId: entity.id }),
         );
-        state = updateEntity(
-          state,
+        newState = updateEntity(
+          newState,
           actions.updateEntity({
             id: player.id,
             inventory: {
@@ -34,13 +35,13 @@ export default function processPickups(state: GameState): GameState {
         );
       }
       if (entity.pickup.effect === "HEAL") {
-        state = removeEntity(
-          state,
+        newState = removeEntity(
+          newState,
           actions.removeEntity({ entityId: entity.id }),
         );
         if (player.hitPoints.current < player.hitPoints.max) {
-          state = updateEntity(
-            state,
+          newState = updateEntity(
+            newState,
             actions.updateEntity({
               id: player.id,
               hitPoints: {
@@ -49,25 +50,25 @@ export default function processPickups(state: GameState): GameState {
               },
             }),
           );
-          state = {
-            ...state,
-            messageLog: [...state.messageLog, "You heal 1."],
+          newState = {
+            ...newState,
+            messageLog: [...newState.messageLog, "You heal 1."],
           };
         }
       }
       if (entity.pickup.effect === "RECHARGE") {
-        state = removeEntity(
-          state,
+        newState = removeEntity(
+          newState,
           actions.removeEntity({ entityId: entity.id }),
         );
-        state = {
-          ...state,
-          messageLog: [...state.messageLog, "All weapons ready."],
+        newState = {
+          ...newState,
+          messageLog: [...newState.messageLog, "All weapons ready."],
         };
-        for (let weapon of selectors.weapons(state)) {
+        for (const weapon of selectors.weapons(newState)) {
           if (weapon.weapon && weapon.weapon.readyIn) {
-            state = updateEntity(
-              state,
+            newState = updateEntity(
+              newState,
               actions.updateEntity({
                 id: weapon.id,
                 weapon: { ...weapon.weapon, readyIn: 0 },
@@ -78,10 +79,10 @@ export default function processPickups(state: GameState): GameState {
       }
       if (entity.pickup.effect === "EQUIP") {
         if (entity.weapon) {
-          state = activateEquip(state, actions.activateEquip({ entity }));
+          newState = activateEquip(newState, actions.activateEquip({ entity }));
         }
       }
     }
   }
-  return state;
+  return newState;
 }

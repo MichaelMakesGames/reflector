@@ -3,49 +3,50 @@ import { PLAYER_ID } from "../constants";
 import { addEntity } from "../state/handlers/addEntity";
 import { removeEntities } from "../state/handlers/removeEntities";
 import { updateEntity } from "../state/handlers/updateEntity";
-import { generateMap } from "./mapgen";
+import generateMap from "./generateMap";
 import * as selectors from "../state/selectors";
 import { GameState } from "../types";
 
-export function makeLevel(state: GameState): GameState {
+export default function makeLevel(state: GameState): GameState {
+  let newState = state;
   const lastLevelEntity = selectors
-    .entityList(state)
+    .entityList(newState)
     .filter(e => e.level && e.level.current)[0];
-  if (!lastLevelEntity || !lastLevelEntity.level) return state;
+  if (!lastLevelEntity || !lastLevelEntity.level) return newState;
   const lastLevel = lastLevelEntity.level;
   const nextLevelEntity = selectors
-    .entityList(state)
+    .entityList(newState)
     .filter(e => e.level && e.level.depth === lastLevel.depth + 1)[0];
-  if (!nextLevelEntity || !nextLevelEntity.level) return state;
+  if (!nextLevelEntity || !nextLevelEntity.level) return newState;
   const nextLevel = nextLevelEntity.level;
 
-  state = updateEntity(
-    state,
+  newState = updateEntity(
+    newState,
     actions.updateEntity({
       id: lastLevelEntity.id,
       level: { ...lastLevel, current: false },
     }),
   );
-  state = updateEntity(
-    state,
+  newState = updateEntity(
+    newState,
     actions.updateEntity({
       id: nextLevelEntity.id,
       level: { ...nextLevel, current: true },
     }),
   );
 
-  state = removeEntities(
-    state,
+  newState = removeEntities(
+    newState,
     actions.removeEntities({
       entityIds: selectors
-        .entityList(state)
+        .entityList(newState)
         .filter(e => e.pos && e.id !== PLAYER_ID)
         .map(e => e.id),
     }),
   );
 
-  for (let entity of generateMap(nextLevel)) {
-    state = addEntity(state, actions.addEntity({ entity }));
+  for (const entity of generateMap(nextLevel)) {
+    newState = addEntity(newState, actions.addEntity({ entity }));
   }
-  return state;
+  return newState;
 }

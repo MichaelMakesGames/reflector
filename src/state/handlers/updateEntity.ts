@@ -1,7 +1,8 @@
+import { has } from "has";
 import * as actions from "../actions";
 import * as selectors from "../selectors";
 import { GameState, MakeRequired, Entity } from "../../types";
-import { getPosKey } from "../../utils";
+import { getPosKey } from "../../utils/geometry";
 import {
   updateRenderEntity,
   removeRenderEntity,
@@ -12,13 +13,14 @@ export function updateEntity(
   state: GameState,
   action: ReturnType<typeof actions.updateEntity>,
 ): GameState {
+  let newState = state;
   const partial = action.payload;
-  const prev = selectors.entity(state, partial.id);
+  const prev = selectors.entity(newState, partial.id);
   if (!prev) {
     console.warn("tried to update nonexistant entity", partial);
   }
   const entity = { ...prev, ...partial };
-  let { entitiesByPosition } = state;
+  let { entitiesByPosition } = newState;
   if (Object.hasOwnProperty.call(partial, "pos")) {
     if (prev && prev.pos) {
       const key = getPosKey(prev.pos);
@@ -36,7 +38,7 @@ export function updateEntity(
     }
   }
 
-  if (partial.hasOwnProperty("pos") || partial.hasOwnProperty("display")) {
+  if (has(partial, "pos") || has(partial, "display")) {
     if (entity.pos && entity.display) {
       if (!prev.pos || !prev.display) {
         addRenderEntity(entity as MakeRequired<Entity, "pos" | "display">);
@@ -48,15 +50,15 @@ export function updateEntity(
     }
   }
 
-  state = {
-    ...state,
+  newState = {
+    ...newState,
     entitiesByPosition,
     entities: {
-      ...state.entities,
+      ...newState.entities,
       [entity.id]: {
         ...entity,
       },
     },
   };
-  return state;
+  return newState;
 }

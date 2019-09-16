@@ -1,11 +1,12 @@
+/* global document */
 import React, { useEffect } from "react";
+import { useDispatch, useMappedState } from "redux-react-hook";
 import * as actions from "../state/actions";
 import * as selectors from "../state/selectors";
-import { Action, Entity, Pos } from "../types/Entity";
-import { useDispatch, useMappedState } from "redux-react-hook";
+import { Entity, Pos } from "../types/Entity";
 import { PLAYER_ID, UP, LEFT, DOWN, RIGHT } from "../constants";
-import { action } from "typesafe-actions";
-import { createEntityFromTemplate } from "../utils";
+import { createEntityFromTemplate } from "../utils/entities";
+import { Action } from "../types/Action";
 
 interface Control {
   key: string;
@@ -279,18 +280,18 @@ export default function Controls() {
     return () => document.removeEventListener("keydown", listener);
   });
 
-  return null;
-  return (
-    <div className="controls box">
-      <div className="box__label">Controls</div>
-      {controls
-        .filter(control => !control.hidden)
-        .map(control => (
-          <div key={control.key} className="control">
-            <kbd>{control.key}</kbd>
-            <span>{control.label}</span>
-          </div>
-        ))}
-    </div>
-  );
+  return <div />;
+  // return (
+  //   <div className="controls box">
+  //     <div className="box__label">Controls</div>
+  //     {controls
+  //       .filter(control => !control.hidden)
+  //       .map(control => (
+  //         <div key={control.key} className="control">
+  //           <kbd>{control.key}</kbd>
+  //           <span>{control.label}</span>
+  //         </div>
+  //       ))}
+  //   </div>
+  // );
 }

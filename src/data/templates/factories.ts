@@ -1,5 +1,5 @@
 import { Entity } from "../../types/Entity";
-import { BLUE, WHITE, PRIORITY_ENEMY, BLACK } from "../../constants";
+import { BLUE, PRIORITY_ENEMY } from "../../constants";
 
 const templates: { [id: string]: Partial<Entity> } = {
   FACTORY_BASE: {
@@ -8,7 +8,7 @@ const templates: { [id: string]: Partial<Entity> } = {
     blocking: { moving: true, throwing: true },
     display: {
       glyph: "F",
-      tile: 'factory',
+      tile: "factory",
       color: BLUE,
       priority: PRIORITY_ENEMY,
     },

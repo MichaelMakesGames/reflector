@@ -1,5 +1,5 @@
 import React from "react";
-import { Weapon } from "../types/Entity";
+import { Weapon as WeaponComp } from "../types/Entity";
 import { RED, YELLOW, PURPLE, BLACK, GREEN } from "../constants";
 
 export default function Weapon({
@@ -7,7 +7,7 @@ export default function Weapon({
   weapon,
 }: {
   slot: string;
-  weapon: Weapon | null;
+  weapon: WeaponComp | null;
 }) {
   if (!weapon) {
     return (
@@ -32,7 +32,7 @@ export default function Weapon({
   return (
     <div className="box weapon">
       <div className="box__label weapon__label">
-        {slot}: {weapon.name}
+        {slot}:{weapon.name}
       </div>
       <div style={{ display: "flex", flexFlow: "row wrap" }}>
         <div style={itemStyle}>
@@ -41,8 +41,14 @@ export default function Weapon({
         <div style={itemStyle}>
           Type: <span style={{ color: weaponTypeColor }}>{weapon.type}</span>
         </div>
-        <div style={itemStyle}>Power: {weapon.power}</div>
-        <div style={itemStyle}>Cooldown: {weapon.cooldown}</div>
+        <div style={itemStyle}>
+          Power:
+          {weapon.power}
+        </div>
+        <div style={itemStyle}>
+          Cooldown:
+          {weapon.cooldown}
+        </div>
       </div>
     </div>
   );

@@ -4,10 +4,11 @@ import * as selectors from "../selectors";
 import { GameState } from "../../types";
 
 export default function processCooldowns(state: GameState): GameState {
-  for (const entity of selectors.entityList(state).filter(e => e.cooldown)) {
+  let newState = state;
+  for (const entity of selectors.entityList(newState).filter(e => e.cooldown)) {
     if (entity.cooldown) {
-      state = updateEntity(
-        state,
+      newState = updateEntity(
+        newState,
         actions.updateEntity({
           id: entity.id,
           cooldown: {
@@ -17,10 +18,10 @@ export default function processCooldowns(state: GameState): GameState {
       );
     }
   }
-  for (const entity of selectors.weapons(state)) {
+  for (const entity of selectors.weapons(newState)) {
     if (entity.weapon) {
-      state = updateEntity(
-        state,
+      newState = updateEntity(
+        newState,
         actions.updateEntity({
           id: entity.id,
           weapon: {
@@ -31,5 +32,5 @@ export default function processCooldowns(state: GameState): GameState {
       );
     }
   }
-  return state;
+  return newState;
 }

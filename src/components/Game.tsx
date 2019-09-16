@@ -5,7 +5,6 @@ import Controls from "./Controls";
 import * as actions from "../state/actions";
 import Weapons from "./Weapons";
 import Status from "./Status";
-import Legend from "./Legend";
 import MessageLog from "./MessageLog";
 import DamageFlash from "./DamageFlash";
 
@@ -26,9 +25,6 @@ export default function Game() {
           <MessageLog />
           <Map />
         </div>
-        {/* <div className="right">
-          <Legend />
-        </div> */}
       </div>
       <div className="row">
         <Controls />

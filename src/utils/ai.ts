@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import * as ROT from "rot-js";
 import { ActionType } from "typesafe-actions";
 import * as actions from "../state/actions";
@@ -8,14 +9,14 @@ import {
   PLAYER_ID,
 } from "../constants";
 import * as selectors from "../state/selectors";
-import { createEntityFromTemplate } from "./createEntityFromTemplate";
+import { createEntityFromTemplate } from "./entities";
 import { Direction, Entity, GameState, Pos } from "../types";
 import {
   getAdjacentPositions,
   getClosestPosition,
   getDistance,
   arePositionsEqual,
-} from "./misc";
+} from "./geometry";
 
 const aiActions = {
   move: actions.move,
@@ -75,7 +76,7 @@ function getDirectionTowardTarget(
 }
 
 export function getAIActions(entity: Entity, gameState: GameState): AIAction[] {
-  const ai = entity.ai;
+  const { ai } = entity;
   if (!ai) return [];
   const player = selectors.player(gameState);
 
@@ -116,9 +117,8 @@ export function getAIActions(entity: Entity, gameState: GameState): AIAction[] {
           message: "The Rusher attacks you!",
         }),
       ];
-    } else {
-      return [actions.move({ entityId: entity.id, ...direction })];
     }
+    return [actions.move({ entityId: entity.id, ...direction })];
   }
 
   if (ai.type === "SMASHER") {
@@ -182,8 +182,8 @@ export function getAIActions(entity: Entity, gameState: GameState): AIAction[] {
     const attackablePositions = possiblePositions.filter(pos => {
       let dx = pos.x - playerPos.x;
       let dy = pos.y - playerPos.y;
-      let dxSign = dx > 0 ? 1 : -1;
-      let dySign = dy > 0 ? 1 : -1;
+      const dxSign = dx > 0 ? 1 : -1;
+      const dySign = dy > 0 ? 1 : -1;
       if (dx === 0) return false;
       dx = (Math.abs(dx) - 1) * dxSign;
       dy = (Math.abs(dy) - 1) * dySign;

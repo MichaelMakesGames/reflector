@@ -8,17 +8,21 @@ export function cancelThrow(
   state: GameState,
   action: ReturnType<typeof actions.cancelThrow>,
 ): GameState {
-  state = removeEntities(
-    state,
+  let newState = state;
+  newState = removeEntities(
+    newState,
     actions.removeEntities({
       entityIds: selectors
-        .entityList(state)
+        .entityList(newState)
         .filter(e => e.fov)
         .map(e => e.id),
     }),
   );
-  const entity = selectors.throwingTarget(state);
-  if (!entity) return state;
-  state = removeEntity(state, actions.removeEntity({ entityId: entity.id }));
-  return state;
+  const entity = selectors.throwingTarget(newState);
+  if (!entity) return newState;
+  newState = removeEntity(
+    newState,
+    actions.removeEntity({ entityId: entity.id }),
+  );
+  return newState;
 }

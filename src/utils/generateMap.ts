@@ -1,10 +1,10 @@
 import * as ROT from "rot-js";
 import { MAZE_SIZE, MAP_HEIGHT, MAP_WIDTH, ROOM_SIZE } from "../constants";
-import { Entity, Level, AIType, Pos, WeaponType } from "../types/Entity";
-import { arePositionsEqual } from "./misc";
-import { createEntityFromTemplate } from "./createEntityFromTemplate";
+import { Entity, Level, Pos } from "../types/Entity";
+import { arePositionsEqual } from "./geometry";
+import { createEntityFromTemplate } from "./entities";
 
-export function generateMap(level: Level): Entity[] {
+export default function generateMap(level: Level): Entity[] {
   const rng = ROT.RNG.clone();
   rng.setSeed(level.seed);
 
@@ -12,7 +12,9 @@ export function generateMap(level: Level): Entity[] {
   const floors: Entity[] = [];
   const mazeGenerator = new ROT.Map.DividedMaze(MAZE_SIZE, MAZE_SIZE);
   const maze: { [key: string]: number } = {};
-  mazeGenerator.create((x, y, contents) => (maze[`${x},${y}`] = contents));
+  mazeGenerator.create((x, y, contents) => {
+    maze[`${x},${y}`] = contents;
+  });
 
   function isWall(x: number, y: number) {
     const mazeX =
@@ -92,14 +94,14 @@ export function generateMap(level: Level): Entity[] {
       "FACTORY_SMASHER",
       "FACTORY_RUSHER",
     ];
-    for (let template of factoryTemplates) {
+    for (const template of factoryTemplates) {
       const position = getRandomPos();
       result.push(createEntityFromTemplate(template, { pos: position }));
     }
   }
 
   for (let i = 0; i < level.numEnemies; i++) {
-    let position = getRandomPos();
+    const position = getRandomPos();
     result.push(
       createEntityFromTemplate(
         rng.getWeightedValue(level.aiWeights) as string,
@@ -111,7 +113,7 @@ export function generateMap(level: Level): Entity[] {
   }
 
   for (let i = 0; i < level.numReflectors; i++) {
-    let position = getRandomPos();
+    const position = getRandomPos();
     result.push(
       createEntityFromTemplate(
         rng.getUniform() > 0.5 ? "REFLECTOR_UP_RIGHT" : "REFLECTOR_DOWN_RIGHT",
@@ -121,7 +123,7 @@ export function generateMap(level: Level): Entity[] {
   }
 
   for (let i = 0; i < level.numSplitters; i++) {
-    let position = getRandomPos();
+    const position = getRandomPos();
     result.push(
       createEntityFromTemplate(
         rng.getUniform() > 0.5 ? "SPLITTER_HORIZONTAL" : "SPLITTER_VERTICAL",
@@ -131,7 +133,7 @@ export function generateMap(level: Level): Entity[] {
   }
 
   for (let i = 0; i < level.numPickups; i++) {
-    let position = getRandomPos();
+    const position = getRandomPos();
     if (rng.getUniform() > 0.5) {
       result.push(createEntityFromTemplate("MED_KIT", { pos: position }));
     } else {

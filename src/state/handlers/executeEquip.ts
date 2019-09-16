@@ -8,20 +8,21 @@ export function executeEquip(
   state: GameState,
   action: ReturnType<typeof actions.executeEquip>,
 ) {
-  const equipping = selectors.entityList(state).filter(e => e.equipping)[0];
-  if (!equipping || !equipping.equipping || !equipping.weapon) return state;
+  let newState = state;
+  const equipping = selectors.entityList(newState).filter(e => e.equipping)[0];
+  if (!equipping || !equipping.equipping || !equipping.weapon) return newState;
 
   const { slot } = action.payload;
   if (slot) {
-    const weaponInSlot = selectors.weaponInSlot(state, slot);
+    const weaponInSlot = selectors.weaponInSlot(newState, slot);
     if (weaponInSlot) {
-      state = removeEntity(
-        state,
+      newState = removeEntity(
+        newState,
         actions.removeEntity({ entityId: weaponInSlot.id }),
       );
     }
-    state = updateEntity(
-      state,
+    newState = updateEntity(
+      newState,
       actions.updateEntity({
         id: equipping.id,
         equipping: undefined,
@@ -32,15 +33,15 @@ export function executeEquip(
         },
       }),
     );
-    state = {
-      ...state,
-      messageLog: [...state.messageLog, `Equipped to slot ${slot}.`],
+    newState = {
+      ...newState,
+      messageLog: [...newState.messageLog, `Equipped to slot ${slot}.`],
     };
   } else {
-    state = {
-      ...state,
-      messageLog: [...state.messageLog, "Discarded."],
+    newState = {
+      ...newState,
+      messageLog: [...newState.messageLog, "Discarded."],
     };
   }
-  return state;
+  return newState;
 }

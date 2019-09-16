@@ -7,10 +7,10 @@ import {
   FONT_FAMILY,
 } from "./constants";
 import { Entity, MakeRequired, Display, Pos } from "./types";
-import { arePositionsEqual } from "./utils";
+import { arePositionsEqual } from "./utils/geometry";
 
 // @ts-ignore
-import tiles from "./assets/tiles/*.png";
+import tiles from "./assets/tiles/*.png"; // eslint-disable-line import/no-unresolved
 
 const loadPromise = new Promise(resolve => {
   PIXI.loader
@@ -50,18 +50,17 @@ const layers: {
 function getLayer(priority: number) {
   if (layers[priority]) {
     return layers[priority];
-  } else {
-    const layer = new PIXI.Container();
-    layer.name = priority.toString();
-    layers[priority] = layer;
-    app.stage.addChild(layer);
-    app.stage.children.sort((a, b) => {
-      const aPriority = parseFloat(a.name || "0") || 0;
-      const bPriority = parseFloat(b.name || "0") || 0;
-      return aPriority - bPriority;
-    });
-    return layer;
   }
+  const layer = new PIXI.Container();
+  layer.name = priority.toString();
+  layers[priority] = layer;
+  app.stage.addChild(layer);
+  app.stage.children.sort((a, b) => {
+    const aPriority = parseFloat(a.name || "0") || 0;
+    const bPriority = parseFloat(b.name || "0") || 0;
+    return aPriority - bPriority;
+  });
+  return layer;
 }
 
 export async function addRenderEntity(

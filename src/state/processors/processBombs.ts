@@ -4,20 +4,21 @@ import { removeEntity } from "../handlers/removeEntity";
 import { updateEntity } from "../handlers/updateEntity";
 import * as selectors from "../selectors";
 import { GameState } from "../../types";
-import { getAdjacentPositions } from "../../utils";
+import { getAdjacentPositions } from "../../utils/geometry";
 
 export default function processBombs(state: GameState): GameState {
-  for (let entity of selectors.entitiesWithComps(state, "pos", "bomb")) {
+  let newState = state;
+  for (const entity of selectors.entitiesWithComps(newState, "pos", "bomb")) {
     if (entity.bomb.time <= 0) {
-      state = removeEntity(
-        state,
+      newState = removeEntity(
+        newState,
         actions.removeEntity({ entityId: entity.id }),
       );
-      for (let pos of getAdjacentPositions(entity.pos)) {
-        for (let e of selectors.entitiesAtPosition(state, pos)) {
+      for (const pos of getAdjacentPositions(entity.pos)) {
+        for (const e of selectors.entitiesAtPosition(newState, pos)) {
           if (e.hitPoints || e.destructible) {
-            state = attack(
-              state,
+            newState = attack(
+              newState,
               actions.attack({
                 target: e.id,
                 message: "You are caught in the bomb's explosion!",
@@ -27,8 +28,8 @@ export default function processBombs(state: GameState): GameState {
         }
       }
     } else {
-      state = updateEntity(
-        state,
+      newState = updateEntity(
+        newState,
         actions.updateEntity({
           id: entity.id,
           bomb: { time: entity.bomb.time - 1 },
@@ -36,5 +37,5 @@ export default function processBombs(state: GameState): GameState {
       );
     }
   }
-  return state;
+  return newState;
 }

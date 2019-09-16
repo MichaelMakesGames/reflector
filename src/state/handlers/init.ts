@@ -1,8 +1,9 @@
 import nanoid from "nanoid";
 import * as actions from "../actions";
 import levels from "../../data/levels";
-import { makeLevel } from "../../utils";
-import { createEntityFromTemplate } from "../../utils";
+import { createEntityFromTemplate } from "../../utils/entities";
+import makeLevel from "../../utils/makeLevel";
+
 import { GameState } from "../../types";
 import { addEntity } from "./addEntity";
 import { PLAYER_ID } from "../../constants";
@@ -11,15 +12,16 @@ export function init(
   state: GameState,
   action: ReturnType<typeof actions.init>,
 ): GameState {
-  for (let level of levels) {
-    state = addEntity(
-      state,
+  let newState = state;
+  for (const level of levels) {
+    newState = addEntity(
+      newState,
       actions.addEntity({ entity: { id: `LEVEL_${nanoid()}`, level } }),
     );
   }
 
-  state = addEntity(
-    state,
+  newState = addEntity(
+    newState,
     actions.addEntity({
       entity: {
         ...createEntityFromTemplate("PLAYER"),
@@ -29,8 +31,8 @@ export function init(
   );
   const startingWeapon = createEntityFromTemplate("WEAPON_LASER");
   if (startingWeapon.weapon) startingWeapon.weapon.slot = 1;
-  state = addEntity(state, actions.addEntity({ entity: startingWeapon }));
+  newState = addEntity(newState, actions.addEntity({ entity: startingWeapon }));
 
-  state = makeLevel(state);
-  return state;
+  newState = makeLevel(newState);
+  return newState;
 }
