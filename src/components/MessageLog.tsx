@@ -9,8 +9,9 @@ export default function Inventory() {
       <div className="box__label">Log</div>
       <div className="messages">
         {messages
-          .map(m => (
-            <div key={m} className="message">
+          .map((m, i) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <div key={i} className="message">
               {m}
             </div>
           ))

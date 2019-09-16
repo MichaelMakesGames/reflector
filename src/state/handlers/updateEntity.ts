@@ -1,4 +1,4 @@
-import { has } from "has";
+import has from "has";
 import * as actions from "../actions";
 import * as selectors from "../selectors";
 import { GameState, MakeRequired, Entity } from "../../types";

@@ -1,3 +1,4 @@
 declare module "has" {
-  export function has(object: any, property: string): boolean;
+  function has(object: any, property: string): boolean;
+  export = has;
 }
