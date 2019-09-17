@@ -1,10 +1,10 @@
-import * as actions from "../actions";
-import { attack } from "../handlers/attack";
-import { removeEntity } from "../handlers/removeEntity";
-import { updateEntity } from "../handlers/updateEntity";
-import * as selectors from "../selectors";
-import { GameState } from "../../types";
-import { getAdjacentPositions } from "../../utils/geometry";
+import * as actions from "~/state/actions";
+import { attack } from "~/state/handlers/attack";
+import { removeEntity } from "~/state/handlers/removeEntity";
+import { updateEntity } from "~/state/handlers/updateEntity";
+import * as selectors from "~/state/selectors";
+import { GameState } from "~/types";
+import { getAdjacentPositions } from "~/utils/geometry";
 
 export default function processBombs(state: GameState): GameState {
   let newState = state;

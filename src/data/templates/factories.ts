@@ -1,5 +1,5 @@
-import { Entity } from "../../types/Entity";
-import { BLUE, PRIORITY_ENEMY } from "../../constants";
+import { Entity } from "~/types/Entity";
+import { BLUE, PRIORITY_ENEMY } from "~/constants";
 
 const templates: { [id: string]: Partial<Entity> } = {
   FACTORY_BASE: {

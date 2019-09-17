@@ -1,10 +1,10 @@
-import * as actions from "../actions";
-import { activateEquip } from "../handlers/activateEquip";
-import { removeEntity } from "../handlers/removeEntity";
-import { updateEntity } from "../handlers/updateEntity";
-import * as selectors from "../selectors";
-import { GameState } from "../../types";
-import { arePositionsEqual } from "../../utils/geometry";
+import * as actions from "~/state/actions";
+import { activateEquip } from "~/state/handlers/activateEquip";
+import { removeEntity } from "~/state/handlers/removeEntity";
+import { updateEntity } from "~/state/handlers/updateEntity";
+import * as selectors from "~/state/selectors";
+import { GameState } from "~/types";
+import { arePositionsEqual } from "~/utils/geometry";
 
 export default function processPickups(state: GameState): GameState {
   let newState = state;

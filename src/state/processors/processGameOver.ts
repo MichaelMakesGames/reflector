@@ -1,5 +1,5 @@
-import * as selectors from "../selectors";
-import { GameState } from "../../types";
+import * as selectors from "~/state/selectors";
+import { GameState } from "~/types";
 
 export default function processGameOver(state: GameState): GameState {
   let newState = state;

@@ -1,7 +1,7 @@
-import * as actions from "../actions";
-import { RIGHT } from "../../constants";
-import * as selectors from "../selectors";
-import { GameState } from "../../types";
+import * as actions from "~/state/actions";
+import { RIGHT } from "~/constants";
+import * as selectors from "~/state/selectors";
+import { GameState } from "~/types";
 import { targetWeapon } from "./targetWeapon";
 import { updateEntity } from "./updateEntity";
 

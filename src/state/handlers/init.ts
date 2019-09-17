@@ -1,12 +1,12 @@
 import nanoid from "nanoid";
-import * as actions from "../actions";
-import levels from "../../data/levels";
-import { createEntityFromTemplate } from "../../utils/entities";
-import makeLevel from "../../utils/makeLevel";
+import * as actions from "~/state/actions";
+import levels from "~/data/levels";
+import { createEntityFromTemplate } from "~/utils/entities";
+import makeLevel from "~/utils/makeLevel";
 
-import { GameState } from "../../types";
+import { GameState } from "~/types";
 import { addEntity } from "./addEntity";
-import { PLAYER_ID } from "../../constants";
+import { PLAYER_ID } from "~/constants";
 
 export function init(
   state: GameState,

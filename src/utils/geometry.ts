@@ -1,5 +1,5 @@
-import { Pos } from "../types";
-import { DOWN, RIGHT, LEFT, UP } from "../constants";
+import { Pos } from "~/types";
+import { DOWN, RIGHT, LEFT, UP } from "~/constants";
 
 export function getPosKey(pos: Pos) {
   return `${pos.x},${pos.y}`;

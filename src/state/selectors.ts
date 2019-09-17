@@ -1,7 +1,7 @@
-import { GameState, Pos, Entity, Level, MakeRequired } from "../types";
-import { PLAYER_ID } from "../constants";
-import { getPosKey } from "../utils/geometry";
-import { filterEntitiesWithComps } from "../utils/entities";
+import { GameState, Pos, Entity, Level, MakeRequired } from "~/types";
+import { PLAYER_ID } from "~/constants";
+import { getPosKey } from "~/utils/geometry";
+import { filterEntitiesWithComps } from "~/utils/entities";
 
 export function gameState(state: GameState) {
   return state;

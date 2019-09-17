@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useMappedState } from "redux-react-hook";
-import * as selectors from "../state/selectors";
-import { BRIGHT_RED } from "../constants";
+import * as selectors from "~/state/selectors";
+import { BRIGHT_RED } from "~/constants";
 
 export default function DamageFlash() {
   const player = useMappedState(selectors.player);

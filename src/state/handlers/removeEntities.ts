@@ -1,6 +1,6 @@
-import * as actions from "../actions";
-import { GameState } from "../../types";
-import { removeRenderEntity } from "../../renderer";
+import * as actions from "~/state/actions";
+import { GameState } from "~/types";
+import { removeRenderEntity } from "~/renderer";
 
 export function removeEntities(
   state: GameState,

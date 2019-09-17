@@ -1,10 +1,10 @@
-import * as actions from "../actions";
-import { THROWING_RANGE } from "../../constants";
-import { computeThrowFOV } from "../../utils/fov";
-import { createEntityFromTemplate } from "../../utils/entities";
-import * as selectors from "../selectors";
+import * as actions from "~/state/actions";
+import { THROWING_RANGE } from "~/constants";
+import { computeThrowFOV } from "~/utils/fov";
+import { createEntityFromTemplate } from "~/utils/entities";
+import * as selectors from "~/state/selectors";
 
-import { GameState } from "../../types";
+import { GameState } from "~/types";
 import { addEntity } from "./addEntity";
 
 export function activateThrow(

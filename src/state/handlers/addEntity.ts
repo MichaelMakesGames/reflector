@@ -1,7 +1,7 @@
-import * as actions from "../actions";
-import { GameState, MakeRequired, Entity } from "../../types";
-import { getPosKey } from "../../utils/geometry";
-import { addRenderEntity } from "../../renderer";
+import * as actions from "~/state/actions";
+import { GameState, MakeRequired, Entity } from "~/types";
+import { getPosKey } from "~/utils/geometry";
+import { addRenderEntity } from "~/renderer";
 
 export function addEntity(
   state: GameState,

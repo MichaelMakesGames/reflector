@@ -1,7 +1,7 @@
-import * as actions from "../actions";
-import { PLAYER_ID } from "../../constants";
-import * as selectors from "../selectors";
-import { GameState } from "../../types";
+import * as actions from "~/state/actions";
+import { PLAYER_ID } from "~/constants";
+import * as selectors from "~/state/selectors";
+import { GameState } from "~/types";
 import { playerTookTurn } from "./playerTookTurn";
 import { updateEntity } from "./updateEntity";
 

@@ -1,12 +1,12 @@
 /* global document */
 import React, { useEffect } from "react";
 import { useDispatch, useMappedState } from "redux-react-hook";
-import * as actions from "../state/actions";
-import * as selectors from "../state/selectors";
-import { Entity, Pos } from "../types/Entity";
-import { PLAYER_ID, UP, LEFT, DOWN, RIGHT } from "../constants";
-import { createEntityFromTemplate } from "../utils/entities";
-import { Action } from "../types/Action";
+import * as actions from "~/state/actions";
+import * as selectors from "~/state/selectors";
+import { Entity, Pos } from "~/types/Entity";
+import { PLAYER_ID, UP, LEFT, DOWN, RIGHT } from "~/constants";
+import { createEntityFromTemplate } from "~/utils/entities";
+import { Action } from "~/types/Action";
 
 interface Control {
   key: string;

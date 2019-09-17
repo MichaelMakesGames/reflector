@@ -1,5 +1,5 @@
-import { Pos, WeaponType, Direction, HasDisplay, Entity } from "../types";
-import { RED, RIGHT, DOWN, LEFT, UP, PURPLE, YELLOW } from "../constants";
+import { Pos, WeaponType, Direction, HasDisplay, Entity } from "~/types";
+import { RED, RIGHT, DOWN, LEFT, UP, PURPLE, YELLOW } from "~/constants";
 import { createEntityFromTemplate } from "./entities";
 import { getConstDir } from "./geometry";
 

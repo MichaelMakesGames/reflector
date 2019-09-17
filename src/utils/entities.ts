@@ -1,7 +1,7 @@
 import nanoid from "nanoid";
-import templates from "../data/templates";
-import { Entity } from "../types/Entity";
-import { MakeRequired } from "../types";
+import templates from "~/data/templates";
+import { Entity } from "~/types/Entity";
+import { MakeRequired } from "~/types";
 
 export function createEntityFromTemplate(
   templateId: string,

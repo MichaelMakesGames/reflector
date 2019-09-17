@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 import * as ROT from "rot-js";
-import { GameState, Pos } from "../types";
-import * as selectors from "../state/selectors";
+import { GameState, Pos } from "~/types";
+import * as selectors from "~/state/selectors";
 import { arePositionsEqual } from "./geometry";
 
 export function computeThrowFOV(

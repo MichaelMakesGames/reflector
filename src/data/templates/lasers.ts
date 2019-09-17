@@ -1,5 +1,5 @@
-import { Entity } from "../../types";
-import { PRIORITY_LASER, RED } from "../../constants";
+import { Entity } from "~/types";
+import { PRIORITY_LASER, RED } from "~/constants";
 
 const templates: { [id: string]: Partial<Entity> } = {
   LASER_BASE: {

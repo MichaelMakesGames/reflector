@@ -1,6 +1,6 @@
-import * as actions from "../actions";
-import processors from "../processors";
-import { GameState } from "../../types";
+import * as actions from "~/state/actions";
+import processors from "~/state/processors";
+import { GameState } from "~/types";
 
 export function playerTookTurn(
   state: GameState,

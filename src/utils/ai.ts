@@ -1,16 +1,16 @@
 /* eslint-disable import/prefer-default-export */
 import * as ROT from "rot-js";
 import { ActionType } from "typesafe-actions";
-import * as actions from "../state/actions";
+import * as actions from "~/state/actions";
 import {
   ANGLER_RANGE,
   BOMBER_COOLDOWN,
   BOMBER_RANGE,
   PLAYER_ID,
-} from "../constants";
-import * as selectors from "../state/selectors";
+} from "~/constants";
+import * as selectors from "~/state/selectors";
 import { createEntityFromTemplate } from "./entities";
-import { Direction, Entity, GameState, Pos } from "../types";
+import { Direction, Entity, GameState, Pos } from "~/types";
 import {
   getAdjacentPositions,
   getClosestPosition,

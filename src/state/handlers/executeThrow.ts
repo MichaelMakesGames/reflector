@@ -1,7 +1,7 @@
-import * as actions from "../actions";
-import * as selectors from "../selectors";
-import { GameState } from "../../types";
-import { getDistance } from "../../utils/geometry";
+import * as actions from "~/state/actions";
+import * as selectors from "~/state/selectors";
+import { GameState } from "~/types";
+import { getDistance } from "~/utils/geometry";
 import { removeEntities } from "./removeEntities";
 import { updateEntity } from "./updateEntity";
 

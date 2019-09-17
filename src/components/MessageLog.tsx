@@ -1,6 +1,6 @@
 import React from "react";
 import { useMappedState } from "redux-react-hook";
-import * as selectors from "../state/selectors";
+import * as selectors from "~/state/selectors";
 
 export default function Inventory() {
   const messages = useMappedState(selectors.messageLog);

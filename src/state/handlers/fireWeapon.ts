@@ -1,6 +1,6 @@
-import * as actions from "../actions";
-import * as selectors from "../selectors";
-import { GameState, Entity } from "../../types";
+import * as actions from "~/state/actions";
+import * as selectors from "~/state/selectors";
+import { GameState, Entity } from "~/types";
 import { attack } from "./attack";
 import { playerTookTurn } from "./playerTookTurn";
 import { removeEntities } from "./removeEntities";

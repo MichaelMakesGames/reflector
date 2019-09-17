@@ -1,10 +1,10 @@
-import * as actions from "../actions";
-import { addEntity } from "../handlers/addEntity";
-import { updateEntity } from "../handlers/updateEntity";
-import * as selectors from "../selectors";
-import { createEntityFromTemplate } from "../../utils/entities";
-import { getAdjacentPositions } from "../../utils/geometry";
-import { GameState } from "../../types";
+import * as actions from "~/state/actions";
+import { addEntity } from "~/state/handlers/addEntity";
+import { updateEntity } from "~/state/handlers/updateEntity";
+import * as selectors from "~/state/selectors";
+import { createEntityFromTemplate } from "~/utils/entities";
+import { getAdjacentPositions } from "~/utils/geometry";
+import { GameState } from "~/types";
 
 export default function processFactories(state: GameState): GameState {
   let newState = state;

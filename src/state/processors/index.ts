@@ -1,4 +1,4 @@
-import { GameState } from "../../types";
+import { GameState } from "~/types";
 import processAI from "./processAI";
 import processBombs from "./processBombs";
 import processCooldowns from "./processCooldowns";

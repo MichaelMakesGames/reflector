@@ -1,11 +1,11 @@
-import * as actions from "../state/actions";
-import { PLAYER_ID } from "../constants";
-import { addEntity } from "../state/handlers/addEntity";
-import { removeEntities } from "../state/handlers/removeEntities";
-import { updateEntity } from "../state/handlers/updateEntity";
+import * as actions from "~/state/actions";
+import { PLAYER_ID } from "~/constants";
+import { addEntity } from "~/state/handlers/addEntity";
+import { removeEntities } from "~/state/handlers/removeEntities";
+import { updateEntity } from "~/state/handlers/updateEntity";
 import generateMap from "./generateMap";
-import * as selectors from "../state/selectors";
-import { GameState } from "../types";
+import * as selectors from "~/state/selectors";
+import { GameState } from "~/types";
 
 export default function makeLevel(state: GameState): GameState {
   let newState = state;

@@ -2,9 +2,9 @@
 import React, { useEffect } from "react";
 import { useMappedState } from "redux-react-hook";
 
-import * as selectors from "../state/selectors";
+import * as selectors from "~/state/selectors";
 
-import { app } from "../renderer";
+import { app } from "~/renderer";
 
 export default function Map() {
   const currentLevel = useMappedState(selectors.currentLevel);

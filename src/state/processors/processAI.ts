@@ -1,12 +1,12 @@
 import { isActionOf } from "typesafe-actions";
-import * as actions from "../actions";
-import { getAIActions } from "../../utils/ai";
-import { addEntity } from "../handlers/addEntity";
-import { attack } from "../handlers/attack";
-import { move } from "../handlers/move";
-import * as selectors from "../selectors";
-import { GameState } from "../../types";
-import { updateEntity } from "../handlers/updateEntity";
+import * as actions from "~/state/actions";
+import { getAIActions } from "~/utils/ai";
+import { addEntity } from "~/state/handlers/addEntity";
+import { attack } from "~/state/handlers/attack";
+import { move } from "~/state/handlers/move";
+import * as selectors from "~/state/selectors";
+import { GameState } from "~/types";
+import { updateEntity } from "~/state/handlers/updateEntity";
 
 export default function processAI(state: GameState): GameState {
   let newState = state;

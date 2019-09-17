@@ -1,6 +1,6 @@
-import * as actions from "../actions";
-import * as selectors from "../selectors";
-import { GameState } from "../../types";
+import * as actions from "~/state/actions";
+import * as selectors from "~/state/selectors";
+import { GameState } from "~/types";
 import { removeEntities } from "./removeEntities";
 import { removeEntity } from "./removeEntity";
 

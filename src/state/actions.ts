@@ -1,5 +1,5 @@
 import { createStandardAction } from "typesafe-actions";
-import { Entity } from "../types/Entity";
+import { Entity } from "~/types/Entity";
 
 export const addEntity = createStandardAction("ADD_ENTITY")<{
   entity: Entity;

@@ -1,8 +1,8 @@
-import { GameState } from "../../types";
-import { arePositionsEqual } from "../../utils/geometry";
-import * as actions from "../actions";
-import { updateEntity } from "../handlers/updateEntity";
-import * as selectors from "../selectors";
+import { GameState } from "~/types";
+import { arePositionsEqual } from "~/utils/geometry";
+import * as actions from "~/state/actions";
+import { updateEntity } from "~/state/handlers/updateEntity";
+import * as selectors from "~/state/selectors";
 
 export default function processTeleporters(state: GameState): GameState {
   let newState = state;

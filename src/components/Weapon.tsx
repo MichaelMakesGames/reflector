@@ -1,6 +1,6 @@
 import React from "react";
-import { Weapon as WeaponComp } from "../types/Entity";
-import { RED, YELLOW, PURPLE, BLACK, GREEN } from "../constants";
+import { Weapon as WeaponComp } from "~/types/Entity";
+import { RED, YELLOW, PURPLE, BLACK, GREEN } from "~/constants";
 
 export default function Weapon({
   slot,

@@ -1,4 +1,4 @@
-import { Entity } from "../../types/Entity";
+import { Entity } from "~/types/Entity";
 import {
   GRAY,
   PRIORITY_TERRAIN,
@@ -6,7 +6,7 @@ import {
   PURPLE,
   PRIORITY_FLOOR,
   DARK_GRAY,
-} from "../../constants";
+} from "~/constants";
 
 const templates: { [id: string]: Partial<Entity> } = {
   WALL_BASE: {

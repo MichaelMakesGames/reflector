@@ -1,9 +1,9 @@
-import * as actions from "../actions";
-import { PLAYER_ID } from "../../constants";
-import * as selectors from "../selectors";
-import { getAdjacentPositions } from "../../utils/geometry";
-import { createLaser, reflect } from "../../utils/lasers";
-import { Entity, GameState, Pos } from "../../types";
+import * as actions from "~/state/actions";
+import { PLAYER_ID } from "~/constants";
+import * as selectors from "~/state/selectors";
+import { getAdjacentPositions } from "~/utils/geometry";
+import { createLaser, reflect } from "~/utils/lasers";
+import { Entity, GameState, Pos } from "~/types";
 
 import { addEntity } from "./addEntity";
 import { removeEntities } from "./removeEntities";

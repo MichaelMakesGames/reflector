@@ -1,13 +1,13 @@
 import has from "has";
-import * as actions from "../actions";
-import * as selectors from "../selectors";
-import { GameState, MakeRequired, Entity } from "../../types";
-import { getPosKey } from "../../utils/geometry";
+import * as actions from "~/state/actions";
+import * as selectors from "~/state/selectors";
+import { GameState, MakeRequired, Entity } from "~/types";
+import { getPosKey } from "~/utils/geometry";
 import {
   updateRenderEntity,
   removeRenderEntity,
   addRenderEntity,
-} from "../../renderer";
+} from "~/renderer";
 
 export function updateEntity(
   state: GameState,

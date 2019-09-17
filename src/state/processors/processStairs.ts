@@ -1,7 +1,7 @@
-import { GameState } from "../../types";
-import { arePositionsEqual } from "../../utils/geometry";
-import makeLevel from "../../utils/makeLevel";
-import * as selectors from "../selectors";
+import { GameState } from "~/types";
+import { arePositionsEqual } from "~/utils/geometry";
+import makeLevel from "~/utils/makeLevel";
+import * as selectors from "~/state/selectors";
 
 export default function processStairs(state: GameState): GameState {
   let newState = state;
