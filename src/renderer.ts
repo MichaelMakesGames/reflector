@@ -13,7 +13,7 @@ import { arePositionsEqual } from "./utils/geometry";
 import tiles from "./assets/tiles/*.png"; // eslint-disable-line import/no-unresolved
 
 const loadPromise = new Promise(resolve => {
-  PIXI.loader
+  PIXI.Loader.shared
     .add(
       Object.entries(tiles).map(([name, file]) => ({
         name,
@@ -30,7 +30,7 @@ export const app = new PIXI.Application({
   height: MAP_HEIGHT * TILE_SIZE,
   backgroundColor: parseInt(BACKGROUND_COLOR.substr(1), 16),
   antialias: false,
-  roundPixels: true,
+  // roundPixels: true,
 });
 
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;

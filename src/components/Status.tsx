@@ -1,9 +1,9 @@
 import React from "react";
-import { useMappedState } from "redux-react-hook";
+import { useSelector } from "react-redux";
 import * as selectors from "~/state/selectors";
 
 export default function Status() {
-  const player = useMappedState(selectors.player);
+  const player = useSelector(selectors.player);
   if (!player) return null;
   const { inventory } = player;
   const hp = player.hitPoints;

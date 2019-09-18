@@ -1,11 +1,11 @@
 import React from "react";
-import { useMappedState } from "redux-react-hook";
+import { useSelector } from "react-redux";
 import * as selectors from "~/state/selectors";
 import Weapon from "./Weapon";
 import { BLACK } from "~/constants";
 
 export default function Weapons() {
-  const weapons = useMappedState(selectors.weapons);
+  const weapons = useSelector(selectors.weapons);
 
   const getSlot = (slot: number) =>
     weapons.map(w => w.weapon).find(w => Boolean(w && w.slot === slot)) || null;

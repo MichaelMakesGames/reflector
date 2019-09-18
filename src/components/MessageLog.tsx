@@ -1,9 +1,9 @@
 import React from "react";
-import { useMappedState } from "redux-react-hook";
+import { useSelector } from "react-redux";
 import * as selectors from "~/state/selectors";
 
 export default function Inventory() {
-  const messages = useMappedState(selectors.messageLog);
+  const messages = useSelector(selectors.messageLog);
   return (
     <div className="box message-log">
       <div className="box__label">Log</div>

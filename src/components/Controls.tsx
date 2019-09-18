@@ -1,6 +1,6 @@
 /* global document */
 import React, { useEffect } from "react";
-import { useDispatch, useMappedState } from "redux-react-hook";
+import { useDispatch, useSelector } from "react-redux";
 import * as actions from "~/state/actions";
 import * as selectors from "~/state/selectors";
 import { Entity, Pos } from "~/types/Entity";
@@ -254,12 +254,12 @@ function getControls(
 
 export default function Controls() {
   const dispatch = useDispatch();
-  const weapons = useMappedState(selectors.weapons);
+  const weapons = useSelector(selectors.weapons);
   const equipping = weapons.filter(weapon => weapon.equipping)[0] || null;
-  const activeWeapon = useMappedState(selectors.activeWeapon);
-  const player = useMappedState(selectors.player);
-  const throwing = useMappedState(selectors.throwingTarget);
-  const gameOver = useMappedState(selectors.gameOver);
+  const activeWeapon = useSelector(selectors.activeWeapon);
+  const player = useSelector(selectors.player);
+  const throwing = useSelector(selectors.throwingTarget);
+  const gameOver = useSelector(selectors.gameOver);
 
   const pos = player ? player.pos : { x: 0, y: 0 };
   const controls = getControls(activeWeapon, pos, throwing, equipping);

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { useMappedState } from "redux-react-hook";
+import { useSelector } from "react-redux";
 import * as selectors from "~/state/selectors";
 import { BRIGHT_RED } from "~/constants";
 
 export default function DamageFlash() {
-  const player = useMappedState(selectors.player);
+  const player = useSelector(selectors.player);
   const hp = player ? player.hitPoints.current : 0;
   const [prevHp, setPrevHp] = useState(0);
 
