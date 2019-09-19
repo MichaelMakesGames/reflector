@@ -17,37 +17,6 @@ const templates: { [id: string]: Partial<Entity> } = {
     },
     ai: { type: "RUSHER" },
   },
-  ENEMY_ANGLER: {
-    parentTemplate: "ENEMY_BASE",
-    display: {
-      tile: "enemy2",
-      glyph: "A",
-      color: BLUE,
-      priority: PRIORITY_ENEMY,
-    },
-    ai: { type: "ANGLER" },
-  },
-  ENEMY_SMASHER: {
-    parentTemplate: "ENEMY_BASE",
-    display: {
-      tile: "enemy3",
-      glyph: "S",
-      color: BLUE,
-      priority: PRIORITY_ENEMY,
-    },
-    ai: { type: "SMASHER" },
-  },
-  ENEMY_BOMBER: {
-    parentTemplate: "ENEMY_BASE",
-    display: {
-      tile: "enemy4",
-      glyph: "B",
-      color: BLUE,
-      priority: PRIORITY_ENEMY,
-    },
-    ai: { type: "BOMBER" },
-    cooldown: { time: 0 },
-  },
 };
 
 export default templates;

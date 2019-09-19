@@ -14,12 +14,6 @@ export function activateThrow(
   let newState = state;
   const player = selectors.player(newState);
   if (!player) return newState;
-  if (action.payload.entity.reflector && !player.inventory.reflectors) {
-    return newState;
-  }
-  if (action.payload.entity.splitter && !player.inventory.splitters) {
-    return newState;
-  }
 
   const fovPositions = computeThrowFOV(newState, player.pos, THROWING_RANGE);
   for (const pos of fovPositions) {

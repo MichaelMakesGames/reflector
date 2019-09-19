@@ -26,9 +26,7 @@ export function move(
   if (
     entity.blocking &&
     !entity.throwing &&
-    entitiesAtNewPosition.some(
-      other => !!(other.blocking && !(entity.id === PLAYER_ID && other.pickup)),
-    )
+    entitiesAtNewPosition.some(other => Boolean(other.blocking))
   ) {
     return newState;
   }

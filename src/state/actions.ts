@@ -30,14 +30,6 @@ export const targetWeapon = createStandardAction("TARGET_WEAPON")<{
   dy: number;
 }>();
 
-export const activateEquip = createStandardAction("ACTIVATE_EQUIP")<{
-  entity: Entity;
-}>();
-
-export const executeEquip = createStandardAction("EXECUTE_EQUIP")<{
-  slot: number;
-}>();
-
 export const fireWeapon = createStandardAction("FIRE_WEAPON")();
 
 export const activateThrow = createStandardAction("ACTIVATE_THROW")<{

@@ -18,7 +18,6 @@ function getControls(
   activeWeapon: Entity | null,
   playerPosition: Pos,
   throwing: Entity | null,
-  equipping: Entity | null,
 ): Control[] {
   const movePlayer = [
     {
@@ -220,49 +219,19 @@ function getControls(
     ];
   }
 
-  if (equipping) {
-    return [
-      {
-        key: "1",
-        action: actions.executeEquip({ slot: 1 }),
-        label: "Equip to Slot 1",
-      },
-      {
-        key: "2",
-        action: actions.executeEquip({ slot: 2 }),
-        label: "Equip to Slot 2",
-      },
-      {
-        key: "3",
-        action: actions.executeEquip({ slot: 3 }),
-        label: "Equip to Slot 3",
-      },
-      {
-        key: "4",
-        action: actions.executeEquip({ slot: 4 }),
-        label: "Equip to Slot 4",
-      },
-      {
-        key: "Escape",
-        action: actions.executeEquip({ slot: 0 }),
-        label: "Cancel",
-      },
-    ];
-  }
   return [...movePlayer, ...activateWeapon, ...activateThrow, ...wait];
 }
 
 export default function Controls() {
   const dispatch = useDispatch();
   const weapons = useSelector(selectors.weapons);
-  const equipping = weapons.filter(weapon => weapon.equipping)[0] || null;
   const activeWeapon = useSelector(selectors.activeWeapon);
   const player = useSelector(selectors.player);
   const throwing = useSelector(selectors.throwingTarget);
   const gameOver = useSelector(selectors.gameOver);
 
   const pos = player ? player.pos : { x: 0, y: 0 };
-  const controls = getControls(activeWeapon, pos, throwing, equipping);
+  const controls = getControls(activeWeapon, pos, throwing);
   const keyMap: { [key: string]: Action } = controls.reduce(
     (acc, cur) => ({ ...acc, [cur.key]: cur.action }),
     {},
@@ -280,18 +249,17 @@ export default function Controls() {
     return () => document.removeEventListener("keydown", listener);
   });
 
-  return <div />;
-  // return (
-  //   <div className="controls box">
-  //     <div className="box__label">Controls</div>
-  //     {controls
-  //       .filter(control => !control.hidden)
-  //       .map(control => (
-  //         <div key={control.key} className="control">
-  //           <kbd>{control.key}</kbd>
-  //           <span>{control.label}</span>
-  //         </div>
-  //       ))}
-  //   </div>
-  // );
+  return (
+    <div className="controls box">
+      <div className="box__label">Controls</div>
+      {controls
+        .filter(control => !control.hidden)
+        .map(control => (
+          <div key={control.key} className="control">
+            <kbd>{control.key}</kbd>
+            <span>{control.label}</span>
+          </div>
+        ))}
+    </div>
+  );
 }

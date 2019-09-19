@@ -75,7 +75,6 @@ main {
 }
 
 .controls {
-  width: 100%;
   display: flex;
   flex-flow: row wrap;
   margin-top: 0;

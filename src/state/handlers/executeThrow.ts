@@ -25,10 +25,6 @@ export function executeThrow(
   const player = selectors.player(newState);
   if (!player) return newState;
 
-  const { inventory } = player;
-  if (entity.reflector && !inventory.reflectors) return newState;
-  if (entity.splitter && !inventory.splitters) return newState;
-
   const { pos } = entity;
   const distance = getDistance(pos, player.pos);
   if (distance > entity.throwing.range) return newState;
@@ -45,19 +41,5 @@ export function executeThrow(
     }),
   );
 
-  newState = updateEntity(
-    newState,
-    actions.updateEntity({
-      id: player.id,
-      inventory: {
-        splitters: entity.splitter
-          ? inventory.splitters - 1
-          : inventory.splitters,
-        reflectors: entity.reflector
-          ? inventory.reflectors - 1
-          : inventory.reflectors,
-      },
-    }),
-  );
   return newState;
 }

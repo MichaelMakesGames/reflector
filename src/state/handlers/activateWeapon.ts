@@ -39,7 +39,7 @@ export function activateWeapon(
         ...entity,
         weapon: {
           ...weapon,
-          active: !weapon.active && !weapon.readyIn,
+          active: !weapon.active,
         },
       },
     },

@@ -164,24 +164,6 @@ const templates: { [id: string]: Partial<Entity> } = {
       priority: PRIORITY_FLOOR,
     },
   },
-  STAIRS: {
-    display: {
-      tile: "stairs_down",
-      glyph: "<",
-      color: WHITE,
-      priority: PRIORITY_TERRAIN,
-    },
-    stairs: {},
-  },
-  TELEPORTER: {
-    display: {
-      tile: "teleporter",
-      glyph: "◉",
-      color: PURPLE,
-      priority: PRIORITY_TERRAIN,
-    },
-    teleporter: {},
-  },
 };
 
 export default templates;

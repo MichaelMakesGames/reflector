@@ -34,8 +34,6 @@ export function fireWeapon(
         }
       } else if (entity.destructible) {
         entitiesToRemove.push(entity.id);
-      } else if (entity.hitPoints) {
-        entitiesToAttack.push(entity.id);
       }
     }
   }
@@ -79,7 +77,6 @@ export function fireWeapon(
       id: activeWeapon.id,
       weapon: {
         ...activeWeapon.weapon,
-        readyIn: activeWeapon.weapon.cooldown + 1,
         active: false,
       },
     }),

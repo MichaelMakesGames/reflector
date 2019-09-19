@@ -1,4 +1,4 @@
-import { GameState, Pos, Entity, Level, MakeRequired } from "~/types";
+import { GameState, Pos, Entity, MakeRequired } from "~/types";
 import { PLAYER_ID } from "~/constants";
 import { getPosKey } from "~/utils/geometry";
 import { filterEntitiesWithComps } from "~/utils/entities";
@@ -33,7 +33,7 @@ export function entity(state: GameState, entityId: string) {
 export function player(state: GameState) {
   return state.entities[PLAYER_ID] as MakeRequired<
     Entity,
-    "pos" | "hitPoints" | "inventory" | "display" | "conductive"
+    "pos" | "display" | "conductive"
   > | null;
 }
 
@@ -76,11 +76,4 @@ export function throwingTarget(state: GameState) {
   const entities = entitiesWithComps(state, "throwing", "pos");
   if (entities.length) return entities[0];
   return null;
-}
-
-export function currentLevel(state: GameState): Level | null {
-  const entity = entityList(state).find(e =>
-    Boolean(e.level && e.level.current),
-  );
-  return entity && entity.level ? entity.level : null;
 }

@@ -1,6 +1,4 @@
-import nanoid from "nanoid";
 import * as actions from "~/state/actions";
-import levels from "~/data/levels";
 import { createEntityFromTemplate } from "~/utils/entities";
 import makeLevel from "~/utils/makeLevel";
 
@@ -13,12 +11,6 @@ export function init(
   action: ReturnType<typeof actions.init>,
 ): GameState {
   let newState = state;
-  for (const level of levels) {
-    newState = addEntity(
-      newState,
-      actions.addEntity({ entity: { id: `LEVEL_${nanoid()}`, level } }),
-    );
-  }
 
   newState = addEntity(
     newState,

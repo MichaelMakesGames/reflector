@@ -42,31 +42,11 @@ export interface HasDestructible {
   destructible: Destructible;
 }
 
-export interface HitPoints {
-  current: number;
-  max: number;
-}
-export interface HasHitPoints {
-  hitPoints: HitPoints;
-}
-
 export interface Throwing {
   range: number;
 }
 export interface HasThrowing {
   throwing: Throwing;
-}
-
-export interface Equipping {}
-export interface HasEquipping {
-  equipping: Equipping;
-}
-
-export interface PickUp {
-  effect: "NONE" | "HEAL" | "RECHARGE" | "EQUIP" | "PICKUP";
-}
-export interface HasPickUp {
-  pickup: PickUp;
 }
 
 export interface Reflector {
@@ -83,47 +63,9 @@ export interface HasSplitter {
   splitter: Splitter;
 }
 
-export interface Cooldown {
-  time: number;
-}
-export interface HasCooldown {
-  cooldown: Cooldown;
-}
-
-export interface Bomb {
-  time: number;
-}
-export interface HasBomb {
-  bomb: Bomb;
-}
-
-export interface Inventory {
-  reflectors: number;
-  splitters: number;
-}
-export interface HasInventory {
-  inventory: Inventory;
-}
-
 export interface FOV {}
 export interface HasFOV {
   fov: FOV;
-}
-
-export interface Level {
-  depth: number;
-  seed: number;
-  current: boolean;
-  final: boolean;
-  numEnemies: number;
-  numReflectors: number;
-  numSplitters: number;
-  numPickups: number;
-  aiWeights: { [type: string]: number };
-  possibleWeapons: string[];
-}
-export interface HasLevel {
-  level: Level;
 }
 
 export interface Stairs {}
@@ -146,27 +88,12 @@ export type WeaponType =
 export interface Weapon {
   name: string;
   power: number;
-  cooldown: number;
-  readyIn: number;
   slot: number;
   active: boolean;
   type: WeaponType;
 }
 export interface HasWeapon {
   weapon: Weapon;
-}
-
-export interface Factory {
-  type: string;
-  cooldown: number;
-}
-export interface HasFactory {
-  factory: Factory;
-}
-
-export interface Teleporter {}
-export interface HasTeleporter {
-  teleporter: Teleporter;
 }
 
 export interface Entity
@@ -179,19 +106,10 @@ export interface Entity
     Partial<HasDestructible>,
     Partial<HasReflector>,
     Partial<HasSplitter>,
-    Partial<HasHitPoints>,
     Partial<HasThrowing>,
-    Partial<HasPickUp>,
-    Partial<HasBomb>,
-    Partial<HasInventory>,
     Partial<HasFOV>,
-    Partial<HasCooldown>,
-    Partial<HasLevel>,
     Partial<HasStairs>,
-    Partial<HasConductive>,
-    Partial<HasEquipping>,
-    Partial<HasFactory>,
-    Partial<HasTeleporter> {
+    Partial<HasConductive> {
   id: string;
   parentTemplate?: string;
 }

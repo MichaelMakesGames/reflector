@@ -1,12 +1,10 @@
 import { getType } from "typesafe-actions";
 import * as actions from "./actions";
-import { activateEquip } from "./handlers/activateEquip";
 import { activateThrow } from "./handlers/activateThrow";
 import { activateWeapon } from "./handlers/activateWeapon";
 import { addEntity } from "./handlers/addEntity";
 import { attack } from "./handlers/attack";
 import { cancelThrow } from "./handlers/cancelThrow";
-import { executeEquip } from "./handlers/executeEquip";
 import { executeThrow } from "./handlers/executeThrow";
 import { fireWeapon } from "./handlers/fireWeapon";
 import { init } from "./handlers/init";
@@ -55,10 +53,6 @@ export default function reducer(
       return attack(state, action);
     case getType(actions.addEntity):
       return addEntity(state, action);
-    case getType(actions.activateEquip):
-      return activateEquip(state, action);
-    case getType(actions.executeEquip):
-      return executeEquip(state, action);
     case getType(actions.removeEntities):
       return removeEntities(state, action);
     case getType(actions.removeEntity):

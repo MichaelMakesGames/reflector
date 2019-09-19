@@ -20,20 +20,8 @@ const templates: { [id: string]: Partial<Entity> } = {
       priority: PRIORITY_PLAYER,
     },
     blocking: { moving: true, throwing: false },
-    hitPoints: { current: 3, max: 3 },
-    inventory: { reflectors: 3, splitters: 1 },
-    conductive: {},
-  },
-  BOMB: {
-    display: {
-      tile: "bomb",
-      glyph: "b",
-      color: BRIGHT_RED,
-      priority: PRIORITY_ENEMY,
-    },
-    blocking: { throwing: false, moving: true },
     destructible: {},
-    bomb: { time: 0 },
+    conductive: {},
   },
   FOV_MARKER: {
     display: {
