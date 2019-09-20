@@ -78,6 +78,14 @@ export interface HasConductive {
   conductive: Conductive;
 }
 
+export interface Housing {
+  occupancy: number;
+  capacity: number;
+}
+export interface HasHousing {
+  housing: Housing;
+}
+
 export type WeaponType =
   | "LASER"
   | "EXPLOSIVE"
@@ -109,6 +117,7 @@ export interface Entity
     Partial<HasThrowing>,
     Partial<HasFOV>,
     Partial<HasStairs>,
+    Partial<HasHousing>,
     Partial<HasConductive> {
   id: string;
   parentTemplate?: string;

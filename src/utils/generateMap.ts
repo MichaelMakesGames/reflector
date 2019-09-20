@@ -1,61 +1,25 @@
-import * as ROT from "rot-js";
-import { MAZE_SIZE, MAP_HEIGHT, MAP_WIDTH, ROOM_SIZE } from "~/constants";
-import { Entity, Pos } from "~/types/Entity";
-import { arePositionsEqual } from "./geometry";
+import { MAP_HEIGHT, MAP_WIDTH } from "~/constants";
+import { Entity } from "~/types/Entity";
 import { createEntityFromTemplate } from "./entities";
 
 export default function generateMap(): Entity[] {
-  const rng = ROT.RNG.clone();
-
   const result: Entity[] = [];
-  const floors: Entity[] = [];
-  const mazeGenerator = new ROT.Map.DividedMaze(MAZE_SIZE, MAZE_SIZE);
-  const maze: { [key: string]: number } = {};
-  mazeGenerator.create((x, y, contents) => {
-    maze[`${x},${y}`] = contents;
-  });
 
-  function isWall(x: number, y: number) {
-    const mazeX =
-      Math.ceil(x / (ROOM_SIZE + 1)) + Math.floor(x / (ROOM_SIZE + 1));
-    const mazeY =
-      Math.ceil(y / (ROOM_SIZE + 1)) + Math.floor(y / (ROOM_SIZE + 1));
-    const key = `${mazeX},${mazeY}`;
-    return maze[key];
-  }
-
-  for (let y = 0; y < MAP_HEIGHT; y++) {
-    for (let x = 0; x < MAP_WIDTH; x++) {
-      if (isWall(x, y)) {
-        let wallBitmap = 0;
-        if (isWall(x, y - 1)) {
-          wallBitmap += 1;
-        }
-        if (isWall(x + 1, y)) {
-          wallBitmap += 2;
-        }
-        if (isWall(x, y + 1)) {
-          wallBitmap += 4;
-        }
-        if (isWall(x - 1, y)) {
-          wallBitmap += 8;
-        }
-
+  for (let y = -1; y < MAP_HEIGHT + 1; y++) {
+    for (let x = -1; x < MAP_WIDTH + 1; x++) {
+      if (y === -1 || x === -1 || y === MAP_HEIGHT || x === MAP_WIDTH) {
         result.push(
-          createEntityFromTemplate(`WALL_${wallBitmap}`, {
+          createEntityFromTemplate("WALL_0", {
             pos: { x, y },
-            destructible:
-              x !== 0 && y !== 0 && x !== MAP_WIDTH - 1 && y !== MAP_HEIGHT - 1
-                ? {}
-                : undefined,
+          }),
+        );
+      } else {
+        result.push(
+          createEntityFromTemplate("FLOOR", {
+            pos: { x, y },
           }),
         );
       }
-      floors.push(
-        createEntityFromTemplate("FLOOR", {
-          pos: { x, y },
-        }),
-      );
     }
   }
 
@@ -68,5 +32,14 @@ export default function generateMap(): Entity[] {
     }),
   );
 
-  return [...floors, ...result];
+  result.push(
+    createEntityFromTemplate("TENT", {
+      pos: {
+        x: Math.floor(MAP_WIDTH / 2),
+        y: Math.floor(MAP_HEIGHT / 2),
+      },
+    }),
+  );
+
+  return result;
 }

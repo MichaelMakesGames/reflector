@@ -56,6 +56,23 @@ const templates: { [id: string]: Partial<Entity> } = {
     },
     splitter: { type: "vertical" },
   },
+  TENT: {
+    display: {
+      tile: "tent",
+      glyph: "▲",
+      color: WHITE,
+      priority: PRIORITY_ITEM,
+    },
+    blocking: {
+      moving: true,
+      throwing: false,
+    },
+    housing: {
+      capacity: 1,
+      occupancy: 1,
+    },
+    destructible: {},
+  },
 };
 
 export default templates;

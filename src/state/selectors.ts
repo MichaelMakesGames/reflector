@@ -44,6 +44,30 @@ export function entitiesAtPosition(state: GameState, position: Pos) {
   ) as MakeRequired<Entity, "pos">[];
 }
 
+export function isPositionBlocked(
+  state: GameState,
+  position: Pos,
+  exceptEntities: Entity[] = [],
+) {
+  return entitiesAtPosition(state, position).some(
+    entity =>
+      entity.blocking &&
+      entity.blocking.moving &&
+      !exceptEntities.includes(entity),
+  );
+}
+
+export function population(state: GameState): number {
+  return entitiesWithComps(state, "housing").reduce(
+    (population, entity) => population + entity.housing.occupancy,
+    0,
+  );
+}
+
+export function turnsUntilNextImmigrant(state: GameState) {
+  return state.turnsUntilNextImmigrant;
+}
+
 export function weapons(state: GameState) {
   return entitiesWithComps(state, "weapon");
 }

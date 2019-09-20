@@ -1,6 +1,7 @@
 export const PLAYER_ID = "PLAYER";
 
 export const THROWING_RANGE = 5;
+export const BASE_IMMIGRATION_RATE = 5;
 
 export const PRIORITY_LASER = 20;
 export const PRIORITY_THROWING = 17;

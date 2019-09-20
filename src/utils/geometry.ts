@@ -1,5 +1,6 @@
 import { Pos } from "~/types";
 import { DOWN, RIGHT, LEFT, UP } from "~/constants";
+import { rangeFromTo } from "./math";
 
 export function getPosKey(pos: Pos) {
   return `${pos.x},${pos.y}`;
@@ -24,16 +25,22 @@ export function getClosestPosition(options: Pos[], to: Pos): Pos | null {
 }
 
 export function getAdjacentPositions(pos: Pos): Pos[] {
-  return [
-    { x: pos.x + 1, y: pos.y },
-    { x: pos.x - 1, y: pos.y },
-    { y: pos.y + 1, x: pos.x },
-    { y: pos.y - 1, x: pos.x },
-    { x: pos.x + 1, y: pos.y + 1 },
-    { x: pos.x - 1, y: pos.y + 1 },
-    { x: pos.x + 1, y: pos.y - 1 },
-    { x: pos.x - 1, y: pos.y - 1 },
-  ];
+  return getPositionsWithinRange(pos, 1);
+}
+
+export function getPositionsWithinRange(pos: Pos, range: number): Pos[] {
+  const positions: Pos[] = [];
+  for (let dy of rangeFromTo(-range, range + 1)) {
+    for (let dx of rangeFromTo(-range, range + 1)) {
+      if (dx !== 0 || dy !== 0) {
+        positions.push({
+          x: pos.x + dx,
+          y: pos.y + dy,
+        });
+      }
+    }
+  }
+  return positions;
 }
 
 export function getConstDir(direction: { dx: number; dy: number }) {

@@ -16,12 +16,14 @@ import { rotateThrow } from "./handlers/rotateThrow";
 import { targetWeapon } from "./handlers/targetWeapon";
 import { Action, GameState } from "~/types";
 import { updateEntity } from "./handlers/updateEntity";
+import { BASE_IMMIGRATION_RATE } from "~constants";
 
 const initialState: GameState = {
   entities: {},
   entitiesByPosition: {},
   messageLog: [],
   gameOver: false,
+  turnsUntilNextImmigrant: BASE_IMMIGRATION_RATE,
 };
 
 export default function reducer(
