@@ -8,6 +8,7 @@ export default function Status() {
   const turnsUntilNextImmigrant = useSelector(
     selectors.turnsUntilNextImmigrant,
   );
+  const morale = useSelector(selectors.morale);
 
   return (
     <div className="box status">
@@ -15,6 +16,7 @@ export default function Status() {
       <div>Player: {gameOver ? "Dead" : "Alive"}</div>
       <div>Population: {population}</div>
       <div>Next Arrival: {turnsUntilNextImmigrant}</div>
+      <div>Morale: {morale}</div>
     </div>
   );
 }

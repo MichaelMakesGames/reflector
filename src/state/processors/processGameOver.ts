@@ -3,7 +3,7 @@ import { GameState } from "~/types";
 
 export default function processGameOver(state: GameState): GameState {
   let newState = state;
-  let player = selectors.player(newState);
+  const player = selectors.player(newState);
   if (!player) {
     newState = {
       ...newState,

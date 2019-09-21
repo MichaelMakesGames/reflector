@@ -1,3 +1,5 @@
+import { Action } from "./Action";
+
 export interface Pos {
   x: number;
   y: number;
@@ -37,7 +39,9 @@ export interface HasTargeting {
   targeting: Targeting;
 }
 
-export interface Destructible {}
+export interface Destructible {
+  onDestroy?: (entity: Entity) => Action | null;
+}
 export interface HasDestructible {
   destructible: Destructible;
 }

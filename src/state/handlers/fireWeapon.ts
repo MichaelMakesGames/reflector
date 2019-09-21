@@ -5,6 +5,7 @@ import { attack } from "./attack";
 import { playerTookTurn } from "./playerTookTurn";
 import { removeEntities } from "./removeEntities";
 import { updateEntity } from "./updateEntity";
+import { destroy } from "./destroy";
 
 export function fireWeapon(
   state: GameState,
@@ -18,7 +19,7 @@ export function fireWeapon(
   const targetingLasers = selectors.targetingLasers(newState);
 
   const entitiesToSwap: Entity[] = [player];
-  const entitiesToRemove: string[] = [];
+  const entitiesToDestroy: string[] = [];
   const entitiesToAttack: string[] = [];
   for (const laser of targetingLasers) {
     const { pos } = laser;
@@ -28,12 +29,12 @@ export function fireWeapon(
         entitiesToSwap.push(entity);
       } else if (entity.conductive && activeWeapon.weapon.type === "ELECTRIC") {
         if (entity.destructible) {
-          entitiesToRemove.push(entity.id);
+          entitiesToDestroy.push(entity.id);
         } else {
           entitiesToAttack.push(entity.id);
         }
       } else if (entity.destructible) {
-        entitiesToRemove.push(entity.id);
+        entitiesToDestroy.push(entity.id);
       }
     }
   }
@@ -41,12 +42,13 @@ export function fireWeapon(
   newState = removeEntities(
     newState,
     actions.removeEntities({
-      entityIds: [
-        ...targetingLasers.map(e => e.id),
-        ...new Set(entitiesToRemove),
-      ],
+      entityIds: [...targetingLasers.map(e => e.id)],
     }),
   );
+
+  for (const id of new Set(entitiesToDestroy)) {
+    newState = destroy(newState, actions.destroy({ entityId: id }));
+  }
 
   for (const id of [...new Set(entitiesToAttack)]) {
     newState = attack(

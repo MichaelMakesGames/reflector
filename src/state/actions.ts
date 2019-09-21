@@ -47,3 +47,9 @@ export const attack = createStandardAction("ATTACK")<{
 export const playerTookTurn = createStandardAction("PLAYER_TOOK_TURN")();
 
 export const init = createStandardAction("INIT")();
+
+export const reduceMorale = createStandardAction("REDUCE_MORALE")<{
+  amount: number;
+}>();
+
+export const destroy = createStandardAction("DESTROY")<{ entityId: string }>();

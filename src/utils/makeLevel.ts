@@ -2,7 +2,6 @@ import * as actions from "~/state/actions";
 import { PLAYER_ID } from "~/constants";
 import { addEntity } from "~/state/handlers/addEntity";
 import { removeEntities } from "~/state/handlers/removeEntities";
-import { updateEntity } from "~/state/handlers/updateEntity";
 import generateMap from "./generateMap";
 import * as selectors from "~/state/selectors";
 import { GameState } from "~/types";

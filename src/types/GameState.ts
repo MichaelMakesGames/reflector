@@ -10,4 +10,5 @@ export interface GameState {
   messageLog: string[];
   gameOver: boolean;
   turnsUntilNextImmigrant: number;
+  morale: number;
 }

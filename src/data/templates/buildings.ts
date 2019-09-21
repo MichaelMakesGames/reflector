@@ -1,11 +1,6 @@
-import {
-  RED,
-  PRIORITY_ITEM,
-  GREEN,
-  WHITE,
-  PRIORITY_THROWING,
-} from "~/constants";
+import { PRIORITY_ITEM, PRIORITY_THROWING, WHITE } from "~/constants";
 import { Entity } from "~/types/Entity";
+import { reduceMorale } from "~state/actions";
 
 const templates: { [id: string]: Partial<Entity> } = {
   REFLECTOR_BASE: {
@@ -71,7 +66,14 @@ const templates: { [id: string]: Partial<Entity> } = {
       capacity: 1,
       occupancy: 1,
     },
-    destructible: {},
+    destructible: {
+      onDestroy: entity => {
+        if (entity.housing) {
+          return reduceMorale({ amount: entity.housing.occupancy });
+        }
+        return null;
+      },
+    },
   },
 };
 

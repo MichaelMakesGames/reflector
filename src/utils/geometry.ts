@@ -30,8 +30,8 @@ export function getAdjacentPositions(pos: Pos): Pos[] {
 
 export function getPositionsWithinRange(pos: Pos, range: number): Pos[] {
   const positions: Pos[] = [];
-  for (let dy of rangeFromTo(-range, range + 1)) {
-    for (let dx of rangeFromTo(-range, range + 1)) {
+  for (const dy of rangeFromTo(-1 * range, range + 1)) {
+    for (const dx of rangeFromTo(-1 * range, range + 1)) {
       if (dx !== 0 || dy !== 0) {
         positions.push({
           x: pos.x + dx,

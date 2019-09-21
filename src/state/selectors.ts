@@ -101,3 +101,7 @@ export function throwingTarget(state: GameState) {
   if (entities.length) return entities[0];
   return null;
 }
+
+export function morale(state: GameState) {
+  return state.morale;
+}

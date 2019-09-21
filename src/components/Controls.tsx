@@ -224,7 +224,6 @@ function getControls(
 
 export default function Controls() {
   const dispatch = useDispatch();
-  const weapons = useSelector(selectors.weapons);
   const activeWeapon = useSelector(selectors.activeWeapon);
   const player = useSelector(selectors.player);
   const throwing = useSelector(selectors.throwingTarget);

@@ -32,6 +32,7 @@ function isDestructibleNonEnemy(gameState: GameState, position: Pos) {
     );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function moveToward(gameState: GameState, entity: Entity, to: Pos) {
   if (!entity.pos) return [];
   const direction = getDirectionTowardTarget(entity.pos, to, gameState);

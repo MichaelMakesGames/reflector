@@ -16,7 +16,9 @@ import { rotateThrow } from "./handlers/rotateThrow";
 import { targetWeapon } from "./handlers/targetWeapon";
 import { Action, GameState } from "~/types";
 import { updateEntity } from "./handlers/updateEntity";
-import { BASE_IMMIGRATION_RATE } from "~constants";
+import { BASE_IMMIGRATION_RATE, STARTING_MORALE } from "~constants";
+import { reduceMorale } from "./handlers/reduceMorale";
+import { destroy } from "./handlers/destroy";
 
 const initialState: GameState = {
   entities: {},
@@ -24,6 +26,7 @@ const initialState: GameState = {
   messageLog: [],
   gameOver: false,
   turnsUntilNextImmigrant: BASE_IMMIGRATION_RATE,
+  morale: STARTING_MORALE,
 };
 
 export default function reducer(
@@ -61,6 +64,10 @@ export default function reducer(
       return removeEntity(state, action);
     case getType(actions.updateEntity):
       return updateEntity(state, action);
+    case getType(actions.reduceMorale):
+      return reduceMorale(state, action);
+    case getType(actions.destroy):
+      return destroy(state, action);
     default: {
       if (!(action as { type: string }).type.startsWith("@@")) {
         console.warn("Unhandled action in reducer", action);

@@ -2,7 +2,7 @@ import * as actions from "~/state/actions";
 import { PLAYER_ID } from "~/constants";
 import * as selectors from "~/state/selectors";
 import { GameState } from "~/types";
-import { removeEntity } from "./removeEntity";
+import { destroy } from "./destroy";
 
 export function attack(
   state: GameState,
@@ -12,10 +12,7 @@ export function attack(
   const target = selectors.entity(newState, action.payload.target);
 
   if (target.destructible) {
-    newState = removeEntity(
-      newState,
-      actions.removeEntity({ entityId: target.id }),
-    );
+    newState = destroy(newState, actions.destroy({ entityId: target.id }));
   }
   if (target.id === PLAYER_ID) {
     newState = {
