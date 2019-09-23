@@ -9,6 +9,7 @@ export interface GameState {
   };
   messageLog: string[];
   gameOver: boolean;
+  victory: boolean;
   turnsUntilNextImmigrant: number;
   morale: number;
 }

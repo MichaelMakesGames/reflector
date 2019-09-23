@@ -25,6 +25,7 @@ const initialState: GameState = {
   entitiesByPosition: {},
   messageLog: [],
   gameOver: false,
+  victory: false,
   turnsUntilNextImmigrant: BASE_IMMIGRATION_RATE,
   morale: STARTING_MORALE,
 };

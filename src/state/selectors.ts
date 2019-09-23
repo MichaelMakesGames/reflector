@@ -15,6 +15,10 @@ export function gameOver(state: GameState) {
   return state.gameOver;
 }
 
+export function victory(state: GameState) {
+  return state.victory;
+}
+
 export function entityList(state: GameState) {
   return Object.values(state.entities);
 }
