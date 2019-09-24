@@ -2,8 +2,9 @@ import * as actions from "~/state/actions";
 import { GameState, MakeRequired, Entity } from "~/types";
 import { getPosKey } from "~/utils/geometry";
 import { addRenderEntity } from "~/renderer";
+import { registerHandler } from "~state/handleAction";
 
-export function addEntity(
+function addEntity(
   state: GameState,
   action: ReturnType<typeof actions.addEntity>,
 ): GameState {
@@ -32,3 +33,5 @@ export function addEntity(
   };
   return newState;
 }
+
+registerHandler(addEntity, actions.addEntity);

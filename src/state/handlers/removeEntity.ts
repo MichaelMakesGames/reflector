@@ -3,12 +3,13 @@ import * as selectors from "~/state/selectors";
 import { GameState } from "~/types";
 import { getPosKey } from "~/utils/geometry";
 import { removeRenderEntity } from "~/renderer";
+import { registerHandler } from "~state/handleAction";
 
-export function removeEntity(
+function removeEntity(
   state: GameState,
   action: ReturnType<typeof actions.removeEntity>,
 ): GameState {
-  const prev = selectors.entity(state, action.payload.entityId);
+  const prev = selectors.entityById(state, action.payload.entityId);
   if (!prev) {
     console.warn(
       `tried to remove nonexistant entity ${action.payload.entityId}`,
@@ -36,3 +37,5 @@ export function removeEntity(
     entities,
   };
 }
+
+registerHandler(removeEntity, actions.removeEntity);

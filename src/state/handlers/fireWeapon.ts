@@ -1,13 +1,9 @@
 import * as actions from "~/state/actions";
 import * as selectors from "~/state/selectors";
-import { GameState, Entity } from "~/types";
-import { attack } from "./attack";
-import { playerTookTurn } from "./playerTookTurn";
-import { removeEntities } from "./removeEntities";
-import { updateEntity } from "./updateEntity";
-import { destroy } from "./destroy";
+import { Entity, GameState } from "~/types";
+import handleAction, { registerHandler } from "~state/handleAction";
 
-export function fireWeapon(
+function fireWeapon(
   state: GameState,
   action: ReturnType<typeof actions.fireWeapon>,
 ) {
@@ -39,7 +35,7 @@ export function fireWeapon(
     }
   }
 
-  newState = removeEntities(
+  newState = handleAction(
     newState,
     actions.removeEntities({
       entityIds: [...targetingLasers.map(e => e.id)],
@@ -47,11 +43,11 @@ export function fireWeapon(
   );
 
   for (const id of new Set(entitiesToDestroy)) {
-    newState = destroy(newState, actions.destroy({ entityId: id }));
+    newState = handleAction(newState, actions.destroy({ entityId: id }));
   }
 
   for (const id of [...new Set(entitiesToAttack)]) {
-    newState = attack(
+    newState = handleAction(
       newState,
       actions.attack({
         target: id,
@@ -63,7 +59,7 @@ export function fireWeapon(
   if (entitiesToSwap.length > 1) {
     const positions = entitiesToSwap.map(e => e.pos);
     entitiesToSwap.forEach((entity, index) => {
-      newState = updateEntity(
+      newState = handleAction(
         newState,
         actions.updateEntity({
           id: entity.id,
@@ -73,7 +69,7 @@ export function fireWeapon(
     });
   }
 
-  newState = updateEntity(
+  newState = handleAction(
     newState,
     actions.updateEntity({
       id: activeWeapon.id,
@@ -84,6 +80,8 @@ export function fireWeapon(
     }),
   );
 
-  newState = playerTookTurn(newState, actions.playerTookTurn());
+  newState = handleAction(newState, actions.playerTookTurn());
   return newState;
 }
+
+registerHandler(fireWeapon, actions.fireWeapon);

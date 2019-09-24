@@ -2,11 +2,10 @@ import * as actions from "~/state/actions";
 import * as selectors from "~/state/selectors";
 import { Entity, GameState, MakeRequired, Pos } from "~/types";
 import { BASE_IMMIGRATION_RATE, MAP_HEIGHT, MAP_WIDTH } from "~constants";
-import { addEntity } from "~state/handlers/addEntity";
-import { updateEntity } from "~state/handlers/updateEntity";
 import { createEntityFromTemplate } from "~utils/entities";
 import { getPositionsWithinRange } from "~utils/geometry";
 import { choose } from "~utils/rng";
+import handleAction from "~state/handleAction";
 
 export default function processImmigration(state: GameState): GameState {
   let newState = state;
@@ -21,7 +20,7 @@ export default function processImmigration(state: GameState): GameState {
 
     const availableHouse = findAvailableHouse(houses);
     if (availableHouse) {
-      newState = updateEntity(
+      newState = handleAction(
         newState,
         actions.updateEntity({
           ...availableHouse,
@@ -37,7 +36,7 @@ export default function processImmigration(state: GameState): GameState {
     if (!pos) {
       console.warn("no position for new immigrant found");
     } else {
-      newState = addEntity(
+      newState = handleAction(
         newState,
         actions.addEntity({
           entity: createEntityFromTemplate("TENT", { pos }),

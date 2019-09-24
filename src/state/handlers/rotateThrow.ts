@@ -1,9 +1,9 @@
 import * as actions from "~/state/actions";
 import * as selectors from "~/state/selectors";
 import { GameState } from "~/types";
-import { updateEntity } from "./updateEntity";
+import handleAction, { registerHandler } from "~state/handleAction";
 
-export function rotateThrow(
+function rotateThrow(
   state: GameState,
   action: ReturnType<typeof actions.rotateThrow>,
 ): GameState {
@@ -36,6 +36,8 @@ export function rotateThrow(
       },
     };
   }
-  newState = updateEntity(newState, actions.updateEntity(entity));
+  newState = handleAction(newState, actions.updateEntity(entity));
   return newState;
 }
+
+registerHandler(rotateThrow, actions.rotateThrow);

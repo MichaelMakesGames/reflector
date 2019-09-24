@@ -1,7 +1,8 @@
 import * as actions from "~/state/actions";
 import { GameState } from "~/types";
+import { registerHandler } from "~state/handleAction";
 
-export function reduceMorale(
+function reduceMorale(
   state: GameState,
   action: ReturnType<typeof actions.reduceMorale>,
 ) {
@@ -10,3 +11,5 @@ export function reduceMorale(
     morale: state.morale - action.payload.amount,
   };
 }
+
+registerHandler(reduceMorale, actions.reduceMorale);

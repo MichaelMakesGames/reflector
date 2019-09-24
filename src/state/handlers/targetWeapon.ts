@@ -4,24 +4,22 @@ import * as selectors from "~/state/selectors";
 import { getAdjacentPositions } from "~/utils/geometry";
 import { createLaser, reflect } from "~/utils/lasers";
 import { Entity, GameState, Pos } from "~/types";
+import handleAction, { registerHandler } from "~state/handleAction";
 
-import { addEntity } from "./addEntity";
-import { removeEntities } from "./removeEntities";
-
-export function targetWeapon(
+function targetWeapon(
   state: GameState,
   action: ReturnType<typeof actions.targetWeapon>,
 ): GameState {
   let newState = state;
   const targetingLasers = selectors.targetingLasers(newState);
-  newState = removeEntities(
+  newState = handleAction(
     newState,
     actions.removeEntities({
       entityIds: targetingLasers.map(e => e.id),
     }),
   );
 
-  const player = selectors.entity(newState, PLAYER_ID);
+  const player = selectors.entityById(newState, PLAYER_ID);
   const playerPosition = player.pos;
   if (!playerPosition) return newState;
 
@@ -53,7 +51,7 @@ export function targetWeapon(
       const solidEntity = entitiesAtPos.find(entity => !!entity.blocking);
 
       if (!solidEntity) {
-        newState = addEntity(
+        newState = handleAction(
           newState,
           actions.addEntity({
             entity: createLaser(beam, beam.power, false, weapon.type, nextPos),
@@ -83,7 +81,7 @@ export function targetWeapon(
         beam.dx = newDirection.dx;
         beam.dy = newDirection.dy;
       } else if (solidEntity.destructible && weapon.type !== "ELECTRIC") {
-        newState = addEntity(
+        newState = handleAction(
           newState,
           actions.addEntity({
             entity: createLaser(beam, beam.power, true, weapon.type, nextPos),
@@ -110,7 +108,7 @@ export function targetWeapon(
     for (const adjacentPos of getAdjacentPositions(pos)) {
       const entities = selectors.entitiesAtPosition(newState, adjacentPos);
       if (entities.every(e => !e.targeting)) {
-        newState = addEntity(
+        newState = handleAction(
           newState,
           actions.addEntity({
             entity: createLaser(
@@ -138,7 +136,7 @@ export function targetWeapon(
         weapon.type,
         pos,
       );
-      newState = addEntity(
+      newState = handleAction(
         newState,
         actions.addEntity({
           entity: newEntity,
@@ -154,3 +152,5 @@ export function targetWeapon(
 
   return newState;
 }
+
+registerHandler(targetWeapon, actions.targetWeapon);

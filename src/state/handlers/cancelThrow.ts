@@ -1,15 +1,14 @@
 import * as actions from "~/state/actions";
 import * as selectors from "~/state/selectors";
 import { GameState } from "~/types";
-import { removeEntities } from "./removeEntities";
-import { removeEntity } from "./removeEntity";
+import handleAction, { registerHandler } from "~state/handleAction";
 
-export function cancelThrow(
+function cancelThrow(
   state: GameState,
   action: ReturnType<typeof actions.cancelThrow>,
 ): GameState {
   let newState = state;
-  newState = removeEntities(
+  newState = handleAction(
     newState,
     actions.removeEntities({
       entityIds: selectors
@@ -20,9 +19,11 @@ export function cancelThrow(
   );
   const entity = selectors.throwingTarget(newState);
   if (!entity) return newState;
-  newState = removeEntity(
+  newState = handleAction(
     newState,
     actions.removeEntity({ entityId: entity.id }),
   );
   return newState;
 }
+
+registerHandler(cancelThrow, actions.cancelThrow);

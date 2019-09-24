@@ -5,9 +5,9 @@ import { createEntityFromTemplate } from "~/utils/entities";
 import * as selectors from "~/state/selectors";
 
 import { GameState } from "~/types";
-import { addEntity } from "./addEntity";
+import handleAction, { registerHandler } from "~state/handleAction";
 
-export function activateThrow(
+function activateThrow(
   state: GameState,
   action: ReturnType<typeof actions.activateThrow>,
 ): GameState {
@@ -17,7 +17,7 @@ export function activateThrow(
 
   const fovPositions = computeThrowFOV(newState, player.pos, THROWING_RANGE);
   for (const pos of fovPositions) {
-    newState = addEntity(
+    newState = handleAction(
       newState,
       actions.addEntity({
         entity: createEntityFromTemplate("FOV_MARKER", { pos }),
@@ -27,6 +27,8 @@ export function activateThrow(
 
   const { entity } = action.payload;
   entity.throwing = { range: THROWING_RANGE };
-  newState = addEntity(newState, actions.addEntity({ entity }));
+  newState = handleAction(newState, actions.addEntity({ entity }));
   return newState;
 }
+
+registerHandler(activateThrow, actions.activateThrow);

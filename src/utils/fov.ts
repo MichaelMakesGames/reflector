@@ -18,9 +18,9 @@ export function computeThrowFOV(
         .every(e => !e.blocking || !e.blocking.throwing),
   );
   fov.compute(pos.x, pos.y, range, (x, y) => results.push({ x, y }));
-  return results.filter(pos =>
+  return results.filter(visiblePos =>
     selectors
-      .entitiesAtPosition(gameState, pos)
+      .entitiesAtPosition(gameState, visiblePos)
       .every(e => !e.blocking || !e.blocking.moving),
   );
 }

@@ -1,10 +1,16 @@
 import * as actions from "~/state/actions";
 import processors from "~/state/processors";
 import { GameState } from "~/types";
+import { registerHandler } from "~state/handleAction";
 
-export function playerTookTurn(
+function playerTookTurn(
   state: GameState,
   action: ReturnType<typeof actions.playerTookTurn>,
 ): GameState {
-  return processors.reduce((state, processor) => processor(state), state);
+  return processors.reduce(
+    (prevState, processor) => processor(prevState),
+    state,
+  );
 }
+
+registerHandler(playerTookTurn, actions.playerTookTurn);

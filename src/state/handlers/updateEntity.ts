@@ -8,14 +8,15 @@ import {
   removeRenderEntity,
   addRenderEntity,
 } from "~/renderer";
+import { registerHandler } from "~state/handleAction";
 
-export function updateEntity(
+function updateEntity(
   state: GameState,
   action: ReturnType<typeof actions.updateEntity>,
 ): GameState {
   let newState = state;
   const partial = action.payload;
-  const prev = selectors.entity(newState, partial.id);
+  const prev = selectors.entityById(newState, partial.id);
   if (!prev) {
     console.warn("tried to update nonexistant entity", partial);
   }
@@ -62,3 +63,5 @@ export function updateEntity(
   };
   return newState;
 }
+
+registerHandler(updateEntity, actions.updateEntity);

@@ -3,16 +3,16 @@ import { createEntityFromTemplate } from "~/utils/entities";
 import makeLevel from "~/utils/makeLevel";
 
 import { GameState } from "~/types";
-import { addEntity } from "./addEntity";
 import { PLAYER_ID } from "~/constants";
+import handleAction, { registerHandler } from "~state/handleAction";
 
-export function init(
+function init(
   state: GameState,
   action: ReturnType<typeof actions.init>,
 ): GameState {
   let newState = state;
 
-  newState = addEntity(
+  newState = handleAction(
     newState,
     actions.addEntity({
       entity: {
@@ -23,8 +23,13 @@ export function init(
   );
   const startingWeapon = createEntityFromTemplate("WEAPON_LASER");
   if (startingWeapon.weapon) startingWeapon.weapon.slot = 1;
-  newState = addEntity(newState, actions.addEntity({ entity: startingWeapon }));
+  newState = handleAction(
+    newState,
+    actions.addEntity({ entity: startingWeapon }),
+  );
 
   newState = makeLevel(newState);
   return newState;
 }
+
+registerHandler(init, actions.init);

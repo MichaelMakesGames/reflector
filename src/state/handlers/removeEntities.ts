@@ -1,8 +1,9 @@
 import * as actions from "~/state/actions";
 import { GameState } from "~/types";
 import { removeRenderEntity } from "~/renderer";
+import { registerHandler } from "~state/handleAction";
 
-export function removeEntities(
+function removeEntities(
   state: GameState,
   action: ReturnType<typeof actions.removeEntities>,
 ): GameState {
@@ -27,3 +28,5 @@ export function removeEntities(
     entities,
   };
 }
+
+registerHandler(removeEntities, actions.removeEntities);

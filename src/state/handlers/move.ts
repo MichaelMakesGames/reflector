@@ -2,15 +2,14 @@ import * as actions from "~/state/actions";
 import { PLAYER_ID } from "~/constants";
 import * as selectors from "~/state/selectors";
 import { GameState } from "~/types";
-import { playerTookTurn } from "./playerTookTurn";
-import { updateEntity } from "./updateEntity";
+import handleAction, { registerHandler } from "~state/handleAction";
 
-export function move(
+function move(
   state: GameState,
   action: ReturnType<typeof actions.move>,
 ): GameState {
   let newState = state;
-  const entity = selectors.entity(newState, action.payload.entityId);
+  const entity = selectors.entityById(newState, action.payload.entityId);
   const { pos } = entity;
   if (!pos) {
     return newState;
@@ -30,7 +29,7 @@ export function move(
   ) {
     return newState;
   }
-  newState = updateEntity(
+  newState = handleAction(
     newState,
     actions.updateEntity({
       id: entity.id,
@@ -38,7 +37,9 @@ export function move(
     }),
   );
   if (entity.id === PLAYER_ID) {
-    newState = playerTookTurn(newState, actions.playerTookTurn());
+    newState = handleAction(newState, actions.playerTookTurn());
   }
   return newState;
 }
+
+registerHandler(move, actions.move);

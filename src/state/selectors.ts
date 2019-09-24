@@ -30,7 +30,7 @@ export function entitiesWithComps<C extends keyof Entity>(
   return filterEntitiesWithComps(entityList(state), ...comps);
 }
 
-export function entity(state: GameState, entityId: string) {
+export function entityById(state: GameState, entityId: string) {
   return state.entities[entityId];
 }
 
@@ -63,7 +63,7 @@ export function isPositionBlocked(
 
 export function population(state: GameState): number {
   return entitiesWithComps(state, "housing").reduce(
-    (population, entity) => population + entity.housing.occupancy,
+    (sum, entity) => sum + entity.housing.occupancy,
     0,
   );
 }

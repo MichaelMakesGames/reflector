@@ -2,10 +2,9 @@ import * as actions from "~/state/actions";
 import { RIGHT } from "~/constants";
 import * as selectors from "~/state/selectors";
 import { GameState } from "~/types";
-import { targetWeapon } from "./targetWeapon";
-import { updateEntity } from "./updateEntity";
+import handleAction, { registerHandler } from "~state/handleAction";
 
-export function activateWeapon(
+function activateWeapon(
   state: GameState,
   action: ReturnType<typeof actions.activateWeapon>,
 ): GameState {
@@ -15,7 +14,7 @@ export function activateWeapon(
 
   for (const weapon of selectors.weapons(newState)) {
     if (weapon !== weaponInSlot && weapon.weapon && weapon.weapon.active) {
-      newState = updateEntity(
+      newState = handleAction(
         newState,
         actions.updateEntity({
           id: weapon.id,
@@ -44,6 +43,8 @@ export function activateWeapon(
       },
     },
   };
-  newState = targetWeapon(newState, actions.targetWeapon(RIGHT));
+  newState = handleAction(newState, actions.targetWeapon(RIGHT));
   return newState;
 }
+
+registerHandler(activateWeapon, actions.activateWeapon);

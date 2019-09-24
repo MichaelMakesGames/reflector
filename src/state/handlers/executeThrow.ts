@@ -2,15 +2,14 @@ import * as actions from "~/state/actions";
 import * as selectors from "~/state/selectors";
 import { GameState } from "~/types";
 import { getDistance } from "~/utils/geometry";
-import { removeEntities } from "./removeEntities";
-import { updateEntity } from "./updateEntity";
+import handleAction, { registerHandler } from "~state/handleAction";
 
-export function executeThrow(
+function executeThrow(
   state: GameState,
   action: ReturnType<typeof actions.executeThrow>,
 ): GameState {
   let newState = state;
-  newState = removeEntities(
+  newState = handleAction(
     newState,
     actions.removeEntities({
       entityIds: selectors
@@ -33,7 +32,7 @@ export function executeThrow(
   if (entitiesAtPosition.some(e => e.id !== entity.id && !!e.blocking))
     return newState;
 
-  newState = updateEntity(
+  newState = handleAction(
     newState,
     actions.updateEntity({
       id: entity.id,
@@ -43,3 +42,5 @@ export function executeThrow(
 
   return newState;
 }
+
+registerHandler(executeThrow, actions.executeThrow);

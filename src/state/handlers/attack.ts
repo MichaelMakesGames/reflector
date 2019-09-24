@@ -2,17 +2,17 @@ import * as actions from "~/state/actions";
 import { PLAYER_ID } from "~/constants";
 import * as selectors from "~/state/selectors";
 import { GameState } from "~/types";
-import { destroy } from "./destroy";
+import handleAction, { registerHandler } from "~state/handleAction";
 
-export function attack(
+function attack(
   state: GameState,
   action: ReturnType<typeof actions.attack>,
 ): GameState {
   let newState = state;
-  const target = selectors.entity(newState, action.payload.target);
+  const target = selectors.entityById(newState, action.payload.target);
 
   if (target.destructible) {
-    newState = destroy(newState, actions.destroy({ entityId: target.id }));
+    newState = handleAction(newState, actions.destroy({ entityId: target.id }));
   }
   if (target.id === PLAYER_ID) {
     newState = {
@@ -22,3 +22,5 @@ export function attack(
   }
   return newState;
 }
+
+registerHandler(attack, actions.attack);
