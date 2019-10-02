@@ -109,3 +109,7 @@ export function throwingTarget(state: GameState) {
 export function morale(state: GameState) {
   return state.morale;
 }
+
+export function turnsUntilNextWave(state: GameState) {
+  return state.wave.turnsUntilNextWaveStart;
+}

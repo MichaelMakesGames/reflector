@@ -24,15 +24,6 @@ export default function generateMap(): Entity[] {
   }
 
   result.push(
-    createEntityFromTemplate("ENEMY_RUSHER", {
-      pos: {
-        x: MAP_WIDTH - 2,
-        y: MAP_HEIGHT - 2,
-      },
-    }),
-  );
-
-  result.push(
     createEntityFromTemplate("TENT", {
       pos: {
         x: Math.floor(MAP_WIDTH / 2),
