@@ -10,6 +10,7 @@ export default function Status() {
     selectors.turnsUntilNextImmigrant,
   );
   const morale = useSelector(selectors.morale);
+  const turnsUntilNextWave = useSelector(selectors.turnsUntilNextWave);
 
   return (
     <div className="box status">
@@ -19,6 +20,7 @@ export default function Status() {
       <div>Population: {population}</div>
       <div>Next Arrival: {turnsUntilNextImmigrant}</div>
       <div>Morale: {morale}</div>
+      <div>Next Wave: {turnsUntilNextWave}</div>
     </div>
   );
 }

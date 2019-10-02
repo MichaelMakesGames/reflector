@@ -1,4 +1,5 @@
 import { Entity } from "./Entity";
+import { Direction } from "./Direction";
 
 export interface GameState {
   entities: {
@@ -12,4 +13,11 @@ export interface GameState {
   victory: boolean;
   turnsUntilNextImmigrant: number;
   morale: number;
+  wave: WaveState;
+}
+
+export interface WaveState {
+  turnsUntilNextWaveStart: number;
+  turnsUntilCurrentWaveEnd: number;
+  direction: Direction;
 }
