@@ -49,8 +49,10 @@ function targetWeapon(
       };
       const entitiesAtPos = selectors.entitiesAtPosition(newState, nextPos);
       const solidEntity = entitiesAtPos.find(entity => !!entity.blocking);
+      const reflectorEntity = entitiesAtPos.find(entity => entity.reflector);
+      const splitterEntity = entitiesAtPos.find(entity => entity.splitter);
 
-      if (!solidEntity) {
+      if (!solidEntity && !reflectorEntity) {
         newState = handleAction(
           newState,
           actions.addEntity({
@@ -58,11 +60,12 @@ function targetWeapon(
           }),
         );
       } else if (
-        solidEntity.splitter &&
-        ((solidEntity.splitter.type === "horizontal" && beam.dy) ||
-          (solidEntity.splitter.type === "vertical" && beam.dx))
+        splitterEntity &&
+        splitterEntity.splitter &&
+        ((splitterEntity.splitter.type === "horizontal" && beam.dy) ||
+          (splitterEntity.splitter.type === "vertical" && beam.dx))
       ) {
-        const { splitter } = solidEntity;
+        const { splitter } = splitterEntity;
         beams.push({
           power: beam.power - 1,
           dx: splitter.type === "horizontal" ? 1 : 0,
@@ -76,11 +79,15 @@ function targetWeapon(
           lastPos: nextPos,
         });
         beam.power = 0;
-      } else if (solidEntity.reflector) {
-        const newDirection = reflect(beam, solidEntity.reflector.type);
+      } else if (reflectorEntity && reflectorEntity.reflector) {
+        const newDirection = reflect(beam, reflectorEntity.reflector.type);
         beam.dx = newDirection.dx;
         beam.dy = newDirection.dy;
-      } else if (solidEntity.destructible && weapon.type !== "ELECTRIC") {
+      } else if (
+        solidEntity &&
+        solidEntity.destructible &&
+        weapon.type !== "ELECTRIC"
+      ) {
         newState = handleAction(
           newState,
           actions.addEntity({
@@ -91,7 +98,11 @@ function targetWeapon(
           explosionCenters.push(nextPos);
         }
         beam.power--;
-      } else if (weapon.type === "ELECTRIC" && solidEntity.conductive) {
+      } else if (
+        weapon.type === "ELECTRIC" &&
+        solidEntity &&
+        solidEntity.conductive
+      ) {
         spreadElectricity.push(solidEntity);
         beam.power--;
       } else {

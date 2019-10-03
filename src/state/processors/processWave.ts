@@ -52,6 +52,7 @@ export default function processWave(oldState: GameState): GameState {
         wave: {
           ...state.wave,
           turnsUntilCurrentWaveEnd: WAVE_DURATION_BASE,
+          direction: choose([UP, DOWN, LEFT, RIGHT]),
         },
       };
     }
