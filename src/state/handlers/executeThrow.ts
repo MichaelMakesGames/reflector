@@ -18,24 +18,34 @@ function executeThrow(
         .map(e => e.id),
     }),
   );
-  const entity = selectors.throwingTarget(newState);
-  if (!entity) return newState;
+  const throwingTarget = selectors.throwingTarget(newState);
+  if (!throwingTarget) return newState;
 
   const player = selectors.player(newState);
   if (!player) return newState;
 
-  const { pos } = entity;
+  const { pos } = throwingTarget;
   const distance = getDistance(pos, player.pos);
-  if (distance > entity.throwing.range) return newState;
+  if (distance > throwingTarget.throwing.range) return newState;
 
   const entitiesAtPosition = selectors.entitiesAtPosition(newState, pos);
-  if (entitiesAtPosition.some(e => e.id !== entity.id && !!e.blocking))
+  if (entitiesAtPosition.some(e => e.id !== throwingTarget.id && !!e.blocking))
     return newState;
+
+  const otherReflector = entitiesAtPosition.find(
+    entity => entity.reflector && entity !== throwingTarget,
+  );
+  if (otherReflector) {
+    newState = handleAction(
+      newState,
+      actions.removeEntity({ entityId: otherReflector.id }),
+    );
+  }
 
   newState = handleAction(
     newState,
     actions.updateEntity({
-      id: entity.id,
+      id: throwingTarget.id,
       throwing: undefined,
     }),
   );

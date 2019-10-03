@@ -3,10 +3,7 @@ import { Entity } from "~/types/Entity";
 import { reduceMorale } from "~state/actions";
 
 const templates: { [id: string]: Partial<Entity> } = {
-  REFLECTOR_BASE: {
-    blocking: { throwing: false, moving: true },
-    destructible: {},
-  },
+  REFLECTOR_BASE: {},
   REFLECTOR_UP_RIGHT: {
     parentTemplate: "REFLECTOR_BASE",
     display: {
