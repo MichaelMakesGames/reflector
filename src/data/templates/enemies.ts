@@ -1,5 +1,5 @@
 import { Entity } from "~/types/Entity";
-import { BLUE, PRIORITY_ENEMY } from "~/constants";
+import { PRIORITY_ENEMY, PURPLE } from "~/constants";
 
 const templates: { [id: string]: Partial<Entity> } = {
   ENEMY_BASE: {
@@ -7,15 +7,15 @@ const templates: { [id: string]: Partial<Entity> } = {
     destructible: {},
     conductive: {},
   },
-  ENEMY_RUSHER: {
+  ENEMY_DRONE: {
     parentTemplate: "ENEMY_BASE",
     display: {
-      tile: "enemy1",
-      glyph: "R",
-      color: BLUE,
+      tile: "enemy_drone",
+      glyph: "D",
+      color: PURPLE,
       priority: PRIORITY_ENEMY,
     },
-    ai: { type: "RUSHER" },
+    ai: { type: "DRONE" },
   },
 };
 

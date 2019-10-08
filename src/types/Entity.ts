@@ -18,7 +18,7 @@ export interface HasDisplay {
   display: Display;
 }
 
-export type AIType = "RUSHER" | "ANGLER" | "SMASHER" | "BOMBER";
+export type AIType = "DRONE";
 export interface AI {
   type: AIType;
 }
