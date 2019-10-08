@@ -66,7 +66,7 @@ function spawnEnemy(state: GameState): GameState {
     const pos = choose(positions);
     return handleAction(
       state,
-      addEntity({ entity: createEntityFromTemplate("ENEMY_RUSHER", { pos }) }),
+      addEntity({ entity: createEntityFromTemplate("ENEMY_DRONE", { pos }) }),
     );
   }
 

@@ -67,23 +67,27 @@ function getDirectionTowardTarget(
 export function getAIActions(entity: Entity, gameState: GameState): AIAction[] {
   const { ai } = entity;
   if (!ai) return [];
-  const player = selectors.player(gameState);
 
-  if (ai.type === "RUSHER") {
-    if (!player || !entity.pos) {
-      return [];
-    }
-    if (getDistance(entity.pos, player.pos) <= 1) {
+  if (ai.type === "DRONE") {
+    if (!entity.pos) return [];
+    const { pos } = entity;
+    const targets = selectors
+      .entitiesWithComps(gameState, "destructible", "pos")
+      .filter(e => !e.ai);
+    targets.sort((a, b) => getDistance(a.pos, pos) - getDistance(b.pos, pos));
+    const target = targets[0];
+
+    if (getDistance(entity.pos, target.pos) <= 1) {
       return [
         actions.attack({
-          target: player.id,
+          target: target.id,
           message: "The Rusher attacks you!",
         }),
       ];
     }
     const direction = getDirectionTowardTarget(
       entity.pos,
-      player.pos,
+      target.pos,
       gameState,
       isDestructibleNonEnemy,
     );
