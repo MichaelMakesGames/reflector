@@ -5,10 +5,10 @@ import handleAction, { registerHandler } from "~state/handleAction";
 
 function rotateThrow(
   state: GameState,
-  action: ReturnType<typeof actions.rotateThrow>,
+  action: ReturnType<typeof actions.rotatePlacement>,
 ): GameState {
   let newState = state;
-  let entity = selectors.throwingTarget(newState);
+  let entity = selectors.placingTarget(newState);
   if (!entity) return newState;
   if (entity.reflector && entity.display) {
     entity = {
@@ -40,4 +40,4 @@ function rotateThrow(
   return newState;
 }
 
-registerHandler(rotateThrow, actions.rotateThrow);
+registerHandler(rotateThrow, actions.rotatePlacement);

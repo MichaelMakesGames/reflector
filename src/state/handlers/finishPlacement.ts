@@ -4,9 +4,9 @@ import { GameState } from "~/types";
 import { getDistance } from "~/utils/geometry";
 import handleAction, { registerHandler } from "~state/handleAction";
 
-function executeThrow(
+function finishPlacement(
   state: GameState,
-  action: ReturnType<typeof actions.executeThrow>,
+  action: ReturnType<typeof actions.finishPlacement>,
 ): GameState {
   let newState = state;
   newState = handleAction(
@@ -18,22 +18,22 @@ function executeThrow(
         .map(e => e.id),
     }),
   );
-  const throwingTarget = selectors.throwingTarget(newState);
-  if (!throwingTarget) return newState;
+  const placingTarget = selectors.placingTarget(newState);
+  if (!placingTarget) return newState;
 
   const player = selectors.player(newState);
   if (!player) return newState;
 
-  const { pos } = throwingTarget;
+  const { pos } = placingTarget;
   const distance = getDistance(pos, player.pos);
-  if (distance > throwingTarget.throwing.range) return newState;
+  if (distance > placingTarget.placing.range) return newState;
 
   const entitiesAtPosition = selectors.entitiesAtPosition(newState, pos);
-  if (entitiesAtPosition.some(e => e.id !== throwingTarget.id && !!e.blocking))
+  if (entitiesAtPosition.some(e => e.id !== placingTarget.id && !!e.blocking))
     return newState;
 
   const otherReflector = entitiesAtPosition.find(
-    entity => entity.reflector && entity !== throwingTarget,
+    entity => entity.reflector && entity !== placingTarget,
   );
   if (otherReflector) {
     newState = handleAction(
@@ -45,12 +45,12 @@ function executeThrow(
   newState = handleAction(
     newState,
     actions.updateEntity({
-      id: throwingTarget.id,
-      throwing: undefined,
+      id: placingTarget.id,
+      placing: undefined,
     }),
   );
 
   return newState;
 }
 
-registerHandler(executeThrow, actions.executeThrow);
+registerHandler(finishPlacement, actions.finishPlacement);

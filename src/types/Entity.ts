@@ -28,7 +28,6 @@ export interface HasAI {
 
 export interface Blocking {
   moving: boolean;
-  throwing: boolean;
 }
 export interface HasBlocking {
   blocking: Blocking;
@@ -46,11 +45,11 @@ export interface HasDestructible {
   destructible: Destructible;
 }
 
-export interface Throwing {
+export interface Placing {
   range: number;
 }
-export interface HasThrowing {
-  throwing: Throwing;
+export interface HasPlacing {
+  placing: Placing;
 }
 
 export interface Reflector {
@@ -118,7 +117,7 @@ export interface Entity
     Partial<HasDestructible>,
     Partial<HasReflector>,
     Partial<HasSplitter>,
-    Partial<HasThrowing>,
+    Partial<HasPlacing>,
     Partial<HasFOV>,
     Partial<HasStairs>,
     Partial<HasHousing>,

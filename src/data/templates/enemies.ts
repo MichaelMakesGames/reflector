@@ -3,7 +3,7 @@ import { PRIORITY_ENEMY, PURPLE } from "~/constants";
 
 const templates: { [id: string]: Partial<Entity> } = {
   ENEMY_BASE: {
-    blocking: { throwing: false, moving: true },
+    blocking: { moving: true },
     destructible: {},
     conductive: {},
   },

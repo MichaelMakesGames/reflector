@@ -1,4 +1,4 @@
-import { PRIORITY_ITEM, PRIORITY_THROWING, WHITE } from "~/constants";
+import { PRIORITY_ITEM, PRIORITY_PLACING, WHITE } from "~/constants";
 import { Entity } from "~/types/Entity";
 import { reduceMorale } from "~state/actions";
 
@@ -10,7 +10,7 @@ const templates: { [id: string]: Partial<Entity> } = {
       tile: "reflector_1",
       glyph: "/",
       color: WHITE,
-      priority: PRIORITY_THROWING,
+      priority: PRIORITY_PLACING,
     },
     reflector: { type: "/" },
   },
@@ -20,12 +20,12 @@ const templates: { [id: string]: Partial<Entity> } = {
       tile: "reflector_2",
       glyph: "\\",
       color: WHITE,
-      priority: PRIORITY_THROWING,
+      priority: PRIORITY_PLACING,
     },
     reflector: { type: "\\" },
   },
   SPLITTER_BASE: {
-    blocking: { throwing: false, moving: true },
+    blocking: { moving: true },
     destructible: {},
   },
   SPLITTER_HORIZONTAL: {
@@ -34,7 +34,7 @@ const templates: { [id: string]: Partial<Entity> } = {
       tile: "splitter_1",
       glyph: "⬌",
       color: WHITE,
-      priority: PRIORITY_THROWING,
+      priority: PRIORITY_PLACING,
     },
     splitter: { type: "horizontal" },
   },
@@ -44,7 +44,7 @@ const templates: { [id: string]: Partial<Entity> } = {
       tile: "splitter_2",
       glyph: "⬍",
       color: WHITE,
-      priority: PRIORITY_THROWING,
+      priority: PRIORITY_PLACING,
     },
     splitter: { type: "vertical" },
   },
@@ -57,7 +57,6 @@ const templates: { [id: string]: Partial<Entity> } = {
     },
     blocking: {
       moving: true,
-      throwing: false,
     },
     housing: {
       capacity: 1,
@@ -71,6 +70,18 @@ const templates: { [id: string]: Partial<Entity> } = {
         return null;
       },
     },
+  },
+  WALL: {
+    display: {
+      tile: "wall",
+      glyph: "#",
+      color: WHITE,
+      priority: PRIORITY_ITEM,
+    },
+    blocking: {
+      moving: true,
+    },
+    destructible: {},
   },
 };
 

@@ -1,6 +1,6 @@
 export const PLAYER_ID = "PLAYER";
 
-export const THROWING_RANGE = 5;
+export const BUILDING_RANGE = 2;
 export const BASE_IMMIGRATION_RATE = 5;
 export const STARTING_MORALE = 10;
 export const VICTORY_POPULATION = 50;
@@ -9,7 +9,7 @@ export const WAVE_DURATION_BASE = 5;
 export const ENEMIES_PER_WAVE_POPULATION_MULTIPLIER = 0.5;
 
 export const PRIORITY_LASER = 20;
-export const PRIORITY_THROWING = 17;
+export const PRIORITY_PLACING = 17;
 export const PRIORITY_PLAYER = 15;
 export const PRIORITY_ENEMY = 10;
 export const PRIORITY_ITEM = 5;

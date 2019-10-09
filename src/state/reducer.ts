@@ -25,6 +25,7 @@ const initialState: GameState = {
     turnsUntilNextWaveStart: TURNS_BETWEEN_WAVES_BASE,
     direction: choose([UP, DOWN, LEFT, RIGHT]),
   },
+  isBuildMenuOpen: false,
 };
 
 export default function reducer(

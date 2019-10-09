@@ -3,9 +3,9 @@ import * as selectors from "~/state/selectors";
 import { GameState } from "~/types";
 import handleAction, { registerHandler } from "~state/handleAction";
 
-function cancelThrow(
+function cancelPlacement(
   state: GameState,
-  action: ReturnType<typeof actions.cancelThrow>,
+  action: ReturnType<typeof actions.cancelPlacement>,
 ): GameState {
   let newState = state;
   newState = handleAction(
@@ -17,7 +17,7 @@ function cancelThrow(
         .map(e => e.id),
     }),
   );
-  const entity = selectors.throwingTarget(newState);
+  const entity = selectors.placingTarget(newState);
   if (!entity) return newState;
   newState = handleAction(
     newState,
@@ -26,4 +26,4 @@ function cancelThrow(
   return newState;
 }
 
-registerHandler(cancelThrow, actions.cancelThrow);
+registerHandler(cancelPlacement, actions.cancelPlacement);

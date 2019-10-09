@@ -5,8 +5,8 @@ import * as actions from "~/state/actions";
 import * as selectors from "~/state/selectors";
 import { Entity, Pos } from "~/types/Entity";
 import { PLAYER_ID, UP, LEFT, DOWN, RIGHT } from "~/constants";
-import { createEntityFromTemplate } from "~/utils/entities";
 import { Action } from "~/types/Action";
+import buildings from "~data/buildings";
 
 interface Control {
   key: string;
@@ -17,7 +17,8 @@ interface Control {
 function getControls(
   activeWeapon: Entity | null,
   playerPosition: Pos,
-  throwing: Entity | null,
+  placing: Entity | null,
+  isBuildMenuOpen: boolean,
 ): Control[] {
   const movePlayer = [
     {
@@ -87,27 +88,40 @@ function getControls(
       label: "Activate Weapon 4",
     },
   ];
-  const activateThrow = [
+  const placeReflector = [
     {
       key: "r",
-      action: actions.activateThrow({
-        entity: createEntityFromTemplate("REFLECTOR_UP_RIGHT", {
-          pos: playerPosition,
-        }),
+      action: actions.activatePlacement({
+        template: "REFLECTOR_UP_RIGHT",
       }),
-      label: "Throw Reflector",
-    },
-    {
-      key: "t",
-      action: actions.activateThrow({
-        entity: createEntityFromTemplate("SPLITTER_HORIZONTAL", {
-          pos: playerPosition,
-        }),
-      }),
-      label: "Throw Splitter",
+      label: "Place Reflector",
     },
   ];
   const wait = [{ key: ".", action: actions.playerTookTurn(), label: "Wait" }];
+  const build = [
+    {
+      key: "b",
+      action: actions.openBuildMenu(),
+      label: "Build",
+    },
+  ];
+
+  if (isBuildMenuOpen) {
+    return [
+      {
+        key: "Escape",
+        action: actions.closeBuildMenu(),
+        label: "Close",
+      },
+      ...buildings.map(building => ({
+        key: building.key,
+        action: actions.activatePlacement({
+          template: building.template,
+        }),
+        label: building.label,
+      })),
+    ];
+  }
 
   if (activeWeapon) {
     return [
@@ -167,70 +181,77 @@ function getControls(
     ];
   }
 
-  if (throwing && throwing.throwing) {
+  if (placing && placing.placing) {
     return [
       {
         key: "w",
-        action: actions.move({ entityId: throwing.id, ...UP }),
+        action: actions.move({ entityId: placing.id, ...UP }),
         label: "Move Target Up",
       },
       {
         key: "a",
-        action: actions.move({ entityId: throwing.id, ...LEFT }),
+        action: actions.move({ entityId: placing.id, ...LEFT }),
         label: "Move Target Left",
       },
       {
         key: "s",
-        action: actions.move({ entityId: throwing.id, ...DOWN }),
+        action: actions.move({ entityId: placing.id, ...DOWN }),
         label: "Move Target Down",
       },
       {
         key: "d",
-        action: actions.move({ entityId: throwing.id, ...RIGHT }),
+        action: actions.move({ entityId: placing.id, ...RIGHT }),
         label: "Move Target Right",
       },
       {
         key: "ArrowUp",
-        action: actions.move({ entityId: throwing.id, ...UP }),
+        action: actions.move({ entityId: placing.id, ...UP }),
         label: "Move Target Up",
         hidden: true,
       },
       {
         key: "ArrowLeft",
-        action: actions.move({ entityId: throwing.id, ...LEFT }),
+        action: actions.move({ entityId: placing.id, ...LEFT }),
         label: "Move Target Left",
         hidden: true,
       },
       {
         key: "ArrowDown",
-        action: actions.move({ entityId: throwing.id, ...DOWN }),
+        action: actions.move({ entityId: placing.id, ...DOWN }),
         label: "Move Target Down",
         hidden: true,
       },
       {
         key: "ArrowRight",
-        action: actions.move({ entityId: throwing.id, ...RIGHT }),
+        action: actions.move({ entityId: placing.id, ...RIGHT }),
         label: "Move Target Right",
         hidden: true,
       },
-      { key: "r", action: actions.rotateThrow(), label: "Rotate" },
-      { key: "Escape", action: actions.cancelThrow(), label: "Cancel" },
-      { key: "Enter", action: actions.executeThrow(), label: "Throw" },
+      { key: "r", action: actions.rotatePlacement(), label: "Rotate" },
+      { key: "Escape", action: actions.cancelPlacement(), label: "Cancel" },
+      { key: "Enter", action: actions.finishPlacement(), label: "Throw" },
     ];
   }
 
-  return [...movePlayer, ...activateWeapon, ...activateThrow, ...wait];
+  return [
+    ...movePlayer,
+    ...activateWeapon,
+    ...placeReflector,
+    ...build,
+    ...wait,
+  ];
 }
 
 export default function Controls() {
   const dispatch = useDispatch();
   const activeWeapon = useSelector(selectors.activeWeapon);
   const player = useSelector(selectors.player);
-  const throwing = useSelector(selectors.throwingTarget);
+  const placing = useSelector(selectors.placingTarget);
   const gameOver = useSelector(selectors.gameOver);
+  const isBuildMenuOpen = useSelector(selectors.isBuildMenuOpen);
 
   const pos = player ? player.pos : { x: 0, y: 0 };
-  const controls = getControls(activeWeapon, pos, throwing);
+  const controls = getControls(activeWeapon, pos, placing, isBuildMenuOpen);
   const keyMap: { [key: string]: Action } = controls.reduce(
     (acc, cur) => ({ ...acc, [cur.key]: cur.action }),
     {},
