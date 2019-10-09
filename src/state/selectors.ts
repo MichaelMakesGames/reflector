@@ -100,8 +100,8 @@ export function targetingLasers(state: GameState) {
   return entitiesWithComps(state, "targeting", "pos");
 }
 
-export function throwingTarget(state: GameState) {
-  const entities = entitiesWithComps(state, "throwing", "pos");
+export function placingTarget(state: GameState) {
+  const entities = entitiesWithComps(state, "placing", "pos");
   if (entities.length) return entities[0];
   return null;
 }
@@ -112,4 +112,8 @@ export function morale(state: GameState) {
 
 export function turnsUntilNextWave(state: GameState) {
   return state.wave.turnsUntilNextWaveStart;
+}
+
+export function isBuildMenuOpen(state: GameState) {
+  return state.isBuildMenuOpen;
 }

@@ -9,8 +9,9 @@ export default function generateMap(): Entity[] {
     for (let x = -1; x < MAP_WIDTH + 1; x++) {
       if (y === -1 || x === -1 || y === MAP_HEIGHT || x === MAP_WIDTH) {
         result.push(
-          createEntityFromTemplate("WALL_0", {
+          createEntityFromTemplate("WALL", {
             pos: { x, y },
+            destructible: undefined,
           }),
         );
       } else {

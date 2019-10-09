@@ -24,7 +24,7 @@ function move(
   );
   if (
     entity.blocking &&
-    !entity.throwing &&
+    !entity.placing &&
     entitiesAtNewPosition.some(other => Boolean(other.blocking))
   ) {
     return newState;

@@ -32,12 +32,12 @@ export const targetWeapon = createStandardAction("TARGET_WEAPON")<{
 
 export const fireWeapon = createStandardAction("FIRE_WEAPON")();
 
-export const activateThrow = createStandardAction("ACTIVATE_THROW")<{
-  entity: Entity;
+export const activatePlacement = createStandardAction("ACTIVATE_PLACEMENT")<{
+  template: string;
 }>();
-export const cancelThrow = createStandardAction("CANCEL_THROW")();
-export const rotateThrow = createStandardAction("ROTATE_THROW")();
-export const executeThrow = createStandardAction("THROW")();
+export const cancelPlacement = createStandardAction("CANCEL_PLACEMENT")();
+export const rotatePlacement = createStandardAction("ROTATE_PLACEMENT")();
+export const finishPlacement = createStandardAction("FINISH_PLACEMENT")();
 
 export const attack = createStandardAction("ATTACK")<{
   target: string;
@@ -53,3 +53,6 @@ export const reduceMorale = createStandardAction("REDUCE_MORALE")<{
 }>();
 
 export const destroy = createStandardAction("DESTROY")<{ entityId: string }>();
+
+export const openBuildMenu = createStandardAction("OPEN_BUILD_MENU")();
+export const closeBuildMenu = createStandardAction("CLOSE_BUILD_MENU")();

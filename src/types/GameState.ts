@@ -14,6 +14,7 @@ export interface GameState {
   turnsUntilNextImmigrant: number;
   morale: number;
   wave: WaveState;
+  isBuildMenuOpen: boolean;
 }
 
 export interface WaveState {

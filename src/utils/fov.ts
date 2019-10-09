@@ -2,7 +2,6 @@
 import * as ROT from "rot-js";
 import { GameState, Pos } from "~/types";
 import * as selectors from "~/state/selectors";
-import { arePositionsEqual } from "./geometry";
 
 export function computeThrowFOV(
   gameState: GameState,
@@ -10,13 +9,7 @@ export function computeThrowFOV(
   range: number,
 ): Pos[] {
   const results: Pos[] = [];
-  const fov = new ROT.FOV.PreciseShadowcasting(
-    (x, y) =>
-      arePositionsEqual({ x, y }, pos) ||
-      selectors
-        .entitiesAtPosition(gameState, { x, y })
-        .every(e => !e.blocking || !e.blocking.throwing),
-  );
+  const fov = new ROT.FOV.PreciseShadowcasting((x, y) => true); // nothing blocks throws for now
   fov.compute(pos.x, pos.y, range, (x, y) => results.push({ x, y }));
   return results.filter(visiblePos =>
     selectors
