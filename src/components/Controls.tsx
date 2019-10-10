@@ -68,24 +68,9 @@ function getControls(
   ];
   const activateWeapon = [
     {
-      key: "1",
+      key: "Enter",
       action: actions.activateWeapon({ slot: 1 }),
-      label: "Activate Weapon 1",
-    },
-    {
-      key: "2",
-      action: actions.activateWeapon({ slot: 2 }),
-      label: "Activate Weapon 2",
-    },
-    {
-      key: "3",
-      action: actions.activateWeapon({ slot: 3 }),
-      label: "Activate Weapon 3",
-    },
-    {
-      key: "4",
-      action: actions.activateWeapon({ slot: 4 }),
-      label: "Activate Weapon 4",
+      label: "Activate Laser",
     },
   ];
   const placeReflector = [
@@ -125,7 +110,6 @@ function getControls(
 
   if (activeWeapon) {
     return [
-      ...activateWeapon,
       {
         key: "w",
         action: actions.targetWeapon(UP),
