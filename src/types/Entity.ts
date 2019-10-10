@@ -84,6 +84,8 @@ export interface HasConductive {
 export interface Housing {
   occupancy: number;
   capacity: number;
+  desirability: number;
+  removeOnVacancy?: boolean;
 }
 export interface HasHousing {
   housing: Housing;
