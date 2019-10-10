@@ -9,4 +9,9 @@ export default [
     key: "w",
     label: "Wall",
   },
+  {
+    template: "RESIDENCE",
+    key: "r",
+    label: "Residence",
+  },
 ];

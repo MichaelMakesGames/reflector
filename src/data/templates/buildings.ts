@@ -2,6 +2,13 @@ import { PRIORITY_ITEM, PRIORITY_PLACING, WHITE } from "~/constants";
 import { Entity } from "~/types/Entity";
 import { reduceMorale } from "~state/actions";
 
+function onDestroyHouse(entity: Entity) {
+  if (entity.housing) {
+    return reduceMorale({ amount: entity.housing.occupancy });
+  }
+  return null;
+}
+
 const templates: { [id: string]: Partial<Entity> } = {
   REFLECTOR_BASE: {},
   REFLECTOR_UP_RIGHT: {
@@ -61,14 +68,30 @@ const templates: { [id: string]: Partial<Entity> } = {
     housing: {
       capacity: 1,
       occupancy: 1,
+      desirability: -1,
+      removeOnVacancy: true,
     },
     destructible: {
-      onDestroy: entity => {
-        if (entity.housing) {
-          return reduceMorale({ amount: entity.housing.occupancy });
-        }
-        return null;
-      },
+      onDestroy: onDestroyHouse,
+    },
+  },
+  RESIDENCE: {
+    display: {
+      tile: "residence",
+      glyph: "R",
+      color: WHITE,
+      priority: PRIORITY_ITEM,
+    },
+    blocking: {
+      moving: true,
+    },
+    housing: {
+      occupancy: 0,
+      capacity: 3,
+      desirability: 0,
+    },
+    destructible: {
+      onDestroy: onDestroyHouse,
     },
   },
   WALL: {

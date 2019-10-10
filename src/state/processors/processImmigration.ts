@@ -18,21 +18,7 @@ export default function processImmigration(state: GameState): GameState {
   if (newState.turnsUntilNextImmigrant <= 0) {
     const houses = selectors.entitiesWithComps(newState, "housing", "pos");
 
-    const availableHouse = findAvailableHouse(houses);
-    if (availableHouse) {
-      newState = handleAction(
-        newState,
-        actions.updateEntity({
-          ...availableHouse,
-          housing: {
-            ...availableHouse.housing,
-            occupancy: availableHouse.housing.occupancy + 1,
-          },
-        }),
-      );
-    }
-
-    const pos = findNewHousePosition(state, houses);
+    const pos = findNewTentPosition(state, houses);
     if (!pos) {
       console.warn("no position for new immigrant found");
     } else {
@@ -53,11 +39,7 @@ export default function processImmigration(state: GameState): GameState {
   return newState;
 }
 
-function findAvailableHouse(houses: MakeRequired<Entity, "housing">[]) {
-  return houses.find(house => house.housing.occupancy < house.housing.capacity);
-}
-
-function findNewHousePosition(
+function findNewTentPosition(
   state: GameState,
   houses: MakeRequired<Entity, "housing" | "pos">[],
 ): Pos {
