@@ -34,6 +34,7 @@ export const fireWeapon = createStandardAction("FIRE_WEAPON")();
 
 export const activatePlacement = createStandardAction("ACTIVATE_PLACEMENT")<{
   template: string;
+  cost?: { resource: string; amount: number };
 }>();
 export const cancelPlacement = createStandardAction("CANCEL_PLACEMENT")();
 export const rotatePlacement = createStandardAction("ROTATE_PLACEMENT")();

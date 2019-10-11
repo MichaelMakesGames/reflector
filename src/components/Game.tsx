@@ -5,6 +5,7 @@ import Controls from "./Controls";
 import * as actions from "~/state/actions";
 import Status from "./Status";
 import MessageLog from "./MessageLog";
+import Resources from "./Resources";
 
 export default function Game() {
   const dispatch = useDispatch();
@@ -17,6 +18,7 @@ export default function Game() {
       <div className="row">
         <div className="left">
           <Status />
+          <Resources />
           <Controls />
         </div>
         <div className="center">

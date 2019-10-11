@@ -7,6 +7,7 @@ export const VICTORY_POPULATION = 50;
 export const TURNS_BETWEEN_WAVES_BASE = 20;
 export const WAVE_DURATION_BASE = 5;
 export const ENEMIES_PER_WAVE_POPULATION_MULTIPLIER = 0.5;
+export const STARTING_METAL = 10;
 
 export const PRIORITY_LASER = 20;
 export const PRIORITY_PLACING = 17;

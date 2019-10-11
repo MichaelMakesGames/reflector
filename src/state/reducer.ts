@@ -7,6 +7,7 @@ import {
   DOWN,
   LEFT,
   RIGHT,
+  STARTING_METAL,
 } from "~constants";
 import handleAction from "./handleAction";
 import "./handlers";
@@ -26,6 +27,9 @@ const initialState: GameState = {
     direction: choose([UP, DOWN, LEFT, RIGHT]),
   },
   isBuildMenuOpen: false,
+  resources: {
+    METAL: STARTING_METAL,
+  },
 };
 
 export default function reducer(

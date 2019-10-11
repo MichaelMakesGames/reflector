@@ -102,8 +102,9 @@ function getControls(
         key: building.key,
         action: actions.activatePlacement({
           template: building.template,
+          cost: building.cost,
         }),
-        label: building.label,
+        label: `${building.label} (${building.cost.amount} ${building.cost.resource})`,
       })),
     ];
   }
