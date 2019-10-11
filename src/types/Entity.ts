@@ -47,6 +47,10 @@ export interface HasDestructible {
 
 export interface Placing {
   range: number;
+  cost?: {
+    resource: string;
+    amount: number;
+  };
 }
 export interface HasPlacing {
   placing: Placing;
@@ -109,6 +113,15 @@ export interface HasWeapon {
   weapon: Weapon;
 }
 
+export type Resource = "METAL";
+export interface Production {
+  resource: Resource;
+  amount: number;
+}
+export interface HasProduction {
+  production: Production;
+}
+
 export interface Entity
   extends Partial<HasPos>,
     Partial<HasDisplay>,
@@ -123,6 +136,7 @@ export interface Entity
     Partial<HasFOV>,
     Partial<HasStairs>,
     Partial<HasHousing>,
+    Partial<HasProduction>,
     Partial<HasConductive> {
   id: string;
   parentTemplate?: string;

@@ -117,3 +117,7 @@ export function turnsUntilNextWave(state: GameState) {
 export function isBuildMenuOpen(state: GameState) {
   return state.isBuildMenuOpen;
 }
+
+export function resources(state: GameState) {
+  return state.resources;
+}

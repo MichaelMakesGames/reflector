@@ -15,6 +15,9 @@ export interface GameState {
   morale: number;
   wave: WaveState;
   isBuildMenuOpen: boolean;
+  resources: {
+    [resource: string]: number;
+  };
 }
 
 export interface WaveState {

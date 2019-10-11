@@ -15,6 +15,12 @@ function activatePlacement(
   const player = selectors.player(state);
   if (!player) return state;
 
+  const { cost, template } = action.payload;
+
+  if (cost && state.resources[cost.resource] < cost.amount) {
+    return state;
+  }
+
   state = handleAction(state, actions.closeBuildMenu());
 
   const fovPositions = computeThrowFOV(state, player.pos, BUILDING_RANGE);
@@ -27,11 +33,10 @@ function activatePlacement(
     );
   }
 
-  const entity = createEntityFromTemplate(action.payload.template, {
-    placing: { range: BUILDING_RANGE },
+  const entity = createEntityFromTemplate(template, {
+    placing: { range: BUILDING_RANGE, cost },
     pos: player.pos,
   });
-  entity.placing = { range: BUILDING_RANGE };
   state = handleAction(state, actions.addEntity({ entity }));
   return state;
 }

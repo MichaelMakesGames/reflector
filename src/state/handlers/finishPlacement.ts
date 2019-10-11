@@ -9,17 +9,24 @@ function finishPlacement(
   action: ReturnType<typeof actions.finishPlacement>,
 ): GameState {
   let newState = state;
-  newState = handleAction(
-    newState,
-    actions.removeEntities({
-      entityIds: selectors
-        .entityList(newState)
-        .filter(e => e.fov)
-        .map(e => e.id),
-    }),
-  );
+
   const placingTarget = selectors.placingTarget(newState);
   if (!placingTarget) return newState;
+
+  if (placingTarget.placing.cost) {
+    const { cost } = placingTarget.placing;
+    if (newState.resources[cost.resource] < cost.amount) {
+      return newState;
+    } else {
+      newState = {
+        ...newState,
+        resources: {
+          ...newState.resources,
+          [cost.resource]: newState.resources[cost.resource] - cost.amount,
+        },
+      };
+    }
+  }
 
   const player = selectors.player(newState);
   if (!player) return newState;
@@ -47,6 +54,16 @@ function finishPlacement(
     actions.updateEntity({
       id: placingTarget.id,
       placing: undefined,
+    }),
+  );
+
+  newState = handleAction(
+    newState,
+    actions.removeEntities({
+      entityIds: selectors
+        .entityList(newState)
+        .filter(e => e.fov)
+        .map(e => e.id),
     }),
   );
 

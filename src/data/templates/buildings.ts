@@ -94,6 +94,22 @@ const templates: { [id: string]: Partial<Entity> } = {
       onDestroy: onDestroyHouse,
     },
   },
+  MINE: {
+    display: {
+      tile: "mine",
+      glyph: "m",
+      color: WHITE,
+      priority: PRIORITY_ITEM,
+    },
+    blocking: {
+      moving: true,
+    },
+    destructible: {},
+    production: {
+      resource: "METAL",
+      amount: 1,
+    },
+  },
   WALL: {
     display: {
       tile: "wall",
