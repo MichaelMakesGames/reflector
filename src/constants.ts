@@ -1,6 +1,7 @@
 export const PLAYER_ID = "PLAYER";
 
 export const BUILDING_RANGE = 2;
+export const PROJECTOR_RANGE = 2;
 export const BASE_IMMIGRATION_RATE = 5;
 export const STARTING_MORALE = 10;
 export const VICTORY_POPULATION = 50;

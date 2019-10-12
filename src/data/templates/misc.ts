@@ -4,6 +4,7 @@ import {
   PRIORITY_PLAYER,
   PRIORITY_TERRAIN,
   WHITE,
+  PROJECTOR_RANGE,
 } from "~/constants";
 import { Entity } from "~/types/Entity";
 
@@ -20,15 +21,18 @@ const templates: { [id: string]: Partial<Entity> } = {
     blocking: { moving: true },
     destructible: {},
     conductive: {},
+    projector: {
+      range: PROJECTOR_RANGE,
+    },
   },
-  FOV_MARKER: {
+  VALID_MARKER: {
     display: {
       glyph: ".",
-      tile: "floor",
+      tile: "valid",
       color: GREEN,
       priority: PRIORITY_TERRAIN,
     },
-    fov: {},
+    validMarker: {},
   },
 };
 

@@ -1,6 +1,6 @@
 import * as actions from "~/state/actions";
 import { BUILDING_RANGE } from "~/constants";
-import { computeThrowFOV } from "~/utils/fov";
+import { findValidPositions } from "~utils/building";
 import { createEntityFromTemplate } from "~/utils/entities";
 import * as selectors from "~/state/selectors";
 
@@ -23,21 +23,31 @@ function activatePlacement(
 
   state = handleAction(state, actions.closeBuildMenu());
 
-  const fovPositions = computeThrowFOV(state, player.pos, BUILDING_RANGE);
-  for (const pos of fovPositions) {
-    state = handleAction(
-      state,
-      actions.addEntity({
-        entity: createEntityFromTemplate("FOV_MARKER", { pos }),
-      }),
-    );
-  }
-
   const entity = createEntityFromTemplate(template, {
     placing: { range: BUILDING_RANGE, cost },
     pos: player.pos,
   });
   state = handleAction(state, actions.addEntity({ entity }));
+
+  const projectors = selectors.entitiesWithComps(state, "projector", "pos");
+  const validPositions = entity.reflector
+    ? findValidPositions(
+        state,
+        projectors.map(projector => ({
+          pos: projector.pos,
+          range: projector.projector.range,
+        })),
+      )
+    : findValidPositions(state, [{ pos: player.pos, range: BUILDING_RANGE }]);
+  for (const pos of validPositions) {
+    state = handleAction(
+      state,
+      actions.addEntity({
+        entity: createEntityFromTemplate("VALID_MARKER", { pos }),
+      }),
+    );
+  }
+
   return state;
 }
 

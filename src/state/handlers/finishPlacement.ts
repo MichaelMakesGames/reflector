@@ -1,7 +1,6 @@
 import * as actions from "~/state/actions";
 import * as selectors from "~/state/selectors";
 import { GameState } from "~/types";
-import { getDistance } from "~/utils/geometry";
 import handleAction, { registerHandler } from "~state/handleAction";
 
 function finishPlacement(
@@ -28,16 +27,10 @@ function finishPlacement(
     }
   }
 
-  const player = selectors.player(newState);
-  if (!player) return newState;
-
   const { pos } = placingTarget;
-  const distance = getDistance(pos, player.pos);
-  if (distance > placingTarget.placing.range) return newState;
-
   const entitiesAtPosition = selectors.entitiesAtPosition(newState, pos);
-  if (entitiesAtPosition.some(e => e.id !== placingTarget.id && !!e.blocking))
-    return newState;
+  const isPosValid = entitiesAtPosition.some(entity => entity.validMarker);
+  if (!isPosValid) return newState;
 
   const otherReflector = entitiesAtPosition.find(
     entity => entity.reflector && entity !== placingTarget,
@@ -62,7 +55,7 @@ function finishPlacement(
     actions.removeEntities({
       entityIds: selectors
         .entityList(newState)
-        .filter(e => e.fov)
+        .filter(e => e.validMarker)
         .map(e => e.id),
     }),
   );

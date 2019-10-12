@@ -70,9 +70,9 @@ export interface HasSplitter {
   splitter: Splitter;
 }
 
-export interface FOV {}
-export interface HasFOV {
-  fov: FOV;
+export interface ValidMarker {}
+export interface HasValidMarker {
+  validMarker: ValidMarker;
 }
 
 export interface Stairs {}
@@ -122,6 +122,13 @@ export interface HasProduction {
   production: Production;
 }
 
+export interface Projector {
+  range: number;
+}
+export interface HasProjector {
+  projector: Projector;
+}
+
 export interface Entity
   extends Partial<HasPos>,
     Partial<HasDisplay>,
@@ -133,10 +140,11 @@ export interface Entity
     Partial<HasReflector>,
     Partial<HasSplitter>,
     Partial<HasPlacing>,
-    Partial<HasFOV>,
+    Partial<HasValidMarker>,
     Partial<HasStairs>,
     Partial<HasHousing>,
     Partial<HasProduction>,
+    Partial<HasProjector>,
     Partial<HasConductive> {
   id: string;
   parentTemplate?: string;
