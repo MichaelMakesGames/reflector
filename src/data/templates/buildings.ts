@@ -3,15 +3,23 @@ import {
   PRIORITY_PLACING,
   WHITE,
   PROJECTOR_RANGE,
+  GRAY,
 } from "~/constants";
 import { Entity } from "~/types/Entity";
-import { reduceMorale } from "~state/actions";
+import { reduceMorale, addEntity } from "~state/actions";
+import { createEntityFromTemplate } from "~utils/entities";
 
 function onDestroyHouse(entity: Entity) {
   if (entity.housing) {
     return reduceMorale({ amount: entity.housing.occupancy });
   }
   return null;
+}
+
+function onDestroyWall(entity: Entity) {
+  return addEntity({
+    entity: createEntityFromTemplate("WALL_DAMAGED", { pos: entity.pos }),
+  });
 }
 
 const templates: { [id: string]: Partial<Entity> } = {
@@ -119,7 +127,21 @@ const templates: { [id: string]: Partial<Entity> } = {
     display: {
       tile: "wall",
       glyph: "#",
-      color: WHITE,
+      color: GRAY,
+      priority: PRIORITY_ITEM,
+    },
+    blocking: {
+      moving: true,
+    },
+    destructible: {
+      onDestroy: onDestroyWall,
+    },
+  },
+  WALL_DAMAGED: {
+    display: {
+      tile: "wall_damaged",
+      glyph: "#",
+      color: GRAY,
       priority: PRIORITY_ITEM,
     },
     blocking: {
