@@ -4,63 +4,67 @@ import { GameState } from "~/types";
 import handleAction, { registerHandler } from "~state/handleAction";
 
 function finishPlacement(
-  state: GameState,
+  prevState: GameState,
   action: ReturnType<typeof actions.finishPlacement>,
 ): GameState {
-  let newState = state;
+  let state = prevState;
 
-  const placingTarget = selectors.placingTarget(newState);
-  if (!placingTarget) return newState;
+  const placingTarget = selectors.placingTarget(state);
+  if (!placingTarget) return state;
 
   if (placingTarget.placing.cost) {
     const { cost } = placingTarget.placing;
-    if (newState.resources[cost.resource] < cost.amount) {
-      return newState;
+    if (state.resources[cost.resource] < cost.amount) {
+      return state;
     } else {
-      newState = {
-        ...newState,
+      state = {
+        ...state,
         resources: {
-          ...newState.resources,
-          [cost.resource]: newState.resources[cost.resource] - cost.amount,
+          ...state.resources,
+          [cost.resource]: state.resources[cost.resource] - cost.amount,
         },
       };
     }
   }
 
   const { pos } = placingTarget;
-  const entitiesAtPosition = selectors.entitiesAtPosition(newState, pos);
+  const entitiesAtPosition = selectors.entitiesAtPosition(state, pos);
   const isPosValid = entitiesAtPosition.some(entity => entity.validMarker);
-  if (!isPosValid) return newState;
+  if (!isPosValid) return state;
 
   const otherReflector = entitiesAtPosition.find(
     entity => entity.reflector && entity !== placingTarget,
   );
   if (otherReflector) {
-    newState = handleAction(
-      newState,
+    state = handleAction(
+      state,
       actions.removeEntity({ entityId: otherReflector.id }),
     );
   }
 
-  newState = handleAction(
-    newState,
+  state = handleAction(
+    state,
     actions.updateEntity({
       id: placingTarget.id,
       placing: undefined,
     }),
   );
 
-  newState = handleAction(
-    newState,
+  state = handleAction(
+    state,
     actions.removeEntities({
       entityIds: selectors
-        .entityList(newState)
+        .entityList(state)
         .filter(e => e.validMarker)
         .map(e => e.id),
     }),
   );
 
-  return newState;
+  if (placingTarget.placing.takesTurn) {
+    state = handleAction(state, actions.playerTookTurn());
+  }
+
+  return state;
 }
 
 registerHandler(finishPlacement, actions.finishPlacement);

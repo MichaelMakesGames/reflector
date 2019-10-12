@@ -47,7 +47,7 @@ export interface HasDestructible {
 }
 
 export interface Placing {
-  range: number;
+  takesTurn: boolean;
   cost?: {
     resource: string;
     amount: number;
