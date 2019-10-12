@@ -48,7 +48,9 @@ function targetWeapon(
         y: beam.lastPos.y + beam.dy,
       };
       const entitiesAtPos = selectors.entitiesAtPosition(newState, nextPos);
-      const solidEntity = entitiesAtPos.find(entity => !!entity.blocking);
+      const solidEntity = entitiesAtPos.find(
+        entity => entity.blocking && entity.blocking.lasers,
+      );
       const reflectorEntity = entitiesAtPos.find(entity => entity.reflector);
       const splitterEntity = entitiesAtPos.find(entity => entity.splitter);
 

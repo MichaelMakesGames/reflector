@@ -9,7 +9,7 @@ export default function Resources() {
     <div className="box">
       <div className="box__label">Resources</div>
       {Object.entries(resources).map(([resource, amount]) => (
-        <div>
+        <div key={resource}>
           {resource}: {amount}
         </div>
       ))}

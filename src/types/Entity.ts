@@ -28,6 +28,7 @@ export interface HasAI {
 
 export interface Blocking {
   moving: boolean;
+  lasers: boolean;
 }
 export interface HasBlocking {
   blocking: Blocking;
