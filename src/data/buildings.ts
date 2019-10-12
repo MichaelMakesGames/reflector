@@ -35,4 +35,13 @@ export default [
       amount: 10,
     },
   },
+  {
+    template: "PROJECTOR",
+    key: "p",
+    label: "Projector",
+    cost: {
+      resource: "METAL",
+      amount: 5,
+    },
+  },
 ];

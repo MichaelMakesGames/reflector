@@ -1,4 +1,9 @@
-import { PRIORITY_ITEM, PRIORITY_PLACING, WHITE } from "~/constants";
+import {
+  PRIORITY_ITEM,
+  PRIORITY_PLACING,
+  WHITE,
+  PROJECTOR_RANGE,
+} from "~/constants";
 import { Entity } from "~/types/Entity";
 import { reduceMorale } from "~state/actions";
 
@@ -121,6 +126,21 @@ const templates: { [id: string]: Partial<Entity> } = {
       moving: true,
     },
     destructible: {},
+  },
+  PROJECTOR: {
+    display: {
+      tile: "projector",
+      glyph: "p",
+      color: WHITE,
+      priority: PRIORITY_ITEM,
+    },
+    blocking: {
+      moving: true,
+    },
+    destructible: {},
+    projector: {
+      range: PROJECTOR_RANGE,
+    },
   },
 };
 

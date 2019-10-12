@@ -13,7 +13,7 @@ function cancelPlacement(
     actions.removeEntities({
       entityIds: selectors
         .entityList(newState)
-        .filter(e => e.fov)
+        .filter(e => e.validMarker)
         .map(e => e.id),
     }),
   );
