@@ -18,7 +18,7 @@ const templates: { [id: string]: Partial<Entity> } = {
       color: WHITE,
       priority: PRIORITY_PLAYER,
     },
-    blocking: { moving: true },
+    blocking: { moving: true, lasers: true },
     destructible: {},
     conductive: {},
     projector: {

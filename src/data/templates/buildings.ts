@@ -45,7 +45,7 @@ const templates: { [id: string]: Partial<Entity> } = {
     reflector: { type: "\\" },
   },
   SPLITTER_BASE: {
-    blocking: { moving: true },
+    blocking: { moving: true, lasers: true },
     destructible: {},
   },
   SPLITTER_HORIZONTAL: {
@@ -77,6 +77,7 @@ const templates: { [id: string]: Partial<Entity> } = {
     },
     blocking: {
       moving: true,
+      lasers: true,
     },
     housing: {
       capacity: 1,
@@ -97,6 +98,7 @@ const templates: { [id: string]: Partial<Entity> } = {
     },
     blocking: {
       moving: true,
+      lasers: true,
     },
     housing: {
       occupancy: 0,
@@ -116,6 +118,7 @@ const templates: { [id: string]: Partial<Entity> } = {
     },
     blocking: {
       moving: true,
+      lasers: true,
     },
     destructible: {},
     production: {
@@ -132,6 +135,7 @@ const templates: { [id: string]: Partial<Entity> } = {
     },
     blocking: {
       moving: true,
+      lasers: true,
     },
     destructible: {
       onDestroy: onDestroyWall,
@@ -146,6 +150,7 @@ const templates: { [id: string]: Partial<Entity> } = {
     },
     blocking: {
       moving: true,
+      lasers: true,
     },
     destructible: {},
   },
@@ -158,6 +163,7 @@ const templates: { [id: string]: Partial<Entity> } = {
     },
     blocking: {
       moving: true,
+      lasers: true,
     },
     destructible: {},
     projector: {
