@@ -3,6 +3,7 @@ import "./activateWeapon";
 import "./addEntity";
 import "./attack";
 import "./cancelPlacement";
+import "./clearReflectors";
 import "./destroy";
 import "./finishPlacement";
 import "./fireWeapon";

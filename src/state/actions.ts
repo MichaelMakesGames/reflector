@@ -58,3 +58,5 @@ export const destroy = createStandardAction("DESTROY")<{ entityId: string }>();
 
 export const openBuildMenu = createStandardAction("OPEN_BUILD_MENU")();
 export const closeBuildMenu = createStandardAction("CLOSE_BUILD_MENU")();
+
+export const clearReflectors = createStandardAction("CLEAR_REFLECTORS")();

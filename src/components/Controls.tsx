@@ -73,7 +73,7 @@ function getControls(
       label: "Activate Laser",
     },
   ];
-  const placeReflector = [
+  const reflectorActions = [
     {
       key: "r",
       action: actions.activatePlacement({
@@ -81,6 +81,11 @@ function getControls(
         takesTurn: false,
       }),
       label: "Place Reflector",
+    },
+    {
+      key: "c",
+      action: actions.clearReflectors(),
+      label: "Clear Reflectors",
     },
   ];
   const wait = [{ key: ".", action: actions.playerTookTurn(), label: "Wait" }];
@@ -223,7 +228,7 @@ function getControls(
   return [
     ...movePlayer,
     ...activateWeapon,
-    ...placeReflector,
+    ...reflectorActions,
     ...build,
     ...wait,
   ];
