@@ -15,7 +15,7 @@ function activatePlacement(
   const player = selectors.player(state);
   if (!player) return state;
 
-  const { cost, template } = action.payload;
+  const { cost, takesTurn, template } = action.payload;
 
   if (cost && state.resources[cost.resource] < cost.amount) {
     return state;
@@ -24,7 +24,7 @@ function activatePlacement(
   state = handleAction(state, actions.closeBuildMenu());
 
   const entity = createEntityFromTemplate(template, {
-    placing: { range: BUILDING_RANGE, cost },
+    placing: { takesTurn, cost },
     pos: player.pos,
   });
   state = handleAction(state, actions.addEntity({ entity }));

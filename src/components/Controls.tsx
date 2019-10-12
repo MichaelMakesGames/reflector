@@ -78,6 +78,7 @@ function getControls(
       key: "r",
       action: actions.activatePlacement({
         template: "REFLECTOR_UP_RIGHT",
+        takesTurn: false,
       }),
       label: "Place Reflector",
     },
@@ -103,6 +104,7 @@ function getControls(
         action: actions.activatePlacement({
           template: building.template,
           cost: building.cost,
+          takesTurn: true,
         }),
         label: `${building.label} (${building.cost.amount} ${building.cost.resource})`,
       })),
