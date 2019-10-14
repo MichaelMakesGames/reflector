@@ -10,6 +10,7 @@ export interface HasPos {
 
 export interface Display {
   tile?: string;
+  rotation?: number;
   glyph: string;
   color: string;
   priority: number;
@@ -34,7 +35,9 @@ export interface HasBlocking {
   blocking: Blocking;
 }
 
-export interface Targeting {}
+export interface Targeting {
+  cosmetic?: boolean;
+}
 export interface HasTargeting {
   targeting: Targeting;
 }

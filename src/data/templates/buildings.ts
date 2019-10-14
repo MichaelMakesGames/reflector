@@ -27,7 +27,7 @@ const templates: { [id: string]: Partial<Entity> } = {
   REFLECTOR_UP_RIGHT: {
     parentTemplate: "REFLECTOR_BASE",
     display: {
-      tile: "reflector_1",
+      tile: "reflector",
       glyph: "/",
       color: WHITE,
       priority: PRIORITY_PLACING,
@@ -37,7 +37,8 @@ const templates: { [id: string]: Partial<Entity> } = {
   REFLECTOR_DOWN_RIGHT: {
     parentTemplate: "REFLECTOR_BASE",
     display: {
-      tile: "reflector_2",
+      tile: "reflector",
+      rotation: 90,
       glyph: "\\",
       color: WHITE,
       priority: PRIORITY_PLACING,
@@ -51,7 +52,7 @@ const templates: { [id: string]: Partial<Entity> } = {
   SPLITTER_HORIZONTAL: {
     parentTemplate: "SPLITTER_BASE",
     display: {
-      tile: "splitter_1",
+      tile: "splitter",
       glyph: "⬌",
       color: WHITE,
       priority: PRIORITY_PLACING,
@@ -61,7 +62,8 @@ const templates: { [id: string]: Partial<Entity> } = {
   SPLITTER_VERTICAL: {
     parentTemplate: "SPLITTER_BASE",
     display: {
-      tile: "splitter_2",
+      tile: "splitter",
+      rotation: 90,
       glyph: "⬍",
       color: WHITE,
       priority: PRIORITY_PLACING,
