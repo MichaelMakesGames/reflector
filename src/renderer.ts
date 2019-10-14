@@ -92,10 +92,28 @@ function createSprite(pos: Pos, display: Display) {
   const sprite = new PIXI.Sprite(
     PIXI.utils.TextureCache[display.tile || "unknown"],
   );
-  sprite.position.set(pos.x * TILE_SIZE, pos.y * TILE_SIZE);
+  sprite.angle = display.rotation || 0;
+  let { x, y } = pos;
+  switch (display.rotation) {
+    case 90:
+      x += 1;
+      break;
+    case 180:
+      x += 1;
+      y += 1;
+      break;
+    case 270:
+      y += 1;
+      break;
+    default:
+      break;
+  }
+  sprite.position.set(x * TILE_SIZE, y * TILE_SIZE);
   sprite.width = TILE_SIZE;
   sprite.height = TILE_SIZE;
   sprite.tint = parseInt((display.color || "#FFFFFF").substr(1), 16);
+  // sprite.pivot.set(TILE_SIZE / 2, TILE_SIZE / 2);
+
   return sprite;
 }
 
@@ -140,7 +158,8 @@ export async function updateRenderEntity(
       renderEntity.displayComp.tile !== entity.display.tile ||
       renderEntity.displayComp.glyph !== entity.display.glyph ||
       renderEntity.displayComp.color !== entity.display.color ||
-      renderEntity.displayComp.priority !== entity.display.priority
+      renderEntity.displayComp.priority !== entity.display.priority ||
+      renderEntity.displayComp.rotation !== entity.display.rotation
     ) {
       await removeRenderEntity(entity.id);
       await addRenderEntity(entity);

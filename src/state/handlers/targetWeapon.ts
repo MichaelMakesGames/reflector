@@ -2,9 +2,10 @@ import * as actions from "~/state/actions";
 import { PLAYER_ID } from "~/constants";
 import * as selectors from "~/state/selectors";
 import { getAdjacentPositions } from "~/utils/geometry";
-import { createLaser, reflect } from "~/utils/lasers";
+import { createLaser, reflect, getSplitTemplateName } from "~/utils/lasers";
 import { Entity, GameState, Pos } from "~/types";
 import handleAction, { registerHandler } from "~state/handleAction";
+import { createEntityFromTemplate } from "~utils/entities";
 
 function targetWeapon(
   state: GameState,
@@ -68,6 +69,15 @@ function targetWeapon(
           (splitterEntity.splitter.type === "vertical" && beam.dx))
       ) {
         const { splitter } = splitterEntity;
+        const cosmeticTemplate = getSplitTemplateName(beam.power, beam);
+        newState = handleAction(
+          newState,
+          actions.addEntity({
+            entity: createEntityFromTemplate(cosmeticTemplate, {
+              pos: nextPos,
+            }),
+          }),
+        );
         beams.push({
           power: beam.power - 1,
           dx: splitter.type === "horizontal" ? 1 : 0,
@@ -82,7 +92,19 @@ function targetWeapon(
         });
         beam.power = 0;
       } else if (reflectorEntity && reflectorEntity.reflector) {
-        const newDirection = reflect(beam, reflectorEntity.reflector.type);
+        const { direction: newDirection, cosmeticTemplate } = reflect(
+          beam,
+          reflectorEntity.reflector.type,
+          beam.power,
+        );
+        newState = handleAction(
+          newState,
+          actions.addEntity({
+            entity: createEntityFromTemplate(cosmeticTemplate, {
+              pos: nextPos,
+            }),
+          }),
+        );
         beam.dx = newDirection.dx;
         beam.dy = newDirection.dy;
       } else if (

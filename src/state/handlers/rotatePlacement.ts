@@ -16,8 +16,7 @@ function rotateThrow(
       reflector: { type: entity.reflector.type === "\\" ? "/" : "\\" },
       display: {
         ...entity.display,
-        tile:
-          entity.display.tile === "reflector_1" ? "reflector_2" : "reflector_1",
+        rotation: Number(!entity.display.rotation) * 90,
         glyph: entity.display.glyph === "\\" ? "/" : "\\",
       },
     };
@@ -30,8 +29,7 @@ function rotateThrow(
       },
       display: {
         ...entity.display,
-        tile:
-          entity.display.tile === "splitter_1" ? "splitter_2" : "splitter_1",
+        rotation: Number(!entity.display.rotation) * 90,
         glyph: entity.display.glyph === "⬍" ? "⬌" : "⬍",
       },
     };

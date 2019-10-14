@@ -17,7 +17,9 @@ function fireWeapon(
   const entitiesToSwap: Entity[] = [player];
   const entitiesToDestroy: string[] = [];
   const entitiesToAttack: string[] = [];
-  for (const laser of targetingLasers) {
+  for (const laser of targetingLasers.filter(
+    entity => !entity.targeting.cosmetic,
+  )) {
     const { pos } = laser;
     const entitiesAtPos = selectors.entitiesAtPosition(newState, pos);
     for (const entity of entitiesAtPos) {
