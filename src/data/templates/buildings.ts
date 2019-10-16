@@ -3,7 +3,7 @@ import {
   PRIORITY_PLACING,
   WHITE,
   PROJECTOR_RANGE,
-  GRAY,
+  BLUE_GRAY,
 } from "~/constants";
 import { Entity } from "~/types/Entity";
 import { reduceMorale, addEntity } from "~state/actions";
@@ -132,7 +132,7 @@ const templates: { [id: string]: Partial<Entity> } = {
     display: {
       tile: "wall",
       glyph: "#",
-      color: GRAY,
+      color: BLUE_GRAY,
       priority: PRIORITY_ITEM,
     },
     blocking: {
@@ -147,7 +147,7 @@ const templates: { [id: string]: Partial<Entity> } = {
     display: {
       tile: "wall_damaged",
       glyph: "#",
-      color: GRAY,
+      color: BLUE_GRAY,
       priority: PRIORITY_ITEM,
     },
     blocking: {

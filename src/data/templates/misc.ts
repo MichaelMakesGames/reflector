@@ -1,10 +1,11 @@
 import {
-  GREEN,
   PLAYER_ID,
   PRIORITY_PLAYER,
   PRIORITY_TERRAIN,
   WHITE,
   PROJECTOR_RANGE,
+  DARK_GREEN,
+  YELLOW,
 } from "~/constants";
 import { Entity } from "~/types/Entity";
 
@@ -29,7 +30,7 @@ const templates: { [id: string]: Partial<Entity> } = {
     display: {
       glyph: ".",
       tile: "valid",
-      color: GREEN,
+      color: YELLOW,
       priority: PRIORITY_TERRAIN,
     },
     validMarker: {},

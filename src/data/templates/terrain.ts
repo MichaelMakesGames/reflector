@@ -1,10 +1,4 @@
-import {
-  DARK_GRAY,
-  PRIORITY_FLOOR,
-  PRIORITY_TERRAIN,
-  BLUE,
-  GRAY,
-} from "~/constants";
+import { DARK_GRAY, PRIORITY_FLOOR, RED_GRAY, DARK_BLUE } from "~/constants";
 import { Entity } from "~/types/Entity";
 
 const templates: { [id: string]: Partial<Entity> } = {
@@ -20,7 +14,7 @@ const templates: { [id: string]: Partial<Entity> } = {
     display: {
       tile: "water",
       glyph: "~",
-      color: BLUE,
+      color: DARK_BLUE,
       priority: PRIORITY_FLOOR,
     },
     blocking: {
@@ -32,7 +26,7 @@ const templates: { [id: string]: Partial<Entity> } = {
     display: {
       tile: "mountain",
       glyph: "▲",
-      color: GRAY,
+      color: RED_GRAY,
       priority: PRIORITY_FLOOR,
     },
     blocking: {
