@@ -4,7 +4,7 @@ import { findValidPositions } from "~utils/building";
 import { createEntityFromTemplate } from "~/utils/entities";
 import * as selectors from "~/state/selectors";
 
-import { GameState } from "~/types";
+import { GameState, Pos } from "~/types";
 import handleAction, { registerHandler } from "~state/handleAction";
 
 function activatePlacement(
@@ -15,7 +15,7 @@ function activatePlacement(
   const player = selectors.player(state);
   if (!player) return state;
 
-  const { cost, takesTurn, template } = action.payload;
+  const { cost, takesTurn, template, validitySelector } = action.payload;
 
   if (cost && state.resources[cost.resource] < cost.amount) {
     return state;
@@ -29,6 +29,15 @@ function activatePlacement(
   });
   state = handleAction(state, actions.addEntity({ entity }));
 
+  const canPlace = (gameState: GameState, pos: Pos) => {
+    console.warn("canPlace");
+    if (validitySelector && (selectors as any)[validitySelector]) {
+      return Boolean((selectors as any)[validitySelector](gameState, pos));
+    } else {
+      return true;
+    }
+  };
+
   const projectors = selectors.entitiesWithComps(state, "projector", "pos");
   const validPositions = entity.reflector
     ? findValidPositions(
@@ -37,8 +46,13 @@ function activatePlacement(
           pos: projector.pos,
           range: projector.projector.range,
         })),
+        canPlace,
       )
-    : findValidPositions(state, [{ pos: player.pos, range: BUILDING_RANGE }]);
+    : findValidPositions(
+        state,
+        [{ pos: player.pos, range: BUILDING_RANGE }],
+        canPlace,
+      );
   for (const pos of validPositions) {
     state = handleAction(
       state,

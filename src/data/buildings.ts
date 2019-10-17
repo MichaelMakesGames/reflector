@@ -34,6 +34,7 @@ export default [
       resource: "METAL",
       amount: 10,
     },
+    validitySelector: "canPlaceMine",
   },
   {
     template: "PROJECTOR",

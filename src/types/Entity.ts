@@ -126,6 +126,13 @@ export interface HasProduction {
   production: Production;
 }
 
+export interface Mineable {
+  resource: Resource;
+}
+export interface HasMineable {
+  mineable: Mineable;
+}
+
 export interface Projector {
   range: number;
 }
@@ -148,6 +155,7 @@ export interface Entity
     Partial<HasStairs>,
     Partial<HasHousing>,
     Partial<HasProduction>,
+    Partial<HasMineable>,
     Partial<HasProjector>,
     Partial<HasConductive> {
   id: string;

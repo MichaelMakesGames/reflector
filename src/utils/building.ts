@@ -10,6 +10,7 @@ export function findValidPositions(
     pos: Pos;
     range: number;
   }[],
+  canPlace: (state: GameState, pos: Pos) => boolean,
 ): Pos[] {
   const results: Pos[] = [];
   for (const buildFrom of buildFroms) {
@@ -18,7 +19,8 @@ export function findValidPositions(
         const pos = { x: buildFrom.pos.x + dx, y: buildFrom.pos.y + dy };
         if (
           !selectors.isPositionBlocked(gameState, pos) &&
-          !results.some(other => arePositionsEqual(pos, other))
+          !results.some(other => arePositionsEqual(pos, other)) &&
+          canPlace(gameState, pos)
         ) {
           results.push(pos);
         }
