@@ -18,3 +18,4 @@ import "./targetWeapon";
 import "./updateEntity";
 import "./openBuildMenu";
 import "./closeBuildMenu";
+import "./mine";

@@ -73,11 +73,5 @@ export default function generateMap(): Entity[] {
     id: PLAYER_ID,
   });
 
-  result.push(
-    createEntityFromTemplate("MINE", {
-      pos: floorPositions[20],
-    }),
-  );
-
   return result;
 }

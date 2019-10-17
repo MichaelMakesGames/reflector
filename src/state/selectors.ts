@@ -1,6 +1,6 @@
 import { GameState, Pos, Entity, MakeRequired } from "~/types";
 import { PLAYER_ID } from "~/constants";
-import { getPosKey } from "~/utils/geometry";
+import { getPosKey, getAdjacentPositions } from "~/utils/geometry";
 import { filterEntitiesWithComps } from "~/utils/entities";
 
 export function gameState(state: GameState) {
@@ -46,6 +46,14 @@ export function entitiesAtPosition(state: GameState, position: Pos) {
   return (state.entitiesByPosition[key] || []).map(
     id => state.entities[id],
   ) as MakeRequired<Entity, "pos">[];
+}
+
+export function adjacentEntities(state: GameState, position: Pos) {
+  return getAdjacentPositions(position).reduce<Entity[]>(
+    (entities, adjacentPosition) =>
+      entities.concat(entitiesAtPosition(state, adjacentPosition)),
+    [],
+  );
 }
 
 export function isPositionBlocked(

@@ -96,6 +96,13 @@ function getControls(
       label: "Build",
     },
   ];
+  const mine = [
+    {
+      key: "m",
+      action: actions.mine(),
+      label: "Mine",
+    },
+  ];
 
   if (isBuildMenuOpen) {
     return [
@@ -231,6 +238,7 @@ function getControls(
     ...activateWeapon,
     ...reflectorActions,
     ...build,
+    ...mine,
     ...wait,
   ];
 }
