@@ -26,6 +26,10 @@ export default function generateMap(): Entity[] {
           template = "WATER";
         } else if (localNoise > 0.75) {
           template = "MOUNTAIN";
+        } else if (localNoise > 0.7) {
+          template = "ORE";
+        } else if (Math.random() < 0.01) {
+          template = "ORE";
         }
         if (
           x === 0 ||

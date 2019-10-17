@@ -121,3 +121,9 @@ export function isBuildMenuOpen(state: GameState) {
 export function resources(state: GameState) {
   return state.resources;
 }
+
+export function canPlaceMine(state: GameState, pos: Pos) {
+  return entitiesAtPosition(state, pos).some(
+    entity => entity.mineable && entity.mineable.resource === "METAL",
+  );
+}

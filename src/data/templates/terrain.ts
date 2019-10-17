@@ -1,4 +1,10 @@
-import { DARK_GRAY, PRIORITY_FLOOR, RED_GRAY, DARK_BLUE } from "~/constants";
+import {
+  DARK_GRAY,
+  PRIORITY_FLOOR,
+  RED_GRAY,
+  DARK_BLUE,
+  ORANGE,
+} from "~/constants";
 import { Entity } from "~/types/Entity";
 
 const templates: { [id: string]: Partial<Entity> } = {
@@ -32,6 +38,17 @@ const templates: { [id: string]: Partial<Entity> } = {
     blocking: {
       moving: true,
       lasers: true,
+    },
+  },
+  ORE: {
+    display: {
+      tile: "floor",
+      glyph: ".",
+      color: ORANGE,
+      priority: PRIORITY_FLOOR,
+    },
+    mineable: {
+      resource: "METAL",
     },
   },
 };

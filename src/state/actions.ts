@@ -36,6 +36,7 @@ export const activatePlacement = createStandardAction("ACTIVATE_PLACEMENT")<{
   template: string;
   takesTurn: boolean;
   cost?: { resource: string; amount: number };
+  validitySelector?: string;
 }>();
 export const cancelPlacement = createStandardAction("CANCEL_PLACEMENT")();
 export const rotatePlacement = createStandardAction("ROTATE_PLACEMENT")();

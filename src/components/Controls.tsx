@@ -110,6 +110,7 @@ function getControls(
           template: building.template,
           cost: building.cost,
           takesTurn: true,
+          validitySelector: building.validitySelector,
         }),
         label: `${building.label} (${building.cost.amount} ${building.cost.resource})`,
       })),
