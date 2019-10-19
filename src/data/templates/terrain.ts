@@ -42,7 +42,7 @@ const templates: { [id: string]: Partial<Entity> } = {
   },
   ORE: {
     display: {
-      tile: "floor",
+      tile: "ore",
       glyph: ".",
       color: ORANGE,
       priority: PRIORITY_FLOOR,
