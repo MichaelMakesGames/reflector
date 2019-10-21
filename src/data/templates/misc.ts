@@ -8,6 +8,8 @@ import {
   YELLOW,
 } from "~/constants";
 import { Entity } from "~/types/Entity";
+import { addEntity } from "~state/actions";
+import { createEntityFromTemplate } from "~utils/entities";
 
 const templates: { [id: string]: Partial<Entity> } = {
   PLAYER: {
@@ -20,11 +22,27 @@ const templates: { [id: string]: Partial<Entity> } = {
       priority: PRIORITY_PLAYER,
     },
     blocking: { moving: true, lasers: true },
-    destructible: {},
+    destructible: {
+      onDestroy: (entity: Entity) =>
+        addEntity({
+          entity: createEntityFromTemplate("PLAYER_CORPSE", {
+            pos: entity.pos,
+          }),
+        }),
+    },
     conductive: {},
     projector: {
       range: PROJECTOR_RANGE,
     },
+  },
+  PLAYER_CORPSE: {
+    display: {
+      tile: "skull",
+      glyph: "%",
+      color: WHITE,
+      priority: PRIORITY_PLAYER,
+    },
+    blocking: { moving: true, lasers: true },
   },
   VALID_MARKER: {
     display: {
