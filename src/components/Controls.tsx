@@ -185,45 +185,45 @@ function getControls(
     return [
       {
         key: "w",
-        action: actions.move({ entityId: placing.id, ...UP }),
+        action: actions.movePlacement({ direction: UP }),
         label: "Move Target Up",
       },
       {
         key: "a",
-        action: actions.move({ entityId: placing.id, ...LEFT }),
+        action: actions.movePlacement({ direction: LEFT }),
         label: "Move Target Left",
       },
       {
         key: "s",
-        action: actions.move({ entityId: placing.id, ...DOWN }),
+        action: actions.movePlacement({ direction: DOWN }),
         label: "Move Target Down",
       },
       {
         key: "d",
-        action: actions.move({ entityId: placing.id, ...RIGHT }),
+        action: actions.movePlacement({ direction: RIGHT }),
         label: "Move Target Right",
       },
       {
         key: "ArrowUp",
-        action: actions.move({ entityId: placing.id, ...UP }),
+        action: actions.movePlacement({ direction: UP }),
         label: "Move Target Up",
         hidden: true,
       },
       {
         key: "ArrowLeft",
-        action: actions.move({ entityId: placing.id, ...LEFT }),
+        action: actions.movePlacement({ direction: LEFT }),
         label: "Move Target Left",
         hidden: true,
       },
       {
         key: "ArrowDown",
-        action: actions.move({ entityId: placing.id, ...DOWN }),
+        action: actions.movePlacement({ direction: DOWN }),
         label: "Move Target Down",
         hidden: true,
       },
       {
         key: "ArrowRight",
-        action: actions.move({ entityId: placing.id, ...RIGHT }),
+        action: actions.movePlacement({ direction: RIGHT }),
         label: "Move Target Right",
         hidden: true,
       },
@@ -276,7 +276,13 @@ export default function Controls() {
       {controls
         .filter(control => !control.hidden)
         .map(control => (
-          <button key={control.key} className="control" onClick={() => dispatch(control.action)} onFocus={e => e.target.blur()}>
+          <button
+            type="button"
+            key={control.key}
+            className="control"
+            onClick={() => dispatch(control.action)}
+            onFocus={e => e.target.blur()}
+          >
             <kbd>{control.key}</kbd>
             <span>{control.label}</span>
           </button>

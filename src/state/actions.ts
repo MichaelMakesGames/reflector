@@ -38,6 +38,9 @@ export const activatePlacement = createStandardAction("ACTIVATE_PLACEMENT")<{
   cost?: { resource: string; amount: number };
   validitySelector?: string;
 }>();
+export const movePlacement = createStandardAction("MOVE_PLACEMENT")<{
+  direction: { dx: number; dy: number };
+}>();
 export const cancelPlacement = createStandardAction("CANCEL_PLACEMENT")();
 export const rotatePlacement = createStandardAction("ROTATE_PLACEMENT")();
 export const finishPlacement = createStandardAction("FINISH_PLACEMENT")();

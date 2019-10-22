@@ -1,5 +1,5 @@
 import { Pos } from "~/types";
-import { DOWN, RIGHT, LEFT, UP } from "~/constants";
+import { DOWN, RIGHT, LEFT, UP, MAP_WIDTH, MAP_HEIGHT } from "~/constants";
 import { rangeFromTo } from "./math";
 
 export function getPosKey(pos: Pos) {
@@ -50,4 +50,13 @@ export function getConstDir(direction: { dx: number; dy: number }) {
   if (dx === LEFT.dx && dy === LEFT.dy) return LEFT;
   if (dx === UP.dx && dy === UP.dy) return UP;
   return direction;
+}
+
+export function isPositionInMap(position: Pos) {
+  return (
+    position.x >= 0 &&
+    position.x < MAP_WIDTH &&
+    position.y >= 0 &&
+    position.y < MAP_HEIGHT
+  );
 }

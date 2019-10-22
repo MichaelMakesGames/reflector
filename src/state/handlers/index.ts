@@ -19,3 +19,4 @@ import "./updateEntity";
 import "./openBuildMenu";
 import "./closeBuildMenu";
 import "./mine";
+import "./movePlacement";
