@@ -19,7 +19,15 @@ function activatePlacement(
   const { cost, takesTurn, template, validitySelector } = action.payload;
 
   if (cost && state.resources[cost.resource] < cost.amount) {
-    return state;
+    return {
+      ...state,
+      messageLog: [
+        ...state.messageLog,
+        `You do not have enough ${cost.resource}. You have ${
+          state.resources[cost.resource]
+        } out of ${cost.amount} required`,
+      ],
+    };
   }
 
   const entityToPlace = createEntityFromTemplate(template, {
