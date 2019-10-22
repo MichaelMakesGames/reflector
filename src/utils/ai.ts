@@ -81,7 +81,7 @@ export function getAIActions(entity: Entity, gameState: GameState): AIAction[] {
       return [
         actions.attack({
           target: target.id,
-          message: "The Rusher attacks you!",
+          message: "The drone attacks you!",
         }),
       ];
     }

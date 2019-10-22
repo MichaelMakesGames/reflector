@@ -90,6 +90,16 @@ main {
 
 .control {
   flex: 0 0 100%;
+  background: none;
+  padding: 0;
+  margin: 0;
+  border: none;
+  cursor: pointer;
+  font-size: inherit;
+  text-align: start;
+}
+.control:hover, .cover:active {
+  background: none;
 }
 .control > kbd {
   background: #333;

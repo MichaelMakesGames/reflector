@@ -11,4 +11,4 @@ The core mechanic of the game is the manipulation of the lasers using reflectors
 
 ## Running the Game
 
-Assuming you have npm installed on your system, `npm install` and `npm run`. Then the game will be available at `localhost:1234`.
+Assuming you have npm installed on your system, `npm install` and `npm start`. Then the game will be available at `localhost:1234`.

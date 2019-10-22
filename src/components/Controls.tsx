@@ -229,7 +229,7 @@ function getControls(
       },
       { key: "r", action: actions.rotatePlacement(), label: "Rotate" },
       { key: "Escape", action: actions.cancelPlacement(), label: "Cancel" },
-      { key: "Enter", action: actions.finishPlacement(), label: "Throw" },
+      { key: "Enter", action: actions.finishPlacement(), label: "Confirm" },
     ];
   }
 
@@ -276,10 +276,10 @@ export default function Controls() {
       {controls
         .filter(control => !control.hidden)
         .map(control => (
-          <div key={control.key} className="control">
+          <button key={control.key} className="control" onClick={() => dispatch(control.action)} onFocus={e => e.target.blur()}>
             <kbd>{control.key}</kbd>
             <span>{control.label}</span>
-          </div>
+          </button>
         ))}
     </div>
   );
