@@ -6,6 +6,7 @@ import * as selectors from "~/state/selectors";
 
 import { GameState, Pos } from "~/types";
 import handleAction, { registerHandler } from "~state/handleAction";
+import { getDistance } from "~utils/geometry";
 
 function activatePlacement(
   prevState: GameState,
@@ -21,16 +22,12 @@ function activatePlacement(
     return state;
   }
 
-  state = handleAction(state, actions.closeBuildMenu());
-
-  const entity = createEntityFromTemplate(template, {
+  const entityToPlace = createEntityFromTemplate(template, {
     placing: { takesTurn, cost },
     pos: player.pos,
   });
-  state = handleAction(state, actions.addEntity({ entity }));
 
   const canPlace = (gameState: GameState, pos: Pos) => {
-    console.warn("canPlace");
     if (validitySelector && (selectors as any)[validitySelector]) {
       return Boolean((selectors as any)[validitySelector](gameState, pos));
     } else {
@@ -39,7 +36,7 @@ function activatePlacement(
   };
 
   const projectors = selectors.entitiesWithComps(state, "projector", "pos");
-  const validPositions = entity.reflector
+  const validPositions = entityToPlace.reflector
     ? findValidPositions(
         state,
         projectors.map(projector => ({
@@ -53,6 +50,27 @@ function activatePlacement(
         [{ pos: player.pos, range: BUILDING_RANGE }],
         canPlace,
       );
+  validPositions.sort(
+    (a, b) => getDistance(player.pos, a) - getDistance(player.pos, b),
+  );
+
+  if (!validPositions.length) {
+    return {
+      ...state,
+      messageLog: [...state.messageLog, "No valid positions in range"],
+    };
+  }
+
+  state = handleAction(state, actions.closeBuildMenu());
+  state = handleAction(
+    state,
+    actions.addEntity({
+      entity: {
+        ...entityToPlace,
+        pos: validPositions[0],
+      },
+    }),
+  );
   for (const pos of validPositions) {
     state = handleAction(
       state,
