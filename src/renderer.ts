@@ -93,6 +93,16 @@ function createSprite(pos: Pos, display: Display) {
     PIXI.utils.TextureCache[display.tile || "unknown"],
   );
   sprite.angle = display.rotation || 0;
+  setSpritePosition(sprite, pos, display);
+  sprite.width = TILE_SIZE;
+  sprite.height = TILE_SIZE;
+  sprite.tint = parseInt((display.color || "#FFFFFF").substr(1), 16);
+  // sprite.pivot.set(TILE_SIZE / 2, TILE_SIZE / 2);
+
+  return sprite;
+}
+
+function setSpritePosition(sprite: PIXI.Sprite, pos: Pos, display: Display) {
   let { x, y } = pos;
   switch (display.rotation) {
     case 90:
@@ -109,12 +119,6 @@ function createSprite(pos: Pos, display: Display) {
       break;
   }
   sprite.position.set(x * TILE_SIZE, y * TILE_SIZE);
-  sprite.width = TILE_SIZE;
-  sprite.height = TILE_SIZE;
-  sprite.tint = parseInt((display.color || "#FFFFFF").substr(1), 16);
-  // sprite.pivot.set(TILE_SIZE / 2, TILE_SIZE / 2);
-
-  return sprite;
 }
 
 export async function removeRenderEntity(entityId: string) {
@@ -147,9 +151,10 @@ export async function updateRenderEntity(
         entity.pos.y * TILE_SIZE,
       );
       if (renderEntity.sprite) {
-        renderEntity.sprite.position.set(
-          entity.pos.x * TILE_SIZE,
-          entity.pos.y * TILE_SIZE,
+        setSpritePosition(
+          renderEntity.sprite,
+          renderEntity.pos,
+          renderEntity.displayComp,
         );
       }
     }
