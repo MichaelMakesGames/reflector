@@ -140,6 +140,19 @@ export interface HasProjector {
   projector: Projector;
 }
 
+export interface Inspector {}
+export interface HasInspector {
+  inspector: Inspector;
+}
+
+export interface Description {
+  name: string;
+  description: string;
+}
+export interface HasDescription {
+  description: Description;
+}
+
 export interface Entity
   extends Partial<HasPos>,
     Partial<HasDisplay>,
@@ -157,6 +170,8 @@ export interface Entity
     Partial<HasProduction>,
     Partial<HasMineable>,
     Partial<HasProjector>,
+    Partial<HasInspector>,
+    Partial<HasDescription>,
     Partial<HasConductive> {
   id: string;
   parentTemplate?: string;

@@ -19,6 +19,7 @@ function getControls(
   playerPosition: Pos,
   placing: Entity | null,
   isBuildMenuOpen: boolean,
+  inspector: Entity | null,
 ): Control[] {
   const movePlayer = [
     {
@@ -103,6 +104,13 @@ function getControls(
       label: "Mine",
     },
   ];
+  const inspect = [
+    {
+      key: "?",
+      action: actions.inspect(),
+      label: "Inspect",
+    },
+  ];
 
   if (isBuildMenuOpen) {
     return [
@@ -181,6 +189,60 @@ function getControls(
     ];
   }
 
+  if (inspector) {
+    return [
+      {
+        key: "Escape",
+        action: actions.cancelInspect(),
+        label: "Close",
+      },
+      {
+        key: "w",
+        action: actions.move({ entityId: inspector.id, ...UP }),
+        label: "Move Inspector Up",
+      },
+      {
+        key: "a",
+        action: actions.move({ entityId: inspector.id, ...LEFT }),
+        label: "Move Inspector Left",
+      },
+      {
+        key: "s",
+        action: actions.move({ entityId: inspector.id, ...DOWN }),
+        label: "Move Inspector Down",
+      },
+      {
+        key: "d",
+        action: actions.move({ entityId: inspector.id, ...RIGHT }),
+        label: "Move Inspector Right",
+      },
+      {
+        key: "ArrowUp",
+        action: actions.move({ entityId: inspector.id, ...UP }),
+        label: "Move Inspector Up",
+        hidden: true,
+      },
+      {
+        key: "ArrowLeft",
+        action: actions.move({ entityId: inspector.id, ...LEFT }),
+        label: "Move Inspector Left",
+        hidden: true,
+      },
+      {
+        key: "ArrowDown",
+        action: actions.move({ entityId: inspector.id, ...DOWN }),
+        label: "Move Inspector Down",
+        hidden: true,
+      },
+      {
+        key: "ArrowRight",
+        action: actions.move({ entityId: inspector.id, ...RIGHT }),
+        label: "Move Inspector Right",
+        hidden: true,
+      },
+    ];
+  }
+
   if (placing && placing.placing) {
     return [
       {
@@ -240,6 +302,7 @@ function getControls(
     ...build,
     ...mine,
     ...wait,
+    ...inspect,
   ];
 }
 
@@ -250,9 +313,16 @@ export default function Controls() {
   const placing = useSelector(selectors.placingTarget);
   const gameOver = useSelector(selectors.gameOver);
   const isBuildMenuOpen = useSelector(selectors.isBuildMenuOpen);
+  const inspector = useSelector(selectors.inspector);
 
   const pos = player ? player.pos : { x: 0, y: 0 };
-  const controls = getControls(activeWeapon, pos, placing, isBuildMenuOpen);
+  const controls = getControls(
+    activeWeapon,
+    pos,
+    placing,
+    isBuildMenuOpen,
+    inspector,
+  );
   const keyMap: { [key: string]: Action } = controls.reduce(
     (acc, cur) => ({ ...acc, [cur.key]: cur.action }),
     {},

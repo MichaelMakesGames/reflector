@@ -27,6 +27,11 @@ const templates: { [id: string]: Partial<Entity> } = {
       moving: true,
       lasers: false,
     },
+    description: {
+      name: "Water",
+      description:
+        "Neither you nor enemies can move over water, but your lasers can shoot over it.",
+    },
   },
   MOUNTAIN: {
     display: {
@@ -39,6 +44,10 @@ const templates: { [id: string]: Partial<Entity> } = {
       moving: true,
       lasers: true,
     },
+    description: {
+      name: "Mountain",
+      description: "Indestructible. Blocks all movement and lasers.",
+    },
   },
   ORE: {
     display: {
@@ -49,6 +58,11 @@ const templates: { [id: string]: Partial<Entity> } = {
     },
     mineable: {
       resource: "METAL",
+    },
+    description: {
+      name: "Ore",
+      description:
+        "Can be mined either manually or by building on mine on top.",
     },
   },
 };

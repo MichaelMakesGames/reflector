@@ -98,7 +98,8 @@ main {
   font-size: inherit;
   text-align: start;
 }
-.control:hover, .cover:active {
+.control:hover,
+.cover:active {
   background: none;
 }
 .control > kbd {
@@ -127,6 +128,7 @@ main {
 
 .message {
   padding-bottom: 0.25rem;
+  width: 40rem;
 }
 
 .legend {

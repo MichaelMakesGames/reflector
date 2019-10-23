@@ -66,3 +66,6 @@ export const closeBuildMenu = createStandardAction("CLOSE_BUILD_MENU")();
 export const clearReflectors = createStandardAction("CLEAR_REFLECTORS")();
 
 export const mine = createStandardAction("MINE")();
+
+export const inspect = createStandardAction("INSPECT")();
+export const cancelInspect = createStandardAction("CANCEL_INSPECT")();

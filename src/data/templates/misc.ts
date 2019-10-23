@@ -34,6 +34,10 @@ const templates: { [id: string]: Partial<Entity> } = {
     projector: {
       range: PROJECTOR_RANGE,
     },
+    description: {
+      name: "Player",
+      description: "This is you.",
+    },
   },
   PLAYER_CORPSE: {
     display: {
@@ -52,6 +56,15 @@ const templates: { [id: string]: Partial<Entity> } = {
       priority: PRIORITY_TERRAIN,
     },
     validMarker: {},
+  },
+  INSPECTOR: {
+    display: {
+      glyph: "?",
+      tile: "valid",
+      color: YELLOW,
+      priority: PRIORITY_TERRAIN,
+    },
+    inspector: {},
   },
 };
 

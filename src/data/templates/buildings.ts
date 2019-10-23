@@ -23,7 +23,13 @@ function onDestroyWall(entity: Entity) {
 }
 
 const templates: { [id: string]: Partial<Entity> } = {
-  REFLECTOR_BASE: {},
+  REFLECTOR_BASE: {
+    description: {
+      name: "Reflector",
+      description:
+        "Reflects laser 90 degrees. It must be within range of either you or a projector, otherwise it is destroyed.",
+    },
+  },
   REFLECTOR_UP_RIGHT: {
     parentTemplate: "REFLECTOR_BASE",
     display: {
@@ -48,6 +54,10 @@ const templates: { [id: string]: Partial<Entity> } = {
   SPLITTER_BASE: {
     blocking: { moving: true, lasers: true },
     destructible: {},
+    description: {
+      name: "Splitter",
+      description: "Splits one incoming beam into two weaker beams.",
+    },
   },
   SPLITTER_HORIZONTAL: {
     parentTemplate: "SPLITTER_BASE",
@@ -90,6 +100,10 @@ const templates: { [id: string]: Partial<Entity> } = {
     destructible: {
       onDestroy: onDestroyHouse,
     },
+    description: {
+      name: "Tent",
+      description: "Temporary housing for 1 pop. They will move if able.",
+    },
   },
   RESIDENCE: {
     display: {
@@ -110,6 +124,10 @@ const templates: { [id: string]: Partial<Entity> } = {
     destructible: {
       onDestroy: onDestroyHouse,
     },
+    description: {
+      name: "Residence",
+      description: "Provides housing for up to 3 pops.",
+    },
   },
   MINE: {
     display: {
@@ -127,6 +145,10 @@ const templates: { [id: string]: Partial<Entity> } = {
       resource: "METAL",
       amount: 1,
     },
+    description: {
+      name: "Mine",
+      description: "Automatically mines metal, but must be built over ore.",
+    },
   },
   WALL: {
     display: {
@@ -142,6 +164,10 @@ const templates: { [id: string]: Partial<Entity> } = {
     destructible: {
       onDestroy: onDestroyWall,
     },
+    description: {
+      name: "Wall",
+      description: "The most basic defense.",
+    },
   },
   WALL_DAMAGED: {
     display: {
@@ -155,6 +181,10 @@ const templates: { [id: string]: Partial<Entity> } = {
       lasers: true,
     },
     destructible: {},
+    description: {
+      name: "Damaged Wall",
+      description: "This wall will be destroyed if hit again.",
+    },
   },
   PROJECTOR: {
     display: {
@@ -170,6 +200,10 @@ const templates: { [id: string]: Partial<Entity> } = {
     destructible: {},
     projector: {
       range: PROJECTOR_RANGE,
+    },
+    description: {
+      name: "Projector",
+      description: "Lets you place reflectors around it.",
     },
   },
 };

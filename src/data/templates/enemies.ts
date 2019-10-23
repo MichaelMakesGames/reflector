@@ -16,6 +16,11 @@ const templates: { [id: string]: Partial<Entity> } = {
       priority: PRIORITY_ENEMY,
     },
     ai: { type: "DRONE" },
+    description: {
+      name: "Drone",
+      description:
+        "The most basic enemy. It targets the player or nearest building.",
+    },
   },
 };
 

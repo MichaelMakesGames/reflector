@@ -1,6 +1,10 @@
 import { GameState, Pos, Entity, MakeRequired } from "~/types";
 import { PLAYER_ID } from "~/constants";
-import { getPosKey, getAdjacentPositions } from "~/utils/geometry";
+import {
+  getPosKey,
+  getAdjacentPositions,
+  arePositionsEqual,
+} from "~/utils/geometry";
 import { filterEntitiesWithComps } from "~/utils/entities";
 
 export function gameState(state: GameState) {
@@ -133,5 +137,21 @@ export function resources(state: GameState) {
 export function canPlaceMine(state: GameState, pos: Pos) {
   return entitiesAtPosition(state, pos).some(
     entity => entity.mineable && entity.mineable.resource === "METAL",
+  );
+}
+
+export function inspector(
+  state: GameState,
+): MakeRequired<Entity, "inspector" | "pos"> | null {
+  return entitiesWithComps(state, "inspector", "pos")[0] || null;
+}
+
+export function inspectedEntities(
+  state: GameState,
+): MakeRequired<Entity, "description">[] | null {
+  const inspectorEntity = inspector(state);
+  if (!inspectorEntity) return null;
+  return entitiesWithComps(state, "pos", "description").filter(e =>
+    arePositionsEqual(e.pos, inspectorEntity.pos),
   );
 }

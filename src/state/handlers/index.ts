@@ -20,3 +20,5 @@ import "./openBuildMenu";
 import "./closeBuildMenu";
 import "./mine";
 import "./movePlacement";
+import "./inspect";
+import "./cancelInspect";
