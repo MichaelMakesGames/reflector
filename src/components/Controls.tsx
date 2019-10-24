@@ -81,12 +81,12 @@ function getControls(
         template: "REFLECTOR_UP_RIGHT",
         takesTurn: false,
       }),
-      label: "Place Reflector",
+      label: "Place Reflector (free action)",
     },
     {
       key: "c",
       action: actions.clearReflectors(),
-      label: "Clear Reflectors",
+      label: "Clear Reflectors (free action)",
     },
   ];
   const wait = [{ key: ".", action: actions.playerTookTurn(), label: "Wait" }];
@@ -108,7 +108,7 @@ function getControls(
     {
       key: "?",
       action: actions.inspect(),
-      label: "Inspect",
+      label: "Inspect (free action)",
     },
   ];
 
