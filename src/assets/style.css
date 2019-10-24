@@ -75,6 +75,19 @@ main {
   height: auto;
 }
 
+.help {
+  display: inline-block;
+  border-radius: 100%;
+  background: var(--yellow);
+  color: var(--black);
+  width: 1.5em;
+  height: 1.5em;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: bold;
+  margin: 0 0.5em;
+}
+
 .status > * {
   flex: 0 0 50%;
 }
