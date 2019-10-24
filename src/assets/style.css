@@ -70,16 +70,13 @@ main {
 }
 
 .status {
-  /* position: relative; */
-  /* top: 7px; */
   display: flex;
-  flex-flow: row;
-  height: 5rem;
-  /* height: 5.3rem; */
+  flex-flow: row wrap;
+  height: auto;
 }
 
 .status > * {
-  flex: 1 1 0;
+  flex: 0 0 50%;
 }
 
 .controls {
