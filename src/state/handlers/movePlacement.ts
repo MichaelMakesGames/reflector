@@ -16,7 +16,8 @@ function movePlacement(
 ): GameState {
   let state = prevState;
   const placingTarget = selectors.placingTarget(state);
-  if (!placingTarget || !placingTarget.pos) return state;
+  const placingMarker = selectors.placingMarker(state);
+  if (!placingTarget || !placingTarget.pos || !placingMarker) return state;
   const currentPos = placingTarget.pos;
   const validPositions = selectors
     .entitiesWithComps(state, "validMarker", "pos")
@@ -45,12 +46,22 @@ function movePlacement(
       validPositions.some(validPos => arePositionsEqual(validPos, pos)),
     );
     if (validPosition) {
+      const dx = validPosition.x - currentPos.x;
+      const dy = validPosition.y - currentPos.y;
       state = handleAction(
         state,
         actions.move({
           entityId: placingTarget.id,
-          dx: validPosition.x - currentPos.x,
-          dy: validPosition.y - currentPos.y,
+          dx,
+          dy,
+        }),
+      );
+      state = handleAction(
+        state,
+        actions.move({
+          entityId: placingMarker.id,
+          dx,
+          dy,
         }),
       );
       break;
@@ -66,7 +77,7 @@ registerHandler(movePlacement, actions.movePlacement);
 function getPositionsToCheck(
   currentPos: Pos,
   direction: Direction,
-  perpedicularCoord: "x" | "y",
+  perpendicularCoord: "x" | "y",
   range: number,
   perpendicularRange: number,
 ): Pos[] {
@@ -78,11 +89,11 @@ function getPositionsToCheck(
   for (const perpendicularDelta of rangeFromTo(1, perpendicularRange + 1)) {
     unfilteredPositions.push({
       ...middlePos,
-      [perpedicularCoord]: middlePos[perpedicularCoord] + perpendicularDelta,
+      [perpendicularCoord]: middlePos[perpendicularCoord] + perpendicularDelta,
     });
     unfilteredPositions.push({
       ...middlePos,
-      [perpedicularCoord]: middlePos[perpedicularCoord] - perpendicularDelta,
+      [perpendicularCoord]: middlePos[perpendicularCoord] - perpendicularDelta,
     });
   }
   return unfilteredPositions.filter(isPositionInMap);

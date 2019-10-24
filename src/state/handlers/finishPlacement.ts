@@ -10,7 +10,8 @@ function finishPlacement(
   let state = prevState;
 
   const placingTarget = selectors.placingTarget(state);
-  if (!placingTarget) return state;
+  const placingMarker = selectors.placingMarker(state);
+  if (!placingTarget || !placingMarker) return state;
 
   if (placingTarget.placing.cost) {
     const { cost } = placingTarget.placing;
@@ -56,7 +57,8 @@ function finishPlacement(
       entityIds: selectors
         .entityList(state)
         .filter(e => e.validMarker)
-        .map(e => e.id),
+        .map(e => e.id)
+        .concat([placingMarker.id]),
     }),
   );
 

@@ -51,16 +51,25 @@ const templates: { [id: string]: Partial<Entity> } = {
   VALID_MARKER: {
     display: {
       glyph: ".",
-      tile: "valid",
+      tile: "outline_dashed",
       color: YELLOW,
       priority: PRIORITY_TERRAIN,
     },
     validMarker: {},
   },
+  PLACING_MARKER: {
+    display: {
+      glyph: ".",
+      tile: "outline_solid",
+      color: YELLOW,
+      priority: PRIORITY_TERRAIN,
+    },
+    placingMarker: {},
+  },
   INSPECTOR: {
     display: {
       glyph: "?",
-      tile: "valid",
+      tile: "outline_solid",
       color: YELLOW,
       priority: PRIORITY_TERRAIN,
     },

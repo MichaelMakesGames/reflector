@@ -145,6 +145,11 @@ export interface HasInspector {
   inspector: Inspector;
 }
 
+export interface PlacingMarker {}
+export interface HasPlacingMarker {
+  placingMarker: PlacingMarker;
+}
+
 export interface Description {
   name: string;
   description: string;
@@ -172,6 +177,7 @@ export interface Entity
     Partial<HasProjector>,
     Partial<HasInspector>,
     Partial<HasDescription>,
+    Partial<HasPlacingMarker>,
     Partial<HasConductive> {
   id: string;
   parentTemplate?: string;

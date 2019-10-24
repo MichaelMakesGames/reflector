@@ -79,6 +79,14 @@ function activatePlacement(
       },
     }),
   );
+  state = handleAction(
+    state,
+    actions.addEntity({
+      entity: createEntityFromTemplate("PLACING_MARKER", {
+        pos: validPositions[0],
+      }),
+    }),
+  );
   for (const pos of validPositions) {
     state = handleAction(
       state,

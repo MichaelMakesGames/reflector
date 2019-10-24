@@ -118,6 +118,12 @@ export function placingTarget(state: GameState) {
   return null;
 }
 
+export function placingMarker(
+  state: GameState,
+): MakeRequired<Entity, "placingMarker" | "pos"> | null {
+  return entitiesWithComps(state, "placingMarker", "pos")[0] || null;
+}
+
 export function morale(state: GameState) {
   return state.morale;
 }
