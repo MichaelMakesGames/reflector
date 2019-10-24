@@ -1,16 +1,11 @@
 import * as PIXI from "pixi.js";
-import {
-  MAP_WIDTH,
-  MAP_HEIGHT,
-  TILE_SIZE,
-  BACKGROUND_COLOR,
-  FONT_FAMILY,
-} from "./constants";
+import { MAP_WIDTH, MAP_HEIGHT, TILE_SIZE, FONT_FAMILY } from "./constants";
 import { Entity, MakeRequired, Display, Pos } from "./types";
 import { arePositionsEqual } from "./utils/geometry";
 
 // @ts-ignore
 import tiles from "./assets/tiles/*.png"; // eslint-disable-line import/no-unresolved
+import colors from "~colors";
 
 const loadPromise = new Promise(resolve => {
   PIXI.Loader.shared
@@ -28,7 +23,7 @@ PIXI.autoDetectRenderer().destroy();
 export const app = new PIXI.Application({
   width: MAP_WIDTH * TILE_SIZE,
   height: MAP_HEIGHT * TILE_SIZE,
-  backgroundColor: parseInt(BACKGROUND_COLOR.substr(1), 16),
+  backgroundColor: parseInt(colors.background.substr(1), 16),
   antialias: false,
   // roundPixels: true,
 });
@@ -97,7 +92,6 @@ function createSprite(pos: Pos, display: Display) {
   sprite.width = TILE_SIZE;
   sprite.height = TILE_SIZE;
   sprite.tint = parseInt((display.color || "#FFFFFF").substr(1), 16);
-  // sprite.pivot.set(TILE_SIZE / 2, TILE_SIZE / 2);
 
   return sprite;
 }

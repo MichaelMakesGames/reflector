@@ -1,15 +1,8 @@
-import { RED, PRIORITY_ITEM } from "~/constants";
+import { PRIORITY_ITEM } from "~/constants";
 import { Entity } from "~/types/Entity";
 
 const templates: { [id: string]: Partial<Entity> } = {
-  WEAPON_BASE: {
-    display: {
-      tile: "item_gun",
-      glyph: "w",
-      color: RED,
-      priority: PRIORITY_ITEM,
-    },
-  },
+  WEAPON_BASE: {},
   WEAPON_LASER: {
     parentTemplate: "WEAPON_BASE",
     weapon: {

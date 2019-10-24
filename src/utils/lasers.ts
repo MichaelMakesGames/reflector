@@ -1,7 +1,8 @@
 import { Pos, WeaponType, Direction, HasDisplay, Entity } from "~/types";
-import { RED, RIGHT, DOWN, LEFT, UP, PURPLE, YELLOW } from "~/constants";
+import { RIGHT, DOWN, LEFT, UP } from "~/constants";
 import { createEntityFromTemplate } from "./entities";
 import { getConstDir } from "./geometry";
+import colors from "~colors";
 
 export function createLaser(
   direction: Direction,
@@ -10,9 +11,7 @@ export function createLaser(
   type: WeaponType,
   pos: Pos,
 ): Entity {
-  let color = RED;
-  if (type === "TELEPORT") color = PURPLE;
-  if (type === "ELECTRIC") color = YELLOW;
+  const color = colors.laser;
 
   let templateName = `LASER_${getOrientation(direction)}_${getThickness(
     power,

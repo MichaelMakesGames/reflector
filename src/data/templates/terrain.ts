@@ -1,18 +1,13 @@
-import {
-  DARK_GRAY,
-  PRIORITY_FLOOR,
-  RED_GRAY,
-  DARK_BLUE,
-  ORANGE,
-} from "~/constants";
+import { PRIORITY_FLOOR } from "~/constants";
 import { Entity } from "~/types/Entity";
+import colors from "~colors";
 
 const templates: { [id: string]: Partial<Entity> } = {
   FLOOR: {
     display: {
       tile: "floor",
       glyph: ".",
-      color: DARK_GRAY,
+      color: colors.ground,
       priority: PRIORITY_FLOOR,
     },
   },
@@ -20,7 +15,7 @@ const templates: { [id: string]: Partial<Entity> } = {
     display: {
       tile: "water",
       glyph: "~",
-      color: DARK_BLUE,
+      color: colors.water,
       priority: PRIORITY_FLOOR,
     },
     blocking: {
@@ -37,7 +32,7 @@ const templates: { [id: string]: Partial<Entity> } = {
     display: {
       tile: "mountain",
       glyph: "▲",
-      color: RED_GRAY,
+      color: colors.mountain,
       priority: PRIORITY_FLOOR,
     },
     blocking: {
@@ -53,7 +48,7 @@ const templates: { [id: string]: Partial<Entity> } = {
     display: {
       tile: "ore",
       glyph: ".",
-      color: ORANGE,
+      color: colors.mineral,
       priority: PRIORITY_FLOOR,
     },
     mineable: {

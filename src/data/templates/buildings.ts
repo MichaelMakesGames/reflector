@@ -1,13 +1,8 @@
-import {
-  PRIORITY_ITEM,
-  PRIORITY_PLACING,
-  WHITE,
-  PROJECTOR_RANGE,
-  BLUE_GRAY,
-} from "~/constants";
+import { PRIORITY_ITEM, PRIORITY_PLACING, PROJECTOR_RANGE } from "~/constants";
 import { Entity } from "~/types/Entity";
 import { reduceMorale, addEntity } from "~state/actions";
 import { createEntityFromTemplate } from "~utils/entities";
+import colors from "~colors";
 
 function onDestroyHouse(entity: Entity) {
   if (entity.housing) {
@@ -35,7 +30,7 @@ const templates: { [id: string]: Partial<Entity> } = {
     display: {
       tile: "reflector",
       glyph: "/",
-      color: WHITE,
+      color: colors.activeBuilding,
       priority: PRIORITY_PLACING,
     },
     reflector: { type: "/" },
@@ -46,7 +41,7 @@ const templates: { [id: string]: Partial<Entity> } = {
       tile: "reflector",
       rotation: 90,
       glyph: "\\",
-      color: WHITE,
+      color: colors.activeBuilding,
       priority: PRIORITY_PLACING,
     },
     reflector: { type: "\\" },
@@ -64,7 +59,7 @@ const templates: { [id: string]: Partial<Entity> } = {
     display: {
       tile: "splitter",
       glyph: "⬌",
-      color: WHITE,
+      color: colors.activeBuilding,
       priority: PRIORITY_PLACING,
     },
     splitter: { type: "horizontal" },
@@ -75,7 +70,7 @@ const templates: { [id: string]: Partial<Entity> } = {
       tile: "splitter",
       rotation: 90,
       glyph: "⬍",
-      color: WHITE,
+      color: colors.activeBuilding,
       priority: PRIORITY_PLACING,
     },
     splitter: { type: "vertical" },
@@ -84,7 +79,7 @@ const templates: { [id: string]: Partial<Entity> } = {
     display: {
       tile: "tent",
       glyph: "▲",
-      color: WHITE,
+      color: colors.activeBuilding,
       priority: PRIORITY_ITEM,
     },
     blocking: {
@@ -109,7 +104,7 @@ const templates: { [id: string]: Partial<Entity> } = {
     display: {
       tile: "residence",
       glyph: "R",
-      color: WHITE,
+      color: colors.activeBuilding,
       priority: PRIORITY_ITEM,
     },
     blocking: {
@@ -133,7 +128,7 @@ const templates: { [id: string]: Partial<Entity> } = {
     display: {
       tile: "mine",
       glyph: "m",
-      color: WHITE,
+      color: colors.activeBuilding,
       priority: PRIORITY_ITEM,
     },
     blocking: {
@@ -154,7 +149,7 @@ const templates: { [id: string]: Partial<Entity> } = {
     display: {
       tile: "wall",
       glyph: "#",
-      color: BLUE_GRAY,
+      color: colors.inactiveBuilding,
       priority: PRIORITY_ITEM,
     },
     blocking: {
@@ -173,7 +168,7 @@ const templates: { [id: string]: Partial<Entity> } = {
     display: {
       tile: "wall_damaged",
       glyph: "#",
-      color: BLUE_GRAY,
+      color: colors.inactiveBuilding,
       priority: PRIORITY_ITEM,
     },
     blocking: {
@@ -190,7 +185,7 @@ const templates: { [id: string]: Partial<Entity> } = {
     display: {
       tile: "projector",
       glyph: "p",
-      color: WHITE,
+      color: colors.activeBuilding,
       priority: PRIORITY_ITEM,
     },
     blocking: {

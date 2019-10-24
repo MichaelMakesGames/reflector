@@ -2,14 +2,12 @@ import {
   PLAYER_ID,
   PRIORITY_PLAYER,
   PRIORITY_TERRAIN,
-  WHITE,
   PROJECTOR_RANGE,
-  DARK_GREEN,
-  YELLOW,
 } from "~/constants";
 import { Entity } from "~/types/Entity";
 import { addEntity } from "~state/actions";
 import { createEntityFromTemplate } from "~utils/entities";
+import colors from "~colors";
 
 const templates: { [id: string]: Partial<Entity> } = {
   PLAYER: {
@@ -18,7 +16,7 @@ const templates: { [id: string]: Partial<Entity> } = {
     display: {
       tile: "player",
       glyph: "@",
-      color: WHITE,
+      color: colors.payer,
       priority: PRIORITY_PLAYER,
     },
     blocking: { moving: true, lasers: true },
@@ -43,7 +41,7 @@ const templates: { [id: string]: Partial<Entity> } = {
     display: {
       tile: "skull",
       glyph: "%",
-      color: WHITE,
+      color: colors.payer,
       priority: PRIORITY_PLAYER,
     },
     blocking: { moving: true, lasers: true },
@@ -52,7 +50,7 @@ const templates: { [id: string]: Partial<Entity> } = {
     display: {
       glyph: ".",
       tile: "outline_dashed",
-      color: YELLOW,
+      color: colors.secondary,
       priority: PRIORITY_TERRAIN,
     },
     validMarker: {},
@@ -61,7 +59,7 @@ const templates: { [id: string]: Partial<Entity> } = {
     display: {
       glyph: ".",
       tile: "outline_solid",
-      color: YELLOW,
+      color: colors.secondary,
       priority: PRIORITY_TERRAIN,
     },
     placingMarker: {},
@@ -70,7 +68,7 @@ const templates: { [id: string]: Partial<Entity> } = {
     display: {
       glyph: "?",
       tile: "outline_solid",
-      color: YELLOW,
+      color: colors.secondary,
       priority: PRIORITY_TERRAIN,
     },
     inspector: {},

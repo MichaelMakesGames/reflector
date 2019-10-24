@@ -1,23 +1,6 @@
 body {
-  --black: #140c1c;
-  --purple: #442434;
-  --dark-blue: #30346d;
-  --dark-gray: #4e4a4e;
-  --brown: #854c30;
-  --dark-green: #346524;
-  --red: #d04648;
-  --red_gray: #757161;
-  --blue: #597dce;
-  --orange: #d27d2c;
-  --blue-gray: #8595a1;
-  --green: #6daa2c;
-  --light-brown: #d2aa99;
-  --light_blue: #6dc2ca;
-  --yellow: #dad45e;
-  --white: #deeed6;
-
-  background: var(--black);
-  color: var(--white);
+  background: var(--background);
+  color: var(--text);
 
   font-size: 16px;
   font-family: Roboto;
@@ -46,13 +29,13 @@ main {
 }
 
 .map {
-  border: 1px solid var(--white);
+  border: 1px solid var(--text);
   border-radius: 0.25rem;
   margin: 1rem;
 }
 
 .box {
-  border: 1px solid var(--white);
+  border: 1px solid var(--text);
   border-radius: 0.25rem;
   margin: 1.5rem 0.75rem;
   padding: 1rem;
@@ -63,7 +46,7 @@ main {
   position: absolute;
   top: -1.25rem;
   left: 0.5rem;
-  background: var(--black);
+  background: var(--background);
   padding: 0 0.5rem;
   font-family: Nova Mono;
   font-size: 1.5rem;
@@ -78,8 +61,8 @@ main {
 .help {
   display: inline-block;
   border-radius: 100%;
-  background: var(--yellow);
-  color: var(--black);
+  background: var(--secondary);
+  color: var(--background);
   width: 1.5em;
   height: 1.5em;
   text-align: center;
