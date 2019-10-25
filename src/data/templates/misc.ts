@@ -5,8 +5,6 @@ import {
   PROJECTOR_RANGE,
 } from "~/constants";
 import { Entity } from "~/types/Entity";
-import { addEntity } from "~state/actions";
-import { createEntityFromTemplate } from "~utils/entities";
 import colors from "~colors";
 
 const templates: { [id: string]: Partial<Entity> } = {
@@ -21,12 +19,7 @@ const templates: { [id: string]: Partial<Entity> } = {
     },
     blocking: { moving: true, lasers: true },
     destructible: {
-      onDestroy: (entity: Entity) =>
-        addEntity({
-          entity: createEntityFromTemplate("PLAYER_CORPSE", {
-            pos: entity.pos,
-          }),
-        }),
+      onDestroy: "player",
     },
     conductive: {},
     projector: {

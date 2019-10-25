@@ -43,7 +43,7 @@ export interface HasTargeting {
 }
 
 export interface Destructible {
-  onDestroy?: (entity: Entity) => Action | null;
+  onDestroy?: string;
 }
 export interface HasDestructible {
   destructible: Destructible;

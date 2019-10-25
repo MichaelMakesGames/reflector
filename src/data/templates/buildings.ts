@@ -1,21 +1,6 @@
 import { PRIORITY_ITEM, PRIORITY_PLACING, PROJECTOR_RANGE } from "~/constants";
 import { Entity } from "~/types/Entity";
-import { reduceMorale, addEntity } from "~state/actions";
-import { createEntityFromTemplate } from "~utils/entities";
 import colors from "~colors";
-
-function onDestroyHouse(entity: Entity) {
-  if (entity.housing) {
-    return reduceMorale({ amount: entity.housing.occupancy });
-  }
-  return null;
-}
-
-function onDestroyWall(entity: Entity) {
-  return addEntity({
-    entity: createEntityFromTemplate("WALL_DAMAGED", { pos: entity.pos }),
-  });
-}
 
 const templates: { [id: string]: Partial<Entity> } = {
   REFLECTOR_BASE: {
@@ -93,7 +78,7 @@ const templates: { [id: string]: Partial<Entity> } = {
       removeOnVacancy: true,
     },
     destructible: {
-      onDestroy: onDestroyHouse,
+      onDestroy: "house",
     },
     description: {
       name: "Tent",
@@ -117,7 +102,7 @@ const templates: { [id: string]: Partial<Entity> } = {
       desirability: 0,
     },
     destructible: {
-      onDestroy: onDestroyHouse,
+      onDestroy: "house",
     },
     description: {
       name: "Residence",
@@ -157,7 +142,7 @@ const templates: { [id: string]: Partial<Entity> } = {
       lasers: true,
     },
     destructible: {
-      onDestroy: onDestroyWall,
+      onDestroy: "wall",
     },
     description: {
       name: "Wall",
