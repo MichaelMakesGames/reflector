@@ -1,5 +1,3 @@
-/* global document, window */
-
 const palette = {
   black: "#111111",
   darkGray: "#333333",
@@ -32,11 +30,5 @@ const colors = {
   power: palette.yellow,
   ground: palette.darkGray,
 };
-
-(window as any).colors = colors;
-
-Object.entries({ ...palette, ...colors }).forEach(([color, value]) =>
-  document.body.style.setProperty(`--${color}`, value),
-);
 
 export default colors;
