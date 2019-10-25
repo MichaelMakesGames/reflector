@@ -1,5 +1,3 @@
-import { Action } from "./Action";
-
 export interface Pos {
   x: number;
   y: number;

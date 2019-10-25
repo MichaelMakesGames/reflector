@@ -2,6 +2,7 @@ import { Entity } from "./Entity";
 import { Direction } from "./Direction";
 
 export interface GameState {
+  version: string;
   entities: {
     [id: string]: Entity;
   };

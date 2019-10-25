@@ -1,5 +1,6 @@
 import { createStandardAction } from "typesafe-actions";
 import { Entity } from "~/types/Entity";
+import { GameState } from "~types";
 
 export const addEntity = createStandardAction("ADD_ENTITY")<{
   entity: Entity;
@@ -52,7 +53,10 @@ export const attack = createStandardAction("ATTACK")<{
 
 export const playerTookTurn = createStandardAction("PLAYER_TOOK_TURN")();
 
-export const init = createStandardAction("INIT")();
+export const newGame = createStandardAction("NEW_GAME")();
+export const loadGame = createStandardAction("LOAD_GAME")<{
+  state: GameState;
+}>();
 
 export const reduceMorale = createStandardAction("REDUCE_MORALE")<{
   amount: number;

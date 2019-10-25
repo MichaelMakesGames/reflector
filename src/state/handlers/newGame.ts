@@ -7,7 +7,7 @@ import handleAction, { registerHandler } from "~state/handleAction";
 
 function init(
   state: GameState,
-  action: ReturnType<typeof actions.init>,
+  action: ReturnType<typeof actions.newGame>,
 ): GameState {
   let newState = state;
 
@@ -22,4 +22,4 @@ function init(
   return newState;
 }
 
-registerHandler(init, actions.init);
+registerHandler(init, actions.newGame);

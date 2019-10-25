@@ -1,22 +1,25 @@
 /* global document */
-import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
 import Map from "./Map";
 import Controls from "./Controls";
-import * as actions from "~/state/actions";
 import Status from "./Status";
 import MessageLog from "./MessageLog";
 import Resources from "./Resources";
 import colors from "~colors";
+import OpeningDialog from "./OpeningDialog";
 
 export default function Game() {
-  const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(actions.init());
     Object.entries(colors).forEach(([color, value]) =>
       document.body.style.setProperty(`--${color}`, value),
     );
   }, []);
+
+  const [showOpeningDialog, setShowOpeningDialog] = useState(true);
+
+  if (showOpeningDialog) {
+    return <OpeningDialog onClose={() => setShowOpeningDialog(false)} />;
+  }
 
   return (
     <main>

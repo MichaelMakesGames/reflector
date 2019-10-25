@@ -146,3 +146,18 @@ main {
 .legend__item:not(:last-child) {
   padding-bottom: 0.4rem;
 }
+
+.opening-dialog {
+  width: 400px;
+  margin: 0 auto;
+}
+
+.opening-dialog__action {
+  width: 100%;
+  display: block;
+  margin-bottom: 1em;
+}
+
+.opening-dialog__warning {
+  color: var(--secondary);
+}

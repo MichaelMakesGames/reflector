@@ -161,3 +161,7 @@ export function inspectedEntities(
     arePositionsEqual(e.pos, inspectorEntity.pos),
   );
 }
+
+export function version(state: GameState) {
+  return state.version;
+}

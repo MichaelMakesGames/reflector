@@ -8,12 +8,14 @@ import {
   LEFT,
   RIGHT,
   STARTING_METAL,
+  VERSION,
 } from "~constants";
 import handleAction from "./handleAction";
 import "./handlers";
 import { choose } from "~utils/rng";
 
 const initialState: GameState = {
+  version: VERSION,
   entities: {},
   entitiesByPosition: {},
   messageLog: [],
