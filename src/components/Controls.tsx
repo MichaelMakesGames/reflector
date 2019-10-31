@@ -327,13 +327,9 @@ export default function Controls() {
   const inspector = useSelector(selectors.inspector);
 
   const pos = player ? player.pos : { x: 0, y: 0 };
-  const controls = getControls(
-    activeWeapon,
-    pos,
-    placing,
-    isBuildMenuOpen,
-    inspector,
-  );
+  const controls: Control[] = gameOver
+    ? []
+    : getControls(activeWeapon, pos, placing, isBuildMenuOpen, inspector);
   const keyMap: { [key: string]: Action } = controls.reduce(
     (acc, cur) => ({ ...acc, [cur.key]: cur.action }),
     {},
