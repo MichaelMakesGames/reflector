@@ -7,6 +7,7 @@ import MessageLog from "./MessageLog";
 import Resources from "./Resources";
 import colors from "~colors";
 import OpeningDialog from "./OpeningDialog";
+import GameEnd from "./GameEnd";
 
 export default function Game() {
   useEffect(() => {
@@ -34,6 +35,7 @@ export default function Game() {
           <Map />
         </div>
       </div>
+      <GameEnd />
     </main>
   );
 }

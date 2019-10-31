@@ -4,12 +4,15 @@ import makeLevel from "~/utils/makeLevel";
 
 import { GameState } from "~/types";
 import handleAction, { registerHandler } from "~state/handleAction";
+import initialState from "~state/initialState";
+import { clearRenderer } from "~renderer";
 
 function init(
   state: GameState,
   action: ReturnType<typeof actions.newGame>,
 ): GameState {
-  let newState = state;
+  let newState = initialState;
+  clearRenderer();
 
   const startingWeapon = createEntityFromTemplate("WEAPON_LASER");
   if (startingWeapon.weapon) startingWeapon.weapon.slot = 1;

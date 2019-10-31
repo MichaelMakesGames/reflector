@@ -161,3 +161,11 @@ main {
 .opening-dialog__warning {
   color: var(--secondary);
 }
+
+.game-over-dialog {
+  width: 400px;
+  position: fixed;
+  top: 10em;
+  left: calc(50vw - 200px);
+  background: var(--background);
+}

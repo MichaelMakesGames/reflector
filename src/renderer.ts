@@ -132,6 +132,12 @@ export async function removeRenderEntity(entityId: string) {
   }
 }
 
+export function clearRenderer() {
+  for (const id of Object.keys(renderEntities)) {
+    removeRenderEntity(id);
+  }
+}
+
 export async function updateRenderEntity(
   entity: MakeRequired<Entity, "display" | "pos">,
 ) {
