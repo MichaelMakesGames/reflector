@@ -82,7 +82,7 @@ const templates: { [id: string]: Partial<Entity> } = {
     },
     description: {
       name: "Tent",
-      description: "Temporary housing for 1 pop. They will move if able.",
+      description: "Temporary housing for 1 colonist. They will move if able.",
     },
   },
   RESIDENCE: {
@@ -106,7 +106,7 @@ const templates: { [id: string]: Partial<Entity> } = {
     },
     description: {
       name: "Residence",
-      description: "Provides housing for up to 3 pops.",
+      description: "Provides housing for up to 3 colonists.",
     },
   },
   MINE: {
