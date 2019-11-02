@@ -8,7 +8,7 @@ const templates: { [id: string]: Partial<Entity> } = {
     weapon: {
       name: "Laser",
       type: "LASER",
-      power: 2,
+      power: 3,
       slot: 0,
       active: false,
     },
