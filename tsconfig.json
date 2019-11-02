@@ -3,7 +3,7 @@
     "esModuleInterop": true,
     "jsx": "react",
     "strict": true,
-    "target": "es6",
+    "target": "esnext",
     "module": "commonjs",
     "baseUrl": "./src",
     "paths": {

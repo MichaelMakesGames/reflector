@@ -4,11 +4,43 @@ import { Entity } from "~/types/Entity";
 import { createEntityFromTemplate } from "./entities";
 import { getDistance, arePositionsEqual } from "./geometry";
 import { MakeRequired } from "~types";
+import { rangeTo, calcPercentile } from "./math";
 
 export default function generateMap(): Entity[] {
   let result: Entity[] = [];
 
-  const noise = new Noise.Simplex();
+  const noiseGenerator = new Noise.Simplex();
+  const noise: number[][] = [];
+  for (const x of rangeTo(MAP_WIDTH)) {
+    noise.push([]);
+    for (const y of rangeTo(MAP_HEIGHT)) {
+      noise[x].push(noiseGenerator.get(x / 12, y / 12));
+    }
+  }
+
+  const flatNoise = noise.flat().sort((a, b) => a - b);
+  const waterFloorThreshold = calcPercentile(flatNoise, 15);
+  const floorOreThreshold = calcPercentile(flatNoise, 85);
+  const oreMountainThreshold = calcPercentile(flatNoise, 90);
+  console.log({
+    total: flatNoise.length,
+    water:
+      (flatNoise.filter(n => n < waterFloorThreshold).length * 100) /
+      flatNoise.length,
+    floor:
+      (flatNoise.filter(n => n < floorOreThreshold && n >= waterFloorThreshold)
+        .length *
+        100) /
+      flatNoise.length,
+    ore:
+      (flatNoise.filter(n => n < oreMountainThreshold && n >= floorOreThreshold)
+        .length *
+        100) /
+      flatNoise.length,
+    mountain:
+      (flatNoise.filter(n => n >= oreMountainThreshold).length * 100) /
+      flatNoise.length,
+  });
 
   for (let y = -1; y < MAP_HEIGHT + 1; y++) {
     for (let x = -1; x < MAP_WIDTH + 1; x++) {
@@ -20,17 +52,18 @@ export default function generateMap(): Entity[] {
           }),
         );
       } else {
-        const localNoise = noise.get(x / 15, y / 15);
+        const localNoise = noise[x][y];
         let template = "FLOOR";
-        if (localNoise < -0.75) {
+        if (localNoise < waterFloorThreshold) {
           template = "WATER_BASE";
-        } else if (localNoise > 0.75) {
+        } else if (localNoise < floorOreThreshold) {
+          template = "FLOOR";
+        } else if (localNoise < oreMountainThreshold) {
+          template = "ORE";
+        } else {
           template = "MOUNTAIN";
-        } else if (localNoise > 0.7) {
-          template = "ORE";
-        } else if (Math.random() < 0.01) {
-          template = "ORE";
         }
+
         if (
           x === 0 ||
           y === 0 ||
