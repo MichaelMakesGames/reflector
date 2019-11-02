@@ -10,9 +10,9 @@ import colors from "~colors";
 const loadPromise = new Promise(resolve => {
   PIXI.Loader.shared
     .add(
-      Object.entries(tiles).map(([name, file]) => ({
+      Object.entries(tiles as Record<string, string>).map(([name, file]) => ({
         name,
-        url: `.${file}`,
+        url: file.startsWith("/") ? `.${file}` : file,
       })),
     )
     .load(resolve);
