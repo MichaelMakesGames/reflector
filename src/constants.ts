@@ -19,10 +19,7 @@ export const PRIORITY_ITEM = 5;
 export const PRIORITY_TERRAIN = 0;
 export const PRIORITY_FLOOR = -5;
 
-export const ROOMS = 5;
-export const ROOM_SIZE = 3;
-export const MAZE_SIZE = ROOMS * 2 + 1;
-export const MAP_WIDTH = ROOMS * ROOM_SIZE + ROOMS + 1;
+export const MAP_WIDTH = 24;
 export const MAP_HEIGHT = MAP_WIDTH;
 
 export const TILE_SIZE = 32;

@@ -29,9 +29,9 @@ export default function Game() {
           <Status />
           <Resources />
           <Controls />
+          <MessageLog />
         </div>
         <div className="center">
-          <MessageLog />
           <Map />
         </div>
       </div>

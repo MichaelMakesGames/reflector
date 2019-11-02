@@ -12,6 +12,8 @@ main {
   max-width: 1280px;
   height: auto;
   overflow: hidden;
+  padding: 0;
+  padding-bottom: 1rem;
 }
 
 .row {
@@ -22,6 +24,10 @@ main {
 .left,
 .right {
   flex: 1 1 0;
+  display: flex;
+  flex-flow: column nowrap;
+  height: 826px;
+  max-height: calc(100vh - 1rem);
 }
 
 .center {
@@ -34,10 +40,15 @@ main {
   margin: 1rem;
 }
 
+.map canvas {
+  max-height: calc(100vh - 4.5rem);
+  max-width: calc(100vh - 4.5rem);
+}
+
 .box {
   border: 1px solid var(--text);
   border-radius: 0.25rem;
-  margin: 1.5rem 0.75rem;
+  margin: 1.5rem 0.75rem 0 0.75rem;
   padding: 1rem;
   position: relative;
 }
@@ -78,7 +89,6 @@ main {
 .controls {
   display: flex;
   flex-flow: row wrap;
-  margin-top: 0;
 }
 
 .control {
@@ -106,12 +116,9 @@ main {
   padding-bottom: 0.5rem;
 }
 
-.weapon {
-  height: 5.3rem;
-}
-
 .message-log {
-  height: 5rem;
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
 .messages {
@@ -121,34 +128,11 @@ main {
 
 .message {
   padding-bottom: 0.25rem;
-  width: 40rem;
-}
-
-.legend {
-  height: 32.3rem;
-  display: flex;
-  flex-flow: row wrap;
-}
-
-.legend__item {
-  flex: 0 0 calc(100% - 2rem);
-}
-
-.legend__item--half {
-  flex: 0 0 calc(50% - 1rem);
-}
-
-.legend__glyph {
-  padding: 0.25rem;
-  font-family: Nova Mono;
-}
-
-.legend__item:not(:last-child) {
-  padding-bottom: 0.4rem;
+  width: 100%;
 }
 
 .opening-dialog {
-  width: 400px;
+  width: 480px;
   margin: 0 auto;
 }
 
@@ -163,7 +147,7 @@ main {
 }
 
 .game-over-dialog {
-  width: 400px;
+  width: 480px;
   position: fixed;
   top: 10em;
   left: calc(50vw - 200px);
