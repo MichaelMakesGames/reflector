@@ -12,6 +12,7 @@ const processors: ((state: GameState) => GameState)[] = [
   processMigration,
   processAI,
   processImmigration,
+  processMigration,
   processProduction,
   processWave,
   processReflectors,
