@@ -6,6 +6,7 @@ import {
   NIGHT_SPAWN_END_BUFFER,
   TURNS_PER_NIGHT,
   NIGHT_SPAWN_START_BUFFER,
+  ENEMIES_PER_TURN_DAY_MULTIPLIER,
 } from "~constants";
 import * as selectors from "~state/selectors";
 import { rangeTo } from "~utils/math";
@@ -21,9 +22,14 @@ export default function processWave(oldState: GameState): GameState {
     state.time.turnsUntilChange > NIGHT_SPAWN_END_BUFFER &&
     TURNS_PER_NIGHT - state.time.turnsUntilChange > NIGHT_SPAWN_START_BUFFER
   ) {
-    const numberOfSpawns = Math.round(
-      ENEMIES_PER_TURN_POPULATION_MULTIPLIER * selectors.population(state),
-    );
+    let numberOfSpawns =
+      ENEMIES_PER_TURN_POPULATION_MULTIPLIER * selectors.population(state) +
+      ENEMIES_PER_TURN_DAY_MULTIPLIER * state.time.day;
+    if (Math.floor(numberOfSpawns) !== numberOfSpawns) {
+      numberOfSpawns =
+        Math.floor(numberOfSpawns) +
+        (Math.random() < numberOfSpawns % 1 ? 1 : 0);
+    }
     for (const _ of rangeTo(numberOfSpawns)) {
       state = spawnEnemy(state);
     }

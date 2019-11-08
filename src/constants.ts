@@ -3,14 +3,15 @@ export const PLAYER_ID = "PLAYER";
 
 export const BUILDING_RANGE = 2;
 export const PROJECTOR_RANGE = 2;
-export const BASE_IMMIGRATION_RATE = 5;
+export const BASE_IMMIGRATION_RATE = 10;
 export const STARTING_MORALE = 10;
-export const VICTORY_POPULATION = 50;
+export const VICTORY_POPULATION = 30;
 export const TURNS_PER_DAY = 30;
 export const TURNS_PER_NIGHT = TURNS_PER_DAY;
 export const NIGHT_SPAWN_START_BUFFER = 0;
 export const NIGHT_SPAWN_END_BUFFER = 10;
-export const ENEMIES_PER_TURN_POPULATION_MULTIPLIER = 0.25;
+export const ENEMIES_PER_TURN_POPULATION_MULTIPLIER = 0.1;
+export const ENEMIES_PER_TURN_DAY_MULTIPLIER = 1;
 export const STARTING_METAL = 0;
 
 export const PRIORITY_LASER = 20;
