@@ -17,13 +17,15 @@ export default function GameEnd() {
     <div className="game-over-dialog box">
       <div className="box__label">{victory ? "Victory!" : "Defeat"}</div>
       {!player && <p>You have died.</p>}
-      {!morale && (
+      {morale <= 0 && (
         <p>
           Your colony&apos;s morale reached 0. Every time a colonist dies you
           lose morale.
         </p>
       )}
-      {!population && <p>Your population reached 0. Defend your colonists!</p>}
+      {population <= 0 && (
+        <p>Your population reached 0. Defend your colonists!</p>
+      )}
       <button type="button" onClick={() => dispatch(actions.newGame())}>
         Restart
       </button>
