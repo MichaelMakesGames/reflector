@@ -52,11 +52,13 @@ function activatePlacement(
           range: projector.projector.range,
         })),
         canPlace,
+        true,
       )
     : findValidPositions(
         state,
         [{ pos: player.pos, range: BUILDING_RANGE }],
         canPlace,
+        false,
       );
   validPositions.sort(
     (a, b) => getDistance(player.pos, a) - getDistance(player.pos, b),
