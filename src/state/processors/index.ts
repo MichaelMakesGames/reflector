@@ -9,14 +9,14 @@ import processWave from "./processWave";
 import processTime from "./processTime";
 
 const processors: ((state: GameState) => GameState)[] = [
+  processMigration,
   processAI,
   processImmigration,
-  processMigration,
   processProduction,
-  processGameOver,
   processWave,
   processReflectors,
   processTime,
+  processGameOver,
 ];
 
 export default processors;
