@@ -6,9 +6,11 @@ export const PROJECTOR_RANGE = 2;
 export const BASE_IMMIGRATION_RATE = 5;
 export const STARTING_MORALE = 10;
 export const VICTORY_POPULATION = 50;
-export const TURNS_BETWEEN_WAVES_BASE = 20;
-export const WAVE_DURATION_BASE = 5;
-export const ENEMIES_PER_WAVE_POPULATION_MULTIPLIER = 0.5;
+export const TURNS_PER_DAY = 30;
+export const TURNS_PER_NIGHT = TURNS_PER_DAY;
+export const NIGHT_SPAWN_START_BUFFER = 0;
+export const NIGHT_SPAWN_END_BUFFER = 10;
+export const ENEMIES_PER_TURN_POPULATION_MULTIPLIER = 0.25;
 export const STARTING_METAL = 0;
 
 export const PRIORITY_LASER = 20;

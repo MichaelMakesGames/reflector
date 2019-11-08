@@ -8,7 +8,8 @@ export default function Status() {
     selectors.turnsUntilNextImmigrant,
   );
   const morale = useSelector(selectors.morale);
-  const turnsUntilNextWave = useSelector(selectors.turnsUntilNextWave);
+  const turnsUntilTimeChange = useSelector(selectors.turnsUntilTimeChange);
+  const isNight = useSelector(selectors.isNight);
 
   return (
     <div className="box status">
@@ -16,7 +17,9 @@ export default function Status() {
       <div>Population: {population}</div>
       <div>Next Arrival: {turnsUntilNextImmigrant}</div>
       <div>Morale: {morale}</div>
-      <div>Next Wave: {turnsUntilNextWave}</div>
+      <div>
+        Turns until {isNight ? "day" : "night"}: {turnsUntilTimeChange}
+      </div>
     </div>
   );
 }

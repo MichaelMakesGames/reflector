@@ -1,60 +1,31 @@
 import { GameState, Pos } from "~types";
 import {
-  WAVE_DURATION_BASE,
-  ENEMIES_PER_WAVE_POPULATION_MULTIPLIER,
-  UP,
+  ENEMIES_PER_TURN_POPULATION_MULTIPLIER,
   MAP_WIDTH,
   MAP_HEIGHT,
-  DOWN,
-  LEFT,
-  RIGHT,
-  TURNS_BETWEEN_WAVES_BASE,
+  NIGHT_SPAWN_END_BUFFER,
+  TURNS_PER_NIGHT,
+  NIGHT_SPAWN_START_BUFFER,
 } from "~constants";
 import * as selectors from "~state/selectors";
 import { rangeTo } from "~utils/math";
-import { choose } from "~utils/rng";
+import { choose, pickWeighted } from "~utils/rng";
 import handleAction from "~state/handleAction";
 import { addEntity } from "~state/actions";
 import { createEntityFromTemplate } from "~utils/entities";
-import { getConstDir } from "~utils/geometry";
 
 export default function processWave(oldState: GameState): GameState {
   let state = oldState;
-  const isCurrent = state.wave.turnsUntilNextWaveStart === 0;
-  if (isCurrent) {
+  if (
+    state.time.isNight &&
+    state.time.turnsUntilChange > NIGHT_SPAWN_END_BUFFER &&
+    TURNS_PER_NIGHT - state.time.turnsUntilChange > NIGHT_SPAWN_START_BUFFER
+  ) {
     const numberOfSpawns = Math.round(
-      ENEMIES_PER_WAVE_POPULATION_MULTIPLIER * selectors.population(state),
+      ENEMIES_PER_TURN_POPULATION_MULTIPLIER * selectors.population(state),
     );
     for (const _ of rangeTo(numberOfSpawns)) {
       state = spawnEnemy(state);
-    }
-    state = {
-      ...state,
-      wave: {
-        ...state.wave,
-        turnsUntilCurrentWaveEnd: state.wave.turnsUntilCurrentWaveEnd - 1,
-      },
-    };
-    if (state.wave.turnsUntilCurrentWaveEnd <= 0) {
-      state.wave.turnsUntilNextWaveStart = TURNS_BETWEEN_WAVES_BASE;
-    }
-  } else {
-    state = {
-      ...state,
-      wave: {
-        ...state.wave,
-        turnsUntilNextWaveStart: state.wave.turnsUntilNextWaveStart - 1,
-      },
-    };
-    if (state.wave.turnsUntilNextWaveStart === 0) {
-      state = {
-        ...state,
-        wave: {
-          ...state.wave,
-          turnsUntilCurrentWaveEnd: WAVE_DURATION_BASE,
-          direction: choose([UP, DOWN, LEFT, RIGHT]),
-        },
-      };
     }
   }
   return state;
@@ -76,30 +47,31 @@ function spawnEnemy(state: GameState): GameState {
 
 function getPossibleSpawnPositions(state: GameState): Pos[] {
   const unfilteredPositions: Pos[] = [];
-  const direction = getConstDir(state.wave.direction);
 
-  if (direction === UP) {
+  const direction = pickWeighted(Object.entries(state.time.directionWeights));
+
+  if (direction === "n") {
     for (const x of rangeTo(MAP_WIDTH)) {
       const y = 0;
       unfilteredPositions.push({ x, y });
     }
   }
 
-  if (direction === DOWN) {
+  if (direction === "s") {
     for (const x of rangeTo(MAP_WIDTH)) {
       const y = MAP_HEIGHT - 1;
       unfilteredPositions.push({ x, y });
     }
   }
 
-  if (direction === LEFT) {
+  if (direction === "w") {
     for (const y of rangeTo(MAP_HEIGHT)) {
       const x = 0;
       unfilteredPositions.push({ x, y });
     }
   }
 
-  if (direction === RIGHT) {
+  if (direction === "e") {
     for (const y of rangeTo(MAP_HEIGHT)) {
       const x = MAP_WIDTH - 1;
       unfilteredPositions.push({ x, y });

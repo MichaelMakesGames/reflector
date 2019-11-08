@@ -2,14 +2,9 @@ import {
   VERSION,
   BASE_IMMIGRATION_RATE,
   STARTING_MORALE,
-  TURNS_BETWEEN_WAVES_BASE,
-  RIGHT,
-  UP,
-  DOWN,
-  LEFT,
   STARTING_METAL,
+  TURNS_PER_DAY,
 } from "~constants";
-import { choose } from "~utils/rng";
 import { GameState } from "~types";
 
 const initialState: GameState = {
@@ -21,10 +16,12 @@ const initialState: GameState = {
   victory: false,
   turnsUntilNextImmigrant: BASE_IMMIGRATION_RATE,
   morale: STARTING_MORALE,
-  wave: {
-    turnsUntilCurrentWaveEnd: 0,
-    turnsUntilNextWaveStart: TURNS_BETWEEN_WAVES_BASE,
-    direction: choose([UP, DOWN, LEFT, RIGHT]),
+  time: {
+    isNight: false,
+    turnsUntilChange: TURNS_PER_DAY,
+    turn: 1,
+    day: 1,
+    directionWeights: { n: 0, s: 0, e: 0, w: 0 },
   },
   isBuildMenuOpen: false,
   resources: {

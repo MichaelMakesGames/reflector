@@ -128,8 +128,12 @@ export function morale(state: GameState) {
   return state.morale;
 }
 
-export function turnsUntilNextWave(state: GameState) {
-  return state.wave.turnsUntilNextWaveStart;
+export function isNight(state: GameState) {
+  return state.time.isNight;
+}
+
+export function turnsUntilTimeChange(state: GameState) {
+  return state.time.turnsUntilChange;
 }
 
 export function isBuildMenuOpen(state: GameState) {

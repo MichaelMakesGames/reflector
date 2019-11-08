@@ -22,25 +22,6 @@ export default function generateMap(): Entity[] {
   const waterFloorThreshold = calcPercentile(flatNoise, 15);
   const floorOreThreshold = calcPercentile(flatNoise, 85);
   const oreMountainThreshold = calcPercentile(flatNoise, 90);
-  console.log({
-    total: flatNoise.length,
-    water:
-      (flatNoise.filter(n => n < waterFloorThreshold).length * 100) /
-      flatNoise.length,
-    floor:
-      (flatNoise.filter(n => n < floorOreThreshold && n >= waterFloorThreshold)
-        .length *
-        100) /
-      flatNoise.length,
-    ore:
-      (flatNoise.filter(n => n < oreMountainThreshold && n >= floorOreThreshold)
-        .length *
-        100) /
-      flatNoise.length,
-    mountain:
-      (flatNoise.filter(n => n >= oreMountainThreshold).length * 100) /
-      flatNoise.length,
-  });
 
   for (let y = -1; y < MAP_HEIGHT + 1; y++) {
     for (let x = -1; x < MAP_WIDTH + 1; x++) {

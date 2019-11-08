@@ -1,5 +1,4 @@
 import { Entity } from "./Entity";
-import { Direction } from "./Direction";
 
 export interface GameState {
   version: string;
@@ -14,15 +13,22 @@ export interface GameState {
   victory: boolean;
   turnsUntilNextImmigrant: number;
   morale: number;
-  wave: WaveState;
+  time: TimeState;
   isBuildMenuOpen: boolean;
   resources: {
     [resource: string]: number;
   };
 }
 
-export interface WaveState {
-  turnsUntilNextWaveStart: number;
-  turnsUntilCurrentWaveEnd: number;
-  direction: Direction;
+export interface TimeState {
+  day: number;
+  turn: number;
+  isNight: boolean;
+  turnsUntilChange: number;
+  directionWeights: {
+    n: number;
+    s: number;
+    e: number;
+    w: number;
+  };
 }
