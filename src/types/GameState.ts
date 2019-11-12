@@ -1,4 +1,5 @@
 import { Entity } from "./Entity";
+import { Direction } from "./Direction";
 
 export interface GameState {
   version: string;
@@ -18,6 +19,7 @@ export interface GameState {
   resources: {
     [resource: string]: number;
   };
+  lastAimingDirection: Direction;
 }
 
 export interface TimeState {

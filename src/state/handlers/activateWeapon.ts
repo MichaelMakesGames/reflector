@@ -1,5 +1,4 @@
 import * as actions from "~/state/actions";
-import { RIGHT } from "~/constants";
 import * as selectors from "~/state/selectors";
 import { GameState } from "~/types";
 import handleAction, { registerHandler } from "~state/handleAction";
@@ -43,7 +42,10 @@ function activateWeapon(
       },
     },
   };
-  newState = handleAction(newState, actions.targetWeapon(RIGHT));
+  newState = handleAction(
+    newState,
+    actions.targetWeapon(newState.lastAimingDirection),
+  );
   return newState;
 }
 

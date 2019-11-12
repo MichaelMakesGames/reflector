@@ -4,6 +4,7 @@ import {
   STARTING_MORALE,
   STARTING_METAL,
   TURNS_PER_DAY,
+  RIGHT,
 } from "~constants";
 import { GameState } from "~types";
 
@@ -27,6 +28,7 @@ const initialState: GameState = {
   resources: {
     METAL: STARTING_METAL,
   },
+  lastAimingDirection: RIGHT,
 };
 
 export default initialState;

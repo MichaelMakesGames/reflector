@@ -11,7 +11,10 @@ function targetWeapon(
   state: GameState,
   action: ReturnType<typeof actions.targetWeapon>,
 ): GameState {
-  let newState = state;
+  let newState: GameState = {
+    ...state,
+    lastAimingDirection: action.payload,
+  };
   const targetingLasers = selectors.targetingLasers(newState);
   newState = handleAction(
     newState,
