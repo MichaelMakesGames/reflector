@@ -120,8 +120,8 @@ export function placingTarget(state: GameState) {
 
 export function placingMarker(
   state: GameState,
-): MakeRequired<Entity, "placingMarker" | "pos"> | null {
-  return entitiesWithComps(state, "placingMarker", "pos")[0] || null;
+): MakeRequired<Entity, "placingMarker" | "pos" | "display"> | null {
+  return entitiesWithComps(state, "placingMarker", "pos", "display")[0] || null;
 }
 
 export function morale(state: GameState) {

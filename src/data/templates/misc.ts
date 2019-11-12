@@ -52,7 +52,7 @@ const templates: { [id: string]: Partial<Entity> } = {
     display: {
       glyph: ".",
       tile: "outline_solid",
-      color: colors.secondary,
+      color: colors.invalid,
       priority: PRIORITY_TERRAIN,
     },
     placingMarker: {},

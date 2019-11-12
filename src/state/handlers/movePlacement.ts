@@ -9,6 +9,7 @@ import {
 import { UP, DOWN } from "~constants";
 import { rangeFromTo } from "~utils/math";
 import handleAction, { registerHandler } from "~state/handleAction";
+import colors from "~colors";
 
 function movePlacement(
   prevState: GameState,
@@ -22,8 +23,37 @@ function movePlacement(
   const validPositions = selectors
     .entitiesWithComps(state, "validMarker", "pos")
     .map(e => e.pos);
-
   const { direction } = action.payload;
+
+  if (!action.payload.jumpToValid) {
+    const newPos = {
+      x: currentPos.x + direction.dx,
+      y: currentPos.y + direction.dy,
+    };
+    const isValid = validPositions.some(validPos =>
+      arePositionsEqual(validPos, newPos),
+    );
+    state = handleAction(
+      state,
+      actions.updateEntity({
+        ...placingTarget,
+        pos: newPos,
+      }),
+    );
+    state = handleAction(
+      state,
+      actions.updateEntity({
+        ...placingMarker,
+        display: {
+          ...placingMarker.display,
+          color: isValid ? colors.secondary : colors.invalid,
+        },
+        pos: newPos,
+      }),
+    );
+    return state;
+  }
+
   const constDir = getConstDir(direction);
   const perpendicularCoord: "x" | "y" =
     constDir === UP || constDir === DOWN ? "x" : "y";
@@ -58,10 +88,13 @@ function movePlacement(
       );
       state = handleAction(
         state,
-        actions.move({
-          entityId: placingMarker.id,
-          dx,
-          dy,
+        actions.updateEntity({
+          ...placingMarker,
+          display: {
+            ...placingMarker.display,
+            color: colors.secondary,
+          },
+          pos: validPosition,
         }),
       );
       break;

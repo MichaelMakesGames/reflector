@@ -60,9 +60,6 @@ function activatePlacement(
         canPlace,
         false,
       );
-  validPositions.sort(
-    (a, b) => getDistance(player.pos, a) - getDistance(player.pos, b),
-  );
 
   if (!validPositions.length) {
     return {
@@ -77,7 +74,7 @@ function activatePlacement(
     actions.addEntity({
       entity: {
         ...entityToPlace,
-        pos: validPositions[0],
+        pos: player.pos,
       },
     }),
   );
@@ -85,7 +82,7 @@ function activatePlacement(
     state,
     actions.addEntity({
       entity: createEntityFromTemplate("PLACING_MARKER", {
-        pos: validPositions[0],
+        pos: player.pos,
       }),
     }),
   );

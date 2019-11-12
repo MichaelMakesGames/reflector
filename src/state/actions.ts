@@ -41,6 +41,7 @@ export const activatePlacement = createStandardAction("ACTIVATE_PLACEMENT")<{
 }>();
 export const movePlacement = createStandardAction("MOVE_PLACEMENT")<{
   direction: { dx: number; dy: number };
+  jumpToValid: boolean;
 }>();
 export const cancelPlacement = createStandardAction("CANCEL_PLACEMENT")();
 export const rotatePlacement = createStandardAction("ROTATE_PLACEMENT")();

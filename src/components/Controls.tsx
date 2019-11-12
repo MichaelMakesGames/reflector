@@ -46,30 +46,6 @@ function getControls(
       action: actions.move({ entityId: PLAYER_ID, ...RIGHT }),
       label: "Move Right",
     },
-    {
-      key: "ArrowUp",
-      action: actions.move({ entityId: PLAYER_ID, ...UP }),
-      label: "Move Up",
-      hidden: true,
-    },
-    {
-      key: "ArrowLeft",
-      action: actions.move({ entityId: PLAYER_ID, ...LEFT }),
-      label: "Move Left",
-      hidden: true,
-    },
-    {
-      key: "ArrowDown",
-      action: actions.move({ entityId: PLAYER_ID, ...DOWN }),
-      label: "Move Down",
-      hidden: true,
-    },
-    {
-      key: "ArrowRight",
-      action: actions.move({ entityId: PLAYER_ID, ...RIGHT }),
-      label: "Move Right",
-      hidden: true,
-    },
   ];
   const activateWeapon = [
     {
@@ -165,30 +141,6 @@ function getControls(
         action: actions.targetWeapon(RIGHT),
         label: "Target Right",
       },
-      {
-        key: "ArrowUp",
-        action: actions.targetWeapon(UP),
-        label: "Target Up",
-        hidden: true,
-      },
-      {
-        key: "ArrowLeft",
-        action: actions.targetWeapon(LEFT),
-        label: "Target Left",
-        hidden: true,
-      },
-      {
-        key: "ArrowDown",
-        action: actions.targetWeapon(DOWN),
-        label: "Target Down",
-        hidden: true,
-      },
-      {
-        key: "ArrowRight",
-        action: actions.targetWeapon(RIGHT),
-        label: "Target Right",
-        hidden: true,
-      },
       { key: "Enter", action: actions.fireWeapon(), label: "Fire" },
       {
         key: "Escape",
@@ -227,30 +179,6 @@ function getControls(
         action: actions.move({ entityId: inspector.id, ...RIGHT }),
         label: "Move Inspector Right",
       },
-      {
-        key: "ArrowUp",
-        action: actions.move({ entityId: inspector.id, ...UP }),
-        label: "Move Inspector Up",
-        hidden: true,
-      },
-      {
-        key: "ArrowLeft",
-        action: actions.move({ entityId: inspector.id, ...LEFT }),
-        label: "Move Inspector Left",
-        hidden: true,
-      },
-      {
-        key: "ArrowDown",
-        action: actions.move({ entityId: inspector.id, ...DOWN }),
-        label: "Move Inspector Down",
-        hidden: true,
-      },
-      {
-        key: "ArrowRight",
-        action: actions.move({ entityId: inspector.id, ...RIGHT }),
-        label: "Move Inspector Right",
-        hidden: true,
-      },
     ];
   }
 
@@ -258,47 +186,47 @@ function getControls(
     return [
       {
         key: "w",
-        action: actions.movePlacement({ direction: UP }),
-        label: "Move Target Up",
+        action: actions.movePlacement({ direction: UP, jumpToValid: false }),
+        label: "Move Target Up (shift to jump to valid spot)",
       },
       {
         key: "a",
-        action: actions.movePlacement({ direction: LEFT }),
-        label: "Move Target Left",
+        action: actions.movePlacement({ direction: LEFT, jumpToValid: false }),
+        label: "Move Target Left (shift to jump to valid spot)",
       },
       {
         key: "s",
-        action: actions.movePlacement({ direction: DOWN }),
-        label: "Move Target Down",
+        action: actions.movePlacement({ direction: DOWN, jumpToValid: false }),
+        label: "Move Target Down (shift to jump to valid spot)",
       },
       {
         key: "d",
-        action: actions.movePlacement({ direction: RIGHT }),
-        label: "Move Target Right",
+        action: actions.movePlacement({ direction: RIGHT, jumpToValid: false }),
+        label: "Move Target Right (shift to jump to valid spot)",
       },
       {
-        key: "ArrowUp",
-        action: actions.movePlacement({ direction: UP }),
+        key: "W",
+        action: actions.movePlacement({ direction: UP, jumpToValid: true }),
+        hidden: true,
         label: "Move Target Up",
-        hidden: true,
       },
       {
-        key: "ArrowLeft",
-        action: actions.movePlacement({ direction: LEFT }),
+        key: "A",
+        action: actions.movePlacement({ direction: LEFT, jumpToValid: true }),
+        hidden: true,
         label: "Move Target Left",
-        hidden: true,
       },
       {
-        key: "ArrowDown",
-        action: actions.movePlacement({ direction: DOWN }),
+        key: "S",
+        action: actions.movePlacement({ direction: DOWN, jumpToValid: true }),
+        hidden: true,
         label: "Move Target Down",
-        hidden: true,
       },
       {
-        key: "ArrowRight",
-        action: actions.movePlacement({ direction: RIGHT }),
-        label: "Move Target Right",
+        key: "D",
+        action: actions.movePlacement({ direction: RIGHT, jumpToValid: true }),
         hidden: true,
+        label: "Move Target Right",
       },
       { key: "r", action: actions.rotatePlacement(), label: "Rotate" },
       { key: "Escape", action: actions.cancelPlacement(), label: "Cancel" },

@@ -18,6 +18,7 @@ const colors = {
   text: palette.white,
   primary: palette.red,
   secondary: palette.yellow,
+  invalid: palette.red,
   payer: palette.white,
   inactiveBuilding: palette.gray,
   activeBuilding: palette.white,
