@@ -183,7 +183,7 @@ function getControls(
   }
 
   if (placing && placing.placing) {
-    return [
+    const placingControls: Control[] = [
       {
         key: "w",
         action: actions.movePlacement({ direction: UP, jumpToValid: false }),
@@ -232,6 +232,16 @@ function getControls(
       { key: "Escape", action: actions.cancelPlacement(), label: "Cancel" },
       { key: "Enter", action: actions.finishPlacement(), label: "Confirm" },
     ];
+
+    if (placing.reflector) {
+      placingControls.push({
+        key: "Backspace",
+        action: actions.removeReflector(),
+        label: "Remove Reflector",
+      });
+    }
+
+    return placingControls;
   }
 
   return [

@@ -1,12 +1,10 @@
-import * as actions from "~/state/actions";
 import { BUILDING_RANGE } from "~/constants";
-import { findValidPositions } from "~utils/building";
-import { createEntityFromTemplate } from "~/utils/entities";
+import * as actions from "~/state/actions";
 import * as selectors from "~/state/selectors";
-
 import { GameState, Pos } from "~/types";
+import { createEntityFromTemplate } from "~/utils/entities";
 import handleAction, { registerHandler } from "~state/handleAction";
-import { getDistance } from "~utils/geometry";
+import { findValidPositions } from "~utils/building";
 
 function activatePlacement(
   prevState: GameState,

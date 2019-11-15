@@ -20,6 +20,7 @@ import "./playerTookTurn";
 import "./reduceMorale";
 import "./removeEntities";
 import "./removeEntity";
+import "./removeReflector";
 import "./rotatePlacement";
 import "./targetWeapon";
 import "./updateEntity";
