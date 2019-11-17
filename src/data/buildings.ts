@@ -5,7 +5,7 @@ export default [
     label: "Splitter",
     cost: {
       resource: "METAL",
-      amount: 3,
+      amount: 25,
     },
   },
   {
@@ -14,7 +14,7 @@ export default [
     label: "Wall",
     cost: {
       resource: "METAL",
-      amount: 1,
+      amount: 10,
     },
   },
   {
@@ -23,7 +23,7 @@ export default [
     label: "Residence",
     cost: {
       resource: "METAL",
-      amount: 5,
+      amount: 25,
     },
   },
   {
@@ -32,7 +32,7 @@ export default [
     label: "Mine",
     cost: {
       resource: "METAL",
-      amount: 10,
+      amount: 25,
     },
     validitySelector: "canPlaceMine",
   },
@@ -42,7 +42,7 @@ export default [
     label: "Projector",
     cost: {
       resource: "METAL",
-      amount: 5,
+      amount: 50,
     },
   },
 ];

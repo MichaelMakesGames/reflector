@@ -74,6 +74,10 @@ export default function generateMap(): Entity[] {
     .filter(entity => entity.id.startsWith("FLOOR"))
     .map(entity => entity.pos)
     .sort((a, b) => getDistance(a, centerPos) - getDistance(b, centerPos));
+  const orePosititions = (result as MakeRequired<Entity, "pos">[])
+    .filter(entity => entity.id.startsWith("ORE"))
+    .map(entity => entity.pos)
+    .sort((a, b) => getDistance(a, centerPos) - getDistance(b, centerPos));
 
   const waterEntities = (result as MakeRequired<Entity, "pos">[]).filter(
     entity => entity.id.startsWith("WATER_BASE"),
@@ -139,6 +143,12 @@ export default function generateMap(): Entity[] {
     pos: floorPositions[10],
     id: PLAYER_ID,
   });
+
+  result.push(
+    createEntityFromTemplate("MINE", {
+      pos: orePosititions[0],
+    }),
+  );
 
   return result;
 }
