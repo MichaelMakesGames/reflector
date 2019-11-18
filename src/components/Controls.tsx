@@ -92,8 +92,9 @@ function getControls(
       action: actions.activatePlacement({
         template: "REFLECTOR_UP_RIGHT",
         takesTurn: false,
+        validitySelector: "canPlaceReflector",
       }),
-      label: "Place Reflector (free action)",
+      label: "Manage Reflectors (free action)",
       tooltip:
         "Reflectors are your main tool for manipulating lasers. Placing a reflector does not cost any resources and does not take a turn. However, reflectors can only be placed around you or a projector, and are automatically destroyed if they are ever out of range.",
     },

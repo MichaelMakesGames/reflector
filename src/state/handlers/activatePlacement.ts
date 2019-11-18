@@ -30,7 +30,6 @@ function activatePlacement(
 
   const entityToPlace = createEntityFromTemplate(template, {
     placing: { takesTurn, cost },
-    pos: player.pos,
   });
 
   const canPlace = (gameState: GameState, pos: Pos) => {
@@ -72,7 +71,7 @@ function activatePlacement(
     actions.addEntity({
       entity: {
         ...entityToPlace,
-        pos: player.pos,
+        pos: action.payload.pos || player.pos,
       },
     }),
   );
@@ -80,7 +79,7 @@ function activatePlacement(
     state,
     actions.addEntity({
       entity: createEntityFromTemplate("PLACING_MARKER", {
-        pos: player.pos,
+        pos: action.payload.pos || player.pos,
       }),
     }),
   );

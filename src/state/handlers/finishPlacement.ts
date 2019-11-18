@@ -64,6 +64,16 @@ function finishPlacement(
 
   if (placingTarget.placing.takesTurn) {
     state = handleAction(state, actions.playerTookTurn());
+  } else {
+    state = handleAction(
+      state,
+      actions.activatePlacement({
+        template: "REFLECTOR_UP_RIGHT",
+        takesTurn: false,
+        validitySelector: "canPlaceReflector",
+        pos: placingTarget.pos,
+      }),
+    );
   }
 
   return state;

@@ -1,5 +1,5 @@
 import { createStandardAction } from "typesafe-actions";
-import { Entity } from "~/types/Entity";
+import { Entity, Pos } from "~/types/Entity";
 import { GameState } from "~types";
 
 export const addEntity = createStandardAction("ADD_ENTITY")<{
@@ -38,6 +38,7 @@ export const activatePlacement = createStandardAction("ACTIVATE_PLACEMENT")<{
   takesTurn: boolean;
   cost?: { resource: string; amount: number };
   validitySelector?: string;
+  pos?: Pos;
 }>();
 export const movePlacement = createStandardAction("MOVE_PLACEMENT")<{
   direction: { dx: number; dy: number };

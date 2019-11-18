@@ -150,6 +150,12 @@ export function canPlaceMine(state: GameState, pos: Pos) {
   );
 }
 
+export function canPlaceReflector(state: GameState, pos: Pos) {
+  return entitiesAtPosition(state, pos).every(entity =>
+    Boolean(!entity.reflector || entity.placing),
+  );
+}
+
 export function inspector(
   state: GameState,
 ): MakeRequired<Entity, "inspector" | "pos"> | null {

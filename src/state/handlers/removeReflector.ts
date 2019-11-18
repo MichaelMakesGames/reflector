@@ -2,13 +2,17 @@ import * as actions from "~state/actions";
 import * as selectors from "~state/selectors";
 import { GameState } from "~types";
 import handleAction, { registerHandler } from "~state/handleAction";
+import { createEntityFromTemplate } from "~utils/entities";
+import colors from "~colors";
 
 function removeReflector(
-  state: GameState,
+  prevState: GameState,
   action: ReturnType<typeof actions.removeReflector>,
 ): GameState {
+  let state = prevState;
   const placingTarget = selectors.placingTarget(state);
-  if (!placingTarget) return state;
+  const placingMarker = selectors.placingMarker(state);
+  if (!placingTarget || !placingMarker) return state;
   const entitiesAtPosition = selectors.entitiesAtPosition(
     state,
     placingTarget.pos,
@@ -22,10 +26,29 @@ function removeReflector(
       messageLog: [...state.messageLog, "No reflector to remove."],
     };
   } else {
-    return handleAction(
+    state = handleAction(
       state,
       actions.removeEntity({ entityId: otherReflector.id }),
     );
+    state = handleAction(
+      state,
+      actions.addEntity({
+        entity: createEntityFromTemplate("VALID_MARKER", {
+          pos: otherReflector.pos,
+        }),
+      }),
+    );
+    state = handleAction(
+      state,
+      actions.updateEntity({
+        ...placingMarker,
+        display: {
+          ...placingMarker.display,
+          color: colors.secondary,
+        },
+      }),
+    );
+    return state;
   }
 }
 
