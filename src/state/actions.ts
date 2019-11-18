@@ -46,7 +46,9 @@ export const movePlacement = createStandardAction("MOVE_PLACEMENT")<{
 }>();
 export const cancelPlacement = createStandardAction("CANCEL_PLACEMENT")();
 export const rotatePlacement = createStandardAction("ROTATE_PLACEMENT")();
-export const finishPlacement = createStandardAction("FINISH_PLACEMENT")();
+export const finishPlacement = createStandardAction("FINISH_PLACEMENT")<{
+  placeAnother: boolean;
+}>();
 
 export const attack = createStandardAction("ATTACK")<{
   target: string;

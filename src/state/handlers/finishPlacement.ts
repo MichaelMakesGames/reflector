@@ -64,7 +64,9 @@ function finishPlacement(
 
   if (placingTarget.placing.takesTurn) {
     state = handleAction(state, actions.playerTookTurn());
-  } else {
+  }
+
+  if (action.payload.placeAnother) {
     state = handleAction(
       state,
       actions.activatePlacement({

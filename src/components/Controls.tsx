@@ -310,7 +310,7 @@ function getControls(
       {
         display: "Enter",
         triggers: confirmTriggers,
-        action: actions.finishPlacement(),
+        action: actions.finishPlacement({ placeAnother: false }),
         label: "Confirm",
       },
     ];
@@ -318,9 +318,15 @@ function getControls(
     if (placing.reflector) {
       placingControls.push({
         display: "Backspace",
-        triggers: [{ code: "Backspace" }],
+        triggers: [{ code: "Backspace" }, { code: "Delete" }],
         action: actions.removeReflector(),
         label: "Remove Reflector",
+      });
+      placingControls.push({
+        display: "Shift+Enter",
+        triggers: confirmTriggers.map(t => ({ ...t, shift: true })),
+        action: actions.finishPlacement({ placeAnother: true }),
+        label: "Confirm and Place Another",
       });
     }
 

@@ -45,9 +45,8 @@ export default function OpeningDialog({ onClose }: Props) {
           other hand, cost resources and time to build but are permanent.
         </p>
         <p>
-          To start off, you should probably manually mine enough metal to build
-          a mine so you can producing some resources. After that, it&apos;s up
-          to you.
+          You have a colonist, a mine, and some metal to start. It is morning
+          now. The bugs will come out at night.
         </p>
         <p>Good luck.</p>
       </div>
