@@ -13,9 +13,16 @@ function finishPlacement(
   const placingMarker = selectors.placingMarker(state);
   if (!placingTarget || !placingMarker) return state;
 
+  const { pos } = placingTarget;
+  const entitiesAtPosition = selectors.entitiesAtPosition(state, pos);
+  const isPosValid = entitiesAtPosition.some(entity => entity.validMarker);
+  if (!isPosValid)
+    return { ...state, messageLog: [...state.messageLog, "Invalid position"] };
+
   if (placingTarget.placing.cost) {
     const { cost } = placingTarget.placing;
     if (state.resources[cost.resource] < cost.amount) {
+      console.warn("Failed to place due to cost. This should be impossible");
       return state;
     } else {
       state = {
@@ -27,11 +34,6 @@ function finishPlacement(
       };
     }
   }
-
-  const { pos } = placingTarget;
-  const entitiesAtPosition = selectors.entitiesAtPosition(state, pos);
-  const isPosValid = entitiesAtPosition.some(entity => entity.validMarker);
-  if (!isPosValid) return state;
 
   const otherReflector = entitiesAtPosition.find(
     entity => entity.reflector && entity !== placingTarget,
