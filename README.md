@@ -1,14 +1,11 @@
-# reflector-rl
-Reflector RL - a tactical game of lasers and mirrors
+# Reflector: Laser Defense
 
-https://mscottmoore.itch.io/reflector-rl
-
-Orignally created for 7DRL 2019, this game is now under active development.
-
-## Gameplay
-
-The core mechanic of the game is the manipulation of the lasers using reflectors and splitters. Your weapons recharge slowly and the enemies are plentiful, so you need to plan your shots to take out multiple at once.
+Reflector: Laser Defense is a hybrid roguelike base-builder game. For more information about the game, check out the main page at https://mscottmoore.itch.io/reflector or the devlog and https://mscottmoore.dev.
 
 ## Running the Game
 
-Assuming you have npm installed on your system, `npm install` and `npm start`. Then the game will be available at `localhost:1234`.
+Assuming you have npm installed on your system, go to the root directory of this project then run `npm i` and `npm start`. Then the game will be available at `localhost:1234`.
+
+## License
+
+The code is licensed under an MIT license. The art assets are all public domain, either created by me or public domain assets from https://kenney.nl.
