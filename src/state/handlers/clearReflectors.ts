@@ -9,12 +9,12 @@ function clearReflectors(
 ): GameState {
   let state = prevState;
 
-  const reflectors = selectors.entitiesWithComps(state, "reflector");
-
-  state = handleAction(
-    state,
-    actions.removeEntities({ entityIds: reflectors.map(e => e.id) }),
-  );
+  const reflectors = selectors
+    .entitiesWithComps(state, "reflector", "pos")
+    .filter(reflector => !reflector.placing);
+  reflectors.forEach(reflector => {
+    state = handleAction(state, actions.removeReflector(reflector.pos));
+  });
 
   return state;
 }

@@ -221,7 +221,7 @@ const templates: { [id: string]: Partial<Entity> } = {
     parentTemplate: "LASER_COSMETIC_BASE",
     display: {
       glyph: "",
-      tile: "laser_split_thin_tononen",
+      tile: "laser_split_thin_to_none",
       rotation: 180,
       color: colors.laser,
       priority: PRIORITY_LASER,

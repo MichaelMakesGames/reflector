@@ -10,6 +10,7 @@ import { Action } from "~/types/Action";
 import { Entity, Pos, Description } from "~/types/Entity";
 import buildings from "~data/buildings";
 import { createEntityFromTemplate } from "~utils/entities";
+import { MakeRequired } from "~types";
 
 interface Control {
   display: string;
@@ -22,7 +23,7 @@ interface Control {
 function getControls(
   activeWeapon: Entity | null,
   playerPosition: Pos,
-  placing: Entity | null,
+  placing: MakeRequired<Entity, "placing" | "pos"> | null,
   isBuildMenuOpen: boolean,
   inspector: Entity | null,
 ): Control[] {
@@ -98,13 +99,6 @@ function getControls(
       tooltip:
         "Reflectors are your main tool for manipulating lasers. Placing a reflector does not cost any resources and does not take a turn. However, reflectors can only be placed around you or a projector, and are automatically destroyed if they are ever out of range.",
     },
-    {
-      display: "c",
-      triggers: [{ code: "KeyC" }],
-      action: actions.clearReflectors(),
-      label: "Clear Reflectors (free action)",
-      tooltip: "This removes all reflectors from the map.",
-    },
   ];
   const wait: Control[] = [
     {
@@ -127,7 +121,9 @@ function getControls(
       display: "m",
       triggers: [{ code: "KeyM" }],
       action: actions.mine(),
-      label: "Mine",
+      label: "Manually Mine",
+      tooltip:
+        "You can mine by hand if you are next to or on top of ore. You can also build mines which will mine metal automatically.",
     },
   ];
   const inspect: Control[] = [
@@ -241,7 +237,7 @@ function getControls(
     ];
   }
 
-  if (placing && placing.placing) {
+  if (placing) {
     const placingControls: Control[] = [
       {
         display: "w",
@@ -319,8 +315,14 @@ function getControls(
       placingControls.push({
         display: "Backspace",
         triggers: [{ code: "Backspace" }, { code: "Delete" }],
-        action: actions.removeReflector(),
+        action: actions.removeReflector(placing.pos),
         label: "Remove Reflector",
+      });
+      placingControls.push({
+        display: "c",
+        triggers: [{ code: "KeyC" }],
+        action: actions.clearReflectors(),
+        label: "Clear All Reflectors",
       });
       placingControls.push({
         display: "Shift+Enter",

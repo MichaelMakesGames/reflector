@@ -7,7 +7,7 @@ const templates: { [id: string]: Partial<Entity> } = {
     description: {
       name: "Reflector",
       description:
-        "Reflects laser 90 degrees. It must be within range of either you or a projector, otherwise it is destroyed.",
+        "Reflects laser 90 degrees. It must be within range of either you or a projector, otherwise it is removed.",
     },
   },
   REFLECTOR_UP_RIGHT: {
@@ -82,7 +82,8 @@ const templates: { [id: string]: Partial<Entity> } = {
     },
     description: {
       name: "Tent",
-      description: "Temporary housing for 1 colonist. They will move if able.",
+      description:
+        "Temporary housing for 1 colonist. Colonists will move to residences if able.",
     },
   },
   RESIDENCE: {
@@ -106,7 +107,8 @@ const templates: { [id: string]: Partial<Entity> } = {
     },
     description: {
       name: "Residence",
-      description: "Provides housing for up to 3 colonists.",
+      description:
+        "Provides housing for up to 3 colonists. Colonists will move out of tents to move into residences.",
     },
   },
   MINE: {
@@ -146,7 +148,8 @@ const templates: { [id: string]: Partial<Entity> } = {
     },
     description: {
       name: "Wall",
-      description: "The most basic defense.",
+      description:
+        "The most basic defense. Can take 2 hits, unlike other buildings which are destroyed in one hit.",
     },
   },
   WALL_DAMAGED: {

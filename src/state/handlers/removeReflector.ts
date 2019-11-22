@@ -4,19 +4,18 @@ import { GameState } from "~types";
 import handleAction, { registerHandler } from "~state/handleAction";
 import { createEntityFromTemplate } from "~utils/entities";
 import colors from "~colors";
+import { arePositionsEqual } from "~utils/geometry";
 
 function removeReflector(
   prevState: GameState,
   action: ReturnType<typeof actions.removeReflector>,
 ): GameState {
   let state = prevState;
+  const pos = action.payload;
   const placingTarget = selectors.placingTarget(state);
   const placingMarker = selectors.placingMarker(state);
   if (!placingTarget || !placingMarker) return state;
-  const entitiesAtPosition = selectors.entitiesAtPosition(
-    state,
-    placingTarget.pos,
-  );
+  const entitiesAtPosition = selectors.entitiesAtPosition(state, pos);
   const otherReflector = entitiesAtPosition.find(
     e => e.reflector && e !== placingTarget,
   );
@@ -38,16 +37,18 @@ function removeReflector(
         }),
       }),
     );
-    state = handleAction(
-      state,
-      actions.updateEntity({
-        ...placingMarker,
-        display: {
-          ...placingMarker.display,
-          color: colors.secondary,
-        },
-      }),
-    );
+    if (arePositionsEqual(pos, placingMarker.pos)) {
+      state = handleAction(
+        state,
+        actions.updateEntity({
+          ...placingMarker,
+          display: {
+            ...placingMarker.display,
+            color: colors.secondary,
+          },
+        }),
+      );
+    }
     return state;
   }
 }

@@ -72,7 +72,7 @@ export const openBuildMenu = createStandardAction("OPEN_BUILD_MENU")();
 export const closeBuildMenu = createStandardAction("CLOSE_BUILD_MENU")();
 
 export const clearReflectors = createStandardAction("CLEAR_REFLECTORS")();
-export const removeReflector = createStandardAction("REMOVE_REFLECTOR")();
+export const removeReflector = createStandardAction("REMOVE_REFLECTOR")<Pos>();
 
 export const mine = createStandardAction("MINE")();
 
