@@ -1,5 +1,5 @@
 import { GameState } from "~types";
-import * as actions from "~state/actions";
+import actions from "~state/actions";
 import { registerHandler } from "~state/handleAction";
 
 function openBuildMenu(

@@ -1,4 +1,4 @@
-import * as actions from "~/state/actions";
+import actions from "~/state/actions";
 import { GameState } from "~/types";
 import { removeRenderEntity } from "~/renderer";
 import { registerHandler } from "~state/handleAction";

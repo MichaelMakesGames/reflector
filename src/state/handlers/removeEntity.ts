@@ -1,4 +1,4 @@
-import * as actions from "~/state/actions";
+import actions from "~/state/actions";
 import * as selectors from "~/state/selectors";
 import { GameState } from "~/types";
 import { getPosKey } from "~/utils/geometry";

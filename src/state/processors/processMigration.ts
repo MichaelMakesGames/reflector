@@ -1,6 +1,6 @@
 import { GameState, MakeRequired, Entity } from "~types";
 import * as selectors from "~state/selectors";
-import * as actions from "~state/actions";
+import actions from "~state/actions";
 import handleAction from "~state/handleAction";
 
 export default function processMigration(prevState: GameState): GameState {

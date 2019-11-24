@@ -1,4 +1,4 @@
-import * as actions from "~/state/actions";
+import actions from "~/state/actions";
 import { PLAYER_ID } from "~/constants";
 import generateMap from "./generateMap";
 import * as selectors from "~/state/selectors";

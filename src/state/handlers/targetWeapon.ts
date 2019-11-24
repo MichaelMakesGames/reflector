@@ -1,4 +1,4 @@
-import * as actions from "~/state/actions";
+import actions from "~/state/actions";
 import { PLAYER_ID } from "~/constants";
 import * as selectors from "~/state/selectors";
 import { getAdjacentPositions } from "~/utils/geometry";

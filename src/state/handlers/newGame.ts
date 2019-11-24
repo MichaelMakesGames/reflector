@@ -1,4 +1,4 @@
-import * as actions from "~/state/actions";
+import actions from "~/state/actions";
 import { createEntityFromTemplate } from "~/utils/entities";
 import makeLevel from "~/utils/makeLevel";
 

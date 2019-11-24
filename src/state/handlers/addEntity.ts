@@ -1,4 +1,4 @@
-import * as actions from "~/state/actions";
+import actions from "~/state/actions";
 import { GameState, MakeRequired, Entity } from "~/types";
 import { getPosKey } from "~/utils/geometry";
 import { addRenderEntity } from "~/renderer";

@@ -1,5 +1,5 @@
 import { GameState, Direction, Pos } from "~types";
-import * as actions from "../actions";
+import actions from "../actions";
 import * as selectors from "../selectors";
 import {
   getConstDir,

@@ -4,7 +4,7 @@ import "rc-tooltip/assets/bootstrap.css";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DOWN, LEFT, PLAYER_ID, RIGHT, UP } from "~/constants";
-import * as actions from "~/state/actions";
+import actions from "~/state/actions";
 import * as selectors from "~/state/selectors";
 import { Action } from "~/types/Action";
 import { Entity, Pos, Description } from "~/types/Entity";

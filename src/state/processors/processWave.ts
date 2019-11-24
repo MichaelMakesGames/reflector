@@ -12,7 +12,7 @@ import * as selectors from "~state/selectors";
 import { rangeTo } from "~utils/math";
 import { choose, pickWeighted } from "~utils/rng";
 import handleAction from "~state/handleAction";
-import { addEntity } from "~state/actions";
+import actions from "~state/actions";
 import { createEntityFromTemplate } from "~utils/entities";
 
 export default function processWave(oldState: GameState): GameState {
@@ -43,7 +43,9 @@ function spawnEnemy(state: GameState): GameState {
     const pos = choose(positions);
     return handleAction(
       state,
-      addEntity({ entity: createEntityFromTemplate("ENEMY_DRONE", { pos }) }),
+      actions.addEntity({
+        entity: createEntityFromTemplate("ENEMY_DRONE", { pos }),
+      }),
     );
   }
 

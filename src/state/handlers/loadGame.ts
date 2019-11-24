@@ -1,5 +1,5 @@
 import { GameState } from "~types";
-import * as actions from "../actions";
+import actions from "../actions";
 import * as selectors from "../selectors";
 import { addRenderEntity } from "~renderer";
 import { registerHandler } from "~state/handleAction";

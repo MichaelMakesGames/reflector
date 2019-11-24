@@ -1,4 +1,4 @@
-import * as actions from "~/state/actions";
+import actions from "~/state/actions";
 import * as selectors from "~/state/selectors";
 import { Entity, GameState, MakeRequired, Pos } from "~/types";
 import { BASE_IMMIGRATION_RATE, MAP_HEIGHT, MAP_WIDTH } from "~constants";
