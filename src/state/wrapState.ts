@@ -10,7 +10,7 @@ export default function wrapState(state: RawState): WrappedState {
     select: {},
     act: {},
   };
-  wrappedState.setState = (newState: RawState) => {
+  wrappedState.setRaw = (newState: RawState) => {
     wrappedState.raw = newState;
     return wrappedState;
   };
