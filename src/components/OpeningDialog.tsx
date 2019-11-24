@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import actions from "~state/actions";
-import * as selectors from "~state/selectors";
+import selectors from "~state/selectors";
 import { GameState } from "~types";
 import { load } from "~utils/gameSave";
 import { VICTORY_POPULATION } from "~constants";

@@ -1,6 +1,6 @@
 import { BUILDING_RANGE } from "~/constants";
 import actions from "~/state/actions";
-import * as selectors from "~/state/selectors";
+import selectors from "~/state/selectors";
 import { GameState, Pos } from "~/types";
 import { createEntityFromTemplate } from "~/utils/entities";
 import handleAction, { registerHandler } from "~state/handleAction";

@@ -1,6 +1,6 @@
 import actions from "~/state/actions";
 import { PLAYER_ID } from "~/constants";
-import * as selectors from "~/state/selectors";
+import selectors from "~/state/selectors";
 import { getAdjacentPositions } from "~/utils/geometry";
 import { createLaser, reflect, getSplitTemplateName } from "~/utils/lasers";
 import { Entity, GameState, Pos } from "~/types";
@@ -15,7 +15,11 @@ function targetWeapon(
     ...state,
     lastAimingDirection: action.payload,
   };
-  const targetingLasers = selectors.targetingLasers(newState);
+  const targetingLasers = selectors.entitiesWithComps(
+    newState,
+    "targeting",
+    "pos",
+  );
   newState = handleAction(
     newState,
     actions.removeEntities({

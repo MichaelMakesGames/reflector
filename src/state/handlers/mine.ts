@@ -1,6 +1,6 @@
 import { GameState } from "~types";
 import actions from "~state/actions";
-import * as selectors from "~state/selectors";
+import selectors from "~state/selectors";
 import handleAction, { registerHandler } from "~state/handleAction";
 
 function mine(

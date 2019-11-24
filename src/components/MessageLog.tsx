@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import * as selectors from "~/state/selectors";
+import selectors from "~/state/selectors";
 
 export default function MessageLog() {
   const messages = useSelector(selectors.messageLog);

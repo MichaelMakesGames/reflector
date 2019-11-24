@@ -2,7 +2,7 @@
 import * as ROT from "rot-js";
 import { ActionType } from "typesafe-actions";
 import actions from "~/state/actions";
-import * as selectors from "~/state/selectors";
+import selectors from "~/state/selectors";
 import { Direction, Entity, GameState, Pos } from "~/types";
 import { getDistance, arePositionsEqual } from "./geometry";
 

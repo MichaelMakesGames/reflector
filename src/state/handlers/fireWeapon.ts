@@ -1,5 +1,5 @@
 import actions from "~/state/actions";
-import * as selectors from "~/state/selectors";
+import selectors from "~/state/selectors";
 import { Entity, GameState } from "~/types";
 import handleAction, { registerHandler } from "~state/handleAction";
 
@@ -12,7 +12,11 @@ function fireWeapon(
   const player = selectors.player(newState);
   if (!player || !activeWeapon) return newState;
 
-  const targetingLasers = selectors.targetingLasers(newState);
+  const targetingLasers = selectors.entitiesWithComps(
+    newState,
+    "targeting",
+    "pos",
+  );
 
   const entitiesToSwap: Entity[] = [player];
   const entitiesToDestroy: string[] = [];

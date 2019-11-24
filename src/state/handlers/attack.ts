@@ -1,6 +1,6 @@
 import actions from "~/state/actions";
 import { PLAYER_ID } from "~/constants";
-import * as selectors from "~/state/selectors";
+import selectors from "~/state/selectors";
 import { GameState } from "~/types";
 import handleAction, { registerHandler } from "~state/handleAction";
 

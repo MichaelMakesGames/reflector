@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import * as selectors from "~state/selectors";
+import selectors from "~state/selectors";
 import actions from "~state/actions";
 
 export default function GameEnd() {

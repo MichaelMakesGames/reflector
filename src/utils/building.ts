@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 import { GameState, Pos } from "~/types";
-import * as selectors from "~/state/selectors";
+import selectors from "~/state/selectors";
 import { rangeFromTo } from "./math";
 import { arePositionsEqual } from "./geometry";
 import { MAP_WIDTH, MAP_HEIGHT } from "~constants";

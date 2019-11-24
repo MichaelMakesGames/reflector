@@ -1,5 +1,5 @@
 import { getAIActions } from "~/utils/ai";
-import * as selectors from "~/state/selectors";
+import selectors from "~/state/selectors";
 import { GameState } from "~/types";
 import handleAction from "~state/handleAction";
 

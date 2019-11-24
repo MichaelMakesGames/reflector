@@ -8,7 +8,7 @@ import {
   NIGHT_SPAWN_START_BUFFER,
   ENEMIES_PER_TURN_DAY_MULTIPLIER,
 } from "~constants";
-import * as selectors from "~state/selectors";
+import selectors from "~state/selectors";
 import { rangeTo } from "~utils/math";
 import { choose, pickWeighted } from "~utils/rng";
 import handleAction from "~state/handleAction";

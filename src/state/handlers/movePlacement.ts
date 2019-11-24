@@ -1,6 +1,6 @@
 import { GameState, Direction, Pos } from "~types";
 import actions from "../actions";
-import * as selectors from "../selectors";
+import selectors from "../selectors";
 import {
   getConstDir,
   isPositionInMap,

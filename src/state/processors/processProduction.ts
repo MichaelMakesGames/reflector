@@ -1,5 +1,5 @@
 import { GameState } from "~types";
-import * as selectors from "~state/selectors";
+import selectors from "~state/selectors";
 
 export default function processProduction(prevState: GameState): GameState {
   let state = prevState;

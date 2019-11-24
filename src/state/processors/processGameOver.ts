@@ -1,4 +1,4 @@
-import * as selectors from "~/state/selectors";
+import selectors from "~/state/selectors";
 import { GameState } from "~/types";
 import { VICTORY_POPULATION } from "~constants";
 

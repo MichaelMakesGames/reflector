@@ -5,7 +5,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DOWN, LEFT, PLAYER_ID, RIGHT, UP } from "~/constants";
 import actions from "~/state/actions";
-import * as selectors from "~/state/selectors";
+import selectors from "~/state/selectors";
 import { Action } from "~/types/Action";
 import { Entity, Pos, Description } from "~/types/Entity";
 import buildings from "~data/buildings";

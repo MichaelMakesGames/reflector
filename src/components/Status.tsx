@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import * as selectors from "~/state/selectors";
+import selectors from "~/state/selectors";
 
 export default function Status() {
   const population = useSelector(selectors.population);

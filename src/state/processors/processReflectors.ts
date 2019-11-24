@@ -1,5 +1,5 @@
 import { GameState } from "~types";
-import * as selectors from "~state/selectors";
+import selectors from "~state/selectors";
 import actions from "~state/actions";
 import handleAction from "~state/handleAction";
 import { getDistance } from "~utils/geometry";

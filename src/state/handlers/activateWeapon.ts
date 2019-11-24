@@ -1,5 +1,5 @@
 import actions from "~/state/actions";
-import * as selectors from "~/state/selectors";
+import selectors from "~/state/selectors";
 import { GameState } from "~/types";
 import handleAction, { registerHandler } from "~state/handleAction";
 
@@ -8,23 +8,8 @@ function activateWeapon(
   action: ReturnType<typeof actions.activateWeapon>,
 ): GameState {
   let newState = state;
-  const weaponInSlot = selectors.weaponInSlot(newState, action.payload.slot);
+  const weaponInSlot = selectors.entitiesWithComps(newState, "weapon")[0];
   if (!weaponInSlot) return newState;
-
-  for (const weapon of selectors.weapons(newState)) {
-    if (weapon !== weaponInSlot && weapon.weapon && weapon.weapon.active) {
-      newState = handleAction(
-        newState,
-        actions.updateEntity({
-          id: weapon.id,
-          weapon: {
-            ...weapon.weapon,
-            active: false,
-          },
-        }),
-      );
-    }
-  }
 
   const entity = weaponInSlot;
   const { weapon } = entity;

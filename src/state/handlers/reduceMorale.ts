@@ -11,8 +11,10 @@ function reduceMorale(
     morale: state.morale - action.payload.amount,
     messageLog: [
       ...state.messageLog,
-      `${action.payload.amount} colonist${action.payload.amount === 1 ? '' : 's'} died! You have lost morale.`
-    ]
+      `${action.payload.amount} colonist${
+        action.payload.amount === 1 ? "" : "s"
+      } died! You have lost morale.`,
+    ],
   };
 }
 

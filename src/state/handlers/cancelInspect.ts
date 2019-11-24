@@ -1,6 +1,6 @@
 import { GameState } from "~types";
 import actions from "../actions";
-import * as selectors from "../selectors";
+import selectors from "../selectors";
 import handleAction, { registerHandler } from "~state/handleAction";
 
 function cancelInspect(
