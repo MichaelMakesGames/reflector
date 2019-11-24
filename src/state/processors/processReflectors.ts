@@ -1,19 +1,12 @@
-import { GameState } from "~types";
-import selectors from "~state/selectors";
-import actions from "~state/actions";
-import handleAction from "~state/handleAction";
+import WrappedState from "~types/WrappedState";
 import { getDistance } from "~utils/geometry";
 
-export default function processReflectors(oldState: GameState): GameState {
-  let state = oldState;
-  const reflectors = selectors.entitiesWithComps(state, "reflector", "pos");
-  const projectors = selectors.entitiesWithComps(state, "projector", "pos");
+export default function processReflectors(state: WrappedState): void {
+  const reflectors = state.select.entitiesWithComps("reflector", "pos");
+  const projectors = state.select.entitiesWithComps("projector", "pos");
   for (const reflector of reflectors) {
-    if (selectors.isPositionBlocked(state, reflector.pos)) {
-      state = handleAction(
-        state,
-        actions.removeEntity({ entityId: reflector.id }),
-      );
+    if (state.select.isPositionBlocked(reflector.pos)) {
+      state.act.removeEntity({ entityId: reflector.id });
     }
 
     if (
@@ -22,11 +15,7 @@ export default function processReflectors(oldState: GameState): GameState {
           getDistance(projector.pos, reflector.pos) > projector.projector.range,
       )
     ) {
-      state = handleAction(
-        state,
-        actions.removeEntity({ entityId: reflector.id }),
-      );
+      state.act.removeEntity({ entityId: reflector.id });
     }
   }
-  return state;
 }

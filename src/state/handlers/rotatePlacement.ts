@@ -1,15 +1,13 @@
 import actions from "~/state/actions";
-import selectors from "~/state/selectors";
-import { GameState } from "~/types";
-import handleAction, { registerHandler } from "~state/handleAction";
+import { registerHandler } from "~state/handleAction";
+import WrappedState from "~types/WrappedState";
 
 function rotateThrow(
-  state: GameState,
+  state: WrappedState,
   action: ReturnType<typeof actions.rotatePlacement>,
-): GameState {
-  let newState = state;
-  let entity = selectors.placingTarget(newState);
-  if (!entity) return newState;
+): void {
+  let entity = state.select.placingTarget();
+  if (!entity) return;
   if (entity.reflector && entity.display) {
     entity = {
       ...entity,
@@ -34,8 +32,7 @@ function rotateThrow(
       },
     };
   }
-  newState = handleAction(newState, actions.updateEntity(entity));
-  return newState;
+  state.act.updateEntity(entity);
 }
 
 registerHandler(rotateThrow, actions.rotatePlacement);

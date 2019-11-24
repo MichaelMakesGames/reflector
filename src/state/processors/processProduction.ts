@@ -1,10 +1,7 @@
-import { GameState } from "~types";
-import selectors from "~state/selectors";
+import WrappedState from "~types/WrappedState";
 
-export default function processProduction(prevState: GameState): GameState {
-  let state = prevState;
-
-  const producers = selectors.entitiesWithComps(state, "production");
+export default function processProduction(state: WrappedState): void {
+  const producers = state.select.entitiesWithComps("production");
 
   const productionByResource = producers.reduce<{ [resource: string]: number }>(
     (prev, cur) => {
@@ -17,15 +14,13 @@ export default function processProduction(prevState: GameState): GameState {
     {},
   );
 
-  const resources = { ...state.resources };
+  const resources = { ...state.raw.resources };
   Object.entries(productionByResource).forEach(([resource, amount]) => {
     resources[resource] = (resources[resource] || 0) + amount;
   });
 
-  state = {
-    ...state,
+  state.setRaw({
+    ...state.raw,
     resources,
-  };
-
-  return state;
+  });
 }

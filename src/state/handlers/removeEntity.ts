@@ -1,20 +1,21 @@
+import { removeRenderEntity } from "~/renderer";
 import actions from "~/state/actions";
 import selectors from "~/state/selectors";
-import { GameState } from "~/types";
 import { getPosKey } from "~/utils/geometry";
-import { removeRenderEntity } from "~/renderer";
 import { registerHandler } from "~state/handleAction";
+import WrappedState from "~types/WrappedState";
 
 function removeEntity(
-  state: GameState,
+  wrappedState: WrappedState,
   action: ReturnType<typeof actions.removeEntity>,
-): GameState {
+): void {
+  const { raw: state } = wrappedState;
   const prev = selectors.entityById(state, action.payload.entityId);
   if (!prev) {
     console.warn(
       `tried to remove nonexistant entity ${action.payload.entityId}`,
     );
-    return state;
+    return;
   }
   let { entitiesByPosition } = state;
   if (prev.pos) {
@@ -31,11 +32,11 @@ function removeEntity(
 
   const entities = { ...state.entities };
   delete entities[action.payload.entityId];
-  return {
+  wrappedState.setRaw({
     ...state,
     entitiesByPosition,
     entities,
-  };
+  });
 }
 
 registerHandler(removeEntity, actions.removeEntity);

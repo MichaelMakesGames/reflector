@@ -1,26 +1,26 @@
 import actions from "~state/actions";
-import selectors from "~/state/selectors";
-import { GameState } from "~types";
-import handleAction, { registerHandler } from "~state/handleAction";
+import { registerHandler } from "~state/handleAction";
+import WrappedState from "~types/WrappedState";
 import onDestroyEffects from "~utils/onDestroyEffects";
 
-function destroy(state: GameState, action: ReturnType<typeof actions.destroy>) {
-  let newState = state;
+function destroy(
+  state: WrappedState,
+  action: ReturnType<typeof actions.destroy>,
+): void {
   const { entityId } = action.payload;
-  const entity = selectors.entityById(newState, entityId);
+  const entity = state.select.entityById(entityId);
   if (entity.destructible) {
     if (entity.destructible.onDestroy) {
       const effect = onDestroyEffects[entity.destructible.onDestroy];
       if (effect) {
         const effectAction = effect(entity);
         if (effectAction) {
-          newState = handleAction(newState, effectAction);
+          state.handle(effectAction);
         }
       }
     }
-    newState = handleAction(newState, actions.removeEntity({ entityId }));
+    state.act.removeEntity({ entityId });
   }
-  return newState;
 }
 
 registerHandler(destroy, actions.destroy);

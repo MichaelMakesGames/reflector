@@ -1,17 +1,17 @@
 /* eslint-disable import/prefer-default-export */
-import { GameState, Pos } from "~/types";
-import selectors from "~/state/selectors";
+import { RawState, Pos } from "~/types";
 import { rangeFromTo } from "./math";
 import { arePositionsEqual } from "./geometry";
 import { MAP_WIDTH, MAP_HEIGHT } from "~constants";
+import WrappedState from "~types/WrappedState";
 
 export function findValidPositions(
-  gameState: GameState,
+  state: WrappedState,
   buildFroms: {
     pos: Pos;
     range: number;
   }[],
-  canPlace: (state: GameState, pos: Pos) => boolean,
+  canPlace: (state: RawState, pos: Pos) => boolean,
   edgesAllowed: boolean,
 ): Pos[] {
   const results: Pos[] = [];
@@ -25,9 +25,9 @@ export function findValidPositions(
           pos.x === MAP_WIDTH - 1 ||
           pos.y === MAP_HEIGHT - 1;
         if (
-          !selectors.isPositionBlocked(gameState, pos) &&
+          !state.select.isPositionBlocked(pos) &&
           !results.some(other => arePositionsEqual(pos, other)) &&
-          canPlace(gameState, pos) &&
+          canPlace(state.raw, pos) &&
           (edgesAllowed || !isEdge)
         ) {
           results.push(pos);

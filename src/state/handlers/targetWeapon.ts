@@ -1,38 +1,31 @@
 import actions from "~/state/actions";
-import { PLAYER_ID } from "~/constants";
-import selectors from "~/state/selectors";
+import { Entity, Pos } from "~/types";
 import { getAdjacentPositions } from "~/utils/geometry";
-import { createLaser, reflect, getSplitTemplateName } from "~/utils/lasers";
-import { Entity, GameState, Pos } from "~/types";
-import handleAction, { registerHandler } from "~state/handleAction";
+import { createLaser, getSplitTemplateName, reflect } from "~/utils/lasers";
+import { registerHandler } from "~state/handleAction";
+import WrappedState from "~types/WrappedState";
 import { createEntityFromTemplate } from "~utils/entities";
 
 function targetWeapon(
-  state: GameState,
+  state: WrappedState,
   action: ReturnType<typeof actions.targetWeapon>,
-): GameState {
-  let newState: GameState = {
-    ...state,
+): void {
+  state.setRaw({
+    ...state.raw,
     lastAimingDirection: action.payload,
-  };
-  const targetingLasers = selectors.entitiesWithComps(
-    newState,
-    "targeting",
-    "pos",
-  );
-  newState = handleAction(
-    newState,
-    actions.removeEntities({
-      entityIds: targetingLasers.map(e => e.id),
-    }),
-  );
+  });
+  const targetingLasers = state.select.entitiesWithComps("targeting", "pos");
+  state.act.removeEntities({
+    entityIds: targetingLasers.map(e => e.id),
+  });
 
-  const player = selectors.entityById(newState, PLAYER_ID);
+  const player = state.select.player();
+  if (!player) return;
   const playerPosition = player.pos;
-  if (!playerPosition) return newState;
 
-  const activeWeapon = selectors.activeWeapon(newState);
-  if (!activeWeapon) return newState;
+  const activeWeapon = state.select.activeWeapon();
+  if (!activeWeapon) return;
+
   const { weapon } = activeWeapon;
 
   const beams = [
@@ -55,7 +48,7 @@ function targetWeapon(
         x: beam.lastPos.x + beam.dx,
         y: beam.lastPos.y + beam.dy,
       };
-      const entitiesAtPos = selectors.entitiesAtPosition(newState, nextPos);
+      const entitiesAtPos = state.select.entitiesAtPosition(nextPos);
       const solidEntity = entitiesAtPos.find(
         entity => entity.blocking && entity.blocking.lasers,
       );
@@ -63,12 +56,9 @@ function targetWeapon(
       const splitterEntity = entitiesAtPos.find(entity => entity.splitter);
 
       if (!solidEntity && !reflectorEntity) {
-        newState = handleAction(
-          newState,
-          actions.addEntity({
-            entity: createLaser(beam, beam.power, false, weapon.type, nextPos),
-          }),
-        );
+        state.act.addEntity({
+          entity: createLaser(beam, beam.power, false, weapon.type, nextPos),
+        });
       } else if (
         splitterEntity &&
         splitterEntity.splitter &&
@@ -77,14 +67,11 @@ function targetWeapon(
       ) {
         const { splitter } = splitterEntity;
         const cosmeticTemplate = getSplitTemplateName(beam.power, beam);
-        newState = handleAction(
-          newState,
-          actions.addEntity({
-            entity: createEntityFromTemplate(cosmeticTemplate, {
-              pos: nextPos,
-            }),
+        state.act.addEntity({
+          entity: createEntityFromTemplate(cosmeticTemplate, {
+            pos: nextPos,
           }),
-        );
+        });
         beams.push({
           power: beam.power - 1,
           dx: splitter.type === "horizontal" ? 1 : 0,
@@ -104,14 +91,11 @@ function targetWeapon(
           reflectorEntity.reflector.type,
           beam.power,
         );
-        newState = handleAction(
-          newState,
-          actions.addEntity({
-            entity: createEntityFromTemplate(cosmeticTemplate, {
-              pos: nextPos,
-            }),
+        state.act.addEntity({
+          entity: createEntityFromTemplate(cosmeticTemplate, {
+            pos: nextPos,
           }),
-        );
+        });
         beam.dx = newDirection.dx;
         beam.dy = newDirection.dy;
       } else if (
@@ -119,12 +103,9 @@ function targetWeapon(
         solidEntity.destructible &&
         weapon.type !== "ELECTRIC"
       ) {
-        newState = handleAction(
-          newState,
-          actions.addEntity({
-            entity: createLaser(beam, beam.power, true, weapon.type, nextPos),
-          }),
-        );
+        state.act.addEntity({
+          entity: createLaser(beam, beam.power, true, weapon.type, nextPos),
+        });
         if (weapon.type === "EXPLOSIVE") {
           explosionCenters.push(nextPos);
         }
@@ -148,20 +129,17 @@ function targetWeapon(
 
   for (const pos of explosionCenters) {
     for (const adjacentPos of getAdjacentPositions(pos)) {
-      const entities = selectors.entitiesAtPosition(newState, adjacentPos);
+      const entities = state.select.entitiesAtPosition(adjacentPos);
       if (entities.every(e => !e.targeting)) {
-        newState = handleAction(
-          newState,
-          actions.addEntity({
-            entity: createLaser(
-              { dx: 1, dy: 1 },
-              1,
-              true,
-              weapon.type,
-              adjacentPos,
-            ),
-          }),
-        );
+        state.act.addEntity({
+          entity: createLaser(
+            { dx: 1, dy: 1 },
+            1,
+            true,
+            weapon.type,
+            adjacentPos,
+          ),
+        });
       }
     }
   }
@@ -169,7 +147,7 @@ function targetWeapon(
   while (spreadElectricity.length) {
     const from = spreadElectricity.pop() as Entity;
     const pos = from.pos as Pos;
-    const entitiesAtPos = selectors.entitiesAtPosition(newState, pos);
+    const entitiesAtPos = state.select.entitiesAtPosition(pos);
     if (from.conductive && entitiesAtPos.every(e => !e.targeting)) {
       const newEntity = createLaser(
         { dx: 1, dy: 1 },
@@ -178,21 +156,16 @@ function targetWeapon(
         weapon.type,
         pos,
       );
-      newState = handleAction(
-        newState,
-        actions.addEntity({
-          entity: newEntity,
-        }),
-      );
+      state.act.addEntity({
+        entity: newEntity,
+      });
       for (const adjacentPos of getAdjacentPositions(pos)) {
-        for (const to of selectors.entitiesAtPosition(newState, adjacentPos)) {
+        for (const to of state.select.entitiesAtPosition(adjacentPos)) {
           spreadElectricity.push(to);
         }
       }
     }
   }
-
-  return newState;
 }
 
 registerHandler(targetWeapon, actions.targetWeapon);

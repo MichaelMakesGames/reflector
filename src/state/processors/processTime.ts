@@ -1,28 +1,32 @@
-import { GameState } from "~types";
 import { TURNS_PER_DAY, TURNS_PER_NIGHT } from "~constants";
+import WrappedState from "~types/WrappedState";
 import { choose } from "~utils/rng";
 
-export default function processTime(state: GameState): GameState {
-  if (state.time.turnsUntilChange <= 1) {
-    return {
-      ...state,
+export default function processTime(state: WrappedState): void {
+  if (state.raw.time.turnsUntilChange <= 1) {
+    state.setRaw({
+      ...state.raw,
       time: {
-        isNight: !state.time.isNight,
-        turnsUntilChange: state.time.isNight ? TURNS_PER_DAY : TURNS_PER_NIGHT,
-        day: state.time.isNight ? state.time.day + 1 : state.time.day,
-        turn: state.time.turn + 1,
+        isNight: !state.raw.time.isNight,
+        turnsUntilChange: state.raw.time.isNight
+          ? TURNS_PER_DAY
+          : TURNS_PER_NIGHT,
+        day: state.raw.time.isNight
+          ? state.raw.time.day + 1
+          : state.raw.time.day,
+        turn: state.raw.time.turn + 1,
         directionWeights: makeRandomDirectionWeights(),
       },
-    };
+    });
   } else {
-    return {
-      ...state,
+    state.setRaw({
+      ...state.raw,
       time: {
-        ...state.time,
-        turn: state.time.turn + 1,
-        turnsUntilChange: state.time.turnsUntilChange - 1,
+        ...state.raw.time,
+        turn: state.raw.time.turn + 1,
+        turnsUntilChange: state.raw.time.turnsUntilChange - 1,
       },
-    };
+    });
   }
 }
 

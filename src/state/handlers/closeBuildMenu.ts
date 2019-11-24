@@ -1,15 +1,15 @@
 import actions from "~state/actions";
-import { GameState } from "~types";
 import { registerHandler } from "~state/handleAction";
+import WrappedState from "~types/WrappedState";
 
 function closeBuildMenu(
-  oldState: GameState,
+  state: WrappedState,
   action: ReturnType<typeof actions.closeBuildMenu>,
-): GameState {
-  return {
-    ...oldState,
+): void {
+  state.setRaw({
+    ...state.raw,
     isBuildMenuOpen: false,
-  };
+  });
 }
 
 registerHandler(closeBuildMenu, actions.closeBuildMenu);

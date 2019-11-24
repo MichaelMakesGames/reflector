@@ -1,28 +1,23 @@
 import actions from "~/state/actions";
 import { createEntityFromTemplate } from "~/utils/entities";
 import makeLevel from "~/utils/makeLevel";
-
-import { GameState } from "~/types";
-import handleAction, { registerHandler } from "~state/handleAction";
-import initialState from "~state/initialState";
 import { clearRenderer } from "~renderer";
+import { registerHandler } from "~state/handleAction";
+import initialState from "~state/initialState";
+import WrappedState from "~types/WrappedState";
 
 function init(
-  state: GameState,
+  state: WrappedState,
   action: ReturnType<typeof actions.newGame>,
-): GameState {
-  let newState = initialState;
+): void {
+  state.setRaw(initialState);
   clearRenderer();
 
   const startingWeapon = createEntityFromTemplate("WEAPON_LASER");
   if (startingWeapon.weapon) startingWeapon.weapon.slot = 1;
-  newState = handleAction(
-    newState,
-    actions.addEntity({ entity: startingWeapon }),
-  );
+  state.act.addEntity({ entity: startingWeapon });
 
-  newState = makeLevel(newState);
-  return newState;
+  makeLevel(state);
 }
 
 registerHandler(init, actions.newGame);

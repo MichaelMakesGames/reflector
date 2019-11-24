@@ -1,62 +1,56 @@
-import { GameState, Pos } from "~types";
 import {
-  ENEMIES_PER_TURN_POPULATION_MULTIPLIER,
-  MAP_WIDTH,
-  MAP_HEIGHT,
-  NIGHT_SPAWN_END_BUFFER,
-  TURNS_PER_NIGHT,
-  NIGHT_SPAWN_START_BUFFER,
   ENEMIES_PER_TURN_DAY_MULTIPLIER,
+  ENEMIES_PER_TURN_POPULATION_MULTIPLIER,
+  MAP_HEIGHT,
+  MAP_WIDTH,
+  NIGHT_SPAWN_END_BUFFER,
+  NIGHT_SPAWN_START_BUFFER,
+  TURNS_PER_NIGHT,
 } from "~constants";
-import selectors from "~state/selectors";
+import { Pos } from "~types";
+import WrappedState from "~types/WrappedState";
+import { createEntityFromTemplate } from "~utils/entities";
 import { rangeTo } from "~utils/math";
 import { choose, pickWeighted } from "~utils/rng";
-import handleAction from "~state/handleAction";
-import actions from "~state/actions";
-import { createEntityFromTemplate } from "~utils/entities";
 
-export default function processWave(oldState: GameState): GameState {
-  let state = oldState;
+export default function processWave(state: WrappedState): void {
   if (
-    state.time.isNight &&
-    state.time.turnsUntilChange > NIGHT_SPAWN_END_BUFFER &&
-    TURNS_PER_NIGHT - state.time.turnsUntilChange > NIGHT_SPAWN_START_BUFFER
+    state.raw.time.isNight &&
+    state.raw.time.turnsUntilChange > NIGHT_SPAWN_END_BUFFER &&
+    TURNS_PER_NIGHT - state.raw.time.turnsUntilChange > NIGHT_SPAWN_START_BUFFER
   ) {
     let numberOfSpawns =
-      ENEMIES_PER_TURN_POPULATION_MULTIPLIER * selectors.population(state) +
-      ENEMIES_PER_TURN_DAY_MULTIPLIER * state.time.day;
+      ENEMIES_PER_TURN_POPULATION_MULTIPLIER * state.select.population() +
+      ENEMIES_PER_TURN_DAY_MULTIPLIER * state.raw.time.day;
     if (Math.floor(numberOfSpawns) !== numberOfSpawns) {
       numberOfSpawns =
         Math.floor(numberOfSpawns) +
         (Math.random() < numberOfSpawns % 1 ? 1 : 0);
     }
     for (const _ of rangeTo(numberOfSpawns)) {
-      state = spawnEnemy(state);
+      spawnEnemy(state);
     }
   }
-  return state;
 }
 
-function spawnEnemy(state: GameState): GameState {
+function spawnEnemy(state: WrappedState): void {
   const positions = getPossibleSpawnPositions(state);
   if (positions.length) {
     const pos = choose(positions);
-    return handleAction(
-      state,
-      actions.addEntity({
-        entity: createEntityFromTemplate("ENEMY_DRONE", { pos }),
-      }),
-    );
+    state.act.addEntity({
+      entity: createEntityFromTemplate("ENEMY_DRONE", { pos }),
+    });
+  } else {
+    console.warn("Unable to find spawn position");
   }
-
-  console.warn("Unable to find spawn position");
-  return state;
 }
 
-function getPossibleSpawnPositions(state: GameState): Pos[] {
+function getPossibleSpawnPositions(state: WrappedState): Pos[] {
   const unfilteredPositions: Pos[] = [];
 
-  const direction = pickWeighted(Object.entries(state.time.directionWeights));
+  const direction = pickWeighted(
+    Object.entries(state.raw.time.directionWeights),
+  );
 
   if (direction === "n") {
     for (const x of rangeTo(MAP_WIDTH)) {
@@ -87,6 +81,6 @@ function getPossibleSpawnPositions(state: GameState): Pos[] {
   }
 
   return unfilteredPositions.filter(
-    pos => !selectors.isPositionBlocked(state, pos),
+    pos => !state.select.isPositionBlocked(pos),
   );
 }

@@ -1,38 +1,39 @@
 import { BUILDING_RANGE } from "~/constants";
 import actions from "~/state/actions";
 import selectors from "~/state/selectors";
-import { GameState, Pos } from "~/types";
+import { RawState, Pos } from "~/types";
 import { createEntityFromTemplate } from "~/utils/entities";
-import handleAction, { registerHandler } from "~state/handleAction";
+import { registerHandler } from "~state/handleAction";
 import { findValidPositions } from "~utils/building";
+import WrappedState from "~types/WrappedState";
 
 function activatePlacement(
-  prevState: GameState,
+  state: WrappedState,
   action: ReturnType<typeof actions.activatePlacement>,
-): GameState {
-  let state = prevState;
-  const player = selectors.player(state);
-  if (!player) return state;
+): void {
+  const player = state.select.player();
+  if (!player) return;
 
   const { cost, takesTurn, template, validitySelector } = action.payload;
 
-  if (cost && state.resources[cost.resource] < cost.amount) {
-    return {
-      ...state,
+  if (cost && state.raw.resources[cost.resource] < cost.amount) {
+    state.setRaw({
+      ...state.raw,
       messageLog: [
-        ...state.messageLog,
+        ...state.raw.messageLog,
         `You do not have enough ${cost.resource}. You have ${
-          state.resources[cost.resource]
+          state.raw.resources[cost.resource]
         } out of ${cost.amount} required`,
       ],
-    };
+    });
+    return;
   }
 
   const entityToPlace = createEntityFromTemplate(template, {
     placing: { takesTurn, cost },
   });
 
-  const canPlace = (gameState: GameState, pos: Pos) => {
+  const canPlace = (gameState: RawState, pos: Pos) => {
     if (validitySelector && (selectors as any)[validitySelector]) {
       return Boolean((selectors as any)[validitySelector](gameState, pos));
     } else {
@@ -40,7 +41,7 @@ function activatePlacement(
     }
   };
 
-  const projectors = selectors.entitiesWithComps(state, "projector", "pos");
+  const projectors = state.select.entitiesWithComps("projector", "pos");
   const validPositions = entityToPlace.reflector
     ? findValidPositions(
         state,
@@ -59,40 +60,30 @@ function activatePlacement(
       );
 
   if (!validPositions.length) {
-    return {
-      ...state,
-      messageLog: [...state.messageLog, "No valid positions in range"],
-    };
+    state.setRaw({
+      ...state.raw,
+      messageLog: [...state.raw.messageLog, "No valid positions in range"],
+    });
+    return;
   }
 
-  state = handleAction(state, actions.closeBuildMenu());
-  state = handleAction(
-    state,
-    actions.addEntity({
-      entity: {
-        ...entityToPlace,
-        pos: action.payload.pos || player.pos,
-      },
+  state.act.closeBuildMenu();
+  state.act.addEntity({
+    entity: {
+      ...entityToPlace,
+      pos: action.payload.pos || player.pos,
+    },
+  });
+  state.act.addEntity({
+    entity: createEntityFromTemplate("PLACING_MARKER", {
+      pos: action.payload.pos || player.pos,
     }),
-  );
-  state = handleAction(
-    state,
-    actions.addEntity({
-      entity: createEntityFromTemplate("PLACING_MARKER", {
-        pos: action.payload.pos || player.pos,
-      }),
-    }),
-  );
+  });
   for (const pos of validPositions) {
-    state = handleAction(
-      state,
-      actions.addEntity({
-        entity: createEntityFromTemplate("VALID_MARKER", { pos }),
-      }),
-    );
+    state.act.addEntity({
+      entity: createEntityFromTemplate("VALID_MARKER", { pos }),
+    });
   }
-
-  return state;
 }
 
 registerHandler(activatePlacement, actions.activatePlacement);

@@ -1,27 +1,28 @@
 import has from "has";
+import {
+  addRenderEntity,
+  removeRenderEntity,
+  updateRenderEntity,
+} from "~/renderer";
 import actions from "~/state/actions";
 import selectors from "~/state/selectors";
-import { GameState, MakeRequired, Entity } from "~/types";
+import { Entity, MakeRequired } from "~/types";
 import { getPosKey } from "~/utils/geometry";
-import {
-  updateRenderEntity,
-  removeRenderEntity,
-  addRenderEntity,
-} from "~/renderer";
 import { registerHandler } from "~state/handleAction";
+import WrappedState from "~types/WrappedState";
 
 function updateEntity(
-  state: GameState,
+  wrappedState: WrappedState,
   action: ReturnType<typeof actions.updateEntity>,
-): GameState {
-  let newState = state;
+): void {
+  const { raw: state } = wrappedState;
   const partial = action.payload;
-  const prev = selectors.entityById(newState, partial.id);
+  const prev = selectors.entityById(state, partial.id);
   if (!prev) {
     console.warn("tried to update nonexistant entity", partial);
   }
   const entity = { ...prev, ...partial };
-  let { entitiesByPosition } = newState;
+  let { entitiesByPosition } = state;
   if (Object.hasOwnProperty.call(partial, "pos")) {
     if (prev && prev.pos) {
       const key = getPosKey(prev.pos);
@@ -51,17 +52,16 @@ function updateEntity(
     }
   }
 
-  newState = {
-    ...newState,
+  wrappedState.setRaw({
+    ...state,
     entitiesByPosition,
     entities: {
-      ...newState.entities,
+      ...state.entities,
       [entity.id]: {
         ...entity,
       },
     },
-  };
-  return newState;
+  });
 }
 
 registerHandler(updateEntity, actions.updateEntity);

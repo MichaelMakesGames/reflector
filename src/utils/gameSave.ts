@@ -1,10 +1,10 @@
 import { set, get } from "idb-keyval";
-import { GameState } from "~types";
+import { RawState } from "~types";
 
-export function save(state: GameState): void {
+export function save(state: RawState): void {
   set("save", state);
 }
 
-export function load(): Promise<GameState | undefined> {
+export function load(): Promise<RawState | undefined> {
   return get("save");
 }

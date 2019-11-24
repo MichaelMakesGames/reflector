@@ -1,21 +1,21 @@
 import actions from "~/state/actions";
-import { GameState } from "~/types";
 import { registerHandler } from "~state/handleAction";
+import WrappedState from "~types/WrappedState";
 
 function reduceMorale(
-  state: GameState,
+  state: WrappedState,
   action: ReturnType<typeof actions.reduceMorale>,
-): GameState {
-  return {
-    ...state,
-    morale: state.morale - action.payload.amount,
+): void {
+  state.setRaw({
+    ...state.raw,
+    morale: state.raw.morale - action.payload.amount,
     messageLog: [
-      ...state.messageLog,
+      ...state.raw.messageLog,
       `${action.payload.amount} colonist${
         action.payload.amount === 1 ? "" : "s"
       } died! You have lost morale.`,
     ],
-  };
+  });
 }
 
 registerHandler(reduceMorale, actions.reduceMorale);

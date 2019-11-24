@@ -1,16 +1,17 @@
 import actions from "~/state/actions";
-import { GameState, MakeRequired, Entity } from "~/types";
+import { MakeRequired, Entity } from "~/types";
 import { getPosKey } from "~/utils/geometry";
 import { addRenderEntity } from "~/renderer";
 import { registerHandler } from "~state/handleAction";
+import WrappedState from "~types/WrappedState";
 
 function addEntity(
-  state: GameState,
+  wrappedState: WrappedState,
   action: ReturnType<typeof actions.addEntity>,
-): GameState {
-  let newState = state;
+): void {
+  let state = wrappedState.raw;
   const { entity } = action.payload;
-  let { entitiesByPosition } = newState;
+  let { entitiesByPosition } = state;
   if (entity.pos) {
     const key = getPosKey(entity.pos);
     entitiesByPosition = {
@@ -23,15 +24,16 @@ function addEntity(
     addRenderEntity(entity as MakeRequired<Entity, "pos" | "display">);
   }
 
-  newState = {
-    ...newState,
+  state = {
+    ...state,
     entitiesByPosition,
     entities: {
-      ...newState.entities,
+      ...state.entities,
       [entity.id]: entity,
     },
   };
-  return newState;
+
+  wrappedState.setRaw(state);
 }
 
 registerHandler(addEntity, actions.addEntity);

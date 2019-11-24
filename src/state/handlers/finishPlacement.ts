@@ -1,37 +1,39 @@
 import actions from "~/state/actions";
-import selectors from "~/state/selectors";
-import { GameState } from "~/types";
-import handleAction, { registerHandler } from "~state/handleAction";
+import { registerHandler } from "~state/handleAction";
+import WrappedState from "~types/WrappedState";
 
 function finishPlacement(
-  prevState: GameState,
+  state: WrappedState,
   action: ReturnType<typeof actions.finishPlacement>,
-): GameState {
-  let state = prevState;
-
-  const placingTarget = selectors.placingTarget(state);
-  const placingMarker = selectors.placingMarker(state);
-  if (!placingTarget || !placingMarker) return state;
+): void {
+  const placingTarget = state.select.placingTarget();
+  const placingMarker = state.select.placingMarker();
+  if (!placingTarget || !placingMarker) return;
 
   const { pos } = placingTarget;
-  const entitiesAtPosition = selectors.entitiesAtPosition(state, pos);
+  const entitiesAtPosition = state.select.entitiesAtPosition(pos);
   const isPosValid = entitiesAtPosition.some(entity => entity.validMarker);
-  if (!isPosValid)
-    return { ...state, messageLog: [...state.messageLog, "Invalid position"] };
+  if (!isPosValid) {
+    state.setRaw({
+      ...state.raw,
+      messageLog: [...state.raw.messageLog, "Invalid position"],
+    });
+    return;
+  }
 
   if (placingTarget.placing.cost) {
     const { cost } = placingTarget.placing;
-    if (state.resources[cost.resource] < cost.amount) {
+    if (state.raw.resources[cost.resource] < cost.amount) {
       console.warn("Failed to place due to cost. This should be impossible");
-      return state;
+      return;
     } else {
-      state = {
-        ...state,
+      state.setRaw({
+        ...state.raw,
         resources: {
-          ...state.resources,
-          [cost.resource]: state.resources[cost.resource] - cost.amount,
+          ...state.raw.resources,
+          [cost.resource]: state.raw.resources[cost.resource] - cost.amount,
         },
-      };
+      });
     }
   }
 
@@ -39,48 +41,33 @@ function finishPlacement(
     entity => entity.reflector && entity !== placingTarget,
   );
   if (otherReflector) {
-    state = handleAction(
-      state,
-      actions.removeEntity({ entityId: otherReflector.id }),
-    );
+    state.act.removeEntity({ entityId: otherReflector.id });
   }
 
-  state = handleAction(
-    state,
-    actions.updateEntity({
-      id: placingTarget.id,
-      placing: undefined,
-    }),
-  );
+  state.act.updateEntity({
+    id: placingTarget.id,
+    placing: undefined,
+  });
 
-  state = handleAction(
-    state,
-    actions.removeEntities({
-      entityIds: selectors
-        .entityList(state)
-        .filter(e => e.validMarker)
-        .map(e => e.id)
-        .concat([placingMarker.id]),
-    }),
-  );
+  state.act.removeEntities({
+    entityIds: state.select
+      .entitiesWithComps("validMarker")
+      .map(e => e.id)
+      .concat([placingMarker.id]),
+  });
 
   if (placingTarget.placing.takesTurn) {
-    state = handleAction(state, actions.playerTookTurn());
+    state.act.playerTookTurn();
   }
 
   if (action.payload.placeAnother) {
-    state = handleAction(
-      state,
-      actions.activatePlacement({
-        template: "REFLECTOR_UP_RIGHT",
-        takesTurn: false,
-        validitySelector: "canPlaceReflector",
-        pos: placingTarget.pos,
-      }),
-    );
+    state.act.activatePlacement({
+      template: "REFLECTOR_UP_RIGHT",
+      takesTurn: false,
+      validitySelector: "canPlaceReflector",
+      pos: placingTarget.pos,
+    });
   }
-
-  return state;
 }
 
 registerHandler(finishPlacement, actions.finishPlacement);

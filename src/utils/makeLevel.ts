@@ -1,25 +1,16 @@
-import actions from "~/state/actions";
 import { PLAYER_ID } from "~/constants";
+import WrappedState from "~types/WrappedState";
 import generateMap from "./generateMap";
-import selectors from "~/state/selectors";
-import { GameState } from "~/types";
-import handleAction from "~state/handleAction";
 
-export default function makeLevel(state: GameState): GameState {
-  let newState = state;
-
-  newState = handleAction(
-    newState,
-    actions.removeEntities({
-      entityIds: selectors
-        .entityList(newState)
-        .filter(e => e.pos && e.id !== PLAYER_ID)
-        .map(e => e.id),
-    }),
-  );
-
+export default function makeLevel(state: WrappedState): WrappedState {
+  state.act.removeEntities({
+    entityIds: state.select
+      .entityList()
+      .filter(e => e.pos && e.id !== PLAYER_ID)
+      .map(e => e.id),
+  });
   for (const entity of generateMap()) {
-    newState = handleAction(newState, actions.addEntity({ entity }));
+    state.act.addEntity({ entity });
   }
-  return newState;
+  return state;
 }

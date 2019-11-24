@@ -1,30 +1,21 @@
 import actions from "~/state/actions";
-import selectors from "~/state/selectors";
-import { GameState } from "~/types";
-import handleAction, { registerHandler } from "~state/handleAction";
+import { registerHandler } from "~state/handleAction";
+import WrappedState from "~types/WrappedState";
 
 function cancelPlacement(
-  prevState: GameState,
+  state: WrappedState,
   action: ReturnType<typeof actions.cancelPlacement>,
-): GameState {
-  let state = prevState;
-  state = handleAction(
-    state,
-    actions.removeEntities({
-      entityIds: selectors
-        .entityList(state)
-        .filter(e => e.validMarker)
-        .map(e => e.id),
-    }),
-  );
-  const entity = selectors.placingTarget(state);
-  const marker = selectors.placingMarker(state);
-  if (!entity || !marker) return state;
-  state = handleAction(
-    state,
-    actions.removeEntities({ entityIds: [entity.id, marker.id] }),
-  );
-  return state;
+): void {
+  state.act.removeEntities({
+    entityIds: state.select
+      .entityList()
+      .filter(e => e.validMarker)
+      .map(e => e.id),
+  });
+  const entity = state.select.placingTarget();
+  const marker = state.select.placingMarker();
+  if (!entity || !marker) return;
+  state.act.removeEntities({ entityIds: [entity.id, marker.id] });
 }
 
 registerHandler(cancelPlacement, actions.cancelPlacement);

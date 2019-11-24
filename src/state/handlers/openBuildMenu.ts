@@ -1,15 +1,15 @@
-import { GameState } from "~types";
 import actions from "~state/actions";
 import { registerHandler } from "~state/handleAction";
+import WrappedState from "~types/WrappedState";
 
 function openBuildMenu(
-  oldState: GameState,
+  state: WrappedState,
   action: ReturnType<typeof actions.openBuildMenu>,
-): GameState {
-  return {
-    ...oldState,
+): void {
+  state.setRaw({
+    ...state.raw,
     isBuildMenuOpen: true,
-  };
+  });
 }
 
 registerHandler(openBuildMenu, actions.openBuildMenu);

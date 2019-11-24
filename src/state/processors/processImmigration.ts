@@ -1,46 +1,37 @@
-import actions from "~/state/actions";
-import selectors from "~/state/selectors";
-import { Entity, GameState, MakeRequired, Pos } from "~/types";
+import { Entity, MakeRequired, Pos } from "~/types";
 import { BASE_IMMIGRATION_RATE, MAP_HEIGHT, MAP_WIDTH } from "~constants";
+import WrappedState from "~types/WrappedState";
 import { createEntityFromTemplate } from "~utils/entities";
 import { getPositionsWithinRange } from "~utils/geometry";
 import { choose } from "~utils/rng";
-import handleAction from "~state/handleAction";
 
-export default function processImmigration(state: GameState): GameState {
-  let newState = state;
+export default function processImmigration(state: WrappedState): void {
+  state.setRaw({
+    ...state.raw,
+    turnsUntilNextImmigrant: state.raw.turnsUntilNextImmigrant - 1,
+  });
 
-  newState = {
-    ...newState,
-    turnsUntilNextImmigrant: newState.turnsUntilNextImmigrant - 1,
-  };
-
-  if (newState.turnsUntilNextImmigrant <= 0) {
-    const houses = selectors.entitiesWithComps(newState, "housing", "pos");
+  if (state.raw.turnsUntilNextImmigrant <= 0) {
+    const houses = state.select.entitiesWithComps("housing", "pos");
 
     const pos = findNewTentPosition(state, houses);
     if (!pos) {
       console.warn("no position for new immigrant found");
     } else {
-      newState = handleAction(
-        newState,
-        actions.addEntity({
-          entity: createEntityFromTemplate("TENT", { pos }),
-        }),
-      );
+      state.act.addEntity({
+        entity: createEntityFromTemplate("TENT", { pos }),
+      });
     }
 
-    newState = {
-      ...newState,
+    state.setRaw({
+      ...state.raw,
       turnsUntilNextImmigrant: BASE_IMMIGRATION_RATE,
-    };
+    });
   }
-
-  return newState;
 }
 
 function findNewTentPosition(
-  state: GameState,
+  state: WrappedState,
   houses: MakeRequired<Entity, "housing" | "pos">[],
 ): Pos {
   const positions = houses
@@ -48,7 +39,7 @@ function findNewTentPosition(
       acc.push(...getPositionsWithinRange(house.pos, 3));
       return acc;
     }, [])
-    .filter(pos => !selectors.isPositionBlocked(state, pos))
+    .filter(pos => !state.select.isPositionBlocked(pos))
     .filter(
       pos =>
         pos.x >= 0 && pos.x < MAP_WIDTH && pos.y >= 0 && pos.y < MAP_HEIGHT,

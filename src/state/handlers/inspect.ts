@@ -1,18 +1,17 @@
-import { GameState } from "~types";
-import actions from "../actions";
-import selectors from "../selectors";
-import handleAction, { registerHandler } from "~state/handleAction";
+import { registerHandler } from "~state/handleAction";
+import WrappedState from "~types/WrappedState";
 import { createEntityFromTemplate } from "~utils/entities";
+import actions from "../actions";
 
-function inspect(state: GameState, action: ReturnType<typeof actions.inspect>) {
-  const player = selectors.player(state);
-  if (!player) return state;
-  return handleAction(
-    state,
-    actions.addEntity({
-      entity: createEntityFromTemplate("INSPECTOR", { pos: player.pos }),
-    }),
-  );
+function inspect(
+  state: WrappedState,
+  action: ReturnType<typeof actions.inspect>,
+): void {
+  const player = state.select.player();
+  if (!player) return;
+  state.act.addEntity({
+    entity: createEntityFromTemplate("INSPECTOR", { pos: player.pos }),
+  });
 }
 
 registerHandler(inspect, actions.inspect);

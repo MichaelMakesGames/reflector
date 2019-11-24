@@ -1,26 +1,16 @@
 import actions from "~/state/actions";
-import { PLAYER_ID } from "~/constants";
-import selectors from "~/state/selectors";
-import { GameState } from "~/types";
-import handleAction, { registerHandler } from "~state/handleAction";
+import { registerHandler } from "~state/handleAction";
+import WrappedState from "~types/WrappedState";
 
 function attack(
-  state: GameState,
+  state: WrappedState,
   action: ReturnType<typeof actions.attack>,
-): GameState {
-  let newState = state;
-  const target = selectors.entityById(newState, action.payload.target);
+): void {
+  const target = state.select.entityById(action.payload.target);
 
   if (target.destructible) {
-    newState = handleAction(newState, actions.destroy({ entityId: target.id }));
+    state.act.destroy({ entityId: target.id });
   }
-  if (target.id === PLAYER_ID) {
-    newState = {
-      ...newState,
-      messageLog: [...newState.messageLog, action.payload.message],
-    };
-  }
-  return newState;
 }
 
 registerHandler(attack, actions.attack);

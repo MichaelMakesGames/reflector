@@ -1,22 +1,17 @@
 import actions from "~/state/actions";
-import selectors from "~/state/selectors";
-import { Entity, GameState } from "~/types";
-import handleAction, { registerHandler } from "~state/handleAction";
+import { Entity } from "~/types";
+import { registerHandler } from "~state/handleAction";
+import WrappedState from "~types/WrappedState";
 
 function fireWeapon(
-  state: GameState,
+  state: WrappedState,
   action: ReturnType<typeof actions.fireWeapon>,
-) {
-  let newState = state;
-  const activeWeapon = selectors.activeWeapon(newState);
-  const player = selectors.player(newState);
-  if (!player || !activeWeapon) return newState;
+): void {
+  const activeWeapon = state.select.activeWeapon();
+  const player = state.select.player();
+  if (!player || !activeWeapon) return;
 
-  const targetingLasers = selectors.entitiesWithComps(
-    newState,
-    "targeting",
-    "pos",
-  );
+  const targetingLasers = state.select.entitiesWithComps("targeting", "pos");
 
   const entitiesToSwap: Entity[] = [player];
   const entitiesToDestroy: string[] = [];
@@ -25,7 +20,7 @@ function fireWeapon(
     entity => !entity.targeting.cosmetic,
   )) {
     const { pos } = laser;
-    const entitiesAtPos = selectors.entitiesAtPosition(newState, pos);
+    const entitiesAtPos = state.select.entitiesAtPosition(pos);
     for (const entity of entitiesAtPos) {
       if (entity.destructible && activeWeapon.weapon.type === "TELEPORT") {
         entitiesToSwap.push(entity);
@@ -41,53 +36,40 @@ function fireWeapon(
     }
   }
 
-  newState = handleAction(
-    newState,
-    actions.removeEntities({
-      entityIds: [...targetingLasers.map(e => e.id)],
-    }),
-  );
+  state.act.removeEntities({
+    entityIds: [...targetingLasers.map(e => e.id)],
+  });
 
   for (const id of new Set(entitiesToDestroy)) {
-    newState = handleAction(newState, actions.destroy({ entityId: id }));
+    state.act.destroy({ entityId: id });
   }
 
   for (const id of [...new Set(entitiesToAttack)]) {
-    newState = handleAction(
-      newState,
-      actions.attack({
-        target: id,
-        message: "You take damage from your own attack...",
-      }),
-    );
+    state.act.attack({
+      target: id,
+      message: "You take damage from your own attack...",
+    });
   }
 
   if (entitiesToSwap.length > 1) {
     const positions = entitiesToSwap.map(e => e.pos);
     entitiesToSwap.forEach((entity, index) => {
-      newState = handleAction(
-        newState,
-        actions.updateEntity({
-          id: entity.id,
-          pos: positions[(index + 1) % positions.length],
-        }),
-      );
+      state.act.updateEntity({
+        id: entity.id,
+        pos: positions[(index + 1) % positions.length],
+      });
     });
   }
 
-  newState = handleAction(
-    newState,
-    actions.updateEntity({
-      id: activeWeapon.id,
-      weapon: {
-        ...activeWeapon.weapon,
-        active: false,
-      },
-    }),
-  );
+  state.act.updateEntity({
+    id: activeWeapon.id,
+    weapon: {
+      ...activeWeapon.weapon,
+      active: false,
+    },
+  });
 
-  newState = handleAction(newState, actions.playerTookTurn());
-  return newState;
+  state.act.playerTookTurn();
 }
 
 registerHandler(fireWeapon, actions.fireWeapon);

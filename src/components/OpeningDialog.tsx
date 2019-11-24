@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import actions from "~state/actions";
 import selectors from "~state/selectors";
-import { GameState } from "~types";
+import { RawState } from "~types";
 import { load } from "~utils/gameSave";
 import { VICTORY_POPULATION } from "~constants";
 
@@ -11,7 +11,7 @@ interface Props {
 }
 
 export default function OpeningDialog({ onClose }: Props) {
-  const [savedGame, setSavedGame] = useState<null | GameState>(null);
+  const [savedGame, setSavedGame] = useState<null | RawState>(null);
   const dispatch = useDispatch();
   const version = useSelector(selectors.version);
 

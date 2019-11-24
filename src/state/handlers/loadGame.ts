@@ -1,21 +1,21 @@
-import { GameState } from "~types";
-import actions from "../actions";
-import selectors from "../selectors";
 import { addRenderEntity } from "~renderer";
 import { registerHandler } from "~state/handleAction";
+import WrappedState from "~types/WrappedState";
+import actions from "../actions";
+import selectors from "../selectors";
 
 function loadGame(
-  prevState: GameState,
+  state: WrappedState,
   action: ReturnType<typeof actions.loadGame>,
-): GameState {
-  const { state } = action.payload;
+): void {
+  const { state: loadedState } = action.payload;
   selectors
-    .entitiesWithComps(state, "pos", "display")
+    .entitiesWithComps(loadedState, "pos", "display")
     .forEach(entity => addRenderEntity(entity));
-  return {
-    ...state,
-    version: prevState.version,
-  };
+  state.setRaw({
+    ...loadedState,
+    version: state.raw.version,
+  });
 }
 
 registerHandler(loadGame, actions.loadGame);

@@ -1,15 +1,14 @@
-import { GameState } from "~types";
 import actions from "../actions";
-import selectors from "../selectors";
-import handleAction, { registerHandler } from "~state/handleAction";
+import { registerHandler } from "~state/handleAction";
+import WrappedState from "~types/WrappedState";
 
 function cancelInspect(
-  state: GameState,
+  state: WrappedState,
   action: ReturnType<typeof actions.cancelInspect>,
-) {
-  const inspector = selectors.inspector(state);
-  if (!inspector) return state;
-  return handleAction(state, actions.removeEntity({ entityId: inspector.id }));
+): void {
+  const inspector = state.select.inspector();
+  if (!inspector) return;
+  state.act.removeEntity({ entityId: inspector.id });
 }
 
 registerHandler(cancelInspect, actions.cancelInspect);

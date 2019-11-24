@@ -1,18 +1,16 @@
-import { GameState } from "~types";
 import actions from "~state/actions";
-import selectors from "~state/selectors";
-import handleAction, { registerHandler } from "~state/handleAction";
+import { registerHandler } from "~state/handleAction";
+import WrappedState from "~types/WrappedState";
 
 function mine(
-  prevState: GameState,
+  state: WrappedState,
   action: ReturnType<typeof actions.mine>,
-): GameState {
-  let state = prevState;
-  const player = selectors.player(state);
-  if (!player) return state;
+): void {
+  const player = state.select.player();
+  if (!player) return;
 
-  const adjacentEntities = selectors.adjacentEntities(state, player.pos);
-  const entitiesAtPosition = selectors.entitiesAtPosition(state, player.pos);
+  const adjacentEntities = state.select.adjacentEntities(player.pos);
+  const entitiesAtPosition = state.select.entitiesAtPosition(player.pos);
   const presentAndAdjacentEntities = adjacentEntities.concat(
     entitiesAtPosition,
   );
@@ -22,22 +20,20 @@ function mine(
       entity => entity.mineable && entity.mineable.resource === "METAL",
     )
   ) {
-    state = {
-      ...state,
+    state.setRaw({
+      ...state.raw,
       resources: {
-        ...state.resources,
-        METAL: state.resources.METAL + 1,
+        ...state.raw.resources,
+        METAL: state.raw.resources.METAL + 1,
       },
-    };
-    state = handleAction(state, actions.playerTookTurn());
+    });
+    state.act.playerTookTurn();
   } else {
-    state = {
-      ...state,
-      messageLog: [...state.messageLog, "Must be next to ore to mine"],
-    };
+    state.setRaw({
+      ...state.raw,
+      messageLog: [...state.raw.messageLog, "Must be next to ore to mine"],
+    });
   }
-
-  return state;
 }
 
 registerHandler(mine, actions.mine);

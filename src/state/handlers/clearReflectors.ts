@@ -1,22 +1,17 @@
 import actions from "~state/actions";
-import selectors from "~state/selectors";
-import { GameState } from "~types";
-import handleAction, { registerHandler } from "~state/handleAction";
+import { registerHandler } from "~state/handleAction";
+import WrappedState from "~types/WrappedState";
 
 function clearReflectors(
-  prevState: GameState,
+  state: WrappedState,
   action: ReturnType<typeof actions.clearReflectors>,
-): GameState {
-  let state = prevState;
-
-  const reflectors = selectors
-    .entitiesWithComps(state, "reflector", "pos")
+): void {
+  const reflectors = state.select
+    .entitiesWithComps("reflector", "pos")
     .filter(reflector => !reflector.placing);
   reflectors.forEach(reflector => {
-    state = handleAction(state, actions.removeReflector(reflector.pos));
+    state.act.removeReflector(reflector.pos);
   });
-
-  return state;
 }
 
 registerHandler(clearReflectors, actions.clearReflectors);

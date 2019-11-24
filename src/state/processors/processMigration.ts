@@ -1,12 +1,8 @@
-import { GameState, MakeRequired, Entity } from "~types";
-import selectors from "~state/selectors";
-import actions from "~state/actions";
-import handleAction from "~state/handleAction";
+import { Entity, MakeRequired } from "~types";
+import WrappedState from "~types/WrappedState";
 
-export default function processMigration(prevState: GameState): GameState {
-  let state = prevState;
-
-  let houses = selectors.entitiesWithComps(state, "housing");
+export default function processMigration(state: WrappedState): void {
+  let houses = state.select.entitiesWithComps("housing");
   let availableDesirableHouse = getAvailableDesirableHouse(houses);
   let occupiedUndesirableHouse = getOccupiedUndesirableHouse(houses);
   while (availableDesirableHouse && occupiedUndesirableHouse) {
@@ -16,43 +12,32 @@ export default function processMigration(prevState: GameState): GameState {
       occupiedUndesirableHouse.housing.occupancy === 1
     ) {
       // remove if removeOnVacancy
-      state = handleAction(
-        state,
-        actions.removeEntity({ entityId: occupiedUndesirableHouse.id }),
-      );
+      state.act.removeEntity({ entityId: occupiedUndesirableHouse.id });
     } else {
       // otherwise update with new occupancy
-      state = handleAction(
-        state,
-        actions.updateEntity({
-          ...occupiedUndesirableHouse,
-          housing: {
-            ...occupiedUndesirableHouse.housing,
-            occupancy: occupiedUndesirableHouse.housing.occupancy - 1,
-          },
-        }),
-      );
+      state.act.updateEntity({
+        ...occupiedUndesirableHouse,
+        housing: {
+          ...occupiedUndesirableHouse.housing,
+          occupancy: occupiedUndesirableHouse.housing.occupancy - 1,
+        },
+      });
     }
 
     // move in to available house
-    state = handleAction(
-      state,
-      actions.updateEntity({
-        ...availableDesirableHouse,
-        housing: {
-          ...availableDesirableHouse.housing,
-          occupancy: availableDesirableHouse.housing.occupancy + 1,
-        },
-      }),
-    );
+    state.act.updateEntity({
+      ...availableDesirableHouse,
+      housing: {
+        ...availableDesirableHouse.housing,
+        occupancy: availableDesirableHouse.housing.occupancy + 1,
+      },
+    });
 
     // prep for next round of migration
-    houses = selectors.entitiesWithComps(state, "housing");
+    houses = state.select.entitiesWithComps("housing");
     availableDesirableHouse = getAvailableDesirableHouse(houses);
     occupiedUndesirableHouse = getOccupiedUndesirableHouse(houses);
   }
-
-  return state;
 }
 
 function getAvailableDesirableHouse(

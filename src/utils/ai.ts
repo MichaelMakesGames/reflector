@@ -3,7 +3,7 @@ import * as ROT from "rot-js";
 import { ActionType } from "typesafe-actions";
 import actions from "~/state/actions";
 import selectors from "~/state/selectors";
-import { Direction, Entity, GameState, Pos } from "~/types";
+import { Direction, Entity, RawState, Pos } from "~/types";
 import { getDistance, arePositionsEqual } from "./geometry";
 
 const aiActions = {
@@ -14,13 +14,13 @@ const aiActions = {
 };
 type AIAction = ActionType<typeof aiActions>;
 
-function isPassable(gameState: GameState, position: Pos) {
+function isPassable(gameState: RawState, position: Pos) {
   return selectors
     .entitiesAtPosition(gameState, position)
     .every(entity => !entity.blocking || !entity.blocking.moving);
 }
 
-function isDestructibleNonEnemy(gameState: GameState, position: Pos) {
+function isDestructibleNonEnemy(gameState: RawState, position: Pos) {
   return selectors
     .entitiesAtPosition(gameState, position)
     .every(entity =>
@@ -33,7 +33,7 @@ function isDestructibleNonEnemy(gameState: GameState, position: Pos) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function moveToward(gameState: GameState, entity: Entity, to: Pos) {
+function moveToward(gameState: RawState, entity: Entity, to: Pos) {
   if (!entity.pos) return [];
   const direction = getDirectionTowardTarget(entity.pos, to, gameState);
   if (!direction) return [];
@@ -43,7 +43,7 @@ function moveToward(gameState: GameState, entity: Entity, to: Pos) {
 function getDirectionTowardTarget(
   from: Pos,
   to: Pos,
-  gameState: GameState,
+  gameState: RawState,
   passableFunc = isPassable,
 ): Direction | null {
   const passable = (x: number, y: number) =>
@@ -64,7 +64,7 @@ function getDirectionTowardTarget(
   return null;
 }
 
-export function getAIActions(entity: Entity, gameState: GameState): AIAction[] {
+export function getAIActions(entity: Entity, gameState: RawState): AIAction[] {
   const { ai } = entity;
   if (!ai) return [];
 

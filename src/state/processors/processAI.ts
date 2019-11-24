@@ -1,15 +1,11 @@
 import { getAIActions } from "~/utils/ai";
-import selectors from "~/state/selectors";
-import { GameState } from "~/types";
-import handleAction from "~state/handleAction";
+import WrappedState from "~types/WrappedState";
 
-export default function processAI(state: GameState): GameState {
-  let newState = state;
-  for (const entity of selectors.entitiesWithComps(newState, "ai")) {
-    const aiActions = getAIActions(entity, newState);
+export default function processAI(state: WrappedState): void {
+  for (const entity of state.select.entitiesWithComps("ai")) {
+    const aiActions = getAIActions(entity, state.raw);
     for (const action of aiActions) {
-      newState = handleAction(newState, action);
+      state.handle(action);
     }
   }
-  return newState;
 }

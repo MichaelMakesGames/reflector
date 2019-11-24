@@ -1,7 +1,8 @@
 import { ActionCreator, getType } from "typesafe-actions";
-import { Action, GameState } from "~types";
+import { Action } from "~types";
+import WrappedState from "~types/WrappedState";
 
-type ActionHandler = (state: GameState, action: any) => GameState;
+type ActionHandler = (state: WrappedState, action: any) => void;
 
 const handlers: {
   [type: string]: ActionHandler;
@@ -15,12 +16,12 @@ export function registerHandler(
 }
 
 export default function handleAction(
-  state: GameState,
+  state: WrappedState,
   action: Action,
-): GameState {
+): WrappedState {
   const handler = handlers[action.type];
   if (handler) {
-    return handler(state, action);
+    handler(state, action);
   }
   return state;
 }

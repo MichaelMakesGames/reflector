@@ -6,9 +6,9 @@ import {
   TURNS_PER_DAY,
   RIGHT,
 } from "~constants";
-import { GameState } from "~types";
+import { RawState } from "~types";
 
-const initialState: GameState = {
+const initialState: RawState = {
   version: VERSION,
   entities: {},
   entitiesByPosition: {},

@@ -1,27 +1,26 @@
-import { GameState, Direction, Pos } from "~types";
-import actions from "../actions";
-import selectors from "../selectors";
+import colors from "~colors";
+import { DOWN, UP } from "~constants";
+import { registerHandler } from "~state/handleAction";
+import { Direction, Pos } from "~types";
+import WrappedState from "~types/WrappedState";
 import {
+  arePositionsEqual,
   getConstDir,
   isPositionInMap,
-  arePositionsEqual,
 } from "~utils/geometry";
-import { UP, DOWN } from "~constants";
 import { rangeFromTo } from "~utils/math";
-import handleAction, { registerHandler } from "~state/handleAction";
-import colors from "~colors";
+import actions from "../actions";
 
 function movePlacement(
-  prevState: GameState,
+  state: WrappedState,
   action: ReturnType<typeof actions.movePlacement>,
-): GameState {
-  let state = prevState;
-  const placingTarget = selectors.placingTarget(state);
-  const placingMarker = selectors.placingMarker(state);
-  if (!placingTarget || !placingTarget.pos || !placingMarker) return state;
+): void {
+  const placingTarget = state.select.placingTarget();
+  const placingMarker = state.select.placingMarker();
+  if (!placingTarget || !placingTarget.pos || !placingMarker) return;
   const currentPos = placingTarget.pos;
-  const validPositions = selectors
-    .entitiesWithComps(state, "validMarker", "pos")
+  const validPositions = state.select
+    .entitiesWithComps("validMarker", "pos")
     .map(e => e.pos);
   const { direction } = action.payload;
 
@@ -33,25 +32,19 @@ function movePlacement(
     const isValid = validPositions.some(validPos =>
       arePositionsEqual(validPos, newPos),
     );
-    state = handleAction(
-      state,
-      actions.updateEntity({
-        ...placingTarget,
-        pos: newPos,
-      }),
-    );
-    state = handleAction(
-      state,
-      actions.updateEntity({
-        ...placingMarker,
-        display: {
-          ...placingMarker.display,
-          color: isValid ? colors.secondary : colors.invalid,
-        },
-        pos: newPos,
-      }),
-    );
-    return state;
+    state.act.updateEntity({
+      ...placingTarget,
+      pos: newPos,
+    });
+    state.act.updateEntity({
+      ...placingMarker,
+      display: {
+        ...placingMarker.display,
+        color: isValid ? colors.secondary : colors.invalid,
+      },
+      pos: newPos,
+    });
+    return;
   }
 
   const constDir = getConstDir(direction);
@@ -78,31 +71,24 @@ function movePlacement(
     if (validPosition) {
       const dx = validPosition.x - currentPos.x;
       const dy = validPosition.y - currentPos.y;
-      state = handleAction(
-        state,
-        actions.move({
-          entityId: placingTarget.id,
-          dx,
-          dy,
-        }),
-      );
-      state = handleAction(
-        state,
-        actions.updateEntity({
-          ...placingMarker,
-          display: {
-            ...placingMarker.display,
-            color: colors.secondary,
-          },
-          pos: validPosition,
-        }),
-      );
+      state.act.move({
+        entityId: placingTarget.id,
+        dx,
+        dy,
+      });
+      state.act.updateEntity({
+        ...placingMarker,
+        display: {
+          ...placingMarker.display,
+          color: colors.secondary,
+        },
+        pos: validPosition,
+      });
       break;
     }
     range += 1;
     perpendicularRange += 1;
   }
-  return state;
 }
 
 registerHandler(movePlacement, actions.movePlacement);

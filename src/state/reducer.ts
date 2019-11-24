@@ -1,11 +1,13 @@
-import { Action, GameState } from "~/types";
-import handleAction from "./handleAction";
+import { Action, RawState } from "~/types";
 import "./handlers";
 import initialState from "./initialState";
+import wrapState from "./wrapState";
 
 export default function reducer(
-  state: GameState = initialState,
+  state: RawState = initialState,
   action: Action,
-): GameState {
-  return handleAction(state, action);
+): RawState {
+  const wrappedState = wrapState(state);
+  wrappedState.handle(action);
+  return wrappedState.raw;
 }

@@ -1,37 +1,24 @@
 import actions from "~/state/actions";
-import selectors from "~/state/selectors";
-import { GameState } from "~/types";
-import handleAction, { registerHandler } from "~state/handleAction";
+import { registerHandler } from "~state/handleAction";
+import WrappedState from "~types/WrappedState";
 
 function activateWeapon(
-  state: GameState,
+  state: WrappedState,
   action: ReturnType<typeof actions.activateWeapon>,
-): GameState {
-  let newState = state;
-  const weaponInSlot = selectors.entitiesWithComps(newState, "weapon")[0];
-  if (!weaponInSlot) return newState;
+): void {
+  const weaponEntity = state.select.entitiesWithComps("weapon")[0];
+  if (!weaponEntity) return;
 
-  const entity = weaponInSlot;
-  const { weapon } = entity;
-  if (!weapon) return newState;
-  newState = {
-    ...newState,
-    entities: {
-      ...newState.entities,
-      [entity.id]: {
-        ...entity,
-        weapon: {
-          ...weapon,
-          active: !weapon.active,
-        },
-      },
+  const { weapon } = weaponEntity;
+  state.act.updateEntity({
+    ...weaponEntity,
+    weapon: {
+      ...weapon,
+      active: !weapon.active,
     },
-  };
-  newState = handleAction(
-    newState,
-    actions.targetWeapon(newState.lastAimingDirection),
-  );
-  return newState;
+  });
+
+  state.act.targetWeapon(state.raw.lastAimingDirection);
 }
 
 registerHandler(activateWeapon, actions.activateWeapon);

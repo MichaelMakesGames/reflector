@@ -1,55 +1,44 @@
-import actions from "~state/actions";
-import selectors from "~state/selectors";
-import { GameState } from "~types";
-import handleAction, { registerHandler } from "~state/handleAction";
-import { createEntityFromTemplate } from "~utils/entities";
 import colors from "~colors";
+import actions from "~state/actions";
+import { registerHandler } from "~state/handleAction";
+import WrappedState from "~types/WrappedState";
+import { createEntityFromTemplate } from "~utils/entities";
 import { arePositionsEqual } from "~utils/geometry";
 
 function removeReflector(
-  prevState: GameState,
+  state: WrappedState,
   action: ReturnType<typeof actions.removeReflector>,
-): GameState {
-  let state = prevState;
+): void {
   const pos = action.payload;
-  const placingTarget = selectors.placingTarget(state);
-  const placingMarker = selectors.placingMarker(state);
-  if (!placingTarget || !placingMarker) return state;
-  const entitiesAtPosition = selectors.entitiesAtPosition(state, pos);
+  const placingTarget = state.select.placingTarget();
+  const placingMarker = state.select.placingMarker();
+  if (!placingTarget || !placingMarker) return;
+  const entitiesAtPosition = state.select.entitiesAtPosition(pos);
   const otherReflector = entitiesAtPosition.find(
     e => e.reflector && e !== placingTarget,
   );
+
   if (!otherReflector) {
-    return {
-      ...state,
-      messageLog: [...state.messageLog, "No reflector to remove."],
-    };
+    state.setRaw({
+      ...state.raw,
+      messageLog: [...state.raw.messageLog, "No reflector to remove."],
+    });
   } else {
-    state = handleAction(
-      state,
-      actions.removeEntity({ entityId: otherReflector.id }),
-    );
-    state = handleAction(
-      state,
-      actions.addEntity({
-        entity: createEntityFromTemplate("VALID_MARKER", {
-          pos: otherReflector.pos,
-        }),
+    state.act.removeEntity({ entityId: otherReflector.id });
+    state.act.addEntity({
+      entity: createEntityFromTemplate("VALID_MARKER", {
+        pos: otherReflector.pos,
       }),
-    );
+    });
     if (arePositionsEqual(pos, placingMarker.pos)) {
-      state = handleAction(
-        state,
-        actions.updateEntity({
-          ...placingMarker,
-          display: {
-            ...placingMarker.display,
-            color: colors.secondary,
-          },
-        }),
-      );
+      state.act.updateEntity({
+        ...placingMarker,
+        display: {
+          ...placingMarker.display,
+          color: colors.secondary,
+        },
+      });
     }
-    return state;
   }
 }
 
