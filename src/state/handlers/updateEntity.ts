@@ -1,4 +1,5 @@
 import has from "has";
+import { Required } from "Object/_api";
 import {
   addRenderEntity,
   removeRenderEntity,
@@ -6,7 +7,7 @@ import {
 } from "~/renderer";
 import actions from "~/state/actions";
 import selectors from "~/state/selectors";
-import { Entity, MakeRequired } from "~/types";
+import { Entity } from "~/types";
 import { getPosKey } from "~/utils/geometry";
 import { registerHandler } from "~state/handleAction";
 import WrappedState from "~types/WrappedState";
@@ -43,9 +44,9 @@ function updateEntity(
   if (has(partial, "pos") || has(partial, "display")) {
     if (entity.pos && entity.display) {
       if (!prev.pos || !prev.display) {
-        addRenderEntity(entity as MakeRequired<Entity, "pos" | "display">);
+        addRenderEntity(entity as Required<Entity, "pos" | "display">);
       } else {
-        updateRenderEntity(entity as MakeRequired<Entity, "pos" | "display">);
+        updateRenderEntity(entity as Required<Entity, "pos" | "display">);
       }
     } else {
       removeRenderEntity(entity.id);

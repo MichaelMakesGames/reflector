@@ -1,4 +1,5 @@
-import { Entity, MakeRequired, Pos } from "~/types";
+import { Required } from "Object/_api";
+import { Entity, Pos } from "~/types";
 import { BASE_IMMIGRATION_RATE, MAP_HEIGHT, MAP_WIDTH } from "~constants";
 import WrappedState from "~types/WrappedState";
 import { createEntityFromTemplate } from "~utils/entities";
@@ -32,7 +33,7 @@ export default function processImmigration(state: WrappedState): void {
 
 function findNewTentPosition(
   state: WrappedState,
-  houses: MakeRequired<Entity, "housing" | "pos">[],
+  houses: Required<Entity, "housing" | "pos">[],
 ): Pos {
   const positions = houses
     .reduce<Pos[]>((acc, house) => {

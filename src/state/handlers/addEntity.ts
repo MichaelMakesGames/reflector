@@ -1,7 +1,8 @@
-import actions from "~/state/actions";
-import { MakeRequired, Entity } from "~/types";
-import { getPosKey } from "~/utils/geometry";
+import { Required } from "Object/_api";
 import { addRenderEntity } from "~/renderer";
+import actions from "~/state/actions";
+import { Entity } from "~/types";
+import { getPosKey } from "~/utils/geometry";
 import { registerHandler } from "~state/handleAction";
 import WrappedState from "~types/WrappedState";
 
@@ -21,7 +22,7 @@ function addEntity(
   }
 
   if (entity.pos && entity.display) {
-    addRenderEntity(entity as MakeRequired<Entity, "pos" | "display">);
+    addRenderEntity(entity as Required<Entity, "pos" | "display">);
   }
 
   state = {

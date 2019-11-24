@@ -1,11 +1,11 @@
+import { Required } from "Object/_api";
 import * as PIXI from "pixi.js";
-import { MAP_WIDTH, MAP_HEIGHT, TILE_SIZE, FONT_FAMILY } from "./constants";
-import { Entity, MakeRequired, Display, Pos } from "./types";
-import { arePositionsEqual } from "./utils/geometry";
-
+import colors from "~colors";
 // @ts-ignore
 import tiles from "./assets/tiles/*.png"; // eslint-disable-line import/no-unresolved
-import colors from "~colors";
+import { FONT_FAMILY, MAP_HEIGHT, MAP_WIDTH, TILE_SIZE } from "./constants";
+import { Display, Entity, Pos } from "./types";
+import { arePositionsEqual } from "./utils/geometry";
 
 const loadPromise = new Promise(resolve => {
   PIXI.Loader.shared
@@ -59,7 +59,7 @@ function getLayer(priority: number) {
 }
 
 export async function addRenderEntity(
-  entity: MakeRequired<Entity, "display" | "pos">,
+  entity: Required<Entity, "display" | "pos">,
 ) {
   await loadPromise;
   const { pos, display } = entity;
@@ -139,7 +139,7 @@ export function clearRenderer() {
 }
 
 export async function updateRenderEntity(
-  entity: MakeRequired<Entity, "display" | "pos">,
+  entity: Required<Entity, "display" | "pos">,
 ) {
   await loadPromise;
   const renderEntity = renderEntities[entity.id];

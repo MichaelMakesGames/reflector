@@ -1,7 +1,8 @@
-import { RawState, Entity, MakeRequired, Pos } from "~types";
-import { filterEntitiesWithComps } from "~utils/entities";
+import { Required } from "Object/_api";
 import { PLAYER_ID } from "~constants";
-import { getPosKey, getAdjacentPositions } from "~utils/geometry";
+import { Entity, Pos, RawState } from "~types";
+import { filterEntitiesWithComps } from "~utils/entities";
+import { getAdjacentPositions, getPosKey } from "~utils/geometry";
 
 export function entityList(state: RawState) {
   return Object.values(state.entities);
@@ -10,7 +11,7 @@ export function entityList(state: RawState) {
 export function entitiesWithComps<C extends keyof Entity>(
   state: RawState,
   ...comps: C[]
-): MakeRequired<Entity, C>[] {
+): Required<Entity, C>[] {
   return filterEntitiesWithComps(entityList(state), ...comps);
 }
 
@@ -19,7 +20,7 @@ export function entityById(state: RawState, entityId: string) {
 }
 
 export function player(state: RawState) {
-  return state.entities[PLAYER_ID] as MakeRequired<
+  return state.entities[PLAYER_ID] as Required<
     Entity,
     "pos" | "display" | "conductive"
   > | null;
@@ -29,7 +30,7 @@ export function entitiesAtPosition(state: RawState, position: Pos) {
   const key = getPosKey(position);
   return (state.entitiesByPosition[key] || []).map(
     id => state.entities[id],
-  ) as MakeRequired<Entity, "pos">[];
+  ) as Required<Entity, "pos">[];
 }
 
 export function adjacentEntities(state: RawState, position: Pos) {

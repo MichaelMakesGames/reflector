@@ -1,4 +1,5 @@
-import { Entity, MakeRequired } from "~types";
+import { Required } from "Object/_api";
+import { Entity } from "~types";
 import WrappedState from "~types/WrappedState";
 
 export default function processMigration(state: WrappedState): void {
@@ -41,8 +42,8 @@ export default function processMigration(state: WrappedState): void {
 }
 
 function getAvailableDesirableHouse(
-  houses: MakeRequired<Entity, "housing">[],
-): MakeRequired<Entity, "housing"> | null {
+  houses: Required<Entity, "housing">[],
+): Required<Entity, "housing"> | null {
   const minDesirability = Math.min(
     ...houses.map(house => house.housing.desirability),
   );
@@ -56,8 +57,8 @@ function getAvailableDesirableHouse(
 }
 
 function getOccupiedUndesirableHouse(
-  houses: MakeRequired<Entity, "housing">[],
-): MakeRequired<Entity, "housing"> | null {
+  houses: Required<Entity, "housing">[],
+): Required<Entity, "housing"> | null {
   const maxDesirability = Math.max(
     ...houses.map(house => house.housing.desirability),
   );

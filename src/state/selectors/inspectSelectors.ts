@@ -1,16 +1,17 @@
-import { RawState, MakeRequired, Entity } from "~types";
-import { entitiesWithComps } from "./entitySelectors";
+import { Required } from "Object/_api";
+import { Entity, RawState } from "~types";
 import { arePositionsEqual } from "~utils/geometry";
+import { entitiesWithComps } from "./entitySelectors";
 
 export function inspector(
   state: RawState,
-): MakeRequired<Entity, "inspector" | "pos"> | null {
+): Required<Entity, "inspector" | "pos"> | null {
   return entitiesWithComps(state, "inspector", "pos")[0] || null;
 }
 
 export function inspectedEntities(
   state: RawState,
-): MakeRequired<Entity, "description">[] | null {
+): Required<Entity, "description">[] | null {
   const inspectorEntity = inspector(state);
   if (!inspectorEntity) return null;
   return entitiesWithComps(state, "pos", "description").filter(e =>

@@ -1,10 +1,10 @@
+import { Required } from "Object/_api";
 import { Noise } from "rot-js";
 import { MAP_HEIGHT, MAP_WIDTH, PLAYER_ID } from "~/constants";
 import { Entity } from "~/types/Entity";
 import { createEntityFromTemplate } from "./entities";
-import { getDistance, arePositionsEqual } from "./geometry";
-import { MakeRequired } from "~types";
-import { rangeTo, calcPercentile } from "./math";
+import { arePositionsEqual, getDistance } from "./geometry";
+import { calcPercentile, rangeTo } from "./math";
 
 export default function generateMap(): Entity[] {
   let result: Entity[] = [];
@@ -70,20 +70,20 @@ export default function generateMap(): Entity[] {
     x: Math.floor(MAP_WIDTH / 2),
     y: Math.floor(MAP_HEIGHT / 2),
   };
-  const floorPositions = (result as MakeRequired<Entity, "pos">[])
+  const floorPositions = (result as Required<Entity, "pos">[])
     .filter(entity => entity.id.startsWith("FLOOR"))
     .map(entity => entity.pos)
     .sort((a, b) => getDistance(a, centerPos) - getDistance(b, centerPos));
-  const orePosititions = (result as MakeRequired<Entity, "pos">[])
+  const orePosititions = (result as Required<Entity, "pos">[])
     .filter(entity => entity.id.startsWith("ORE"))
     .map(entity => entity.pos)
     .sort((a, b) => getDistance(a, centerPos) - getDistance(b, centerPos));
 
-  const waterEntities = (result as MakeRequired<Entity, "pos">[]).filter(
-    entity => entity.id.startsWith("WATER_BASE"),
+  const waterEntities = (result as Required<Entity, "pos">[]).filter(entity =>
+    entity.id.startsWith("WATER_BASE"),
   );
   result = result.filter(
-    e => !waterEntities.includes(e as MakeRequired<Entity, "pos">),
+    e => !waterEntities.includes(e as Required<Entity, "pos">),
   );
   waterEntities.forEach(waterEntity => {
     const { pos } = waterEntity;

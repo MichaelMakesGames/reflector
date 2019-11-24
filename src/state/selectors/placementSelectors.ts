@@ -1,5 +1,6 @@
+import { Required } from "Object/_api";
+import { Entity, Pos, RawState } from "~types";
 import { entitiesAtPosition, entitiesWithComps } from "./entitySelectors";
-import { RawState, MakeRequired, Entity, Pos } from "~types";
 
 export function placingTarget(state: RawState) {
   const entities = entitiesWithComps(state, "placing", "pos");
@@ -9,7 +10,7 @@ export function placingTarget(state: RawState) {
 
 export function placingMarker(
   state: RawState,
-): MakeRequired<Entity, "placingMarker" | "pos" | "display"> | null {
+): Required<Entity, "placingMarker" | "pos" | "display"> | null {
   return entitiesWithComps(state, "placingMarker", "pos", "display")[0] || null;
 }
 

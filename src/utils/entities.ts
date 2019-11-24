@@ -1,7 +1,7 @@
 import nanoid from "nanoid";
+import { Required } from "Object/_api";
 import templates from "~/data/templates";
 import { Entity } from "~/types/Entity";
-import { MakeRequired } from "~/types";
 
 export function createEntityFromTemplate(
   templateId: string,
@@ -26,5 +26,5 @@ export function filterEntitiesWithComps<C extends keyof Entity>(
 ) {
   return entities.filter(e =>
     comps.every(comp => Boolean(e[comp])),
-  ) as MakeRequired<Entity, C>[];
+  ) as Required<Entity, C>[];
 }

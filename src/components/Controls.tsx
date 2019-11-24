@@ -1,4 +1,5 @@
 /* global document */
+import { Required } from "Object/_api";
 import Tooltip from "rc-tooltip";
 import "rc-tooltip/assets/bootstrap.css";
 import React, { useEffect } from "react";
@@ -7,10 +8,9 @@ import { DOWN, LEFT, PLAYER_ID, RIGHT, UP } from "~/constants";
 import actions from "~/state/actions";
 import selectors from "~/state/selectors";
 import { Action } from "~/types/Action";
-import { Entity, Pos, Description } from "~/types/Entity";
+import { Description, Entity, Pos } from "~/types/Entity";
 import buildings from "~data/buildings";
 import { createEntityFromTemplate } from "~utils/entities";
-import { MakeRequired } from "~types";
 
 interface Control {
   display: string;
@@ -23,7 +23,7 @@ interface Control {
 function getControls(
   activeWeapon: Entity | null,
   playerPosition: Pos,
-  placing: MakeRequired<Entity, "placing" | "pos"> | null,
+  placing: Required<Entity, "placing" | "pos"> | null,
   isBuildMenuOpen: boolean,
   inspector: Entity | null,
 ): Control[] {
