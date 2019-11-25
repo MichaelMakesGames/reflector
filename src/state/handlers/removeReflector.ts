@@ -19,10 +19,8 @@ function removeReflector(
   );
 
   if (!otherReflector) {
-    state.setRaw({
-      ...state.raw,
-      messageLog: [...state.raw.messageLog, "No reflector to remove."],
-    });
+    const message = "No reflector to remove.";
+    state.act.logMessage({ message });
   } else {
     state.act.removeEntity({ entityId: otherReflector.id });
     state.act.addEntity({

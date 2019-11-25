@@ -14,10 +14,8 @@ function finishPlacement(
   const entitiesAtPosition = state.select.entitiesAtPosition(pos);
   const isPosValid = entitiesAtPosition.some(entity => entity.validMarker);
   if (!isPosValid) {
-    state.setRaw({
-      ...state.raw,
-      messageLog: [...state.raw.messageLog, "Invalid position"],
-    });
+    const message = "Invalid position";
+    state.act.logMessage({ message });
     return;
   }
 

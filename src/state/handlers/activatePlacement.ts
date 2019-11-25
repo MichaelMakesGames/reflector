@@ -17,15 +17,10 @@ function activatePlacement(
   const { cost, takesTurn, template, validitySelector } = action.payload;
 
   if (cost && state.raw.resources[cost.resource] < cost.amount) {
-    state.setRaw({
-      ...state.raw,
-      messageLog: [
-        ...state.raw.messageLog,
-        `You do not have enough ${cost.resource}. You have ${
-          state.raw.resources[cost.resource]
-        } out of ${cost.amount} required`,
-      ],
-    });
+    const message = `You do not have enough ${cost.resource}. You have ${
+      state.raw.resources[cost.resource]
+    } out of ${cost.amount} required`;
+    state.act.logMessage({ message });
     return;
   }
 
@@ -60,10 +55,8 @@ function activatePlacement(
       );
 
   if (!validPositions.length) {
-    state.setRaw({
-      ...state.raw,
-      messageLog: [...state.raw.messageLog, "No valid positions in range"],
-    });
+    const message = "No valid positions in range";
+    state.act.logMessage({ message });
     return;
   }
 

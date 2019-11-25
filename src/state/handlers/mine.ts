@@ -29,10 +29,8 @@ function mine(
     });
     state.act.playerTookTurn();
   } else {
-    state.setRaw({
-      ...state.raw,
-      messageLog: [...state.raw.messageLog, "Must be next to ore to mine"],
-    });
+    const message = "Must be next to ore to mine";
+    state.act.logMessage({ message });
   }
 }
 

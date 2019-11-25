@@ -11,6 +11,7 @@ import "./finishPlacement";
 import "./fireWeapon";
 import "./inspect";
 import "./loadGame";
+import "./logMessage";
 import "./mine";
 import "./move";
 import "./movePlacement";
