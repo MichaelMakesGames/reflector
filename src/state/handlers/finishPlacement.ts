@@ -21,16 +21,13 @@ function finishPlacement(
 
   if (placingTarget.placing.cost) {
     const { cost } = placingTarget.placing;
-    if (state.raw.resources[cost.resource] < cost.amount) {
+    if (!state.select.canAffordToPay(cost.resource, cost.amount)) {
       console.warn("Failed to place due to cost. This should be impossible");
       return;
     } else {
-      state.setRaw({
-        ...state.raw,
-        resources: {
-          ...state.raw.resources,
-          [cost.resource]: state.raw.resources[cost.resource] - cost.amount,
-        },
+      state.act.modifyResource({
+        resource: cost.resource,
+        amount: -cost.amount,
       });
     }
   }

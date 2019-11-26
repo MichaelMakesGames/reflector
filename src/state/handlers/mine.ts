@@ -20,12 +20,9 @@ function mine(
       entity => entity.mineable && entity.mineable.resource === "METAL",
     )
   ) {
-    state.setRaw({
-      ...state.raw,
-      resources: {
-        ...state.raw.resources,
-        METAL: state.raw.resources.METAL + 1,
-      },
+    state.act.modifyResource({
+      resource: "METAL",
+      amount: 1,
     });
     state.act.playerTookTurn();
   } else {

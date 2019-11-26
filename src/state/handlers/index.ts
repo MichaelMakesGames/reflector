@@ -13,6 +13,7 @@ import "./inspect";
 import "./loadGame";
 import "./logMessage";
 import "./mine";
+import "./modifyResource";
 import "./move";
 import "./movePlacement";
 import "./newGame";

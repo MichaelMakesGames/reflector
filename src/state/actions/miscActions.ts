@@ -26,3 +26,8 @@ export const mine = createStandardAction("MINE")();
 export const logMessage = createStandardAction("LOG_MESSAGE")<{
   message: string;
 }>();
+
+export const modifyResource = createStandardAction("MODIFY_RESOURCE")<{
+  resource: string;
+  amount: number;
+}>();

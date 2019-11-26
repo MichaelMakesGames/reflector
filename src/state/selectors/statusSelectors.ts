@@ -48,6 +48,18 @@ export function resources(state: RawState) {
   return state.resources;
 }
 
+export function resource(state: RawState, resourceName: string) {
+  return resources(state)[resourceName];
+}
+
+export function canAffordToPay(
+  state: RawState,
+  resourceName: string,
+  cost: number,
+) {
+  return resource(state, resourceName) >= cost;
+}
+
 export function activeWeapon(state: RawState) {
   const activeWeapons = entitiesWithComps(state, "weapon").filter(
     entity => entity.weapon && entity.weapon.active,

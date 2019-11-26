@@ -16,10 +16,12 @@ function activatePlacement(
 
   const { cost, takesTurn, template, validitySelector } = action.payload;
 
-  if (cost && state.raw.resources[cost.resource] < cost.amount) {
-    const message = `You do not have enough ${cost.resource}. You have ${
-      state.raw.resources[cost.resource]
-    } out of ${cost.amount} required`;
+  if (cost && !state.select.canAffordToPay(cost.resource, cost.amount)) {
+    const message = `You do not have enough ${
+      cost.resource
+    }. You have ${state.select.resource(cost.resource)} out of ${
+      cost.amount
+    } required`;
     state.act.logMessage({ message });
     return;
   }

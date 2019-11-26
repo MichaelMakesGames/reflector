@@ -14,13 +14,10 @@ export default function processProduction(state: WrappedState): void {
     {},
   );
 
-  const resources = { ...state.raw.resources };
   Object.entries(productionByResource).forEach(([resource, amount]) => {
-    resources[resource] = (resources[resource] || 0) + amount;
-  });
-
-  state.setRaw({
-    ...state.raw,
-    resources,
+    state.act.modifyResource({
+      resource,
+      amount,
+    });
   });
 }
