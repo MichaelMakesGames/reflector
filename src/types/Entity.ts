@@ -179,6 +179,7 @@ export interface Entity
     Partial<HasConductive> {
   id: string;
   parentTemplate?: string;
+  template: string;
 }
 
 export type EntityHasPos = Entity & HasPos;

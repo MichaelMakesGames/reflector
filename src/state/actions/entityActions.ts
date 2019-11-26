@@ -1,3 +1,4 @@
+import { Object } from "ts-toolbelt";
 import { createStandardAction } from "typesafe-actions";
 import { Entity } from "~/types/Entity";
 
@@ -13,4 +14,6 @@ export const removeEntities = createStandardAction("REMOVE_ENTITIES")<{
   entityIds: string[];
 }>();
 
-export const updateEntity = createStandardAction("UPDATE_ENTITY")<Entity>();
+export const updateEntity = createStandardAction("UPDATE_ENTITY")<
+  Object.Required<Partial<Entity>, "id">
+>();

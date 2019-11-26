@@ -71,16 +71,16 @@ export default function generateMap(): Entity[] {
     y: Math.floor(MAP_HEIGHT / 2),
   };
   const floorPositions = (result as Required<Entity, "pos">[])
-    .filter(entity => entity.id.startsWith("FLOOR"))
+    .filter(entity => entity.template === "FLOOR")
     .map(entity => entity.pos)
     .sort((a, b) => getDistance(a, centerPos) - getDistance(b, centerPos));
   const orePosititions = (result as Required<Entity, "pos">[])
-    .filter(entity => entity.id.startsWith("ORE"))
+    .filter(entity => entity.template === "ORE")
     .map(entity => entity.pos)
     .sort((a, b) => getDistance(a, centerPos) - getDistance(b, centerPos));
 
-  const waterEntities = (result as Required<Entity, "pos">[]).filter(entity =>
-    entity.id.startsWith("WATER_BASE"),
+  const waterEntities = (result as Required<Entity, "pos">[]).filter(
+    entity => entity.template === "WATER_BASE",
   );
   result = result.filter(
     e => !waterEntities.includes(e as Required<Entity, "pos">),

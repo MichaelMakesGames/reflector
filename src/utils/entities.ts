@@ -10,13 +10,14 @@ export function createEntityFromTemplate(
   const template = templates[templateId];
   const parent: Entity = template.parentTemplate
     ? createEntityFromTemplate(template.parentTemplate)
-    : { id: "tempId" };
+    : { id: "tempId", template: "NONE" };
 
   return {
     ...parent,
     ...templates[templateId],
     ...additionalComps,
     id: `${templateId}_${nanoid()}`,
+    template: templateId,
   };
 }
 
