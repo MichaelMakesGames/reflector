@@ -69,3 +69,7 @@ export function activeWeapon(state: RawState) {
   }
   return null;
 }
+
+export function lastAimingDirection(state: RawState) {
+  return state.lastAimingDirection;
+}

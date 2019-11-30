@@ -5,6 +5,7 @@ import actions from "~/state/actions";
 import selectors from "~/state/selectors";
 import { Direction, Entity, RawState, Pos } from "~/types";
 import { getDistance, arePositionsEqual } from "./geometry";
+import WrappedState from "~types/WrappedState";
 
 const aiActions = {
   move: actions.move,
@@ -33,9 +34,9 @@ function isDestructibleNonEnemy(gameState: RawState, position: Pos) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function moveToward(gameState: RawState, entity: Entity, to: Pos) {
+function moveToward(state: WrappedState, entity: Entity, to: Pos) {
   if (!entity.pos) return [];
-  const direction = getDirectionTowardTarget(entity.pos, to, gameState);
+  const direction = getDirectionTowardTarget(entity.pos, to, state);
   if (!direction) return [];
   return [actions.move({ entityId: entity.id, ...direction })];
 }
@@ -43,13 +44,13 @@ function moveToward(gameState: RawState, entity: Entity, to: Pos) {
 function getDirectionTowardTarget(
   from: Pos,
   to: Pos,
-  gameState: RawState,
+  state: WrappedState,
   passableFunc = isPassable,
 ): Direction | null {
   const passable = (x: number, y: number) =>
     (x === from.x && y === from.y) ||
     (x === to.x && y === to.y) ||
-    passableFunc(gameState, { x, y });
+    passableFunc(state.raw, { x, y });
   const path: Pos[] = [];
   const aStar = new ROT.Path.AStar(to.x, to.y, passable);
   aStar.compute(from.x, from.y, (x, y) => {
@@ -64,15 +65,15 @@ function getDirectionTowardTarget(
   return null;
 }
 
-export function getAIActions(entity: Entity, gameState: RawState): AIAction[] {
+export function getAIActions(entity: Entity, state: WrappedState): AIAction[] {
   const { ai } = entity;
   if (!ai) return [];
 
   if (ai.type === "DRONE") {
     if (!entity.pos) return [];
     const { pos } = entity;
-    const targets = selectors
-      .entitiesWithComps(gameState, "destructible", "pos")
+    const targets = state.select
+      .entitiesWithComps("destructible", "pos")
       .filter(e => !e.ai);
     targets.sort((a, b) => getDistance(a.pos, pos) - getDistance(b.pos, pos));
     const target = targets[0];
@@ -88,7 +89,7 @@ export function getAIActions(entity: Entity, gameState: RawState): AIAction[] {
     const direction = getDirectionTowardTarget(
       entity.pos,
       target.pos,
-      gameState,
+      state,
       isDestructibleNonEnemy,
     );
     if (!direction) return [];
@@ -96,10 +97,7 @@ export function getAIActions(entity: Entity, gameState: RawState): AIAction[] {
       x: entity.pos.x + direction.dx,
       y: entity.pos.y + direction.dy,
     };
-    const entitiesAtTargetPos = selectors.entitiesAtPosition(
-      gameState,
-      targetPos,
-    );
+    const entitiesAtTargetPos = state.select.entitiesAtPosition(targetPos);
     const destructibleAtTargetPos = entitiesAtTargetPos.find(
       e => !!e.destructible,
     );

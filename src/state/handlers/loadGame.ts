@@ -14,7 +14,7 @@ function loadGame(
     .forEach(entity => addRenderEntity(entity));
   state.setRaw({
     ...loadedState,
-    version: state.raw.version,
+    version: state.select.version(),
   });
 }
 

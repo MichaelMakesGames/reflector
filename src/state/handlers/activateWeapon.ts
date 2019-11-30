@@ -18,7 +18,7 @@ function activateWeapon(
     },
   });
 
-  state.act.targetWeapon(state.raw.lastAimingDirection);
+  state.act.targetWeapon(state.select.lastAimingDirection());
 }
 
 registerHandler(activateWeapon, actions.activateWeapon);
