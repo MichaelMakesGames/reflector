@@ -1,8 +1,8 @@
-import { Entity } from "~/types";
 import { PRIORITY_LASER } from "~/constants";
 import colors from "~colors";
+import { Entity } from "~types";
 
-const templates: { [id: string]: Partial<Entity> } = {
+const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   LASER_BASE: {
     targeting: {},
   },

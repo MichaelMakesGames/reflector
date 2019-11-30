@@ -1,7 +1,6 @@
-import { PRIORITY_ITEM } from "~/constants";
-import { Entity } from "~/types/Entity";
+import { Entity } from "~types";
 
-const templates: { [id: string]: Partial<Entity> } = {
+const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   WEAPON_BASE: {},
   WEAPON_LASER: {
     parentTemplate: "WEAPON_BASE",

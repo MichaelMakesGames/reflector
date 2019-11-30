@@ -1,8 +1,8 @@
-import { Entity } from "~/types/Entity";
 import { PRIORITY_ENEMY } from "~/constants";
 import colors from "~colors";
+import { Entity } from "~types";
 
-const templates: { [id: string]: Partial<Entity> } = {
+const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   ENEMY_BASE: {
     blocking: { moving: true, lasers: true },
     destructible: {},

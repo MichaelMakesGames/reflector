@@ -58,6 +58,13 @@ export interface HasPlacing {
   placing: Placing;
 }
 
+export interface Rotatable {
+  rotatesTo: TemplateName;
+}
+export interface HasRotatable {
+  rotatable: Rotatable;
+}
+
 export interface Reflector {
   type: "\\" | "/";
 }
@@ -167,6 +174,7 @@ export interface Entity
     Partial<HasReflector>,
     Partial<HasSplitter>,
     Partial<HasPlacing>,
+    Partial<HasRotatable>,
     Partial<HasValidMarker>,
     Partial<HasStairs>,
     Partial<HasHousing>,
@@ -178,8 +186,8 @@ export interface Entity
     Partial<HasPlacingMarker>,
     Partial<HasConductive> {
   id: string;
-  parentTemplate?: string;
-  template: string;
+  parentTemplate?: TemplateName;
+  template: TemplateName;
 }
 
 export type EntityHasPos = Entity & HasPos;

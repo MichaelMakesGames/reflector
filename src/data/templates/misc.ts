@@ -4,10 +4,10 @@ import {
   PRIORITY_TERRAIN,
   PROJECTOR_RANGE,
 } from "~/constants";
-import { Entity } from "~/types/Entity";
 import colors from "~colors";
+import { Entity } from "~types";
 
-const templates: { [id: string]: Partial<Entity> } = {
+const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   PLAYER: {
     id: PLAYER_ID,
     pos: { x: 1, y: 1 },

@@ -4,7 +4,7 @@ import templates from "~/data/templates";
 import { Entity } from "~/types/Entity";
 
 export function createEntityFromTemplate(
-  templateId: string,
+  templateId: TemplateName,
   additionalComps?: Partial<Entity>,
 ) {
   const template = templates[templateId];

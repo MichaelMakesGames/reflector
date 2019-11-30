@@ -296,6 +296,7 @@ function getControls(
         triggers: [{ code: "KeyR" }],
         action: actions.rotatePlacement(),
         label: "Rotate",
+        hidden: !placing.rotatable,
       },
       {
         display: "Escape",

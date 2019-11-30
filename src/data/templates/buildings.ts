@@ -1,8 +1,8 @@
 import { PRIORITY_ITEM, PRIORITY_PLACING, PROJECTOR_RANGE } from "~/constants";
-import { Entity } from "~/types/Entity";
 import colors from "~colors";
+import { Entity } from "~types";
 
-const templates: { [id: string]: Partial<Entity> } = {
+const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   REFLECTOR_BASE: {
     description: {
       name: "Reflector",
@@ -19,6 +19,7 @@ const templates: { [id: string]: Partial<Entity> } = {
       priority: PRIORITY_PLACING,
     },
     reflector: { type: "/" },
+    rotatable: { rotatesTo: "REFLECTOR_DOWN_RIGHT" },
   },
   REFLECTOR_DOWN_RIGHT: {
     parentTemplate: "REFLECTOR_BASE",
@@ -30,6 +31,7 @@ const templates: { [id: string]: Partial<Entity> } = {
       priority: PRIORITY_PLACING,
     },
     reflector: { type: "\\" },
+    rotatable: { rotatesTo: "REFLECTOR_UP_RIGHT" },
   },
   SPLITTER_BASE: {
     blocking: { moving: true, lasers: true },
@@ -48,6 +50,7 @@ const templates: { [id: string]: Partial<Entity> } = {
       priority: PRIORITY_PLACING,
     },
     splitter: { type: "horizontal" },
+    rotatable: { rotatesTo: "SPLITTER_VERTICAL" },
   },
   SPLITTER_VERTICAL: {
     parentTemplate: "SPLITTER_BASE",
@@ -59,6 +62,7 @@ const templates: { [id: string]: Partial<Entity> } = {
       priority: PRIORITY_PLACING,
     },
     splitter: { type: "vertical" },
+    rotatable: { rotatesTo: "SPLITTER_HORIZONTAL" },
   },
   TENT: {
     display: {

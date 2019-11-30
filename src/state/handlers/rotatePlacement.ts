@@ -1,38 +1,21 @@
 import actions from "~/state/actions";
 import { registerHandler } from "~state/handleAction";
 import WrappedState from "~types/WrappedState";
+import { createEntityFromTemplate } from "~utils/entities";
 
 function rotateThrow(
   state: WrappedState,
   action: ReturnType<typeof actions.rotatePlacement>,
 ): void {
-  let entity = state.select.placingTarget();
-  if (!entity) return;
-  if (entity.reflector && entity.display) {
-    entity = {
+  const entity = state.select.placingTarget();
+  if (!entity || !entity.rotatable) return;
+  state.act.removeEntity({ entityId: entity.id });
+  state.act.addEntity({
+    entity: {
       ...entity,
-      reflector: { type: entity.reflector.type === "\\" ? "/" : "\\" },
-      display: {
-        ...entity.display,
-        rotation: Number(!entity.display.rotation) * 90,
-        glyph: entity.display.glyph === "\\" ? "/" : "\\",
-      },
-    };
-  }
-  if (entity.splitter && entity.display) {
-    entity = {
-      ...entity,
-      splitter: {
-        type: entity.splitter.type === "horizontal" ? "vertical" : "horizontal",
-      },
-      display: {
-        ...entity.display,
-        rotation: Number(!entity.display.rotation) * 90,
-        glyph: entity.display.glyph === "⬍" ? "⬌" : "⬍",
-      },
-    };
-  }
-  state.act.updateEntity(entity);
+      ...createEntityFromTemplate(entity.rotatable.rotatesTo),
+    },
+  });
 }
 
 registerHandler(rotateThrow, actions.rotatePlacement);
