@@ -13,6 +13,7 @@ export const NIGHT_SPAWN_END_BUFFER = 10;
 export const ENEMIES_PER_TURN_POPULATION_MULTIPLIER = 0.1;
 export const ENEMIES_PER_TURN_DAY_MULTIPLIER = 0.5;
 export const STARTING_METAL = 25;
+export const BASE_LASER_POWER = 3;
 
 export const PRIORITY_LASER = 20;
 export const PRIORITY_PLACING = 17;

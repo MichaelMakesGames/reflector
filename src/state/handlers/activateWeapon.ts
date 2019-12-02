@@ -6,18 +6,7 @@ function activateWeapon(
   state: WrappedState,
   action: ReturnType<typeof actions.activateWeapon>,
 ): void {
-  const weaponEntity = state.select.entitiesWithComps("weapon")[0];
-  if (!weaponEntity) return;
-
-  const { weapon } = weaponEntity;
-  state.act.updateEntity({
-    ...weaponEntity,
-    weapon: {
-      ...weapon,
-      active: !weapon.active,
-    },
-  });
-
+  state.setRaw({ ...state.raw, isWeaponActive: true });
   state.act.targetWeapon(state.select.lastAimingDirection());
 }
 

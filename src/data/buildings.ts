@@ -1,6 +1,6 @@
 export default [
   {
-    template: "SPLITTER_HORIZONTAL",
+    template: "SPLITTER_HORIZONTAL" as TemplateName,
     key: "s",
     label: "Splitter",
     cost: {
@@ -9,7 +9,7 @@ export default [
     },
   },
   {
-    template: "WALL",
+    template: "WALL" as TemplateName,
     key: "w",
     label: "Wall",
     cost: {
@@ -18,7 +18,7 @@ export default [
     },
   },
   {
-    template: "RESIDENCE",
+    template: "RESIDENCE" as TemplateName,
     key: "r",
     label: "Residence",
     cost: {
@@ -27,7 +27,7 @@ export default [
     },
   },
   {
-    template: "MINE",
+    template: "MINE" as TemplateName,
     key: "m",
     label: "Mine",
     cost: {
@@ -37,7 +37,7 @@ export default [
     validitySelector: "canPlaceMine",
   },
   {
-    template: "PROJECTOR",
+    template: "PROJECTOR" as TemplateName,
     key: "p",
     label: "Projector",
     cost: {

@@ -21,7 +21,7 @@ interface Control {
   tooltip?: string;
 }
 function getControls(
-  activeWeapon: Entity | null,
+  isWeaponActive: boolean,
   playerPosition: Pos,
   placing: Required<Entity, "placing" | "pos"> | null,
   isBuildMenuOpen: boolean,
@@ -80,7 +80,7 @@ function getControls(
     {
       display: "Enter",
       triggers: confirmTriggers,
-      action: actions.activateWeapon({ slot: 1 }),
+      action: actions.activateWeapon(),
       label: "Activate Laser",
       tooltip:
         "Activates your laser. You will get to choose your direction and preview before firing.",
@@ -159,7 +159,7 @@ function getControls(
     ];
   }
 
-  if (activeWeapon) {
+  if (isWeaponActive) {
     return [
       {
         display: "w",
@@ -194,9 +194,7 @@ function getControls(
       {
         display: "Escape",
         triggers: cancelTriggers,
-        action: actions.activateWeapon({
-          slot: activeWeapon.weapon ? activeWeapon.weapon.slot : 0,
-        }),
+        action: actions.deactivateWeapon(),
         label: "Cancel",
       },
     ];
@@ -349,7 +347,7 @@ function getControls(
 
 export default function Controls() {
   const dispatch = useDispatch();
-  const activeWeapon = useSelector(selectors.activeWeapon);
+  const isWeaponActive = useSelector(selectors.isWeaponActive);
   const player = useSelector(selectors.player);
   const placing = useSelector(selectors.placingTarget);
   const gameOver = useSelector(selectors.gameOver);
@@ -359,7 +357,7 @@ export default function Controls() {
   const pos = player ? player.pos : { x: 0, y: 0 };
   const controls: Control[] = gameOver
     ? []
-    : getControls(activeWeapon, pos, placing, isBuildMenuOpen, inspector);
+    : getControls(isWeaponActive, pos, placing, isBuildMenuOpen, inspector);
 
   function listener(event: KeyboardEvent) {
     if (gameOver) return;

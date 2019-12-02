@@ -25,6 +25,7 @@ const initialState: RawState = {
     directionWeights: { n: 0, s: 0, e: 0, w: 0 },
   },
   isBuildMenuOpen: false,
+  isWeaponActive: false,
   resources: {
     METAL: STARTING_METAL,
   },

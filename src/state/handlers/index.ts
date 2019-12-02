@@ -6,6 +6,7 @@ import "./cancelInspect";
 import "./cancelPlacement";
 import "./clearReflectors";
 import "./closeBuildMenu";
+import "./deactivateWeapon";
 import "./destroy";
 import "./finishPlacement";
 import "./fireWeapon";

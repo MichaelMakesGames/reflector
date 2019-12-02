@@ -1,4 +1,4 @@
-import { Pos, WeaponType, Direction, HasDisplay, Entity } from "~/types";
+import { Pos, Direction, HasDisplay, Entity } from "~/types";
 import { RIGHT, DOWN, LEFT, UP } from "~/constants";
 import { createEntityFromTemplate } from "./entities";
 import { getConstDir } from "./geometry";
@@ -8,7 +8,6 @@ export function createLaser(
   direction: Direction,
   power: number,
   hit: boolean,
-  type: WeaponType,
   pos: Pos,
 ): Entity {
   const color = colors.laser;
@@ -20,8 +19,9 @@ export function createLaser(
     templateName = "LASER_BURST";
   }
 
-  const template = createEntityFromTemplate(templateName, { pos }) as Entity &
-    HasDisplay;
+  const template = createEntityFromTemplate(templateName as TemplateName, {
+    pos,
+  }) as Entity & HasDisplay;
   return {
     ...template,
     display: {
@@ -35,7 +35,7 @@ export function reflect(
   previousDirection: Direction,
   reflectorType: "\\" | "/",
   power: number,
-): { direction: Direction; cosmeticTemplate: string } {
+): { direction: Direction; cosmeticTemplate: TemplateName } {
   const constPrevDir = getConstDir(previousDirection);
   let newDirection = constPrevDir;
   if (reflectorType === "\\") {
@@ -57,21 +57,24 @@ export function reflect(
   return { direction: newDirection, cosmeticTemplate };
 }
 
-export function getSplitTemplateName(power: number, direction: Direction) {
+export function getSplitTemplateName(
+  power: number,
+  direction: Direction,
+): TemplateName {
   return `LASER_SPLIT_${getThickness(power)}_TO_${getThickness(
     power - 1,
-  )}_${getSplitOrientation(direction)}`;
+  )}_${getSplitOrientation(direction)}` as TemplateName;
 }
 
 function getReflectedTemplateName(
   power: number,
   from: Direction,
   to: Direction,
-) {
+): TemplateName {
   return `LASER_REFLECTED_${getThickness(power)}_${getReflectedOrientation(
     from,
     to,
-  )}`;
+  )}` as TemplateName;
 }
 
 function getThickness(power: number) {

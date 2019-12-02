@@ -1,10 +1,10 @@
 import actions from "~/state/actions";
-import { Entity, Pos } from "~/types";
-import { getAdjacentPositions } from "~/utils/geometry";
+import { Pos } from "~/types";
 import { createLaser, getSplitTemplateName, reflect } from "~/utils/lasers";
 import { registerHandler } from "~state/handleAction";
 import WrappedState from "~types/WrappedState";
 import { createEntityFromTemplate } from "~utils/entities";
+import { BASE_LASER_POWER } from "~constants";
 
 function targetWeapon(
   state: WrappedState,
@@ -23,22 +23,14 @@ function targetWeapon(
   if (!player) return;
   const playerPosition = player.pos;
 
-  const activeWeapon = state.select.activeWeapon();
-  if (!activeWeapon) return;
-
-  const { weapon } = activeWeapon;
-
   const beams = [
     {
-      power: weapon.power,
+      power: BASE_LASER_POWER,
       dx: action.payload.dx,
       dy: action.payload.dy,
       lastPos: playerPosition,
     },
   ];
-
-  const explosionCenters: Pos[] = [];
-  const spreadElectricity: Entity[] = [];
 
   while (beams.length) {
     const beam = beams[beams.length - 1];
@@ -57,7 +49,7 @@ function targetWeapon(
 
       if (!solidEntity && !reflectorEntity) {
         state.act.addEntity({
-          entity: createLaser(beam, beam.power, false, weapon.type, nextPos),
+          entity: createLaser(beam, beam.power, false, nextPos),
         });
       } else if (
         splitterEntity &&
@@ -98,72 +90,15 @@ function targetWeapon(
         });
         beam.dx = newDirection.dx;
         beam.dy = newDirection.dy;
-      } else if (
-        solidEntity &&
-        solidEntity.destructible &&
-        weapon.type !== "ELECTRIC"
-      ) {
+      } else if (solidEntity && solidEntity.destructible) {
         state.act.addEntity({
-          entity: createLaser(beam, beam.power, true, weapon.type, nextPos),
+          entity: createLaser(beam, beam.power, true, nextPos),
         });
-        if (weapon.type === "EXPLOSIVE") {
-          explosionCenters.push(nextPos);
-        }
-        beam.power--;
-      } else if (
-        weapon.type === "ELECTRIC" &&
-        solidEntity &&
-        solidEntity.conductive
-      ) {
-        spreadElectricity.push(solidEntity);
         beam.power--;
       } else {
         beam.power = 0;
-        if (weapon.type === "EXPLOSIVE") {
-          explosionCenters.push(beam.lastPos);
-        }
       }
       beam.lastPos = nextPos;
-    }
-  }
-
-  for (const pos of explosionCenters) {
-    for (const adjacentPos of getAdjacentPositions(pos)) {
-      const entities = state.select.entitiesAtPosition(adjacentPos);
-      if (entities.every(e => !e.targeting)) {
-        state.act.addEntity({
-          entity: createLaser(
-            { dx: 1, dy: 1 },
-            1,
-            true,
-            weapon.type,
-            adjacentPos,
-          ),
-        });
-      }
-    }
-  }
-
-  while (spreadElectricity.length) {
-    const from = spreadElectricity.pop() as Entity;
-    const pos = from.pos as Pos;
-    const entitiesAtPos = state.select.entitiesAtPosition(pos);
-    if (from.conductive && entitiesAtPos.every(e => !e.targeting)) {
-      const newEntity = createLaser(
-        { dx: 1, dy: 1 },
-        1,
-        true,
-        weapon.type,
-        pos,
-      );
-      state.act.addEntity({
-        entity: newEntity,
-      });
-      for (const adjacentPos of getAdjacentPositions(pos)) {
-        for (const to of state.select.entitiesAtPosition(adjacentPos)) {
-          spreadElectricity.push(to);
-        }
-      }
     }
   }
 }

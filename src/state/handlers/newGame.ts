@@ -1,5 +1,4 @@
 import actions from "~/state/actions";
-import { createEntityFromTemplate } from "~/utils/entities";
 import makeLevel from "~/utils/makeLevel";
 import { clearRenderer } from "~renderer";
 import { registerHandler } from "~state/handleAction";
@@ -12,11 +11,6 @@ function init(
 ): void {
   state.setRaw(initialState);
   clearRenderer();
-
-  const startingWeapon = createEntityFromTemplate("WEAPON_LASER");
-  if (startingWeapon.weapon) startingWeapon.weapon.slot = 1;
-  state.act.addEntity({ entity: startingWeapon });
-
   makeLevel(state);
 }
 

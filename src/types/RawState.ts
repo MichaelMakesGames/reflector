@@ -16,6 +16,7 @@ export interface RawState {
   morale: number;
   time: TimeState;
   isBuildMenuOpen: boolean;
+  isWeaponActive: boolean;
   resources: {
     [resource: string]: number;
   };

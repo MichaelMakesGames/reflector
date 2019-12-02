@@ -60,14 +60,8 @@ export function canAffordToPay(
   return resource(state, resourceName) >= cost;
 }
 
-export function activeWeapon(state: RawState) {
-  const activeWeapons = entitiesWithComps(state, "weapon").filter(
-    entity => entity.weapon && entity.weapon.active,
-  );
-  if (activeWeapons.length) {
-    return activeWeapons[0];
-  }
-  return null;
+export function isWeaponActive(state: RawState): boolean {
+  return state.isWeaponActive;
 }
 
 export function lastAimingDirection(state: RawState) {

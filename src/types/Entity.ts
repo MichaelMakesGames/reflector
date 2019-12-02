@@ -104,24 +104,6 @@ export interface HasHousing {
   housing: Housing;
 }
 
-export type WeaponType =
-  | "LASER"
-  | "EXPLOSIVE"
-  | "TELEPORT"
-  | "ELECTRIC"
-  | "STASIS"
-  | "OMEGA";
-export interface Weapon {
-  name: string;
-  power: number;
-  slot: number;
-  active: boolean;
-  type: WeaponType;
-}
-export interface HasWeapon {
-  weapon: Weapon;
-}
-
 export type Resource = "METAL";
 export interface Production {
   resource: Resource;
@@ -168,7 +150,6 @@ export interface Entity
     Partial<HasDisplay>,
     Partial<HasAI>,
     Partial<HasBlocking>,
-    Partial<HasWeapon>,
     Partial<HasTargeting>,
     Partial<HasDestructible>,
     Partial<HasReflector>,
