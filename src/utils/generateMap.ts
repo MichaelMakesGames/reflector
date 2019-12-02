@@ -34,7 +34,7 @@ export default function generateMap(): Entity[] {
         );
       } else {
         const localNoise = noise[x][y];
-        let template = "FLOOR";
+        let template: TemplateName = "FLOOR";
         if (localNoise < waterFloorThreshold) {
           template = "WATER_BASE";
         } else if (localNoise < floorOreThreshold) {
@@ -117,7 +117,9 @@ export default function generateMap(): Entity[] {
       (eIsWater ? 2 : 0) +
       (sIsWater ? 4 : 0) +
       (wIsWater ? 8 : 0);
-    result.push(createEntityFromTemplate(`WATER_${waterNumber}`, { pos }));
+    result.push(
+      createEntityFromTemplate(`WATER_${waterNumber}` as TemplateName, { pos }),
+    );
     if (nIsWater && eIsWater && neIsWater) {
       result.push(createEntityFromTemplate("WATER_CORNER_NE", { pos }));
     }

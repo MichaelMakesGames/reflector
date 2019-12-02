@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "parcel --no-hmr src/index.html",
-    "test": "npm run format:check && npm run lint:check",
+    "test": "npm run format:check && npm run lint:check && tsc",
     "build": "parcel build src/index.html --public-url ./",
     "lint:check": "eslint src/**/*.{ts,tsx}",
     "lint:fix": "eslint --fix src/**/*.{ts,tsx}",

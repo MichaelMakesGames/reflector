@@ -2,7 +2,7 @@ import { createStandardAction } from "typesafe-actions";
 import { Pos } from "~types";
 
 export const activatePlacement = createStandardAction("ACTIVATE_PLACEMENT")<{
-  template: string;
+  template: TemplateName;
   takesTurn: boolean;
   cost?: { resource: string; amount: number };
   validitySelector?: string;
