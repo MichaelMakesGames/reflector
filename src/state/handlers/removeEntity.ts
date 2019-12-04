@@ -10,11 +10,10 @@ function removeEntity(
   action: ReturnType<typeof actions.removeEntity>,
 ): void {
   const { raw: state } = wrappedState;
-  const prev = selectors.entityById(state, action.payload.entityId);
+  const entityId = action.payload;
+  const prev = selectors.entityById(state, entityId);
   if (!prev) {
-    console.warn(
-      `tried to remove nonexistant entity ${action.payload.entityId}`,
-    );
+    console.warn(`tried to remove nonexistant entity ${entityId}`);
     return;
   }
   let { entitiesByPosition } = state;
@@ -31,7 +30,7 @@ function removeEntity(
   }
 
   const entities = { ...state.entities };
-  delete entities[action.payload.entityId];
+  delete entities[entityId];
   wrappedState.setRaw({
     ...state,
     entitiesByPosition,

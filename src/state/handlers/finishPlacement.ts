@@ -36,7 +36,7 @@ function finishPlacement(
     entity => entity.reflector && entity !== placingTarget,
   );
   if (otherReflector) {
-    state.act.removeEntity({ entityId: otherReflector.id });
+    state.act.removeEntity(otherReflector.id);
   }
 
   state.act.updateEntity({
@@ -44,12 +44,12 @@ function finishPlacement(
     placing: undefined,
   });
 
-  state.act.removeEntities({
-    entityIds: state.select
+  state.act.removeEntities(
+    state.select
       .entitiesWithComps("validMarker")
       .map(e => e.id)
       .concat([placingMarker.id]),
-  });
+  );
 
   if (placingTarget.placing.takesTurn) {
     state.act.playerTookTurn();

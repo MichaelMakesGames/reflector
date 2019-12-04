@@ -64,20 +64,16 @@ function activatePlacement(
 
   state.act.closeBuildMenu();
   state.act.addEntity({
-    entity: {
-      ...entityToPlace,
-      pos: action.payload.pos || player.pos,
-    },
+    ...entityToPlace,
+    pos: action.payload.pos || player.pos,
   });
-  state.act.addEntity({
-    entity: createEntityFromTemplate("PLACING_MARKER", {
+  state.act.addEntity(
+    createEntityFromTemplate("PLACING_MARKER", {
       pos: action.payload.pos || player.pos,
     }),
-  });
+  );
   for (const pos of validPositions) {
-    state.act.addEntity({
-      entity: createEntityFromTemplate("VALID_MARKER", { pos }),
-    });
+    state.act.addEntity(createEntityFromTemplate("VALID_MARKER", { pos }));
   }
 }
 

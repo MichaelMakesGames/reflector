@@ -9,12 +9,10 @@ function rotateThrow(
 ): void {
   const entity = state.select.placingTarget();
   if (!entity || !entity.rotatable) return;
-  state.act.removeEntity({ entityId: entity.id });
+  state.act.removeEntity(entity.id);
   state.act.addEntity({
-    entity: {
-      ...entity,
-      ...createEntityFromTemplate(entity.rotatable.rotatesTo),
-    },
+    ...entity,
+    ...createEntityFromTemplate(entity.rotatable.rotatesTo),
   });
 }
 

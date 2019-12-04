@@ -6,16 +6,16 @@ function cancelPlacement(
   state: WrappedState,
   action: ReturnType<typeof actions.cancelPlacement>,
 ): void {
-  state.act.removeEntities({
-    entityIds: state.select
+  state.act.removeEntities(
+    state.select
       .entityList()
       .filter(e => e.validMarker)
       .map(e => e.id),
-  });
+  );
   const entity = state.select.placingTarget();
   const marker = state.select.placingMarker();
   if (!entity || !marker) return;
-  state.act.removeEntities({ entityIds: [entity.id, marker.id] });
+  state.act.removeEntities([entity.id, marker.id]);
 }
 
 registerHandler(cancelPlacement, actions.cancelPlacement);

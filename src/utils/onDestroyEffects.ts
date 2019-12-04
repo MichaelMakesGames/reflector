@@ -11,17 +11,17 @@ const onDestroyEffects: { [id: string]: (entity: Entity) => Action | null } = {
   },
 
   wall(entity: Entity) {
-    return actions.addEntity({
-      entity: createEntityFromTemplate("WALL_DAMAGED", { pos: entity.pos }),
-    });
+    return actions.addEntity(
+      createEntityFromTemplate("WALL_DAMAGED", { pos: entity.pos }),
+    );
   },
 
   player(entity: Entity) {
-    return actions.addEntity({
-      entity: createEntityFromTemplate("PLAYER_CORPSE", {
+    return actions.addEntity(
+      createEntityFromTemplate("PLAYER_CORPSE", {
         pos: entity.pos,
       }),
-    });
+    );
   },
 };
 

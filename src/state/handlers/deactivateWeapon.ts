@@ -10,9 +10,9 @@ function deactivateWeapon(
     ...state.raw,
     isWeaponActive: false,
   });
-  state.act.removeEntities({
-    entityIds: state.select.entitiesWithComps("targeting").map(e => e.id),
-  });
+  state.act.removeEntities(
+    state.select.entitiesWithComps("targeting").map(e => e.id),
+  );
 }
 
 registerHandler(deactivateWeapon, actions.deactivateWeapon);

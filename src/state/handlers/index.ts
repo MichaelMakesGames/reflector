@@ -1,7 +1,6 @@
 import "./activatePlacement";
 import "./activateWeapon";
 import "./addEntity";
-import "./attack";
 import "./cancelInspect";
 import "./cancelPlacement";
 import "./clearReflectors";

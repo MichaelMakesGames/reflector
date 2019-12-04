@@ -13,7 +13,7 @@ export default function processMigration(state: WrappedState): void {
       occupiedUndesirableHouse.housing.occupancy === 1
     ) {
       // remove if removeOnVacancy
-      state.act.removeEntity({ entityId: occupiedUndesirableHouse.id });
+      state.act.removeEntity(occupiedUndesirableHouse.id);
     } else {
       // otherwise update with new occupancy
       state.act.updateEntity({

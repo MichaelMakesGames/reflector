@@ -1,19 +1,10 @@
 /* eslint-disable import/prefer-default-export */
 import * as ROT from "rot-js";
-import { ActionType } from "typesafe-actions";
 import actions from "~/state/actions";
 import selectors from "~/state/selectors";
-import { Direction, Entity, RawState, Pos } from "~/types";
+import { Direction, Entity, RawState, Pos, Action } from "~/types";
 import { getDistance, arePositionsEqual } from "./geometry";
 import WrappedState from "~types/WrappedState";
-
-const aiActions = {
-  move: actions.move,
-  attack: actions.attack,
-  addEntity: actions.addEntity,
-  updateEntity: actions.updateEntity,
-};
-type AIAction = ActionType<typeof aiActions>;
 
 function isPassable(gameState: RawState, position: Pos) {
   return selectors
@@ -65,7 +56,7 @@ function getDirectionTowardTarget(
   return null;
 }
 
-export function getAIActions(entity: Entity, state: WrappedState): AIAction[] {
+export function getAIActions(entity: Entity, state: WrappedState): Action[] {
   const { ai } = entity;
   if (!ai) return [];
 
@@ -79,12 +70,7 @@ export function getAIActions(entity: Entity, state: WrappedState): AIAction[] {
     const target = targets[0];
 
     if (getDistance(entity.pos, target.pos) <= 1) {
-      return [
-        actions.attack({
-          target: target.id,
-          message: "The drone attacks you!",
-        }),
-      ];
+      return [actions.destroy(target.id)];
     }
     const direction = getDirectionTowardTarget(
       entity.pos,
@@ -102,12 +88,7 @@ export function getAIActions(entity: Entity, state: WrappedState): AIAction[] {
       e => !!e.destructible,
     );
     if (destructibleAtTargetPos) {
-      return [
-        actions.attack({
-          target: destructibleAtTargetPos.id,
-          message: "The Rusher attacks you!",
-        }),
-      ];
+      return [actions.destroy(destructibleAtTargetPos.id)];
     }
     return [actions.move({ entityId: entity.id, ...direction })];
   }

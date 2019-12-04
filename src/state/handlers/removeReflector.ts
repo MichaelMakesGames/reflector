@@ -22,12 +22,12 @@ function removeReflector(
     const message = "No reflector to remove.";
     state.act.logMessage({ message });
   } else {
-    state.act.removeEntity({ entityId: otherReflector.id });
-    state.act.addEntity({
-      entity: createEntityFromTemplate("VALID_MARKER", {
+    state.act.removeEntity(otherReflector.id);
+    state.act.addEntity(
+      createEntityFromTemplate("VALID_MARKER", {
         pos: otherReflector.pos,
       }),
-    });
+    );
     if (arePositionsEqual(pos, placingMarker.pos)) {
       state.act.updateEntity({
         ...placingMarker,

@@ -8,7 +8,7 @@ function cancelInspect(
 ): void {
   const inspector = state.select.inspector();
   if (!inspector) return;
-  state.act.removeEntity({ entityId: inspector.id });
+  state.act.removeEntity(inspector.id);
 }
 
 registerHandler(cancelInspect, actions.cancelInspect);

@@ -19,9 +19,7 @@ export default function processImmigration(state: WrappedState): void {
     if (!pos) {
       console.warn("no position for new immigrant found");
     } else {
-      state.act.addEntity({
-        entity: createEntityFromTemplate("TENT", { pos }),
-      });
+      state.act.addEntity(createEntityFromTemplate("TENT", { pos }));
     }
 
     state.setRaw({

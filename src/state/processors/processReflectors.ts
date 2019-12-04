@@ -6,7 +6,7 @@ export default function processReflectors(state: WrappedState): void {
   const projectors = state.select.entitiesWithComps("projector", "pos");
   for (const reflector of reflectors) {
     if (state.select.isPositionBlocked(reflector.pos)) {
-      state.act.removeEntity({ entityId: reflector.id });
+      state.act.removeEntity(reflector.id);
     }
 
     if (
@@ -15,7 +15,7 @@ export default function processReflectors(state: WrappedState): void {
           getDistance(projector.pos, reflector.pos) > projector.projector.range,
       )
     ) {
-      state.act.removeEntity({ entityId: reflector.id });
+      state.act.removeEntity(reflector.id);
     }
   }
 }

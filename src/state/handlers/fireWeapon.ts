@@ -25,7 +25,7 @@ function fireWeapon(
   }
 
   for (const id of new Set(entitiesToDestroy)) {
-    state.act.destroy({ entityId: id });
+    state.act.destroy(id);
   }
 
   state.act.deactivateWeapon();

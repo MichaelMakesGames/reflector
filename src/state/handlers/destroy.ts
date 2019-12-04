@@ -7,7 +7,7 @@ function destroy(
   state: WrappedState,
   action: ReturnType<typeof actions.destroy>,
 ): void {
-  const { entityId } = action.payload;
+  const entityId = action.payload;
   const entity = state.select.entityById(entityId);
   if (entity.destructible) {
     if (entity.destructible.onDestroy) {
@@ -19,7 +19,7 @@ function destroy(
         }
       }
     }
-    state.act.removeEntity({ entityId });
+    state.act.removeEntity(entityId);
   }
 }
 

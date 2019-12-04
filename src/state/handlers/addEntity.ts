@@ -11,7 +11,7 @@ function addEntity(
   action: ReturnType<typeof actions.addEntity>,
 ): void {
   let state = wrappedState.raw;
-  const { entity } = action.payload;
+  const entity = action.payload;
   let { entitiesByPosition } = state;
   if (entity.pos) {
     const key = getPosKey(entity.pos);

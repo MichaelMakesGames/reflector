@@ -37,9 +37,7 @@ function spawnEnemy(state: WrappedState): void {
   const positions = getPossibleSpawnPositions(state);
   if (positions.length) {
     const pos = choose(positions);
-    state.act.addEntity({
-      entity: createEntityFromTemplate("ENEMY_DRONE", { pos }),
-    });
+    state.act.addEntity(createEntityFromTemplate("ENEMY_DRONE", { pos }));
   } else {
     console.warn("Unable to find spawn position");
   }

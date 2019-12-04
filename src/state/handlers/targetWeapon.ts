@@ -15,9 +15,7 @@ function targetWeapon(
     lastAimingDirection: action.payload,
   });
   const targetingLasers = state.select.entitiesWithComps("targeting", "pos");
-  state.act.removeEntities({
-    entityIds: targetingLasers.map(e => e.id),
-  });
+  state.act.removeEntities(targetingLasers.map(e => e.id));
 
   const player = state.select.player();
   if (!player) return;
@@ -48,9 +46,7 @@ function targetWeapon(
       const splitterEntity = entitiesAtPos.find(entity => entity.splitter);
 
       if (!solidEntity && !reflectorEntity) {
-        state.act.addEntity({
-          entity: createLaser(beam, beam.power, false, nextPos),
-        });
+        state.act.addEntity(createLaser(beam, beam.power, false, nextPos));
       } else if (
         splitterEntity &&
         splitterEntity.splitter &&
@@ -59,11 +55,11 @@ function targetWeapon(
       ) {
         const { splitter } = splitterEntity;
         const cosmeticTemplate = getSplitTemplateName(beam.power, beam);
-        state.act.addEntity({
-          entity: createEntityFromTemplate(cosmeticTemplate, {
+        state.act.addEntity(
+          createEntityFromTemplate(cosmeticTemplate, {
             pos: nextPos,
           }),
-        });
+        );
         beams.push({
           power: beam.power - 1,
           dx: splitter.type === "horizontal" ? 1 : 0,
@@ -83,17 +79,15 @@ function targetWeapon(
           reflectorEntity.reflector.type,
           beam.power,
         );
-        state.act.addEntity({
-          entity: createEntityFromTemplate(cosmeticTemplate, {
+        state.act.addEntity(
+          createEntityFromTemplate(cosmeticTemplate, {
             pos: nextPos,
           }),
-        });
+        );
         beam.dx = newDirection.dx;
         beam.dy = newDirection.dy;
       } else if (solidEntity && solidEntity.destructible) {
-        state.act.addEntity({
-          entity: createLaser(beam, beam.power, true, nextPos),
-        });
+        state.act.addEntity(createLaser(beam, beam.power, true, nextPos));
         beam.power--;
       } else {
         beam.power = 0;

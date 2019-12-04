@@ -9,9 +9,9 @@ function inspect(
 ): void {
   const player = state.select.player();
   if (!player) return;
-  state.act.addEntity({
-    entity: createEntityFromTemplate("INSPECTOR", { pos: player.pos }),
-  });
+  state.act.addEntity(
+    createEntityFromTemplate("INSPECTOR", { pos: player.pos }),
+  );
 }
 
 registerHandler(inspect, actions.inspect);
