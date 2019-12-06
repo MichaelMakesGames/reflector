@@ -1,5 +1,3 @@
-import { Direction } from "./Direction";
-
 export interface Pos {
   x: number;
   y: number;
@@ -52,7 +50,7 @@ export interface HasDestructible {
 export interface Placing {
   takesTurn: boolean;
   cost?: {
-    resource: string;
+    resource: Resource;
     amount: number;
   };
 }
@@ -106,7 +104,6 @@ export interface HasHousing {
   housing: Housing;
 }
 
-export type Resource = "METAL";
 export interface Production {
   resource: Resource;
   amount: number;

@@ -1,6 +1,15 @@
-export default [
+const buildings: {
+  template: TemplateName;
+  key: string;
+  label: string;
+  cost: {
+    resource: Resource;
+    amount: number;
+  };
+  validitySelector?: string;
+}[] = [
   {
-    template: "SPLITTER_HORIZONTAL" as TemplateName,
+    template: "SPLITTER_HORIZONTAL",
     key: "s",
     label: "Splitter",
     cost: {
@@ -9,7 +18,7 @@ export default [
     },
   },
   {
-    template: "WALL" as TemplateName,
+    template: "WALL",
     key: "w",
     label: "Wall",
     cost: {
@@ -18,7 +27,7 @@ export default [
     },
   },
   {
-    template: "RESIDENCE" as TemplateName,
+    template: "RESIDENCE",
     key: "r",
     label: "Residence",
     cost: {
@@ -27,7 +36,7 @@ export default [
     },
   },
   {
-    template: "MINE" as TemplateName,
+    template: "MINE",
     key: "m",
     label: "Mine",
     cost: {
@@ -37,7 +46,7 @@ export default [
     validitySelector: "canPlaceMine",
   },
   {
-    template: "PROJECTOR" as TemplateName,
+    template: "PROJECTOR",
     key: "p",
     label: "Projector",
     cost: {
@@ -46,3 +55,4 @@ export default [
     },
   },
 ];
+export default buildings;

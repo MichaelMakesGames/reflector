@@ -23,6 +23,6 @@ export const logMessage = createStandardAction("LOG_MESSAGE")<{
 }>();
 
 export const modifyResource = createStandardAction("MODIFY_RESOURCE")<{
-  resource: string;
+  resource: Resource;
   amount: number;
 }>();

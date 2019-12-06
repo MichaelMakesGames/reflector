@@ -4,7 +4,7 @@ import { Pos } from "~types";
 export const activatePlacement = createStandardAction("ACTIVATE_PLACEMENT")<{
   template: TemplateName;
   takesTurn: boolean;
-  cost?: { resource: string; amount: number };
+  cost?: { resource: Resource; amount: number };
   validitySelector?: string;
   pos?: Pos;
 }>();

@@ -3,12 +3,8 @@ import { Direction } from "./Direction";
 
 export interface RawState {
   version: string;
-  entities: {
-    [id: string]: Entity;
-  };
-  entitiesByPosition: {
-    [position: string]: string[];
-  };
+  entities: Record<string, Entity>;
+  entitiesByPosition: Record<string, string[]>;
   messageLog: string[];
   gameOver: boolean;
   victory: boolean;
@@ -17,9 +13,7 @@ export interface RawState {
   time: TimeState;
   isBuildMenuOpen: boolean;
   isWeaponActive: boolean;
-  resources: {
-    [resource: string]: number;
-  };
+  resources: Record<Resource, number>;
   lastAimingDirection: Direction;
 }
 

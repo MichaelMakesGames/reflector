@@ -48,13 +48,13 @@ export function resources(state: RawState) {
   return state.resources;
 }
 
-export function resource(state: RawState, resourceName: string) {
+export function resource(state: RawState, resourceName: Resource) {
   return resources(state)[resourceName];
 }
 
 export function canAffordToPay(
   state: RawState,
-  resourceName: string,
+  resourceName: Resource,
   cost: number,
 ) {
   return resource(state, resourceName) >= cost;
