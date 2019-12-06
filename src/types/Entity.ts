@@ -1,3 +1,5 @@
+import { Direction } from "./Direction";
+
 export interface Pos {
   x: number;
   y: number;
@@ -33,11 +35,11 @@ export interface HasBlocking {
   blocking: Blocking;
 }
 
-export interface Targeting {
+export interface Laser {
   cosmetic?: boolean;
 }
-export interface HasTargeting {
-  targeting: Targeting;
+export interface HasLaser {
+  laser: Laser;
 }
 
 export interface Destructible {
@@ -150,7 +152,7 @@ export interface Entity
     Partial<HasDisplay>,
     Partial<HasAI>,
     Partial<HasBlocking>,
-    Partial<HasTargeting>,
+    Partial<HasLaser>,
     Partial<HasDestructible>,
     Partial<HasReflector>,
     Partial<HasSplitter>,

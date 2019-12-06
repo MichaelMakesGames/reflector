@@ -9,12 +9,10 @@ function fireWeapon(
   const player = state.select.player();
   if (!player) return;
 
-  const targetingLasers = state.select.entitiesWithComps("targeting", "pos");
+  const lasers = state.select.entitiesWithComps("laser", "pos");
 
   const entitiesToDestroy: string[] = [];
-  for (const laser of targetingLasers.filter(
-    entity => !entity.targeting.cosmetic,
-  )) {
+  for (const laser of lasers.filter(entity => !entity.laser.cosmetic)) {
     const { pos } = laser;
     const entitiesAtPos = state.select.entitiesAtPosition(pos);
     for (const entity of entitiesAtPos) {

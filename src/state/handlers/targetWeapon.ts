@@ -14,8 +14,8 @@ function targetWeapon(
     ...state.raw,
     lastAimingDirection: action.payload,
   });
-  const targetingLasers = state.select.entitiesWithComps("targeting", "pos");
-  state.act.removeEntities(targetingLasers.map(e => e.id));
+  const lasers = state.select.entitiesWithComps("laser", "pos");
+  state.act.removeEntities(lasers.map(e => e.id));
 
   const player = state.select.player();
   if (!player) return;

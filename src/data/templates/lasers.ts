@@ -4,10 +4,10 @@ import { Entity } from "~types";
 
 const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   LASER_BASE: {
-    targeting: {},
+    laser: {},
   },
   LASER_COSMETIC_BASE: {
-    targeting: {
+    laser: {
       cosmetic: true,
     },
   },
