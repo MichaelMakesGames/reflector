@@ -13,13 +13,17 @@ export default function processImmigration(state: WrappedState): void {
   });
 
   if (state.raw.turnsUntilNextImmigrant <= 0) {
-    const houses = state.select.entitiesWithComps("housing", "pos");
-
-    const pos = findNewTentPosition(state, houses);
-    if (!pos) {
-      console.warn("no position for new immigrant found");
+    const player = state.select.player();
+    if (!player) {
+      console.warn("No player");
     } else {
-      state.act.addEntity(createEntityFromTemplate("TENT", { pos }));
+      const sourcePositions = [player.pos];
+      const pos = findNewColonistPosition(state, sourcePositions);
+      if (!pos) {
+        console.warn("no position for new immigrant found");
+      } else {
+        state.act.addEntity(createEntityFromTemplate("COLONIST", { pos }));
+      }
     }
 
     state.setRaw({
@@ -29,13 +33,13 @@ export default function processImmigration(state: WrappedState): void {
   }
 }
 
-function findNewTentPosition(
+function findNewColonistPosition(
   state: WrappedState,
-  houses: Required<Entity, "housing" | "pos">[],
+  sourcePositions: Pos[],
 ): Pos {
-  const positions = houses
-    .reduce<Pos[]>((acc, house) => {
-      acc.push(...getPositionsWithinRange(house.pos, 3));
+  const positions = sourcePositions
+    .reduce<Pos[]>((acc, pos) => {
+      acc.push(...getPositionsWithinRange(pos, 3));
       return acc;
     }, [])
     .filter(pos => !state.select.isPositionBlocked(pos))

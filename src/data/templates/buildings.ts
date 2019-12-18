@@ -81,9 +81,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       desirability: -1,
       removeOnVacancy: true,
     },
-    destructible: {
-      onDestroy: "house",
-    },
+    destructible: {},
     description: {
       name: "Tent",
       description:
@@ -106,9 +104,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       capacity: 3,
       desirability: 0,
     },
-    destructible: {
-      onDestroy: "house",
-    },
+    destructible: {},
     description: {
       name: "Residence",
       description:

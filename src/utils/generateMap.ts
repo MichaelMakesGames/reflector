@@ -135,7 +135,7 @@ export default function generateMap(): Entity[] {
   });
 
   result.push(
-    createEntityFromTemplate("TENT", {
+    createEntityFromTemplate("COLONIST", {
       pos: floorPositions[0],
     }),
   );

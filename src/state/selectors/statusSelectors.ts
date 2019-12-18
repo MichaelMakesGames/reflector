@@ -2,10 +2,7 @@ import { RawState } from "~types";
 import { entitiesWithComps } from "./entitySelectors";
 
 export function population(state: RawState): number {
-  return entitiesWithComps(state, "housing").reduce(
-    (sum, entity) => sum + entity.housing.occupancy,
-    0,
-  );
+  return entitiesWithComps(state, "colonist").length;
 }
 
 export function gameOver(state: RawState) {

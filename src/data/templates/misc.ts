@@ -66,6 +66,18 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     inspector: {},
   },
+  COLONIST: {
+    display: {
+      glyph: "c",
+      tile: "colonists1",
+      color: colors.payer,
+      priority: PRIORITY_PLAYER,
+    },
+    destructible: {
+      onDestroy: "colonist",
+    },
+    colonist: {},
+  },
 };
 
 export default templates;

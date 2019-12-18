@@ -3,11 +3,8 @@ import actions from "~state/actions";
 import { createEntityFromTemplate } from "./entities";
 
 const onDestroyEffects: { [id: string]: (entity: Entity) => Action | null } = {
-  house(entity: Entity) {
-    if (entity.housing) {
-      return actions.reduceMorale({ amount: entity.housing.occupancy });
-    }
-    return null;
+  colonist(entity: Entity) {
+    return actions.reduceMorale({ amount: 1 });
   },
 
   wall(entity: Entity) {

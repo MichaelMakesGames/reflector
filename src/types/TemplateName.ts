@@ -1,4 +1,5 @@
 type TemplateName =
+  | "COLONIST"
   | "ENEMY_BASE"
   | "ENEMY_DRONE"
   | "FLOOR"

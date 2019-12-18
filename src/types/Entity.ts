@@ -58,6 +58,11 @@ export interface HasPlacing {
   placing: Placing;
 }
 
+export interface Colonist {}
+export interface HasColonist {
+  colonist: Colonist;
+}
+
 export interface Rotatable {
   rotatesTo: TemplateName;
 }
@@ -145,26 +150,27 @@ export interface HasDescription {
 }
 
 export interface Entity
-  extends Partial<HasPos>,
-    Partial<HasDisplay>,
-    Partial<HasAI>,
+  extends Partial<HasAI>,
     Partial<HasBlocking>,
-    Partial<HasLaser>,
-    Partial<HasDestructible>,
-    Partial<HasReflector>,
-    Partial<HasSplitter>,
-    Partial<HasPlacing>,
-    Partial<HasRotatable>,
-    Partial<HasValidMarker>,
-    Partial<HasStairs>,
-    Partial<HasHousing>,
-    Partial<HasProduction>,
-    Partial<HasMineable>,
-    Partial<HasProjector>,
-    Partial<HasInspector>,
+    Partial<HasColonist>,
+    Partial<HasConductive>,
     Partial<HasDescription>,
+    Partial<HasDestructible>,
+    Partial<HasDisplay>,
+    Partial<HasHousing>,
+    Partial<HasInspector>,
+    Partial<HasLaser>,
+    Partial<HasMineable>,
+    Partial<HasPlacing>,
     Partial<HasPlacingMarker>,
-    Partial<HasConductive> {
+    Partial<HasPos>,
+    Partial<HasProduction>,
+    Partial<HasProjector>,
+    Partial<HasReflector>,
+    Partial<HasRotatable>,
+    Partial<HasSplitter>,
+    Partial<HasStairs>,
+    Partial<HasValidMarker> {
   id: string;
   parentTemplate?: TemplateName;
   template: TemplateName;
