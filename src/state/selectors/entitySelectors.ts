@@ -53,3 +53,7 @@ export function isPositionBlocked(
       !exceptEntities.includes(entity),
   );
 }
+
+export function colonists(state: RawState) {
+  return entitiesWithComps(state, "pos", "colonist", "display");
+}

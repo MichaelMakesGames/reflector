@@ -1,24 +1,46 @@
-import { Action, Entity } from "~types";
 import actions from "~state/actions";
+import { Action, Entity } from "~types";
+import WrappedState from "~types/WrappedState";
 import { createEntityFromTemplate } from "./entities";
 
-const onDestroyEffects: { [id: string]: (entity: Entity) => Action | null } = {
-  colonist(entity: Entity) {
-    return actions.reduceMorale({ amount: 1 });
+const onDestroyEffects: {
+  [id: string]: (state: WrappedState, entity: Entity) => Action[];
+} = {
+  colonist(state: WrappedState, entity: Entity) {
+    const results: Action[] = [actions.reduceMorale({ amount: 1 })];
+    if (entity.colonist && entity.colonist.residence) {
+      const residence = state.select.entityById(entity.colonist.residence);
+      if (residence && residence.housing) {
+        results.push(
+          actions.updateEntity({
+            ...residence,
+            housing: {
+              ...residence.housing,
+              occupancy: residence.housing.occupancy - 1,
+            },
+          }),
+        );
+      }
+    }
+    return results;
   },
 
-  wall(entity: Entity) {
-    return actions.addEntity(
-      createEntityFromTemplate("WALL_DAMAGED", { pos: entity.pos }),
-    );
+  wall(state: WrappedState, entity: Entity) {
+    return [
+      actions.addEntity(
+        createEntityFromTemplate("WALL_DAMAGED", { pos: entity.pos }),
+      ),
+    ];
   },
 
-  player(entity: Entity) {
-    return actions.addEntity(
-      createEntityFromTemplate("PLAYER_CORPSE", {
-        pos: entity.pos,
-      }),
-    );
+  player(state: WrappedState, entity: Entity) {
+    return [
+      actions.addEntity(
+        createEntityFromTemplate("PLAYER_CORPSE", {
+          pos: entity.pos,
+        }),
+      ),
+    ];
   },
 };
 

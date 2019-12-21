@@ -13,10 +13,8 @@ function destroy(
     if (entity.destructible.onDestroy) {
       const effect = onDestroyEffects[entity.destructible.onDestroy];
       if (effect) {
-        const effectAction = effect(entity);
-        if (effectAction) {
-          state.handle(effectAction);
-        }
+        const effectActions = effect(state, entity);
+        effectActions.forEach(effectAction => state.handle(effectAction));
       }
     }
     state.act.removeEntity(entityId);

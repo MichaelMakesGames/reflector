@@ -32,7 +32,7 @@ function moveToward(state: WrappedState, entity: Entity, to: Pos) {
   return [actions.move({ entityId: entity.id, ...direction })];
 }
 
-function getDirectionTowardTarget(
+export function getDirectionTowardTarget(
   from: Pos,
   to: Pos,
   state: WrappedState,
@@ -70,7 +70,7 @@ export function getAIActions(entity: Entity, state: WrappedState): Action[] {
     const target = targets[0];
 
     if (getDistance(entity.pos, target.pos) <= 1) {
-      return [actions.destroy(target.id)];
+      return destroyAllAtPos(state, target.pos);
     }
     const direction = getDirectionTowardTarget(
       entity.pos,
@@ -83,15 +83,18 @@ export function getAIActions(entity: Entity, state: WrappedState): Action[] {
       x: entity.pos.x + direction.dx,
       y: entity.pos.y + direction.dy,
     };
-    const entitiesAtTargetPos = state.select.entitiesAtPosition(targetPos);
-    const destructibleAtTargetPos = entitiesAtTargetPos.find(
-      e => !!e.destructible,
-    );
-    if (destructibleAtTargetPos) {
-      return [actions.destroy(destructibleAtTargetPos.id)];
+    if (state.select.entitiesAtPosition(targetPos).some(e => e.destructible)) {
+      return destroyAllAtPos(state, targetPos);
     }
     return [actions.move({ entityId: entity.id, ...direction })];
   }
 
   return [];
+}
+
+function destroyAllAtPos(state: WrappedState, pos: Pos) {
+  const entitiesAtTargetPos = state.select.entitiesAtPosition(pos);
+  return entitiesAtTargetPos
+    .filter(e => e.destructible)
+    .map(e => actions.destroy(e.id));
 }

@@ -58,7 +58,9 @@ export interface HasPlacing {
   placing: Placing;
 }
 
-export interface Colonist {}
+export interface Colonist {
+  residence: string | null;
+}
 export interface HasColonist {
   colonist: Colonist;
 }

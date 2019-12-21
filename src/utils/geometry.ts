@@ -1,4 +1,4 @@
-import { Pos } from "~/types";
+import { Pos, HasPos } from "~/types";
 import { DOWN, RIGHT, LEFT, UP, MAP_WIDTH, MAP_HEIGHT } from "~/constants";
 import { rangeFromTo } from "./math";
 
@@ -59,4 +59,10 @@ export function isPositionInMap(position: Pos) {
     position.y >= 0 &&
     position.y < MAP_HEIGHT
   );
+}
+
+export function getClosest<T extends HasPos>(choices: T[], position: Pos): T {
+  return [...choices].sort(
+    (a, b) => getDistance(a.pos, position) - getDistance(b.pos, position),
+  )[0];
 }
