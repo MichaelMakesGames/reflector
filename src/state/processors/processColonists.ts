@@ -34,7 +34,29 @@ export default function processColonists(state: WrappedState): void {
       .entitiesWithComps("housing")
       .filter(entity => entity.housing.removeOnVacancy)
       .forEach(tent => state.act.removeEntity(tent.id));
-    state.select.colonists().forEach(colonist => wander(state, colonist));
+
+    for (const colonist of state.select.colonists()) {
+      cleanEmployment(state, colonist);
+    }
+
+    for (const colonist of state.select.colonists()) {
+      assignEmployment(state, colonist);
+    }
+
+    state.select.colonists().forEach(colonist => {
+      if (colonist.colonist.employment) {
+        const employment = state.select.entityById(
+          colonist.colonist.employment,
+        ) as Required<Entity, "pos" | "jobProvider">;
+        if (arePositionsEqual(employment.pos, colonist.pos)) {
+          doWork(state, colonist);
+        } else {
+          goToWork(state, colonist);
+        }
+      } else {
+        wander(state, colonist);
+      }
+    });
   }
 
   // update tile
@@ -56,6 +78,24 @@ function cleanResidence(
       colonist: {
         ...colonist.colonist,
         residence: null,
+      },
+    });
+  }
+}
+
+function cleanEmployment(
+  state: WrappedState,
+  colonist: Required<Entity, "colonist" | "pos">,
+) {
+  if (
+    colonist.colonist.employment &&
+    !state.select.entityById(colonist.colonist.employment)
+  ) {
+    state.act.updateEntity({
+      ...colonist,
+      colonist: {
+        ...colonist.colonist,
+        employment: null,
       },
     });
   }
@@ -89,6 +129,36 @@ function assignResidence(
   }
 }
 
+function assignEmployment(
+  state: WrappedState,
+  colonist: Required<Entity, "colonist" | "pos">,
+) {
+  if (!colonist.colonist.employment) {
+    const availableJobs = state.select
+      .entitiesWithComps("jobProvider", "pos")
+      .filter(
+        e => e.jobProvider.numberEmployed < e.jobProvider.maxNumberEmployed,
+      );
+    if (availableJobs.length > 0) {
+      const job = getClosest(availableJobs, colonist.pos);
+      state.act.updateEntity({
+        ...job,
+        jobProvider: {
+          ...job.jobProvider,
+          numberEmployed: job.jobProvider.numberEmployed + 1,
+        },
+      });
+      state.act.updateEntity({
+        ...colonist,
+        colonist: {
+          ...colonist.colonist,
+          employment: job.id,
+        },
+      });
+    }
+  }
+}
+
 function goHome(
   state: WrappedState,
   colonist: Required<Entity, "colonist" | "pos">,
@@ -110,6 +180,54 @@ function goHome(
         state.act.move({ entityId: colonist.id, ...direction });
       }
     }
+  }
+}
+
+function goToWork(
+  state: WrappedState,
+  colonist: Required<Entity, "colonist" | "pos">,
+) {
+  if (
+    colonist.colonist.employment &&
+    !arePositionsEqual(colonist.pos, state.select.entityById(
+      colonist.colonist.employment,
+    ).pos as Pos)
+  ) {
+    const employment = state.select.entityById(colonist.colonist.employment);
+    if (employment.pos) {
+      const direction = getDirectionTowardTarget(
+        colonist.pos,
+        employment.pos,
+        state,
+      );
+      if (direction) {
+        state.act.move({ entityId: colonist.id, ...direction });
+      }
+    }
+  }
+}
+
+function doWork(
+  state: WrappedState,
+  colonist: Required<Entity, "colonist" | "pos">,
+) {
+  const employment = state.select.entityById(colonist.colonist
+    .employment as string) as Required<Entity, "jobProvider">;
+  if (
+    Object.entries(employment.jobProvider.consumes)
+      .filter((entry): entry is [Resource, number] => Boolean(entry[1]))
+      .every(([resource, cost]) => state.select.canAffordToPay(resource, cost))
+  ) {
+    Object.entries(employment.jobProvider.consumes)
+      .filter((entry): entry is [Resource, number] => Boolean(entry[1]))
+      .every(([resource, cost]) =>
+        state.act.modifyResource({ resource, amount: -cost }),
+      );
+    Object.entries(employment.jobProvider.produces)
+      .filter((entry): entry is [Resource, number] => Boolean(entry[1]))
+      .every(([resource, amount]) =>
+        state.act.modifyResource({ resource, amount }),
+      );
   }
 }
 

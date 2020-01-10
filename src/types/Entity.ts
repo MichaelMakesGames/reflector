@@ -60,6 +60,7 @@ export interface HasPlacing {
 
 export interface Colonist {
   residence: string | null;
+  employment: string | null;
 }
 export interface HasColonist {
   colonist: Colonist;
@@ -151,6 +152,16 @@ export interface HasDescription {
   description: Description;
 }
 
+export interface JobProvider {
+  consumes: Partial<Record<Resource, number>>;
+  produces: Partial<Record<Resource, number>>;
+  numberEmployed: number;
+  maxNumberEmployed: number;
+}
+export interface HasJobProvider {
+  jobProvider: JobProvider;
+}
+
 export interface Entity
   extends Partial<HasAI>,
     Partial<HasBlocking>,
@@ -161,6 +172,7 @@ export interface Entity
     Partial<HasDisplay>,
     Partial<HasHousing>,
     Partial<HasInspector>,
+    Partial<HasJobProvider>,
     Partial<HasLaser>,
     Partial<HasMineable>,
     Partial<HasPlacing>,

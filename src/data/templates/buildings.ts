@@ -123,9 +123,13 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       lasers: true,
     },
     destructible: {},
-    production: {
-      resource: "METAL",
-      amount: 1,
+    jobProvider: {
+      consumes: {},
+      produces: {
+        METAL: 1,
+      },
+      numberEmployed: 0,
+      maxNumberEmployed: 2,
     },
     description: {
       name: "Mine",

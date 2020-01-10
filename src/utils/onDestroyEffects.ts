@@ -22,6 +22,20 @@ const onDestroyEffects: {
         );
       }
     }
+    if (entity.colonist && entity.colonist.employment) {
+      const employment = state.select.entityById(entity.colonist.employment);
+      if (employment && employment.jobProvider) {
+        results.push(
+          actions.updateEntity({
+            ...employment,
+            jobProvider: {
+              ...employment.jobProvider,
+              numberEmployed: employment.jobProvider.numberEmployed - 1,
+            },
+          }),
+        );
+      }
+    }
     return results;
   },
 
