@@ -30,6 +30,7 @@ const colors = {
   laser: palette.red,
   power: palette.yellow,
   ground: palette.darkGray,
+  food: palette.green,
 };
 
 export default colors;

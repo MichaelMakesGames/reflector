@@ -243,6 +243,21 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
         "Can be mined either manually or by building on mine on top.",
     },
   },
+  FERTILE: {
+    display: {
+      tile: "fertile",
+      glyph: '"',
+      color: colors.food,
+      priority: PRIORITY_FLOOR,
+    },
+    mineable: {
+      resource: "FOOD",
+    },
+    description: {
+      name: "Fertile Land",
+      description: "Can be farmed for food by building a farm on top.",
+    },
+  },
 };
 
 export default templates;

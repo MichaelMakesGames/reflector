@@ -2,6 +2,8 @@ type TemplateName =
   | "COLONIST"
   | "ENEMY_BASE"
   | "ENEMY_DRONE"
+  | "FARM"
+  | "FERTILE"
   | "FLOOR"
   | "INSPECTOR"
   | "LASER_BASE"

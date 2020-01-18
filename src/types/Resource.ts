@@ -1,1 +1,1 @@
-type Resource = "METAL";
+type Resource = "METAL" | "FOOD";

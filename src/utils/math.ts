@@ -24,3 +24,7 @@ export function calcPercentile(
 export function sum(...numbers: number[]) {
   return numbers.reduce((acc, cur) => acc + cur, 0);
 }
+
+export function round(value: number, precision: number = 0) {
+  return Math.round(value * 10 ** precision) / 10 ** precision;
+}

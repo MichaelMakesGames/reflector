@@ -136,6 +136,28 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       description: "Automatically mines metal, but must be built over ore.",
     },
   },
+  FARM: {
+    display: {
+      tile: "farm",
+      glyph: "F",
+      color: colors.food,
+      priority: PRIORITY_ITEM,
+    },
+    destructible: {},
+    jobProvider: {
+      consumes: {},
+      produces: {
+        FOOD: 0.2,
+      },
+      numberEmployed: 0,
+      maxNumberEmployed: 1,
+    },
+    description: {
+      name: "Farm",
+      description:
+        "Produces 0.2 food when worked by colonist. Up to 1 colonist can work at a time",
+    },
+  },
   WALL: {
     display: {
       tile: "wall",

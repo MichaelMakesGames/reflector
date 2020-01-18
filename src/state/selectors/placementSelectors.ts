@@ -20,6 +20,12 @@ export function canPlaceMine(state: RawState, pos: Pos) {
   );
 }
 
+export function canPlaceFarm(state: RawState, pos: Pos) {
+  return entitiesAtPosition(state, pos).some(
+    entity => entity.mineable && entity.mineable.resource === "FOOD",
+  );
+}
+
 export function canPlaceReflector(state: RawState, pos: Pos) {
   return entitiesAtPosition(state, pos).every(entity =>
     Boolean(!entity.reflector || entity.placing),

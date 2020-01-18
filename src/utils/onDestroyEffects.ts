@@ -7,7 +7,10 @@ const onDestroyEffects: {
   [id: string]: (state: WrappedState, entity: Entity) => Action[];
 } = {
   colonist(state: WrappedState, entity: Entity) {
-    const results: Action[] = [actions.reduceMorale({ amount: 1 })];
+    const results: Action[] = [
+      actions.reduceMorale({ amount: 1 }),
+      actions.logMessage({ message: "A colonist died! You lost 1 morale." }),
+    ];
     if (entity.colonist && entity.colonist.residence) {
       const residence = state.select.entityById(entity.colonist.residence);
       if (residence && residence.housing) {

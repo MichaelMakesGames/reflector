@@ -19,7 +19,8 @@ export default function generateMap(): Entity[] {
   }
 
   const flatNoise = noise.flat().sort((a, b) => a - b);
-  const waterFloorThreshold = calcPercentile(flatNoise, 15);
+  const waterFertileThreshold = calcPercentile(flatNoise, 15);
+  const fertileFloorThreshold = calcPercentile(flatNoise, 35);
   const floorOreThreshold = calcPercentile(flatNoise, 85);
   const oreMountainThreshold = calcPercentile(flatNoise, 90);
 
@@ -35,8 +36,10 @@ export default function generateMap(): Entity[] {
       } else {
         const localNoise = noise[x][y];
         let template: TemplateName = "FLOOR";
-        if (localNoise < waterFloorThreshold) {
+        if (localNoise < waterFertileThreshold) {
           template = "WATER_BASE";
+        } else if (localNoise < fertileFloorThreshold) {
+          template = "FERTILE";
         } else if (localNoise < floorOreThreshold) {
           template = "FLOOR";
         } else if (localNoise < oreMountainThreshold) {
