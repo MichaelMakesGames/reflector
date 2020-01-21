@@ -1,14 +1,22 @@
-import { PRIORITY_LASER } from "~/constants";
+import { PRIORITY_LASER, UP } from "~/constants";
 import colors from "~colors";
 import { Entity } from "~types";
 
 const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   LASER_BASE: {
-    laser: {},
+    laser: {
+      cosmetic: false,
+      hit: false,
+      strength: 1,
+      direction: UP,
+    },
   },
   LASER_COSMETIC_BASE: {
     laser: {
       cosmetic: true,
+      hit: false,
+      strength: 1,
+      direction: UP,
     },
   },
   LASER_BURST: {
@@ -352,6 +360,46 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     display: {
       glyph: "",
       tile: "laser_split_thick_to_thick",
+      rotation: 270,
+      color: colors.laser,
+      priority: PRIORITY_LASER,
+    },
+  },
+  LASER_SPLIT_THIN_TO_THIN_UP: {
+    parentTemplate: "LASER_COSMETIC_BASE",
+    display: {
+      glyph: "",
+      tile: "laser_split_thin_to_thin",
+      rotation: 0,
+      color: colors.laser,
+      priority: PRIORITY_LASER,
+    },
+  },
+  LASER_SPLIT_THIN_TO_THIN_RIGHT: {
+    parentTemplate: "LASER_COSMETIC_BASE",
+    display: {
+      glyph: "",
+      tile: "laser_split_thin_to_thin",
+      rotation: 90,
+      color: colors.laser,
+      priority: PRIORITY_LASER,
+    },
+  },
+  LASER_SPLIT_THIN_TO_THIN_DOWN: {
+    parentTemplate: "LASER_COSMETIC_BASE",
+    display: {
+      glyph: "",
+      tile: "laser_split_thin_to_thin",
+      rotation: 180,
+      color: colors.laser,
+      priority: PRIORITY_LASER,
+    },
+  },
+  LASER_SPLIT_THIN_TO_THIN_LEFT: {
+    parentTemplate: "LASER_COSMETIC_BASE",
+    display: {
+      glyph: "",
+      tile: "laser_split_thin_to_thin",
       rotation: 270,
       color: colors.laser,
       priority: PRIORITY_LASER,

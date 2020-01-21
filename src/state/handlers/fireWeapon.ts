@@ -11,6 +11,10 @@ function fireWeapon(
 
   const lasers = state.select.entitiesWithComps("laser", "pos");
 
+  if (state.select.canAffordToPay("POWER", 1)) {
+    state.act.modifyResource({ resource: "POWER", amount: -1 });
+  }
+
   const entitiesToDestroy: string[] = [];
   for (const laser of lasers.filter(entity => !entity.laser.cosmetic)) {
     const { pos } = laser;

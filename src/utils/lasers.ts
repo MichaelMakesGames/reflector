@@ -6,14 +6,14 @@ import colors from "~colors";
 
 export function createLaser(
   direction: Direction,
-  power: number,
+  strength: number,
   hit: boolean,
   pos: Pos,
 ): Entity {
   const color = colors.laser;
 
   let templateName = `LASER_${getOrientation(direction)}_${getThickness(
-    power,
+    strength,
   )}`;
   if (hit) {
     templateName = "LASER_BURST";
@@ -28,13 +28,19 @@ export function createLaser(
       ...template.display,
       color,
     },
+    laser: {
+      ...template.laser,
+      direction,
+      hit,
+      strength,
+    },
   };
 }
 
 export function reflect(
   previousDirection: Direction,
   reflectorType: "\\" | "/",
-  power: number,
+  strength: number,
 ): { direction: Direction; cosmeticTemplate: TemplateName } {
   const constPrevDir = getConstDir(previousDirection);
   let newDirection = constPrevDir;
@@ -50,7 +56,7 @@ export function reflect(
     if (constPrevDir === UP) newDirection = RIGHT;
   }
   const cosmeticTemplate = getReflectedTemplateName(
-    power,
+    strength,
     previousDirection,
     newDirection,
   );
@@ -58,30 +64,31 @@ export function reflect(
 }
 
 export function getSplitTemplateName(
-  power: number,
+  strength: number,
   direction: Direction,
 ): TemplateName {
-  return `LASER_SPLIT_${getThickness(power)}_TO_${getThickness(
-    power - 1,
+  return `LASER_SPLIT_${getThickness(strength)}_TO_${getThickness(
+    strength - 1,
   )}_${getSplitOrientation(direction)}` as TemplateName;
 }
 
 function getReflectedTemplateName(
-  power: number,
+  strength: number,
   from: Direction,
   to: Direction,
 ): TemplateName {
-  return `LASER_REFLECTED_${getThickness(power)}_${getReflectedOrientation(
+  return `LASER_REFLECTED_${getThickness(strength)}_${getReflectedOrientation(
     from,
     to,
   )}` as TemplateName;
 }
 
-function getThickness(power: number) {
-  if (power >= 3) return "THICK";
-  if (power === 2) return "MEDIUM";
-  if (power === 1) return "THIN";
-  return "NONE";
+function getThickness(strength: number) {
+  return strength ? "THIN" : "NONE";
+  // if (strength >= 3) return "THICK";
+  // if (strength === 2) return "MEDIUM";
+  // if (strength === 1) return "THIN";
+  // return "NONE";
 }
 
 function getOrientation(direction: Direction) {

@@ -1,3 +1,5 @@
+import { Direction } from "./Direction";
+
 export interface Pos {
   x: number;
   y: number;
@@ -35,6 +37,9 @@ export interface HasBlocking {
 
 export interface Laser {
   cosmetic?: boolean;
+  strength: number;
+  direction: Direction;
+  hit: boolean;
 }
 export interface HasLaser {
   laser: Laser;

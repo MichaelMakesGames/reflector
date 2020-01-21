@@ -15,7 +15,8 @@ export const ENEMIES_PER_TURN_DAY_MULTIPLIER = 0.5;
 export const STARTING_METAL = 25;
 export const STARTING_FOOD = 5;
 export const STARTING_POWER = 0;
-export const BASE_LASER_POWER = 3;
+export const BASE_LASER_STRENGTH = 100;
+export const UNPOWERED_LASER_STRENGTH = 1;
 
 export const PRIORITY_LASER = 20;
 export const PRIORITY_PLACING = 17;
