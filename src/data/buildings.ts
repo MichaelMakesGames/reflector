@@ -56,6 +56,15 @@ const buildings: {
     validitySelector: "canPlaceFarm",
   },
   {
+    template: "POWER_PLANT",
+    key: "o",
+    label: "Power Plant",
+    cost: {
+      resource: "METAL",
+      amount: 15,
+    },
+  },
+  {
     template: "PROJECTOR",
     key: "p",
     label: "Projector",

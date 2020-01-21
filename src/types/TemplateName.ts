@@ -50,6 +50,7 @@ type TemplateName =
   | "PLACING_MARKER"
   | "PLAYER_CORPSE"
   | "PLAYER"
+  | "POWER_PLANT"
   | "PROJECTOR"
   | "REFLECTOR_BASE"
   | "REFLECTOR_DOWN_RIGHT"

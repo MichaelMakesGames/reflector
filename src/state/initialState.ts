@@ -6,6 +6,7 @@ import {
   TURNS_PER_DAY,
   RIGHT,
   STARTING_FOOD,
+  STARTING_POWER,
 } from "~constants";
 import { RawState } from "~types";
 
@@ -30,6 +31,7 @@ const initialState: RawState = {
   resources: {
     METAL: STARTING_METAL,
     FOOD: STARTING_FOOD,
+    POWER: STARTING_POWER,
   },
   lastAimingDirection: RIGHT,
 };

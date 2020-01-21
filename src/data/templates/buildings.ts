@@ -155,7 +155,33 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     description: {
       name: "Farm",
       description:
-        "Produces 0.2 food when worked by colonist. Up to 1 colonist can work at a time",
+        "Produces 0.2 food when worked by colonist. Up to 1 colonist can work at a time.",
+    },
+  },
+  POWER_PLANT: {
+    display: {
+      tile: "powerplant",
+      glyph: "P",
+      color: colors.activeBuilding,
+      priority: PRIORITY_ITEM,
+    },
+    destructible: {},
+    jobProvider: {
+      consumes: {},
+      produces: {
+        POWER: 0.5,
+      },
+      numberEmployed: 0,
+      maxNumberEmployed: 2,
+    },
+    blocking: {
+      moving: true,
+      lasers: true,
+    },
+    description: {
+      name: "Power Plant",
+      description:
+        "Produces 0.5 power when worked by colonist. Up to 2 colonists can work at a time.",
     },
   },
   WALL: {
