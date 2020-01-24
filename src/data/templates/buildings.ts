@@ -184,6 +184,35 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
         "Produces 0.5 power when worked by colonist. Up to 2 colonists can work at a time.",
     },
   },
+  FURNACE: {
+    display: {
+      tile: "furnace",
+      glyph: "R",
+      color: colors.activeBuilding,
+      priority: PRIORITY_ITEM,
+    },
+    destructible: {},
+    jobProvider: {
+      consumes: {
+        POWER: 1,
+        METAL: 2,
+      },
+      produces: {
+        REFINED_METAL: 1,
+      },
+      numberEmployed: 0,
+      maxNumberEmployed: 2,
+    },
+    blocking: {
+      moving: true,
+      lasers: true,
+    },
+    description: {
+      name: "Furnace",
+      description:
+        "Provides 2 jobs that consume 2 metal and 1 power to produce 1 refined metal",
+    },
+  },
   WALL: {
     display: {
       tile: "wall",

@@ -5,6 +5,7 @@ type TemplateName =
   | "FARM"
   | "FERTILE"
   | "FLOOR"
+  | "FURNACE"
   | "INSPECTOR"
   | "LASER_BASE"
   | "LASER_BURST"

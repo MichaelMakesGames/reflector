@@ -1,1 +1,1 @@
-type Resource = "METAL" | "FOOD" | "POWER";
+type Resource = "METAL" | "FOOD" | "POWER" | "REFINED_METAL";

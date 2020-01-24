@@ -13,8 +13,8 @@ const buildings: {
     key: "s",
     label: "Splitter",
     cost: {
-      resource: "METAL",
-      amount: 25,
+      resource: "REFINED_METAL",
+      amount: 10,
     },
   },
   {
@@ -65,12 +65,21 @@ const buildings: {
     },
   },
   {
+    template: "FURNACE",
+    key: "u",
+    label: "Furnace",
+    cost: {
+      resource: "METAL",
+      amount: 25,
+    },
+  },
+  {
     template: "PROJECTOR",
     key: "p",
     label: "Projector",
     cost: {
-      resource: "METAL",
-      amount: 50,
+      resource: "REFINED_METAL",
+      amount: 15,
     },
   },
 ];
