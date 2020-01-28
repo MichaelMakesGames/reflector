@@ -133,6 +133,7 @@ export interface HasMineable {
 }
 
 export interface Projector {
+  condition: ConditionName | null;
   range: number;
 }
 export interface HasProjector {
@@ -167,6 +168,15 @@ export interface HasJobProvider {
   jobProvider: JobProvider;
 }
 
+export interface Powered {
+  hasPower: boolean;
+  powerNeeded: number;
+}
+
+export interface HasPowered {
+  powered: Powered;
+}
+
 export interface Entity
   extends Partial<HasAI>,
     Partial<HasBlocking>,
@@ -183,6 +193,7 @@ export interface Entity
     Partial<HasPlacing>,
     Partial<HasPlacingMarker>,
     Partial<HasPos>,
+    Partial<HasPowered>,
     Partial<HasProduction>,
     Partial<HasProjector>,
     Partial<HasReflector>,

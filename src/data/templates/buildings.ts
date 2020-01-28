@@ -262,7 +262,12 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       lasers: true,
     },
     destructible: {},
+    powered: {
+      hasPower: true,
+      powerNeeded: 1,
+    },
     projector: {
+      condition: "isPowered",
       range: PROJECTOR_RANGE,
     },
     description: {

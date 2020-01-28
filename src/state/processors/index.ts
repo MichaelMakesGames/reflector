@@ -8,6 +8,7 @@ import processProduction from "./processProduction";
 import processReflectors from "./processReflectors";
 import processTime from "./processTime";
 import processWave from "./processWave";
+import processPowered from "./processPowered";
 
 const processors: ((state: WrappedState) => void)[] = [
   processAI,
@@ -16,6 +17,7 @@ const processors: ((state: WrappedState) => void)[] = [
   processProduction,
   processHunger,
   processWave,
+  processPowered,
   processReflectors,
   processTime,
   processGameOver,

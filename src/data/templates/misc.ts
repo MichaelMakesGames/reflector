@@ -23,6 +23,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     conductive: {},
     projector: {
+      condition: null,
       range: PROJECTOR_RANGE,
     },
     description: {
@@ -76,7 +77,10 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     destructible: {
       onDestroy: "colonist",
     },
-    colonist: {},
+    colonist: {
+      residence: null,
+      employment: null,
+    },
   },
 };
 

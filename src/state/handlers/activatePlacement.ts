@@ -6,6 +6,7 @@ import { createEntityFromTemplate } from "~/utils/entities";
 import { registerHandler } from "~state/handleAction";
 import { findValidPositions } from "~utils/building";
 import WrappedState from "~types/WrappedState";
+import { areConditionsMet } from "~utils/conditions";
 
 function activatePlacement(
   state: WrappedState,
@@ -42,10 +43,14 @@ function activatePlacement(
   const validPositions = entityToPlace.reflector
     ? findValidPositions(
         state,
-        projectors.map(projector => ({
-          pos: projector.pos,
-          range: projector.projector.range,
-        })),
+        projectors
+          .filter(projector =>
+            areConditionsMet(state, projector, projector.projector.condition),
+          )
+          .map(projector => ({
+            pos: projector.pos,
+            range: projector.projector.range,
+          })),
         canPlace,
         true,
       )

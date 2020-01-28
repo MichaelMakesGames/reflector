@@ -1,4 +1,5 @@
 import WrappedState from "~types/WrappedState";
+import { areConditionsMet } from "~utils/conditions";
 import { getDistance } from "~utils/geometry";
 
 export default function processReflectors(state: WrappedState): void {
@@ -10,10 +11,15 @@ export default function processReflectors(state: WrappedState): void {
     }
 
     if (
-      projectors.every(
-        projector =>
-          getDistance(projector.pos, reflector.pos) > projector.projector.range,
-      )
+      projectors
+        .filter(projector =>
+          areConditionsMet(state, projector, projector.projector.condition),
+        )
+        .every(
+          projector =>
+            getDistance(projector.pos, reflector.pos) >
+            projector.projector.range,
+        )
     ) {
       state.act.removeEntity(reflector.id);
     }
