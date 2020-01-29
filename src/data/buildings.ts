@@ -65,6 +65,24 @@ const buildings: {
     },
   },
   {
+    template: "SOLAR_PANEL",
+    key: "l",
+    label: "Solar Panel",
+    cost: {
+      resource: "REFINED_METAL",
+      amount: 5,
+    },
+  },
+  {
+    template: "WINDMILL",
+    key: "n",
+    label: "Windmill",
+    cost: {
+      resource: "METAL",
+      amount: 20,
+    },
+  },
+  {
     template: "FURNACE",
     key: "u",
     label: "Furnace",

@@ -184,6 +184,45 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
         "Produces 0.5 power when worked by colonist. Up to 2 colonists can work at a time.",
     },
   },
+  SOLAR_PANEL: {
+    display: {
+      tile: "solarpanel",
+      glyph: "S",
+      color: colors.activeBuilding,
+      priority: PRIORITY_ITEM,
+    },
+    destructible: {},
+    production: {
+      resource: "POWER",
+      amount: 1,
+      conditions: ["isDay"],
+    },
+    description: {
+      name: "Solar Panel",
+      description:
+        "Produces 1 power during day. Does not require a working colonist.",
+    },
+  },
+  WINDMILL: {
+    display: {
+      tile: "windmill",
+      glyph: "W",
+      color: colors.activeBuilding,
+      priority: PRIORITY_ITEM,
+    },
+    destructible: {},
+    blocking: { moving: true, lasers: true },
+    production: {
+      resource: "POWER",
+      amount: 1,
+      conditions: ["doesNotHaveTallNeighbors"],
+    },
+    description: {
+      name: "Windmill",
+      description:
+        "Produces 1 power as long as the neighboring tiles are not blocked.",
+    },
+  },
   FURNACE: {
     display: {
       tile: "furnace",

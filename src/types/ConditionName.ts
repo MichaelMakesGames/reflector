@@ -1,1 +1,1 @@
-type ConditionName = "isPowered";
+type ConditionName = "isPowered" | "isDay" | "doesNotHaveTallNeighbors";

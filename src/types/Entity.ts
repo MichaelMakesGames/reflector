@@ -120,6 +120,7 @@ export interface HasHousing {
 export interface Production {
   resource: Resource;
   amount: number;
+  conditions: ConditionName[];
 }
 export interface HasProduction {
   production: Production;
