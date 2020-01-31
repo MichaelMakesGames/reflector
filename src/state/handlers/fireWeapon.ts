@@ -20,7 +20,10 @@ function fireWeapon(
     const { pos } = laser;
     const entitiesAtPos = state.select.entitiesAtPosition(pos);
     for (const entity of entitiesAtPos) {
-      if (entity.destructible) {
+      if (
+        entity.destructible &&
+        entitiesAtPos.some(e => e.blocking && e.blocking.lasers)
+      ) {
         entitiesToDestroy.push(entity.id);
       }
     }
