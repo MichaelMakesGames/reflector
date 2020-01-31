@@ -26,10 +26,10 @@ export const PRIORITY_ITEM = 5;
 export const PRIORITY_TERRAIN = 0;
 export const PRIORITY_FLOOR = -5;
 
-export const MAP_WIDTH = 24;
+export const MAP_WIDTH = 32;
 export const MAP_HEIGHT = MAP_WIDTH;
 
-export const TILE_SIZE = 32;
+export const TILE_SIZE = 24;
 export const FONT_FAMILY = "Nova Mono";
 
 export const TRANSPARENT = "transparent";
