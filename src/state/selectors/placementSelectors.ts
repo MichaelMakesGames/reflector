@@ -31,3 +31,9 @@ export function canPlaceReflector(state: RawState, pos: Pos) {
     Boolean(!entity.reflector || entity.placing),
   );
 }
+
+export function removingMarker(
+  state: RawState,
+): Required<Entity, "removingMarker" | "pos"> | null {
+  return entitiesWithComps(state, "removingMarker", "pos")[0] || null;
+}

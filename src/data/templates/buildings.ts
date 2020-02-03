@@ -34,6 +34,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     rotatable: { rotatesTo: "REFLECTOR_UP_RIGHT" },
   },
   SPLITTER_BASE: {
+    building: {},
     blocking: { moving: true, lasers: true },
     destructible: {},
     description: {
@@ -65,6 +66,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     rotatable: { rotatesTo: "SPLITTER_HORIZONTAL" },
   },
   TENT: {
+    building: {},
     display: {
       tile: "tent",
       glyph: "▲",
@@ -89,6 +91,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
   },
   RESIDENCE: {
+    building: {},
     display: {
       tile: "residence",
       glyph: "R",
@@ -112,6 +115,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
   },
   MINE: {
+    building: {},
     display: {
       tile: "mine",
       glyph: "m",
@@ -137,6 +141,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
   },
   FARM: {
+    building: {},
     display: {
       tile: "farm",
       glyph: "F",
@@ -159,6 +164,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
   },
   POWER_PLANT: {
+    building: {},
     display: {
       tile: "powerplant",
       glyph: "P",
@@ -185,6 +191,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
   },
   SOLAR_PANEL: {
+    building: {},
     display: {
       tile: "solarpanel",
       glyph: "S",
@@ -204,6 +211,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
   },
   WINDMILL: {
+    building: {},
     display: {
       tile: "windmill",
       glyph: "W",
@@ -224,6 +232,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
   },
   FURNACE: {
+    building: {},
     display: {
       tile: "furnace",
       glyph: "R",
@@ -253,6 +262,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
   },
   WALL: {
+    building: {},
     display: {
       tile: "wall",
       glyph: "#",
@@ -273,6 +283,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
   },
   WALL_DAMAGED: {
+    building: {},
     display: {
       tile: "wall_damaged",
       glyph: "#",
@@ -290,6 +301,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
   },
   PROJECTOR: {
+    building: {},
     display: {
       tile: "projector",
       glyph: "p",

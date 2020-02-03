@@ -151,6 +151,11 @@ export interface HasPlacingMarker {
   placingMarker: PlacingMarker;
 }
 
+export interface RemovingMarker {}
+export interface HasRemovingMarker {
+  removingMarker: RemovingMarker;
+}
+
 export interface Description {
   name: string;
   description: string;
@@ -178,9 +183,15 @@ export interface HasPowered {
   powered: Powered;
 }
 
+export interface Building {}
+export interface HasBuilding {
+  building: Building;
+}
+
 export interface Entity
   extends Partial<HasAI>,
     Partial<HasBlocking>,
+    Partial<HasBuilding>,
     Partial<HasColonist>,
     Partial<HasConductive>,
     Partial<HasDescription>,
@@ -198,6 +209,7 @@ export interface Entity
     Partial<HasProduction>,
     Partial<HasProjector>,
     Partial<HasReflector>,
+    Partial<HasRemovingMarker>,
     Partial<HasRotatable>,
     Partial<HasSplitter>,
     Partial<HasStairs>,

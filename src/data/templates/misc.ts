@@ -58,6 +58,15 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     placingMarker: {},
   },
+  REMOVING_MARKER: {
+    display: {
+      glyph: ".",
+      tile: "outline_solid",
+      color: colors.invalid,
+      priority: PRIORITY_TERRAIN,
+    },
+    removingMarker: {},
+  },
   INSPECTOR: {
     display: {
       glyph: "?",

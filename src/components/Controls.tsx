@@ -26,6 +26,7 @@ function getControls(
   placing: Required<Entity, "placing" | "pos"> | null,
   isBuildMenuOpen: boolean,
   inspector: Entity | null,
+  removingMarker: Required<Entity, "pos"> | null,
 ): Control[] {
   const upTriggers = [
     { code: "KeyW" },
@@ -114,6 +115,16 @@ function getControls(
       triggers: [{ code: "KeyB" }],
       action: actions.openBuildMenu(),
       label: "Build",
+    },
+  ];
+  const remove: Control[] = [
+    {
+      display: "x",
+      triggers: [{ code: "KeyX" }],
+      action: actions.activateRemoveBuilding(),
+      label: "Remove Building",
+      tooltip:
+        "You can freely remove buildings but you get no resources back. It does not count as your turn.",
     },
   ];
   const mine: Control[] = [
@@ -235,6 +246,47 @@ function getControls(
     ];
   }
 
+  if (removingMarker) {
+    return [
+      {
+        display: "Escape",
+        triggers: cancelTriggers,
+        action: actions.cancelRemoveBuilding(),
+        label: "Close",
+      },
+      {
+        display: "Enter",
+        triggers: confirmTriggers,
+        action: actions.executeRemoveBuilding(removingMarker.pos),
+        label: "Removing Building",
+      },
+      {
+        display: "w",
+        triggers: upTriggers,
+        action: actions.move({ entityId: removingMarker.id, ...UP }),
+        label: "Move Inspector Up",
+      },
+      {
+        display: "a",
+        triggers: leftTriggers,
+        action: actions.move({ entityId: removingMarker.id, ...LEFT }),
+        label: "Move Inspector Left",
+      },
+      {
+        display: "s",
+        triggers: downTriggers,
+        action: actions.move({ entityId: removingMarker.id, ...DOWN }),
+        label: "Move Inspector Down",
+      },
+      {
+        display: "d",
+        triggers: rightTriggers,
+        action: actions.move({ entityId: removingMarker.id, ...RIGHT }),
+        label: "Move Inspector Right",
+      },
+    ];
+  }
+
   if (placing) {
     const placingControls: Control[] = [
       {
@@ -339,6 +391,7 @@ function getControls(
     ...activateWeapon,
     ...reflectorActions,
     ...build,
+    ...remove,
     ...mine,
     ...wait,
     ...inspect,
@@ -353,11 +406,19 @@ export default function Controls() {
   const gameOver = useSelector(selectors.gameOver);
   const isBuildMenuOpen = useSelector(selectors.isBuildMenuOpen);
   const inspector = useSelector(selectors.inspector);
+  const removingMarker = useSelector(selectors.removingMarker);
 
   const pos = player ? player.pos : { x: 0, y: 0 };
   const controls: Control[] = gameOver
     ? []
-    : getControls(isWeaponActive, pos, placing, isBuildMenuOpen, inspector);
+    : getControls(
+        isWeaponActive,
+        pos,
+        placing,
+        isBuildMenuOpen,
+        inspector,
+        removingMarker,
+      );
 
   function listener(event: KeyboardEvent) {
     if (gameOver) return;

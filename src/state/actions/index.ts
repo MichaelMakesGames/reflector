@@ -3,6 +3,7 @@ import * as inspectActions from "./inspectActions";
 import * as loadingActions from "./loadingActions";
 import * as miscActions from "./miscActions";
 import * as placementActions from "./placementActions";
+import * as removeBuildingActions from "./removeBuildingActions";
 import * as weaponActions from "./weaponActions";
 
 export default {
@@ -11,5 +12,6 @@ export default {
   ...loadingActions,
   ...miscActions,
   ...placementActions,
+  ...removeBuildingActions,
   ...weaponActions,
 };

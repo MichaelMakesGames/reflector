@@ -1,12 +1,15 @@
 import "./activatePlacement";
+import "./activateRemoveBuilding";
 import "./activateWeapon";
 import "./addEntity";
 import "./cancelInspect";
 import "./cancelPlacement";
+import "./cancelRemoveBuilding";
 import "./clearReflectors";
 import "./closeBuildMenu";
 import "./deactivateWeapon";
 import "./destroy";
+import "./executeRemoveBuilding";
 import "./finishPlacement";
 import "./fireWeapon";
 import "./inspect";
