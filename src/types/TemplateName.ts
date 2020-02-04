@@ -1,4 +1,5 @@
 type TemplateName =
+  | "BASIC_PROJECTOR"
   | "COLONIST"
   | "ENEMY_BASE"
   | "ENEMY_DRONE"

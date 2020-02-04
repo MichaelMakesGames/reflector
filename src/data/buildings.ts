@@ -92,6 +92,15 @@ const buildings: {
     },
   },
   {
+    template: "BASIC_PROJECTOR",
+    key: "b",
+    label: "Basic Projector",
+    cost: {
+      resource: "METAL",
+      amount: 20,
+    },
+  },
+  {
     template: "PROJECTOR",
     key: "p",
     label: "Projector",

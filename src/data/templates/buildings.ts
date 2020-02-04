@@ -300,10 +300,10 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       description: "This wall will be destroyed if hit again.",
     },
   },
-  PROJECTOR: {
+  BASIC_PROJECTOR: {
     building: {},
     display: {
-      tile: "projector",
+      tile: "basic_projector",
       glyph: "p",
       color: colors.activeBuilding,
       priority: PRIORITY_ITEM,
@@ -319,7 +319,33 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     projector: {
       condition: "isPowered",
-      range: PROJECTOR_RANGE,
+      range: 1,
+    },
+    description: {
+      name: "Projector",
+      description: "Lets you place reflectors around it.",
+    },
+  },
+  PROJECTOR: {
+    building: {},
+    display: {
+      tile: "projector",
+      glyph: "p",
+      color: colors.activeBuilding,
+      priority: PRIORITY_ITEM,
+    },
+    blocking: {
+      moving: true,
+      lasers: true,
+    },
+    destructible: {},
+    powered: {
+      hasPower: true,
+      powerNeeded: 2,
+    },
+    projector: {
+      condition: "isPowered",
+      range: 2,
     },
     description: {
       name: "Projector",
