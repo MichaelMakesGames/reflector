@@ -61,6 +61,7 @@
     }
   },
   "devDependencies": {
+    "@fullhuman/postcss-purgecss": "^2.0.6",
     "@types/nanoid": "^2.0.0",
     "@types/react": "^16.9.2",
     "@types/react-dom": "^16.9.0",
@@ -75,6 +76,7 @@
     "eslint-plugin-react": "^7.14.3",
     "parcel-bundler": "^1.12.4",
     "prettier": "^1.18.2",
+    "tailwindcss": "^1.1.4",
     "typescript": "^3.7.2"
   },
   "dependencies": {
