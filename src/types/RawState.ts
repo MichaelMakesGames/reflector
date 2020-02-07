@@ -15,6 +15,7 @@ export interface RawState {
   isWeaponActive: boolean;
   resources: Record<Resource, number>;
   lastAimingDirection: Direction;
+  jobPriorities: Record<JobType, number>;
 }
 
 export interface TimeState {

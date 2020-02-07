@@ -32,6 +32,12 @@ const initialState: RawState = {
     METAL: STARTING_METAL,
     FOOD: STARTING_FOOD,
     POWER: STARTING_POWER,
+    REFINED_METAL: 0,
+  },
+  jobPriorities: {
+    POWER: 1,
+    MINING: 2,
+    FARMING: 3,
   },
   lastAimingDirection: RIGHT,
 };

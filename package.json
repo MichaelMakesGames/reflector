@@ -61,10 +61,14 @@
     }
   },
   "devDependencies": {
+    "@babel/core": "^7.8.4",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.8.3",
+    "@babel/plugin-proposal-optional-chaining": "^7.8.3",
     "@fullhuman/postcss-purgecss": "^2.0.6",
     "@types/nanoid": "^2.0.0",
     "@types/react": "^16.9.2",
     "@types/react-dom": "^16.9.0",
+    "@types/react-modal": "^3.10.4",
     "@types/react-redux": "^7.1.2",
     "@typescript-eslint/eslint-plugin": "^2.3.0",
     "@typescript-eslint/parser": "^2.3.0",
@@ -76,11 +80,12 @@
     "eslint-plugin-react": "^7.14.3",
     "parcel-bundler": "^1.12.4",
     "prettier": "^1.18.2",
-    "tailwindcss": "^1.1.4",
-    "typescript": "^3.7.2"
+    "typescript": "^3.7.5"
   },
   "dependencies": {
     "@babel/polyfill": "^7.2.5",
+    "@types/classnames": "^2.2.9",
+    "classnames": "^2.2.6",
     "has": "^1.0.3",
     "idb-keyval": "^3.2.0",
     "nanoid": "^2.1.1",
@@ -88,10 +93,12 @@
     "rc-tooltip": "^4.0.0-alpha.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
+    "react-modal": "^3.11.1",
     "react-redux": "^7.1.1",
     "redux": "^4.0.4",
     "redux-devtools-extension": "^2.13.8",
     "rot-js": "^2.1.1",
+    "tailwindcss": "^1.2.0",
     "ts-toolbelt": "^4.10.21",
     "typesafe-actions": "^4.4.2"
   }

@@ -26,3 +26,10 @@ export const modifyResource = createStandardAction("MODIFY_RESOURCE")<{
   resource: Resource;
   amount: number;
 }>();
+
+export const increaseJobPriority = createStandardAction(
+  "INCREASE_JOB_PRIORITY",
+)<JobType>();
+export const decreaseJobPriority = createStandardAction(
+  "DECREASE_JOB_PRIORITY",
+)<JobType>();

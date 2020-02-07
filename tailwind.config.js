@@ -3,7 +3,6 @@ const palette = {
   darkGray: "#333333",
   gray: "#666666",
   white: "#DDDDDD",
-  opaqueWhite: "#DDDDDD80",
   red: "#f44336",
   blue: "#0D47A1",
   brown: "#cc6442",
@@ -15,8 +14,6 @@ const palette = {
 };
 
 const colors = {
-  background: palette.black,
-  text: palette.white,
   primary: palette.red,
   secondary: palette.yellow,
   invalid: palette.red,
@@ -34,4 +31,14 @@ const colors = {
   food: palette.green,
 };
 
-export default colors;
+module.exports = {
+  theme: {
+    colors: {
+      ...colors,
+      ...palette,
+    },
+    extend: {},
+  },
+  variants: {},
+  plugins: [],
+};

@@ -64,3 +64,11 @@ export function isWeaponActive(state: RawState): boolean {
 export function lastAimingDirection(state: RawState) {
   return state.lastAimingDirection;
 }
+
+export function jobPriorities(state: RawState) {
+  return state.jobPriorities;
+}
+
+export function jobPriority(state: RawState, jobType: JobType) {
+  return jobPriorities(state)[jobType];
+}

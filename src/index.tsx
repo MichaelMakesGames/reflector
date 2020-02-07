@@ -3,7 +3,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import "@babel/polyfill";
-
+import Modal from "react-modal";
 import store from "./state/store";
 import Game from "./components/Game";
 
@@ -17,4 +17,7 @@ const app = (
 
 const target = document.getElementById("root");
 
-ReactDOM.render(app, target);
+if (target) {
+  Modal.setAppElement(target);
+  ReactDOM.render(app, target);
+}

@@ -2,7 +2,7 @@
 import { Required } from "Object/_api";
 import Tooltip from "rc-tooltip";
 import "rc-tooltip/assets/bootstrap.css";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DOWN, LEFT, PLAYER_ID, RIGHT, UP } from "~/constants";
 import actions from "~/state/actions";
@@ -11,15 +11,18 @@ import { Action } from "~/types/Action";
 import { Description, Entity, Pos } from "~/types/Entity";
 import buildings from "~data/buildings";
 import { createEntityFromTemplate } from "~utils/entities";
+import JobPriorities from "./JobPriorities";
 
 interface Control {
   display: string;
   triggers: { code: string; shift?: boolean }[];
-  action: Action;
+  action?: Action;
+  onClick?: () => void;
   label: string;
   hidden?: boolean;
   tooltip?: string;
 }
+
 function getControls(
   isWeaponActive: boolean,
   playerPosition: Pos,
@@ -27,7 +30,11 @@ function getControls(
   isBuildMenuOpen: boolean,
   inspector: Entity | null,
   removingMarker: Required<Entity, "pos"> | null,
+  prioritiesIsOpen: boolean,
+  setPrioritiesIsOpen: (value: boolean) => void,
 ): Control[] {
+  if (prioritiesIsOpen) return [];
+
   const upTriggers = [
     { code: "KeyW" },
     { code: "ArrowUp" },
@@ -143,6 +150,14 @@ function getControls(
       triggers: [{ code: "KeyQ" }],
       action: actions.inspect(),
       label: "Inspect (free action)",
+    },
+  ];
+  const priorities: Control[] = [
+    {
+      display: "p",
+      triggers: [{ code: "KeyP" }],
+      onClick: () => setPrioritiesIsOpen(true),
+      label: "Job Priorities",
     },
   ];
 
@@ -395,6 +410,7 @@ function getControls(
     ...mine,
     ...wait,
     ...inspect,
+    ...priorities,
   ];
 }
 
@@ -408,6 +424,8 @@ export default function Controls() {
   const inspector = useSelector(selectors.inspector);
   const removingMarker = useSelector(selectors.removingMarker);
 
+  const [prioritiesIsOpen, setPrioritiesIsOpen] = useState(false);
+
   const pos = player ? player.pos : { x: 0, y: 0 };
   const controls: Control[] = gameOver
     ? []
@@ -418,6 +436,8 @@ export default function Controls() {
         isBuildMenuOpen,
         inspector,
         removingMarker,
+        prioritiesIsOpen,
+        setPrioritiesIsOpen,
       );
 
   function listener(event: KeyboardEvent) {
@@ -429,7 +449,8 @@ export default function Controls() {
       ),
     );
     if (triggered) {
-      dispatch(triggered.action);
+      if (triggered.onClick) triggered.onClick();
+      if (triggered.action) dispatch(triggered.action);
     }
   }
 
@@ -448,7 +469,10 @@ export default function Controls() {
             type="button"
             key={control.display}
             className="control"
-            onClick={() => dispatch(control.action)}
+            onClick={() => {
+              if (control.onClick) control.onClick();
+              if (control.action) dispatch(control.action);
+            }}
             onFocus={e => e.target.blur()}
           >
             <kbd>{control.display}</kbd>
@@ -464,6 +488,10 @@ export default function Controls() {
             )}
           </button>
         ))}
+      <JobPriorities
+        isOpen={prioritiesIsOpen}
+        onClose={() => setPrioritiesIsOpen(false)}
+      />
     </div>
   );
 }
