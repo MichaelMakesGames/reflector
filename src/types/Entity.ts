@@ -169,6 +169,7 @@ export interface JobProvider {
   produces: Partial<Record<Resource, number>>;
   numberEmployed: number;
   maxNumberEmployed: number;
+  jobType: JobType;
 }
 export interface HasJobProvider {
   jobProvider: JobProvider;

@@ -38,6 +38,7 @@ const initialState: RawState = {
     POWER: 1,
     MINING: 2,
     FARMING: 3,
+    REFINING: 4,
   },
   lastAimingDirection: RIGHT,
 };

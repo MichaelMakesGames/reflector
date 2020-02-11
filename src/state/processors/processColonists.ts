@@ -1,5 +1,5 @@
 import { Required } from "Object/_api";
-import { Entity, Pos } from "~types";
+import { Entity, Pos, HasPos, HasJobProvider } from "~types";
 import WrappedState from "~types/WrappedState";
 import { getDirectionTowardTarget } from "~utils/ai";
 import { createEntityFromTemplate } from "~utils/entities";
@@ -8,16 +8,30 @@ import {
   getAdjacentPositions,
   getClosest,
 } from "~utils/geometry";
+import { rangeTo } from "~utils/math";
 import { choose } from "~utils/rng";
+import { TURNS_PER_NIGHT } from "~constants";
 
 export default function processColonists(state: WrappedState): void {
   if (state.select.isNight()) {
-    for (const colonist of state.select.colonists()) {
-      cleanResidence(state, colonist);
-    }
+    if (state.select.turnsUntilTimeChange() === TURNS_PER_NIGHT) {
+      for (const colonist of state.select.colonists()) {
+        clearResidence(state, colonist);
+      }
 
-    for (const colonist of state.select.colonists()) {
-      assignResidence(state, colonist);
+      for (const colonist of state.select.colonists().sort((a, b) => {
+        const aEmployment = state.select.employment(a);
+        const bEmployment = state.select.employment(b);
+        const aPriority = aEmployment
+          ? state.select.jobPriority(aEmployment.jobProvider.jobType)
+          : Infinity;
+        const bPriority = bEmployment
+          ? state.select.jobPriority(bEmployment.jobProvider.jobType)
+          : Infinity;
+        return aPriority - bPriority;
+      })) {
+        assignResidence(state, colonist);
+      }
     }
 
     for (const colonist of state.select.colonists()) {
@@ -39,8 +53,23 @@ export default function processColonists(state: WrappedState): void {
       cleanEmployment(state, colonist);
     }
 
-    for (const colonist of state.select.colonists()) {
-      assignEmployment(state, colonist);
+    const workPlaces = state.select
+      .entitiesWithComps("pos", "jobProvider")
+      .sort(
+        (a, b) =>
+          state.select.jobPriority(a.jobProvider.jobType) -
+          state.select.jobPriority(b.jobProvider.jobType),
+      );
+    for (let workPlace of workPlaces) {
+      workPlace = state.select.entityById(workPlace.id) as typeof workPlace;
+      const numEmptyJobs =
+        workPlace.jobProvider.maxNumberEmployed -
+        workPlace.jobProvider.numberEmployed;
+      if (numEmptyJobs > 0) {
+        for (const _ of rangeTo(numEmptyJobs)) {
+          assignColonistToWorkPlace(state, workPlace);
+        }
+      }
     }
 
     state.select.colonists().forEach(colonist => {
@@ -65,7 +94,7 @@ export default function processColonists(state: WrappedState): void {
     .forEach(colonist => updateColonistTile(state, colonist));
 }
 
-function cleanResidence(
+function clearResidence(
   state: WrappedState,
   colonist: Required<Entity, "colonist" | "pos">,
 ) {
@@ -80,6 +109,17 @@ function cleanResidence(
         residence: null,
       },
     });
+
+    const residence = state.select.entityById(colonist.colonist.residence);
+    if (residence && residence.housing) {
+      state.act.updateEntity({
+        ...residence,
+        housing: {
+          ...residence.housing,
+          occupancy: residence.housing.occupancy - 1,
+        },
+      });
+    }
   }
 }
 
@@ -123,36 +163,6 @@ function assignResidence(
         colonist: {
           ...colonist.colonist,
           residence: residence.id,
-        },
-      });
-    }
-  }
-}
-
-function assignEmployment(
-  state: WrappedState,
-  colonist: Required<Entity, "colonist" | "pos">,
-) {
-  if (!colonist.colonist.employment) {
-    const availableJobs = state.select
-      .entitiesWithComps("jobProvider", "pos")
-      .filter(
-        e => e.jobProvider.numberEmployed < e.jobProvider.maxNumberEmployed,
-      );
-    if (availableJobs.length > 0) {
-      const job = getClosest(availableJobs, colonist.pos);
-      state.act.updateEntity({
-        ...job,
-        jobProvider: {
-          ...job.jobProvider,
-          numberEmployed: job.jobProvider.numberEmployed + 1,
-        },
-      });
-      state.act.updateEntity({
-        ...colonist,
-        colonist: {
-          ...colonist.colonist,
-          employment: job.id,
         },
       });
     }
@@ -291,6 +301,81 @@ function updateColonistTile(
       display: {
         ...colonist.display,
         tile: "colonists3",
+      },
+    });
+  }
+}
+
+function groupColonistsByJobPriority(
+  state: WrappedState,
+): Record<number, Required<Entity, "colonist" | "pos" | "display">[]> {
+  const results: Record<
+    number,
+    Required<Entity, "colonist" | "pos" | "display">[]
+  > = {};
+  state.select.colonists().forEach(colonist => {
+    let priority = Infinity;
+    const employment = state.select.employment(colonist);
+    if (employment && employment.jobProvider) {
+      priority = state.select.jobPriority(employment.jobProvider.jobType);
+    }
+    if (!results[priority]) results[priority] = [];
+    results[priority].push(colonist);
+  });
+  return results;
+}
+
+function findColonistsWithLowestPriorityJob(
+  state: WrappedState,
+  maximumPriority: number,
+): null | Required<Entity, "colonist" | "pos" | "display">[] {
+  const colonistsByJobPriority = groupColonistsByJobPriority(state);
+  const lowestPriority = Math.max(
+    ...Object.keys(colonistsByJobPriority).map(parseFloat),
+  );
+  if (lowestPriority > maximumPriority) {
+    return colonistsByJobPriority[lowestPriority];
+  } else {
+    return null;
+  }
+}
+
+function assignColonistToWorkPlace(
+  state: WrappedState,
+  workPlace: Entity & HasPos & HasJobProvider,
+) {
+  const workPlaceCopy = state.select.entityById(
+    workPlace.id,
+  ) as typeof workPlace;
+
+  const colonists = findColonistsWithLowestPriorityJob(
+    state,
+    state.select.jobPriority(workPlaceCopy.jobProvider.jobType),
+  );
+  if (colonists) {
+    const colonist = getClosest(colonists, workPlaceCopy.pos);
+    const oldEmployment = state.select.employment(colonist);
+    if (oldEmployment) {
+      state.act.updateEntity({
+        ...oldEmployment,
+        jobProvider: {
+          ...oldEmployment.jobProvider,
+          numberEmployed: oldEmployment.jobProvider.numberEmployed - 1,
+        },
+      });
+    }
+    state.act.updateEntity({
+      ...workPlaceCopy,
+      jobProvider: {
+        ...workPlaceCopy.jobProvider,
+        numberEmployed: workPlaceCopy.jobProvider.numberEmployed + 1,
+      },
+    });
+    state.act.updateEntity({
+      ...colonist,
+      colonist: {
+        ...colonist.colonist,
+        employment: workPlaceCopy.id,
       },
     });
   }

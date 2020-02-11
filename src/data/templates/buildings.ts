@@ -134,6 +134,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       },
       numberEmployed: 0,
       maxNumberEmployed: 2,
+      jobType: "MINING",
     },
     description: {
       name: "Mine",
@@ -156,6 +157,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       },
       numberEmployed: 0,
       maxNumberEmployed: 1,
+      jobType: "FARMING",
     },
     description: {
       name: "Farm",
@@ -179,6 +181,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       },
       numberEmployed: 0,
       maxNumberEmployed: 2,
+      jobType: "POWER",
     },
     blocking: {
       moving: true,
@@ -250,6 +253,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       },
       numberEmployed: 0,
       maxNumberEmployed: 2,
+      jobType: "REFINING",
     },
     blocking: {
       moving: true,

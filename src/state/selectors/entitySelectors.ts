@@ -1,6 +1,6 @@
 import { Required } from "Object/_api";
 import { PLAYER_ID } from "~constants";
-import { Entity, Pos, RawState } from "~types";
+import { Entity, Pos, RawState, HasColonist, HasJobProvider } from "~types";
 import { filterEntitiesWithComps } from "~utils/entities";
 import { getAdjacentPositions, getPosKey } from "~utils/geometry";
 
@@ -56,4 +56,16 @@ export function isPositionBlocked(
 
 export function colonists(state: RawState) {
   return entitiesWithComps(state, "pos", "colonist", "display");
+}
+
+export function employment(state: RawState, colonist: HasColonist) {
+  if (
+    colonist.colonist.employment &&
+    entityById(state, colonist.colonist.employment)
+  ) {
+    return entityById(state, colonist.colonist.employment) as Entity &
+      HasJobProvider;
+  } else {
+    return null;
+  }
 }

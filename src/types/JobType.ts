@@ -1,1 +1,1 @@
-type JobType = "MINING" | "POWER" | "FARMING";
+type JobType = "MINING" | "POWER" | "FARMING" | "REFINING";
