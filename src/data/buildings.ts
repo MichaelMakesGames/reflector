@@ -46,6 +46,16 @@ const buildings: {
     validitySelector: "canPlaceMine",
   },
   {
+    template: "MINING_SPOT",
+    key: "t",
+    label: "Mining Spot",
+    cost: {
+      resource: "METAL",
+      amount: 0,
+    },
+    validitySelector: "canPlaceMine",
+  },
+  {
     template: "FARM",
     key: "f",
     label: "Farm",

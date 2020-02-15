@@ -16,8 +16,6 @@ export const reduceMorale = createStandardAction("REDUCE_MORALE")<{
 
 export const destroy = createStandardAction("DESTROY")<string>();
 
-export const mine = createStandardAction("MINE")();
-
 export const logMessage = createStandardAction("LOG_MESSAGE")<{
   message: string;
 }>();

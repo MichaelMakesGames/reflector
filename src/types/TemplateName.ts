@@ -52,6 +52,7 @@ type TemplateName =
   | "LASER_VERTICAL_THICK"
   | "LASER_VERTICAL_THIN"
   | "MINE"
+  | "MINING_SPOT"
   | "MOUNTAIN"
   | "NONE"
   | "ORE"

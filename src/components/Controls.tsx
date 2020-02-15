@@ -127,14 +127,6 @@ function getControls(
         "You can freely remove buildings but you get no resources back. It does not count as your turn.",
     },
     {
-      display: "m",
-      triggers: [{ code: "KeyM" }],
-      action: actions.mine(),
-      label: "Manually Mine",
-      tooltip:
-        "You can mine by hand if you are next to or on top of ore. You can also build mines which will mine metal automatically.",
-    },
-    {
       display: "q",
       triggers: [{ code: "KeyQ" }],
       action: actions.inspect(),

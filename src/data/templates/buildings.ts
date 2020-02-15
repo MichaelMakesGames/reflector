@@ -118,7 +118,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     building: {},
     display: {
       tile: "mine",
-      glyph: "m",
+      glyph: "M",
       color: colors.activeBuilding,
       priority: PRIORITY_ITEM,
     },
@@ -139,6 +139,30 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     description: {
       name: "Mine",
       description: "Automatically mines metal, but must be built over ore.",
+    },
+  },
+  MINING_SPOT: {
+    building: {},
+    display: {
+      tile: "outline_solid",
+      glyph: "m",
+      color: colors.activeBuilding,
+      priority: PRIORITY_ITEM,
+    },
+    destructible: {},
+    jobProvider: {
+      consumes: {},
+      produces: {
+        METAL: 0.5,
+      },
+      numberEmployed: 0,
+      maxNumberEmployed: 1,
+      jobType: "MINING",
+    },
+    description: {
+      name: "Mine",
+      description:
+        "Free to build, but less efficient than a mine. Provides 1 job that produces 0.5 metal when mined.",
     },
   },
   FARM: {
