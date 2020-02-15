@@ -4,7 +4,14 @@ import { createLaser, getSplitTemplateName, reflect } from "~/utils/lasers";
 import { registerHandler } from "~state/handleAction";
 import WrappedState from "~types/WrappedState";
 import { createEntityFromTemplate } from "~utils/entities";
-import { BASE_LASER_STRENGTH, UNPOWERED_LASER_STRENGTH } from "~constants";
+import {
+  BASE_LASER_STRENGTH,
+  UNPOWERED_LASER_STRENGTH,
+  UP,
+  DOWN,
+  LEFT,
+  RIGHT,
+} from "~constants";
 import { getConstDir } from "~utils/geometry";
 
 function targetWeapon(
@@ -73,27 +80,48 @@ function targetWeapon(
         splitterEntity &&
         splitterEntity.splitter &&
         ((splitterEntity.splitter.type === "horizontal" && beam.dy) ||
-          (splitterEntity.splitter.type === "vertical" && beam.dx))
+          (splitterEntity.splitter.type === "vertical" && beam.dx) ||
+          splitterEntity.splitter.type === "advanced")
       ) {
         const { splitter } = splitterEntity;
-        const cosmeticTemplate = getSplitTemplateName(beam.strength, beam);
+        const cosmeticTemplate = getSplitTemplateName(
+          beam.strength,
+          beam,
+          splitter.type,
+        );
         state.act.addEntity(
           createEntityFromTemplate(cosmeticTemplate, {
             pos: nextPos,
           }),
         );
-        beams.push({
-          strength: beam.strength - 1,
-          dx: splitter.type === "horizontal" ? 1 : 0,
-          dy: splitter.type === "vertical" ? 1 : 0,
-          lastPos: nextPos,
-        });
-        beams.push({
-          strength: beam.strength - 1,
-          dx: splitter.type === "horizontal" ? -1 : 0,
-          dy: splitter.type === "vertical" ? -1 : 0,
-          lastPos: nextPos,
-        });
+        if (splitter.type === "advanced") {
+          const oppositeDir = getConstDir({
+            dx: beam.dx * -1,
+            dy: beam.dy * -1,
+          });
+          for (const dir of [UP, DOWN, LEFT, RIGHT]) {
+            if (dir !== oppositeDir) {
+              beams.push({
+                strength: beam.strength - 1,
+                lastPos: nextPos,
+                ...dir,
+              });
+            }
+          }
+        } else {
+          beams.push({
+            strength: beam.strength - 1,
+            dx: splitter.type === "horizontal" ? 1 : 0,
+            dy: splitter.type === "vertical" ? 1 : 0,
+            lastPos: nextPos,
+          });
+          beams.push({
+            strength: beam.strength - 1,
+            dx: splitter.type === "horizontal" ? -1 : 0,
+            dy: splitter.type === "vertical" ? -1 : 0,
+            lastPos: nextPos,
+          });
+        }
         beam.strength = 0;
       } else if (reflectorEntity && reflectorEntity.reflector) {
         const { direction: newDirection, cosmeticTemplate } = reflect(

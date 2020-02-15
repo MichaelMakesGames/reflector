@@ -86,7 +86,7 @@ export interface HasReflector {
 }
 
 export interface Splitter {
-  type: "horizontal" | "vertical";
+  type: "horizontal" | "vertical" | "advanced";
 }
 export interface HasSplitter {
   splitter: Splitter;

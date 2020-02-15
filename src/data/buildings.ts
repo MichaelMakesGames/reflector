@@ -18,6 +18,15 @@ const buildings: {
     },
   },
   {
+    template: "SPLITTER_ADVANCED",
+    key: "a",
+    label: "Advanced Splitter",
+    cost: {
+      resource: "REFINED_METAL",
+      amount: 30,
+    },
+  },
+  {
     template: "WALL",
     key: "w",
     label: "Wall",

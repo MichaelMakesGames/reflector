@@ -66,7 +66,11 @@ export function reflect(
 export function getSplitTemplateName(
   strength: number,
   direction: Direction,
+  splitterType: string,
 ): TemplateName {
+  if (splitterType === "advanced") {
+    return "LASER_4SPLIT_THIN_TO_THIN";
+  }
   return `LASER_SPLIT_${getThickness(strength)}_TO_${getThickness(
     strength - 1,
   )}_${getSplitOrientation(direction)}` as TemplateName;

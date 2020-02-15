@@ -65,6 +65,16 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     splitter: { type: "vertical" },
     rotatable: { rotatesTo: "SPLITTER_HORIZONTAL" },
   },
+  SPLITTER_ADVANCED: {
+    parentTemplate: "SPLITTER_BASE",
+    display: {
+      tile: "splitter_advanced",
+      glyph: "+",
+      color: colors.activeBuilding,
+      priority: PRIORITY_PLACING,
+    },
+    splitter: { type: "advanced" },
+  },
   TENT: {
     building: {},
     display: {

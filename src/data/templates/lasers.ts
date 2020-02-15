@@ -205,6 +205,16 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       priority: PRIORITY_LASER,
     },
   },
+  LASER_4SPLIT_THIN_TO_THIN: {
+    parentTemplate: "LASER_COSMETIC_BASE",
+    display: {
+      glyph: "",
+      tile: "laser_4split_thin_to_thin",
+      rotation: 0,
+      color: colors.laser,
+      priority: PRIORITY_LASER,
+    },
+  },
   LASER_SPLIT_THIN_TO_NONE_UP: {
     parentTemplate: "LASER_COSMETIC_BASE",
     display: {
