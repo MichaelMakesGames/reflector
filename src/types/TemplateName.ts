@@ -8,6 +8,7 @@ type TemplateName =
   | "FERTILE"
   | "FLOOR"
   | "FURNACE"
+  | "GREENHOUSE"
   | "INSPECTOR"
   | "JOB_DISABLER"
   | "LASER_4SPLIT_THIN_TO_THIN"

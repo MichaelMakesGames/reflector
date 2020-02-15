@@ -75,6 +75,15 @@ const buildings: {
     validitySelector: "canPlaceFarm",
   },
   {
+    template: "GREENHOUSE",
+    key: "g",
+    label: "Greenhouse",
+    cost: {
+      resource: "REFINED_METAL",
+      amount: 10,
+    },
+  },
+  {
     template: "POWER_PLANT",
     key: "o",
     label: "Power Plant",

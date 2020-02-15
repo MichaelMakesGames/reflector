@@ -199,6 +199,36 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
         "Produces 0.2 food when worked by colonist. Up to 1 colonist can work at a time.",
     },
   },
+  GREENHOUSE: {
+    building: {},
+    display: {
+      tile: "greenhouse",
+      glyph: "G",
+      color: colors.activeBuilding,
+      priority: PRIORITY_ITEM,
+    },
+    blocking: {
+      lasers: true,
+      moving: true,
+    },
+    destructible: {},
+    jobProvider: {
+      consumes: {
+        POWER: 1,
+      },
+      produces: {
+        FOOD: 1,
+      },
+      numberEmployed: 0,
+      maxNumberEmployed: 1,
+      jobType: "FARMING",
+    },
+    description: {
+      name: "Greenhouse",
+      description:
+        "Produces 1 food when worked, but consumes 1 power. Up to 1 colonist can work at a time.",
+    },
+  },
   POWER_PLANT: {
     building: {},
     display: {
