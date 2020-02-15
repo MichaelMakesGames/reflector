@@ -189,6 +189,16 @@ export interface HasBuilding {
   building: Building;
 }
 
+export interface JobDisabler {}
+export interface HasJobDisabler {
+  jobDisabler: JobDisabler;
+}
+
+export interface DisableMarker {}
+export interface HasDisableMarker {
+  disableMarker: DisableMarker;
+}
+
 export interface Entity
   extends Partial<HasAI>,
     Partial<HasBlocking>,
@@ -197,9 +207,11 @@ export interface Entity
     Partial<HasConductive>,
     Partial<HasDescription>,
     Partial<HasDestructible>,
+    Partial<HasDisableMarker>,
     Partial<HasDisplay>,
     Partial<HasHousing>,
     Partial<HasInspector>,
+    Partial<HasJobDisabler>,
     Partial<HasJobProvider>,
     Partial<HasLaser>,
     Partial<HasMineable>,

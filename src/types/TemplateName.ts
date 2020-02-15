@@ -1,6 +1,7 @@
 type TemplateName =
   | "BASIC_PROJECTOR"
   | "COLONIST"
+  | "DISABLE_MARKER"
   | "ENEMY_BASE"
   | "ENEMY_DRONE"
   | "FARM"
@@ -8,6 +9,7 @@ type TemplateName =
   | "FLOOR"
   | "FURNACE"
   | "INSPECTOR"
+  | "JOB_DISABLER"
   | "LASER_BASE"
   | "LASER_BURST"
   | "LASER_COSMETIC_BASE"

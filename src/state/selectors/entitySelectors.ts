@@ -1,6 +1,13 @@
 import { Required } from "Object/_api";
 import { PLAYER_ID } from "~constants";
-import { Entity, Pos, RawState, HasColonist, HasJobProvider } from "~types";
+import {
+  Entity,
+  Pos,
+  RawState,
+  HasColonist,
+  HasJobProvider,
+  HasPos,
+} from "~types";
 import { filterEntitiesWithComps } from "~utils/entities";
 import { getAdjacentPositions, getPosKey } from "~utils/geometry";
 
@@ -64,8 +71,19 @@ export function employment(state: RawState, colonist: HasColonist) {
     entityById(state, colonist.colonist.employment)
   ) {
     return entityById(state, colonist.colonist.employment) as Entity &
-      HasJobProvider;
+      HasJobProvider &
+      HasPos;
   } else {
     return null;
   }
+}
+
+export function jobDisablers(state: RawState) {
+  return entitiesWithComps(state, "pos", "jobDisabler");
+}
+
+export function disableMarker(
+  state: RawState,
+): null | Required<Entity, "pos" | "disabledMarker"> {
+  return entitiesWithComps(state, "pos", "disableMarker")[0] || null;
 }

@@ -1,7 +1,9 @@
+import "./activateDisableMode";
 import "./activatePlacement";
 import "./activateRemoveBuilding";
 import "./activateWeapon";
 import "./addEntity";
+import "./cancelDisableMode";
 import "./cancelInspect";
 import "./cancelPlacement";
 import "./cancelRemoveBuilding";
@@ -30,4 +32,5 @@ import "./removeEntity";
 import "./removeReflector";
 import "./rotatePlacement";
 import "./targetWeapon";
+import "./toggleDisabled";
 import "./updateEntity";

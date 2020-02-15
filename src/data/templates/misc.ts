@@ -3,6 +3,7 @@ import {
   PRIORITY_PLAYER,
   PRIORITY_TERRAIN,
   PROJECTOR_RANGE,
+  PRIORITY_ITEM,
 } from "~/constants";
 import colors from "~colors";
 import { Entity } from "~types";
@@ -66,6 +67,24 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       priority: PRIORITY_TERRAIN,
     },
     removingMarker: {},
+  },
+  DISABLE_MARKER: {
+    display: {
+      glyph: ".",
+      tile: "outline_solid",
+      color: colors.invalid,
+      priority: PRIORITY_TERRAIN,
+    },
+    disableMarker: {},
+  },
+  JOB_DISABLER: {
+    display: {
+      glyph: "X",
+      tile: "disabled",
+      color: colors.invalid,
+      priority: PRIORITY_ITEM,
+    },
+    jobDisabler: {},
   },
   INSPECTOR: {
     display: {

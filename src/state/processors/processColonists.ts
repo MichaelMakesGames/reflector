@@ -53,8 +53,15 @@ export default function processColonists(state: WrappedState): void {
       cleanEmployment(state, colonist);
     }
 
+    const jobDisablers = state.select.jobDisablers();
     const workPlaces = state.select
       .entitiesWithComps("pos", "jobProvider")
+      .filter(
+        e =>
+          !jobDisablers.some(disabler =>
+            arePositionsEqual(e.pos, disabler.pos),
+          ),
+      )
       .sort(
         (a, b) =>
           state.select.jobPriority(a.jobProvider.jobType) -
@@ -127,17 +134,39 @@ function cleanEmployment(
   state: WrappedState,
   colonist: Required<Entity, "colonist" | "pos">,
 ) {
-  if (
-    colonist.colonist.employment &&
-    !state.select.entityById(colonist.colonist.employment)
-  ) {
-    state.act.updateEntity({
-      ...colonist,
-      colonist: {
-        ...colonist.colonist,
-        employment: null,
-      },
-    });
+  if (colonist.colonist.employment) {
+    const employment = state.select.employment(colonist);
+    if (employment) {
+      const jobDisablers = state.select.jobDisablers();
+      if (
+        jobDisablers.some(disabler =>
+          arePositionsEqual(disabler.pos, employment.pos),
+        )
+      ) {
+        state.act.updateEntity({
+          ...colonist,
+          colonist: {
+            ...colonist.colonist,
+            employment: null,
+          },
+        });
+        state.act.updateEntity({
+          ...employment,
+          jobProvider: {
+            ...employment.jobProvider,
+            numberEmployed: employment.jobProvider.numberEmployed - 1,
+          },
+        });
+      }
+    } else {
+      state.act.updateEntity({
+        ...colonist,
+        colonist: {
+          ...colonist.colonist,
+          employment: null,
+        },
+      });
+    }
   }
 }
 

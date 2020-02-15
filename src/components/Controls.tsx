@@ -32,6 +32,7 @@ function getControls(
   removingMarker: Required<Entity, "pos"> | null,
   prioritiesIsOpen: boolean,
   setPrioritiesIsOpen: (value: boolean) => void,
+  disableMarker: Required<Entity, "pos"> | null,
 ): Control[] {
   if (prioritiesIsOpen) return [];
 
@@ -84,7 +85,7 @@ function getControls(
       label: "Move Right",
     },
   ];
-  const activateWeapon: Control[] = [
+  const miscPlayerActions: Control[] = [
     {
       display: "Enter",
       triggers: confirmTriggers,
@@ -93,8 +94,6 @@ function getControls(
       tooltip:
         "Activates your laser. You will get to choose your direction and preview before firing.",
     },
-  ];
-  const reflectorActions: Control[] = [
     {
       display: "r",
       triggers: [{ code: "KeyR" }],
@@ -107,24 +106,18 @@ function getControls(
       tooltip:
         "Reflectors are your main tool for manipulating lasers. Placing a reflector does not cost any resources and does not take a turn. However, reflectors can only be placed around you or a projector, and are automatically destroyed if they are ever out of range.",
     },
-  ];
-  const wait: Control[] = [
     {
       display: ".",
       triggers: [{ code: "Period" }],
       action: actions.playerTookTurn(),
       label: "Wait",
     },
-  ];
-  const build: Control[] = [
     {
       display: "b",
       triggers: [{ code: "KeyB" }],
       action: actions.openBuildMenu(),
       label: "Build",
     },
-  ];
-  const remove: Control[] = [
     {
       display: "x",
       triggers: [{ code: "KeyX" }],
@@ -133,8 +126,6 @@ function getControls(
       tooltip:
         "You can freely remove buildings but you get no resources back. It does not count as your turn.",
     },
-  ];
-  const mine: Control[] = [
     {
       display: "m",
       triggers: [{ code: "KeyM" }],
@@ -143,23 +134,66 @@ function getControls(
       tooltip:
         "You can mine by hand if you are next to or on top of ore. You can also build mines which will mine metal automatically.",
     },
-  ];
-  const inspect: Control[] = [
     {
       display: "q",
       triggers: [{ code: "KeyQ" }],
       action: actions.inspect(),
       label: "Inspect (free action)",
     },
-  ];
-  const priorities: Control[] = [
     {
       display: "p",
       triggers: [{ code: "KeyP" }],
       onClick: () => setPrioritiesIsOpen(true),
       label: "Job Priorities",
     },
+    {
+      display: "j",
+      triggers: [{ code: "KeyJ" }],
+      action: actions.activateDisableMode(),
+      label: "Disable Jobs",
+    },
   ];
+
+  if (disableMarker) {
+    return [
+      {
+        display: "Escape",
+        triggers: cancelTriggers,
+        action: actions.cancelDisableMode(),
+        label: "Cancel",
+      },
+      {
+        display: "w",
+        triggers: upTriggers,
+        action: actions.move({ entityId: disableMarker.id, ...UP }),
+        label: "Move Cursor Up",
+      },
+      {
+        display: "a",
+        triggers: leftTriggers,
+        action: actions.move({ entityId: disableMarker.id, ...LEFT }),
+        label: "Move Cursor Left",
+      },
+      {
+        display: "s",
+        triggers: downTriggers,
+        action: actions.move({ entityId: disableMarker.id, ...DOWN }),
+        label: "Move Cursor Down",
+      },
+      {
+        display: "d",
+        triggers: rightTriggers,
+        action: actions.move({ entityId: disableMarker.id, ...RIGHT }),
+        label: "Move Cursor Right",
+      },
+      {
+        display: "Enter",
+        triggers: confirmTriggers,
+        action: actions.toggleDisabled(disableMarker.pos),
+        label: "Toggle Disabled",
+      },
+    ];
+  }
 
   if (isBuildMenuOpen) {
     return [
@@ -401,17 +435,7 @@ function getControls(
     return placingControls;
   }
 
-  return [
-    ...movePlayer,
-    ...activateWeapon,
-    ...reflectorActions,
-    ...build,
-    ...remove,
-    ...mine,
-    ...wait,
-    ...inspect,
-    ...priorities,
-  ];
+  return [...movePlayer, ...miscPlayerActions];
 }
 
 export default function Controls() {
@@ -423,6 +447,7 @@ export default function Controls() {
   const isBuildMenuOpen = useSelector(selectors.isBuildMenuOpen);
   const inspector = useSelector(selectors.inspector);
   const removingMarker = useSelector(selectors.removingMarker);
+  const disableMarker = useSelector(selectors.disableMarker);
 
   const [prioritiesIsOpen, setPrioritiesIsOpen] = useState(false);
 
@@ -438,6 +463,7 @@ export default function Controls() {
         removingMarker,
         prioritiesIsOpen,
         setPrioritiesIsOpen,
+        disableMarker,
       );
 
   function listener(event: KeyboardEvent) {
