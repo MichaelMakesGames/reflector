@@ -1,9 +1,14 @@
-import { Required } from "Object/_api";
-import { Entity, Pos } from "~/types";
-import { BASE_IMMIGRATION_RATE, MAP_HEIGHT, MAP_WIDTH } from "~constants";
+import { Pos } from "~/types";
+import {
+  BASE_IMMIGRATION_RATE,
+  COLONISTS_PER_IMMIGRATION_WAVE,
+  MAP_HEIGHT,
+  MAP_WIDTH,
+} from "~constants";
 import WrappedState from "~types/WrappedState";
 import { createEntityFromTemplate } from "~utils/entities";
 import { getPositionsWithinRange } from "~utils/geometry";
+import { rangeTo } from "~utils/math";
 import { choose } from "~utils/rng";
 
 export default function processImmigration(state: WrappedState): void {
@@ -18,12 +23,17 @@ export default function processImmigration(state: WrappedState): void {
       console.warn("No player");
     } else {
       const sourcePositions = [player.pos];
-      const pos = findNewColonistPosition(state, sourcePositions);
-      if (!pos) {
-        console.warn("no position for new immigrant found");
-      } else {
-        state.act.addEntity(createEntityFromTemplate("COLONIST", { pos }));
+      for (const _ of rangeTo(COLONISTS_PER_IMMIGRATION_WAVE)) {
+        const pos = findNewColonistPosition(state, sourcePositions);
+        if (!pos) {
+          console.warn("no position for new immigrant found");
+        } else {
+          state.act.addEntity(createEntityFromTemplate("COLONIST", { pos }));
+        }
       }
+      state.act.logMessage({
+        message: `${COLONISTS_PER_IMMIGRATION_WAVE} new colonists have arrived!`,
+      });
     }
 
     state.setRaw({
