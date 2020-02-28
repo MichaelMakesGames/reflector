@@ -12,9 +12,7 @@ export function createLaser(
 ): Entity {
   const color = colors.laser;
 
-  let templateName = `LASER_${getOrientation(direction)}_${getThickness(
-    strength,
-  )}`;
+  let templateName = `LASER_${getOrientation(direction)}`;
   if (hit) {
     templateName = "LASER_BURST";
   }
@@ -69,11 +67,9 @@ export function getSplitTemplateName(
   splitterType: string,
 ): TemplateName {
   if (splitterType === "advanced") {
-    return "LASER_4SPLIT_THIN_TO_THIN";
+    return "LASER_4SPLIT";
   }
-  return `LASER_SPLIT_${getThickness(strength)}_TO_${getThickness(
-    strength - 1,
-  )}_${getSplitOrientation(direction)}` as TemplateName;
+  return `LASER_SPLIT_${getSplitOrientation(direction)}` as TemplateName;
 }
 
 function getReflectedTemplateName(
@@ -81,18 +77,10 @@ function getReflectedTemplateName(
   from: Direction,
   to: Direction,
 ): TemplateName {
-  return `LASER_REFLECTED_${getThickness(strength)}_${getReflectedOrientation(
+  return `LASER_REFLECTED_${getReflectedOrientation(
     from,
     to,
   )}` as TemplateName;
-}
-
-function getThickness(strength: number) {
-  return strength ? "THIN" : "NONE";
-  // if (strength >= 3) return "THICK";
-  // if (strength === 2) return "MEDIUM";
-  // if (strength === 1) return "THIN";
-  // return "NONE";
 }
 
 function getOrientation(direction: Direction) {
