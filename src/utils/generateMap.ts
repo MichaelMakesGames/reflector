@@ -5,9 +5,10 @@ import { Entity } from "~/types/Entity";
 import { createEntityFromTemplate } from "./entities";
 import { arePositionsEqual, getDistance } from "./geometry";
 import { calcPercentile, rangeTo } from "./math";
+import { choose } from "./rng";
 
 export default function generateMap(): Entity[] {
-  let result: Entity[] = [];
+  let results: Entity[] = [];
 
   const noiseGenerator = new Noise.Simplex();
   const noise: number[][] = [];
@@ -27,7 +28,7 @@ export default function generateMap(): Entity[] {
   for (let y = -1; y < MAP_HEIGHT + 1; y++) {
     for (let x = -1; x < MAP_WIDTH + 1; x++) {
       if (y === -1 || x === -1 || y === MAP_HEIGHT || x === MAP_WIDTH) {
-        result.push(
+        results.push(
           createEntityFromTemplate("WALL", {
             pos: { x, y },
             destructible: undefined,
@@ -58,12 +59,26 @@ export default function generateMap(): Entity[] {
           (x === MAP_WIDTH - 2 && y === 1) ||
           (x === MAP_WIDTH - 2 && y === MAP_HEIGHT - 2)
         ) {
-          template = "FLOOR";
+          if (template === "WATER_BASE") {
+            template = "FERTILE";
+          } else if (template === "MOUNTAIN") {
+            template = "ORE";
+          }
         }
-        result.push(
-          createEntityFromTemplate(template, {
-            pos: { x, y },
-          }),
+        let entity = createEntityFromTemplate(template, {
+          pos: { x, y },
+        });
+        if (["FERTILE", "ORE"].includes(template) && entity.display) {
+          entity = {
+            ...entity,
+            display: {
+              ...entity.display,
+              rotation: choose([0, 90, 180, 270]),
+            }
+          };
+        }
+        results.push(
+          entity
         );
       }
     }
@@ -73,19 +88,19 @@ export default function generateMap(): Entity[] {
     x: Math.floor(MAP_WIDTH / 2),
     y: Math.floor(MAP_HEIGHT / 2),
   };
-  const floorPositions = (result as Required<Entity, "pos">[])
+  const floorPositions = (results as Required<Entity, "pos">[])
     .filter(entity => entity.template === "FLOOR")
     .map(entity => entity.pos)
     .sort((a, b) => getDistance(a, centerPos) - getDistance(b, centerPos));
-  const orePosititions = (result as Required<Entity, "pos">[])
+  const orePosititions = (results as Required<Entity, "pos">[])
     .filter(entity => entity.template === "ORE")
     .map(entity => entity.pos)
     .sort((a, b) => getDistance(a, centerPos) - getDistance(b, centerPos));
 
-  const waterEntities = (result as Required<Entity, "pos">[]).filter(
+  const waterEntities = (results as Required<Entity, "pos">[]).filter(
     entity => entity.template === "WATER_BASE",
   );
-  result = result.filter(
+  results = results.filter(
     e => !waterEntities.includes(e as Required<Entity, "pos">),
   );
   waterEntities.forEach(waterEntity => {
@@ -120,40 +135,40 @@ export default function generateMap(): Entity[] {
       (eIsWater ? 2 : 0) +
       (sIsWater ? 4 : 0) +
       (wIsWater ? 8 : 0);
-    result.push(
+    results.push(
       createEntityFromTemplate(`WATER_${waterNumber}` as TemplateName, { pos }),
     );
     if (nIsWater && eIsWater && neIsWater) {
-      result.push(createEntityFromTemplate("WATER_CORNER_NE", { pos }));
+      results.push(createEntityFromTemplate("WATER_CORNER_NE", { pos }));
     }
     if (sIsWater && eIsWater && seIsWater) {
-      result.push(createEntityFromTemplate("WATER_CORNER_SE", { pos }));
+      results.push(createEntityFromTemplate("WATER_CORNER_SE", { pos }));
     }
     if (sIsWater && wIsWater && swIsWater) {
-      result.push(createEntityFromTemplate("WATER_CORNER_SW", { pos }));
+      results.push(createEntityFromTemplate("WATER_CORNER_SW", { pos }));
     }
     if (nIsWater && wIsWater && nwIsWater) {
-      result.push(createEntityFromTemplate("WATER_CORNER_NW", { pos }));
+      results.push(createEntityFromTemplate("WATER_CORNER_NW", { pos }));
     }
   });
 
-  result.push(
+  results.push(
     createEntityFromTemplate("COLONIST", {
       pos: floorPositions[0],
     }),
   );
 
-  result.push({
+  results.push({
     ...createEntityFromTemplate("PLAYER"),
     pos: floorPositions[10],
     id: PLAYER_ID,
   });
 
-  result.push(
+  results.push(
     createEntityFromTemplate("MINE", {
       pos: orePosititions[0],
     }),
   );
 
-  return result;
+  return results;
 }

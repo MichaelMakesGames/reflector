@@ -19,6 +19,7 @@ import "./increaseJobPriority";
 import "./inspect";
 import "./loadGame";
 import "./logMessage";
+import "./makeMeRich";
 import "./modifyResource";
 import "./move";
 import "./movePlacement";

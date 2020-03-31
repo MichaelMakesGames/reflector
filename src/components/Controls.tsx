@@ -12,6 +12,7 @@ import { Description, Entity, Pos } from "~/types/Entity";
 import buildings from "~data/buildings";
 import { createEntityFromTemplate } from "~utils/entities";
 import JobPriorities from "./JobPriorities";
+import { toggleZoom } from "~renderer";
 
 interface Control {
   display: string;
@@ -86,6 +87,12 @@ function getControls(
     },
   ];
   const miscPlayerActions: Control[] = [
+    {
+      display: "z",
+      triggers: [{ code: "KeyZ" }],
+      onClick: () => toggleZoom(playerPosition),
+      label: "Toggle Zoom"
+    },
     {
       display: "Enter",
       triggers: confirmTriggers,

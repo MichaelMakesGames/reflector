@@ -204,7 +204,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     display: {
       tile: "greenhouse",
       glyph: "G",
-      color: colors.activeBuilding,
+      color: colors.food,
       priority: PRIORITY_ITEM,
     },
     blocking: {

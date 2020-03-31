@@ -3,7 +3,7 @@ import * as PIXI from "pixi.js";
 import colors from "~colors";
 // @ts-ignore
 import tiles from "./assets/tiles/*.png"; // eslint-disable-line import/no-unresolved
-import { FONT_FAMILY, MAP_HEIGHT, MAP_WIDTH, TILE_SIZE } from "./constants";
+import { FONT_FAMILY, MAP_HEIGHT, MAP_WIDTH, TILE_SIZE, PLAYER_ID } from "./constants";
 import { Display, Entity, Pos } from "./types";
 import { arePositionsEqual } from "./utils/geometry";
 
@@ -27,6 +27,33 @@ export const app = new PIXI.Application({
   antialias: false,
   // roundPixels: true,
 });
+
+let zoomedIn = false;
+export function toggleZoom(pos: Pos) {
+  if (zoomedIn) {
+    zoomOut();
+  } else {
+    zoomTo(pos);
+  }
+}
+
+export function zoomOut() {
+  zoomedIn = false;
+  app.stage.scale = new PIXI.Point(1, 1);
+  app.stage.position = new PIXI.Point(0, 0);
+}
+
+export function zoomTo(pos: Pos) {
+  const X_MIN = 0;
+  const Y_MIN = 0;
+  const X_MAX = MAP_WIDTH / 2;
+  const Y_MAX = MAP_WIDTH / 2;
+  const x = Math.max(Math.min(pos.x - MAP_WIDTH / 4, X_MAX), X_MIN);
+  const y = Math.max(Math.min(pos.y - MAP_WIDTH / 4, Y_MAX), Y_MIN);
+  zoomedIn = true;
+  app.stage.scale = new PIXI.Point(2, 2);
+  app.stage.position = new PIXI.Point(-x * TILE_SIZE * 2, -y * TILE_SIZE * 2);
+}
 
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
@@ -156,6 +183,9 @@ export async function updateRenderEntity(
           renderEntity.pos,
           renderEntity.displayComp,
         );
+      }
+      if (entity.id === PLAYER_ID && zoomedIn) {
+        zoomTo(entity.pos);
       }
     }
 
