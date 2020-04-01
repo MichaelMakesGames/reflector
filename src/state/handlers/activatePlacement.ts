@@ -44,10 +44,10 @@ function activatePlacement(
     ? findValidPositions(
         state,
         projectors
-          .filter(projector =>
+          .filter((projector) =>
             areConditionsMet(state, projector, projector.projector.condition),
           )
-          .map(projector => ({
+          .map((projector) => ({
             pos: projector.pos,
             range: projector.projector.range,
           })),

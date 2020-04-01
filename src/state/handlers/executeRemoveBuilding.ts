@@ -9,13 +9,13 @@ function cancelRemoveBuilding(
 ): void {
   const removingTarget = state.select
     .entitiesWithComps("pos", "building")
-    .find(entity => arePositionsEqual(entity.pos, action.payload));
+    .find((entity) => arePositionsEqual(entity.pos, action.payload));
   if (!removingTarget) return;
   if (removingTarget.housing && removingTarget.pos) {
     if (
       state.select
         .colonists()
-        .some(colonist => arePositionsEqual(colonist.pos, removingTarget.pos))
+        .some((colonist) => arePositionsEqual(colonist.pos, removingTarget.pos))
     ) {
       state.act.logMessage({
         message: "You cannot remove houses with colonists inside",

@@ -20,7 +20,7 @@ function move(
   if (
     entity.blocking &&
     !entity.placing &&
-    entitiesAtNewPosition.some(other => Boolean(other.blocking))
+    entitiesAtNewPosition.some((other) => Boolean(other.blocking))
   ) {
     return;
   }

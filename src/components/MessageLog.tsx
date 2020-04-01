@@ -10,7 +10,7 @@ export default function MessageLog() {
       <div className="box message-log">
         <div className="box__label">Inspection</div>
         <div className="messages">
-          {inspected.map(e => (
+          {inspected.map((e) => (
             <div key={e.id} className="message">
               {`${e.description.name}: ${e.description.description}`}
             </div>

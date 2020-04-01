@@ -11,7 +11,7 @@ function decreaseJobPriority(
   const jobPriorities: Record<JobType, number> = {
     ...state.raw.jobPriorities,
   };
-  (Object.keys(jobPriorities) as JobType[]).forEach(jobType => {
+  (Object.keys(jobPriorities) as JobType[]).forEach((jobType) => {
     if (jobPriorities[jobType] === newPriority) {
       jobPriorities[jobType] = previousPriority;
       jobPriorities[action.payload] = newPriority;

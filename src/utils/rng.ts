@@ -9,7 +9,7 @@ export function randomInt(exclusiveMaximum: number) {
 }
 
 export function pickWeighted<T>(options: [T, number][]): T {
-  const total = sum(...options.map(optionAndWeight => optionAndWeight[1]));
+  const total = sum(...options.map((optionAndWeight) => optionAndWeight[1]));
   const pick = randomInt(total);
   let currentVal = 0;
   for (const [option, weight] of options) {

@@ -14,7 +14,7 @@ export function inspectedEntities(
 ): Required<Entity, "description">[] | null {
   const inspectorEntity = inspector(state);
   if (!inspectorEntity) return null;
-  return entitiesWithComps(state, "pos", "description").filter(e =>
+  return entitiesWithComps(state, "pos", "description").filter((e) =>
     arePositionsEqual(e.pos, inspectorEntity.pos),
   );
 }

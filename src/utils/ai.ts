@@ -9,13 +9,13 @@ import WrappedState from "~types/WrappedState";
 function isPassable(gameState: RawState, position: Pos) {
   return selectors
     .entitiesAtPosition(gameState, position)
-    .every(entity => !entity.blocking || !entity.blocking.moving);
+    .every((entity) => !entity.blocking || !entity.blocking.moving);
 }
 
 function isDestructibleNonEnemy(gameState: RawState, position: Pos) {
   return selectors
     .entitiesAtPosition(gameState, position)
-    .every(entity =>
+    .every((entity) =>
       Boolean(
         !entity.blocking ||
           !entity.blocking.moving ||
@@ -65,7 +65,7 @@ export function getAIActions(entity: Entity, state: WrappedState): Action[] {
     const { pos } = entity;
     const targets = state.select
       .entitiesWithComps("destructible", "pos")
-      .filter(e => !e.ai);
+      .filter((e) => !e.ai);
     targets.sort((a, b) => getDistance(a.pos, pos) - getDistance(b.pos, pos));
     const target = targets[0];
 
@@ -83,7 +83,9 @@ export function getAIActions(entity: Entity, state: WrappedState): Action[] {
       x: entity.pos.x + direction.dx,
       y: entity.pos.y + direction.dy,
     };
-    if (state.select.entitiesAtPosition(targetPos).some(e => e.destructible)) {
+    if (
+      state.select.entitiesAtPosition(targetPos).some((e) => e.destructible)
+    ) {
       return destroyAllAtPos(state, targetPos);
     }
     return [actions.move({ entityId: entity.id, ...direction })];
@@ -95,6 +97,6 @@ export function getAIActions(entity: Entity, state: WrappedState): Action[] {
 function destroyAllAtPos(state: WrappedState, pos: Pos) {
   const entitiesAtTargetPos = state.select.entitiesAtPosition(pos);
   return entitiesAtTargetPos
-    .filter(e => e.destructible)
-    .map(e => actions.destroy(e.id));
+    .filter((e) => e.destructible)
+    .map((e) => actions.destroy(e.id));
 }

@@ -77,10 +77,7 @@ function getReflectedTemplateName(
   from: Direction,
   to: Direction,
 ): TemplateName {
-  return `LASER_REFLECTED_${getReflectedOrientation(
-    from,
-    to,
-  )}` as TemplateName;
+  return `LASER_REFLECTED_${getReflectedOrientation(from, to)}` as TemplateName;
 }
 
 function getOrientation(direction: Direction) {

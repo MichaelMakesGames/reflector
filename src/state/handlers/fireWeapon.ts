@@ -16,13 +16,13 @@ function fireWeapon(
   }
 
   const entitiesToDestroy: string[] = [];
-  for (const laser of lasers.filter(entity => !entity.laser.cosmetic)) {
+  for (const laser of lasers.filter((entity) => !entity.laser.cosmetic)) {
     const { pos } = laser;
     const entitiesAtPos = state.select.entitiesAtPosition(pos);
     for (const entity of entitiesAtPos) {
       if (
         entity.destructible &&
-        entitiesAtPos.some(e => e.blocking && e.blocking.lasers)
+        entitiesAtPos.some((e) => e.blocking && e.blocking.lasers)
       ) {
         entitiesToDestroy.push(entity.id);
       }

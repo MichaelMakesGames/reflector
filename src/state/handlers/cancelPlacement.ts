@@ -9,8 +9,8 @@ function cancelPlacement(
   state.act.removeEntities(
     state.select
       .entityList()
-      .filter(e => e.validMarker)
-      .map(e => e.id),
+      .filter((e) => e.validMarker)
+      .map((e) => e.id),
   );
   const entity = state.select.placingTarget();
   const marker = state.select.placingMarker();

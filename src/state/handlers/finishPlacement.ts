@@ -12,7 +12,7 @@ function finishPlacement(
 
   const { pos } = placingTarget;
   const entitiesAtPosition = state.select.entitiesAtPosition(pos);
-  const isPosValid = entitiesAtPosition.some(entity => entity.validMarker);
+  const isPosValid = entitiesAtPosition.some((entity) => entity.validMarker);
   if (!isPosValid) {
     const message = "Invalid position";
     state.act.logMessage({ message });
@@ -33,7 +33,7 @@ function finishPlacement(
   }
 
   const otherReflector = entitiesAtPosition.find(
-    entity => entity.reflector && entity !== placingTarget,
+    (entity) => entity.reflector && entity !== placingTarget,
   );
   if (otherReflector) {
     state.act.removeEntity(otherReflector.id);
@@ -47,7 +47,7 @@ function finishPlacement(
   state.act.removeEntities(
     state.select
       .entitiesWithComps("validMarker")
-      .map(e => e.id)
+      .map((e) => e.id)
       .concat([placingMarker.id]),
   );
 

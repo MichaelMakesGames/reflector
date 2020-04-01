@@ -2,7 +2,7 @@ import WrappedState from "~types/WrappedState";
 
 export default function processPowered(state: WrappedState): void {
   const poweredEntities = state.select.entitiesWithComps("powered");
-  poweredEntities.forEach(entity => {
+  poweredEntities.forEach((entity) => {
     if (state.select.canAffordToPay("POWER", entity.powered.powerNeeded)) {
       state.act.modifyResource({
         resource: "POWER",

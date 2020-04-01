@@ -36,7 +36,7 @@ export function player(state: RawState) {
 export function entitiesAtPosition(state: RawState, position: Pos) {
   const key = getPosKey(position);
   return (state.entitiesByPosition[key] || []).map(
-    id => state.entities[id],
+    (id) => state.entities[id],
   ) as Required<Entity, "pos">[];
 }
 
@@ -54,7 +54,7 @@ export function isPositionBlocked(
   exceptEntities: Entity[] = [],
 ) {
   return entitiesAtPosition(state, position).some(
-    entity =>
+    (entity) =>
       entity.blocking &&
       entity.blocking.moving &&
       !exceptEntities.includes(entity),

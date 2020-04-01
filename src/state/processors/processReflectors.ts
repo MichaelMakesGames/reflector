@@ -12,11 +12,11 @@ export default function processReflectors(state: WrappedState): void {
 
     if (
       projectors
-        .filter(projector =>
+        .filter((projector) =>
           areConditionsMet(state, projector, projector.projector.condition),
         )
         .every(
-          projector =>
+          (projector) =>
             getDistance(projector.pos, reflector.pos) >
             projector.projector.range,
         )

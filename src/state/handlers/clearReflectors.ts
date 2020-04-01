@@ -8,8 +8,8 @@ function clearReflectors(
 ): void {
   const reflectors = state.select
     .entitiesWithComps("reflector", "pos")
-    .filter(reflector => !reflector.placing);
-  reflectors.forEach(reflector => {
+    .filter((reflector) => !reflector.placing);
+  reflectors.forEach((reflector) => {
     state.act.removeReflector(reflector.pos);
   });
 }

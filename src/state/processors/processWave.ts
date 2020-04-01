@@ -79,6 +79,6 @@ function getPossibleSpawnPositions(state: WrappedState): Pos[] {
   }
 
   return unfilteredPositions.filter(
-    pos => !state.select.isPositionBlocked(pos),
+    (pos) => !state.select.isPositionBlocked(pos),
   );
 }

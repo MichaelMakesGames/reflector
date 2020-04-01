@@ -13,7 +13,7 @@ import {
 import { Display, Entity, Pos } from "./types";
 import { arePositionsEqual } from "./utils/geometry";
 
-const loadPromise = new Promise(resolve => {
+const loadPromise = new Promise((resolve) => {
   PIXI.Loader.shared
     .add(
       Object.entries(tiles as Record<string, string>).map(([name, file]) => ({

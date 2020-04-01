@@ -16,7 +16,7 @@ export default function OpeningDialog({ onClose }: Props) {
   const version = useSelector(selectors.version);
 
   useEffect(() => {
-    load().then(gameState => {
+    load().then((gameState) => {
       if (gameState) setSavedGame(gameState);
     });
   });

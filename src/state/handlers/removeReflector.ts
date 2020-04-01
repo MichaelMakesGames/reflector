@@ -15,7 +15,7 @@ function removeReflector(
   if (!placingTarget || !placingMarker) return;
   const entitiesAtPosition = state.select.entitiesAtPosition(pos);
   const otherReflector = entitiesAtPosition.find(
-    e => e.reflector && e !== placingTarget,
+    (e) => e.reflector && e !== placingTarget,
   );
 
   if (!otherReflector) {

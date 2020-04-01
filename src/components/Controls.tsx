@@ -91,7 +91,7 @@ function getControls(
       display: "z",
       triggers: [{ code: "KeyZ" }],
       onClick: () => toggleZoom(playerPosition),
-      label: "Toggle Zoom"
+      label: "Toggle Zoom",
     },
     {
       display: "Enter",
@@ -202,7 +202,7 @@ function getControls(
         action: actions.closeBuildMenu(),
         label: "Close",
       },
-      ...buildings.map(building => ({
+      ...buildings.map((building) => ({
         display: building.key,
         triggers: [{ code: `Key${building.key.toUpperCase()}` }],
         action: actions.activatePlacement({
@@ -363,28 +363,28 @@ function getControls(
       },
       {
         display: "W",
-        triggers: upTriggers.map(t => ({ ...t, shift: true })),
+        triggers: upTriggers.map((t) => ({ ...t, shift: true })),
         action: actions.movePlacement({ direction: UP, jumpToValid: true }),
         hidden: true,
         label: "Move Target Up",
       },
       {
         display: "A",
-        triggers: leftTriggers.map(t => ({ ...t, shift: true })),
+        triggers: leftTriggers.map((t) => ({ ...t, shift: true })),
         action: actions.movePlacement({ direction: LEFT, jumpToValid: true }),
         hidden: true,
         label: "Move Target Left",
       },
       {
         display: "S",
-        triggers: downTriggers.map(t => ({ ...t, shift: true })),
+        triggers: downTriggers.map((t) => ({ ...t, shift: true })),
         action: actions.movePlacement({ direction: DOWN, jumpToValid: true }),
         hidden: true,
         label: "Move Target Down",
       },
       {
         display: "D",
-        triggers: rightTriggers.map(t => ({ ...t, shift: true })),
+        triggers: rightTriggers.map((t) => ({ ...t, shift: true })),
         action: actions.movePlacement({ direction: RIGHT, jumpToValid: true }),
         hidden: true,
         label: "Move Target Right",
@@ -425,7 +425,7 @@ function getControls(
       });
       placingControls.push({
         display: "Shift+Enter",
-        triggers: confirmTriggers.map(t => ({ ...t, shift: true })),
+        triggers: confirmTriggers.map((t) => ({ ...t, shift: true })),
         action: actions.finishPlacement({ placeAnother: true }),
         label: "Confirm and Place Another",
       });
@@ -468,9 +468,10 @@ export default function Controls() {
   function listener(event: KeyboardEvent) {
     if (gameOver) return;
     const { code, shiftKey } = event;
-    const triggered = controls.find(control =>
+    const triggered = controls.find((control) =>
       control.triggers.some(
-        trigger => trigger.code === code && Boolean(trigger.shift) === shiftKey,
+        (trigger) =>
+          trigger.code === code && Boolean(trigger.shift) === shiftKey,
       ),
     );
     if (triggered) {
@@ -488,8 +489,8 @@ export default function Controls() {
     <div className="controls box">
       <div className="box__label">Controls</div>
       {controls
-        .filter(control => !control.hidden)
-        .map(control => (
+        .filter((control) => !control.hidden)
+        .map((control) => (
           <button
             type="button"
             key={control.display}
@@ -498,7 +499,7 @@ export default function Controls() {
               if (control.onClick) control.onClick();
               if (control.action) dispatch(control.action);
             }}
-            onFocus={e => e.target.blur()}
+            onFocus={(e) => e.target.blur()}
           >
             <kbd>{control.display}</kbd>
             <span>{control.label}</span>

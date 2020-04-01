@@ -6,8 +6,8 @@ export default function makeLevel(state: WrappedState): WrappedState {
   state.act.removeEntities(
     state.select
       .entityList()
-      .filter(e => e.pos && e.id !== PLAYER_ID)
-      .map(e => e.id),
+      .filter((e) => e.pos && e.id !== PLAYER_ID)
+      .map((e) => e.id),
   );
   for (const entity of generateMap()) {
     state.act.addEntity(entity);

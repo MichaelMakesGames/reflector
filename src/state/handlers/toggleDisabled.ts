@@ -10,10 +10,10 @@ function toggleDisabled(
 ): void {
   const pos = action.payload;
   const disablers = state.select.jobDisablers();
-  const disablerAtPos = disablers.find(e => arePositionsEqual(e.pos, pos));
+  const disablerAtPos = disablers.find((e) => arePositionsEqual(e.pos, pos));
   if (disablerAtPos) {
     state.act.removeEntity(disablerAtPos.id);
-  } else if (state.select.entitiesAtPosition(pos).some(e => e.jobProvider)) {
+  } else if (state.select.entitiesAtPosition(pos).some((e) => e.jobProvider)) {
     state.act.addEntity(createEntityFromTemplate("JOB_DISABLER", { pos }));
   }
 }

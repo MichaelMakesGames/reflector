@@ -74,12 +74,10 @@ export default function generateMap(): Entity[] {
             display: {
               ...entity.display,
               rotation: choose([0, 90, 180, 270]),
-            }
+            },
           };
         }
-        results.push(
-          entity
-        );
+        results.push(entity);
       }
     }
   }
@@ -89,44 +87,44 @@ export default function generateMap(): Entity[] {
     y: Math.floor(MAP_HEIGHT / 2),
   };
   const floorPositions = (results as Required<Entity, "pos">[])
-    .filter(entity => entity.template === "FLOOR")
-    .map(entity => entity.pos)
+    .filter((entity) => entity.template === "FLOOR")
+    .map((entity) => entity.pos)
     .sort((a, b) => getDistance(a, centerPos) - getDistance(b, centerPos));
   const orePosititions = (results as Required<Entity, "pos">[])
-    .filter(entity => entity.template === "ORE")
-    .map(entity => entity.pos)
+    .filter((entity) => entity.template === "ORE")
+    .map((entity) => entity.pos)
     .sort((a, b) => getDistance(a, centerPos) - getDistance(b, centerPos));
 
   const waterEntities = (results as Required<Entity, "pos">[]).filter(
-    entity => entity.template === "WATER_BASE",
+    (entity) => entity.template === "WATER_BASE",
   );
   results = results.filter(
-    e => !waterEntities.includes(e as Required<Entity, "pos">),
+    (e) => !waterEntities.includes(e as Required<Entity, "pos">),
   );
-  waterEntities.forEach(waterEntity => {
+  waterEntities.forEach((waterEntity) => {
     const { pos } = waterEntity;
-    const nIsWater = waterEntities.some(e =>
+    const nIsWater = waterEntities.some((e) =>
       arePositionsEqual(e.pos, { x: pos.x, y: pos.y - 1 }),
     );
-    const neIsWater = waterEntities.some(e =>
+    const neIsWater = waterEntities.some((e) =>
       arePositionsEqual(e.pos, { x: pos.x + 1, y: pos.y - 1 }),
     );
-    const eIsWater = waterEntities.some(e =>
+    const eIsWater = waterEntities.some((e) =>
       arePositionsEqual(e.pos, { x: pos.x + 1, y: pos.y }),
     );
-    const seIsWater = waterEntities.some(e =>
+    const seIsWater = waterEntities.some((e) =>
       arePositionsEqual(e.pos, { x: pos.x + 1, y: pos.y + 1 }),
     );
-    const sIsWater = waterEntities.some(e =>
+    const sIsWater = waterEntities.some((e) =>
       arePositionsEqual(e.pos, { x: pos.x, y: pos.y + 1 }),
     );
-    const swIsWater = waterEntities.some(e =>
+    const swIsWater = waterEntities.some((e) =>
       arePositionsEqual(e.pos, { x: pos.x - 1, y: pos.y + 1 }),
     );
-    const wIsWater = waterEntities.some(e =>
+    const wIsWater = waterEntities.some((e) =>
       arePositionsEqual(e.pos, { x: pos.x - 1, y: pos.y }),
     );
-    const nwIsWater = waterEntities.some(e =>
+    const nwIsWater = waterEntities.some((e) =>
       arePositionsEqual(e.pos, { x: pos.x - 1, y: pos.y - 1 }),
     );
     const waterNumber =

@@ -33,7 +33,7 @@ function targetWeapon(
     lastAimingDirection: action.payload,
   });
   const lasers = state.select.entitiesWithComps("laser", "pos");
-  state.act.removeEntities(lasers.map(e => e.id));
+  state.act.removeEntities(lasers.map((e) => e.id));
 
   const player = state.select.player();
   if (!player) return;
@@ -60,14 +60,14 @@ function targetWeapon(
       };
       const entitiesAtPos = state.select.entitiesAtPosition(nextPos);
       const solidEntity = entitiesAtPos.find(
-        entity => entity.blocking && entity.blocking.lasers,
+        (entity) => entity.blocking && entity.blocking.lasers,
       );
-      const reflectorEntity = entitiesAtPos.find(entity => entity.reflector);
-      const splitterEntity = entitiesAtPos.find(entity => entity.splitter);
+      const reflectorEntity = entitiesAtPos.find((entity) => entity.reflector);
+      const splitterEntity = entitiesAtPos.find((entity) => entity.splitter);
 
       if (
         entitiesAtPos.some(
-          e =>
+          (e) =>
             e.laser &&
             e.laser.strength >= beam.strength &&
             getConstDir(beam) === getConstDir(e.laser.direction),

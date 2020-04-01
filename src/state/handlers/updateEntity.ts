@@ -29,7 +29,7 @@ function updateEntity(
       const key = getPosKey(prev.pos);
       entitiesByPosition = {
         ...entitiesByPosition,
-        [key]: entitiesByPosition[key].filter(id => id !== prev.id),
+        [key]: entitiesByPosition[key].filter((id) => id !== prev.id),
       };
     }
     if (entity.pos) {

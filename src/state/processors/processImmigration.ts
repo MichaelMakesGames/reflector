@@ -52,9 +52,9 @@ function findNewColonistPosition(
       acc.push(...getPositionsWithinRange(pos, 3));
       return acc;
     }, [])
-    .filter(pos => !state.select.isPositionBlocked(pos))
+    .filter((pos) => !state.select.isPositionBlocked(pos))
     .filter(
-      pos =>
+      (pos) =>
         pos.x >= 0 && pos.x < MAP_WIDTH && pos.y >= 0 && pos.y < MAP_HEIGHT,
     );
   return choose(positions);

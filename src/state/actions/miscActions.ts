@@ -32,6 +32,4 @@ export const decreaseJobPriority = createStandardAction(
   "DECREASE_JOB_PRIORITY",
 )<JobType>();
 
-export const makeMeRich = createStandardAction(
-  "MAKE_ME_RICH"
-)();
+export const makeMeRich = createStandardAction("MAKE_ME_RICH")();

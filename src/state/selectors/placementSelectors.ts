@@ -16,18 +16,18 @@ export function placingMarker(
 
 export function canPlaceMine(state: RawState, pos: Pos) {
   return entitiesAtPosition(state, pos).some(
-    entity => entity.mineable && entity.mineable.resource === "METAL",
+    (entity) => entity.mineable && entity.mineable.resource === "METAL",
   );
 }
 
 export function canPlaceFarm(state: RawState, pos: Pos) {
   return entitiesAtPosition(state, pos).some(
-    entity => entity.mineable && entity.mineable.resource === "FOOD",
+    (entity) => entity.mineable && entity.mineable.resource === "FOOD",
   );
 }
 
 export function canPlaceReflector(state: RawState, pos: Pos) {
-  return entitiesAtPosition(state, pos).every(entity =>
+  return entitiesAtPosition(state, pos).every((entity) =>
     Boolean(!entity.reflector || entity.placing),
   );
 }

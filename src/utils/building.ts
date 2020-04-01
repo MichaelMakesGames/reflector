@@ -26,7 +26,7 @@ export function findValidPositions(
           pos.y === MAP_HEIGHT - 1;
         if (
           !state.select.isPositionBlocked(pos) &&
-          !results.some(other => arePositionsEqual(pos, other)) &&
+          !results.some((other) => arePositionsEqual(pos, other)) &&
           canPlace(state.raw, pos) &&
           (edgesAllowed || !isEdge)
         ) {

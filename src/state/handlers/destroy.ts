@@ -14,7 +14,7 @@ function destroy(
       const effect = onDestroyEffects[entity.destructible.onDestroy];
       if (effect) {
         const effectActions = effect(state, entity);
-        effectActions.forEach(effectAction => state.handle(effectAction));
+        effectActions.forEach((effectAction) => state.handle(effectAction));
       }
     }
     state.act.removeEntity(entityId);

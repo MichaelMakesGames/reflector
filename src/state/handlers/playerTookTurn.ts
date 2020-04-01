@@ -8,7 +8,7 @@ function playerTookTurn(
   state: WrappedState,
   action: ReturnType<typeof actions.playerTookTurn>,
 ): void {
-  processors.forEach(processor => processor(state));
+  processors.forEach((processor) => processor(state));
   save(state.raw);
 }
 

@@ -11,7 +11,7 @@ function removeEntities(
   const { entitiesByPosition } = state;
   const entityIds = action.payload;
   for (const [key, ids] of Object.entries(entitiesByPosition)) {
-    entitiesByPosition[key] = ids.filter(id => !entityIds.includes(id));
+    entitiesByPosition[key] = ids.filter((id) => !entityIds.includes(id));
   }
   const entities = {
     ...state.entities,

@@ -21,7 +21,7 @@ function movePlacement(
   const currentPos = placingTarget.pos;
   const validPositions = state.select
     .entitiesWithComps("validMarker", "pos")
-    .map(e => e.pos);
+    .map((e) => e.pos);
   const { direction } = action.payload;
 
   if (!action.payload.jumpToValid) {
@@ -29,7 +29,7 @@ function movePlacement(
       x: currentPos.x + direction.dx,
       y: currentPos.y + direction.dy,
     };
-    const isValid = validPositions.some(validPos =>
+    const isValid = validPositions.some((validPos) =>
       arePositionsEqual(validPos, newPos),
     );
     state.act.updateEntity({
@@ -65,8 +65,8 @@ function movePlacement(
     if (!positionsToCheck.length) {
       break;
     }
-    const validPosition = positionsToCheck.find(pos =>
-      validPositions.some(validPos => arePositionsEqual(validPos, pos)),
+    const validPosition = positionsToCheck.find((pos) =>
+      validPositions.some((validPos) => arePositionsEqual(validPos, pos)),
     );
     if (validPosition) {
       const dx = validPosition.x - currentPos.x;

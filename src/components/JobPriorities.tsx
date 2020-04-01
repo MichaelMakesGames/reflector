@@ -50,10 +50,9 @@ export default function JobPriorities({ isOpen, onClose }: Props) {
                 "border-blue": selectedJob === jobType,
               })}
               type="button"
-              onKeyDown={e => {
+              onKeyDown={(e) => {
                 if (selectedJob === jobType) {
-                  if ([" ", "Enter"].includes(e.key))
-                    setSelectedJob(null);
+                  if ([" ", "Enter"].includes(e.key)) setSelectedJob(null);
                   if (["ArrowUp", "w", "8"].includes(e.key))
                     dispatch(actions.increaseJobPriority(jobType));
                   if (["ArrowDown", "s", "2"].includes(e.key))

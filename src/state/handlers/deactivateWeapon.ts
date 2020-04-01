@@ -11,7 +11,7 @@ function deactivateWeapon(
     isWeaponActive: false,
   });
   state.act.removeEntities(
-    state.select.entitiesWithComps("laser").map(e => e.id),
+    state.select.entitiesWithComps("laser").map((e) => e.id),
   );
 }
 

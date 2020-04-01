@@ -11,7 +11,7 @@ function loadGame(
   const { state: loadedState } = action.payload;
   selectors
     .entitiesWithComps(loadedState, "pos", "display")
-    .forEach(entity => addRenderEntity(entity));
+    .forEach((entity) => addRenderEntity(entity));
   state.setRaw({
     ...loadedState,
     version: state.select.version(),

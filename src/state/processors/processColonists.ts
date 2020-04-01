@@ -46,8 +46,8 @@ export default function processColonists(state: WrappedState): void {
   } else {
     state.select
       .entitiesWithComps("housing")
-      .filter(entity => entity.housing.removeOnVacancy)
-      .forEach(tent => state.act.removeEntity(tent.id));
+      .filter((entity) => entity.housing.removeOnVacancy)
+      .forEach((tent) => state.act.removeEntity(tent.id));
 
     for (const colonist of state.select.colonists()) {
       cleanEmployment(state, colonist);
@@ -57,8 +57,8 @@ export default function processColonists(state: WrappedState): void {
     const workPlaces = state.select
       .entitiesWithComps("pos", "jobProvider")
       .filter(
-        e =>
-          !jobDisablers.some(disabler =>
+        (e) =>
+          !jobDisablers.some((disabler) =>
             arePositionsEqual(e.pos, disabler.pos),
           ),
       )
@@ -79,7 +79,7 @@ export default function processColonists(state: WrappedState): void {
       }
     }
 
-    state.select.colonists().forEach(colonist => {
+    state.select.colonists().forEach((colonist) => {
       if (colonist.colonist.employment) {
         const employment = state.select.entityById(
           colonist.colonist.employment,
@@ -98,7 +98,7 @@ export default function processColonists(state: WrappedState): void {
   // update tile
   state.select
     .entitiesWithComps("colonist", "display", "pos")
-    .forEach(colonist => updateColonistTile(state, colonist));
+    .forEach((colonist) => updateColonistTile(state, colonist));
 }
 
 function clearResidence(
@@ -139,7 +139,7 @@ function cleanEmployment(
     if (employment) {
       const jobDisablers = state.select.jobDisablers();
       if (
-        jobDisablers.some(disabler =>
+        jobDisablers.some((disabler) =>
           arePositionsEqual(disabler.pos, employment.pos),
         )
       ) {
@@ -177,7 +177,7 @@ function assignResidence(
   if (!colonist.colonist.residence) {
     const availableResidences = state.select
       .entitiesWithComps("housing", "pos")
-      .filter(e => e.housing.occupancy < e.housing.capacity);
+      .filter((e) => e.housing.occupancy < e.housing.capacity);
     if (availableResidences.length > 0) {
       const residence = getClosest(availableResidences, colonist.pos);
       state.act.updateEntity({
@@ -204,9 +204,10 @@ function goHome(
 ) {
   if (
     colonist.colonist.residence &&
-    !arePositionsEqual(colonist.pos, state.select.entityById(
-      colonist.colonist.residence,
-    ).pos as Pos)
+    !arePositionsEqual(
+      colonist.pos,
+      state.select.entityById(colonist.colonist.residence).pos as Pos,
+    )
   ) {
     const residence = state.select.entityById(colonist.colonist.residence);
     if (residence.pos) {
@@ -228,9 +229,10 @@ function goToWork(
 ) {
   if (
     colonist.colonist.employment &&
-    !arePositionsEqual(colonist.pos, state.select.entityById(
-      colonist.colonist.employment,
-    ).pos as Pos)
+    !arePositionsEqual(
+      colonist.pos,
+      state.select.entityById(colonist.colonist.employment).pos as Pos,
+    )
   ) {
     const employment = state.select.entityById(colonist.colonist.employment);
     if (employment.pos) {
@@ -250,8 +252,9 @@ function doWork(
   state: WrappedState,
   colonist: Required<Entity, "colonist" | "pos">,
 ) {
-  const employment = state.select.entityById(colonist.colonist
-    .employment as string) as Required<Entity, "jobProvider">;
+  const employment = state.select.entityById(
+    colonist.colonist.employment as string,
+  ) as Required<Entity, "jobProvider">;
   if (
     Object.entries(employment.jobProvider.consumes)
       .filter((entry): entry is [Resource, number] => Boolean(entry[1]))
@@ -275,7 +278,7 @@ function wander(
   colonist: Required<Entity, "colonist" | "pos">,
 ) {
   const newPosOptions = getAdjacentPositions(colonist.pos).filter(
-    pos => !state.select.isPositionBlocked(pos),
+    (pos) => !state.select.isPositionBlocked(pos),
   );
   if (newPosOptions.length >= 1) {
     const newPos = choose(newPosOptions);
@@ -307,7 +310,7 @@ function updateColonistTile(
 ) {
   const numColonistsAtPos = state.select
     .entitiesAtPosition(colonist.pos)
-    .filter(e => e.colonist).length;
+    .filter((e) => e.colonist).length;
   if (numColonistsAtPos === 1) {
     state.act.updateEntity({
       ...colonist,
@@ -342,7 +345,7 @@ function groupColonistsByJobPriority(
     number,
     Required<Entity, "colonist" | "pos" | "display">[]
   > = {};
-  state.select.colonists().forEach(colonist => {
+  state.select.colonists().forEach((colonist) => {
     let priority = Infinity;
     const employment = state.select.employment(colonist);
     if (employment && employment.jobProvider) {

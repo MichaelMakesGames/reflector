@@ -8,10 +8,10 @@ const conditions: Record<
 > = {
   doesNotHaveTallNeighbors(state, entity) {
     if (!entity.pos) return false;
-    return getAdjacentPositions(entity.pos).every(pos =>
+    return getAdjacentPositions(entity.pos).every((pos) =>
       state.select
         .entitiesAtPosition(pos)
-        .every(neighbor => !neighbor.blocking || !neighbor.blocking.lasers),
+        .every((neighbor) => !neighbor.blocking || !neighbor.blocking.lasers),
     );
   },
 
@@ -29,5 +29,7 @@ export function areConditionsMet(
   entity: Entity,
   ...conditionNames: (ConditionName | null)[]
 ) {
-  return conditionNames.every(name => !name || conditions[name](state, entity));
+  return conditionNames.every(
+    (name) => !name || conditions[name](state, entity),
+  );
 }
