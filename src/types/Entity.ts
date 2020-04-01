@@ -14,6 +14,7 @@ export interface Display {
   glyph: string;
   color: string;
   priority: number;
+  hasBackground?: boolean;
 }
 export interface HasDisplay {
   display: Display;

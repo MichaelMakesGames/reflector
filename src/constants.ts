@@ -19,13 +19,12 @@ export const STARTING_POWER = 0;
 export const BASE_LASER_STRENGTH = 100;
 export const UNPOWERED_LASER_STRENGTH = 1;
 
+export const PRIORITY_MARKER = 25;
 export const PRIORITY_LASER = 20;
-export const PRIORITY_PLACING = 17;
-export const PRIORITY_PLAYER = 15;
-export const PRIORITY_ENEMY = 10;
-export const PRIORITY_ITEM = 5;
+export const PRIORITY_BUILDING_HIGH = 15;
+export const PRIORITY_UNIT = 10;
+export const PRIORITY_BUILDING_LOW = 5;
 export const PRIORITY_TERRAIN = 0;
-export const PRIORITY_FLOOR = -5;
 
 export const MAP_WIDTH = 32;
 export const MAP_HEIGHT = MAP_WIDTH;

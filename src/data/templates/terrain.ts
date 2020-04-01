@@ -1,4 +1,4 @@
-import { PRIORITY_FLOOR } from "~/constants";
+import { PRIORITY_TERRAIN } from "~/constants";
 import colors from "~colors";
 import { Entity } from "~types";
 
@@ -8,7 +8,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       tile: "floor",
       glyph: ".",
       color: colors.ground,
-      priority: PRIORITY_FLOOR,
+      priority: PRIORITY_TERRAIN,
     },
   },
   WATER_BASE: {
@@ -28,7 +28,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       tile: "water_0",
       glyph: "~",
       color: colors.water,
-      priority: PRIORITY_FLOOR,
+      priority: PRIORITY_TERRAIN,
     },
   },
   WATER_1: {
@@ -38,7 +38,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       rotation: 180,
       glyph: "~",
       color: colors.water,
-      priority: PRIORITY_FLOOR,
+      priority: PRIORITY_TERRAIN,
     },
   },
   WATER_2: {
@@ -48,7 +48,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       rotation: 270,
       glyph: "~",
       color: colors.water,
-      priority: PRIORITY_FLOOR,
+      priority: PRIORITY_TERRAIN,
     },
   },
   WATER_3: {
@@ -58,7 +58,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       rotation: 270,
       glyph: "~",
       color: colors.water,
-      priority: PRIORITY_FLOOR,
+      priority: PRIORITY_TERRAIN,
     },
   },
   WATER_4: {
@@ -67,7 +67,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       tile: "water_4",
       glyph: "~",
       color: colors.water,
-      priority: PRIORITY_FLOOR,
+      priority: PRIORITY_TERRAIN,
     },
   },
   WATER_5: {
@@ -76,7 +76,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       tile: "water_5",
       glyph: "~",
       color: colors.water,
-      priority: PRIORITY_FLOOR,
+      priority: PRIORITY_TERRAIN,
     },
   },
   WATER_6: {
@@ -85,7 +85,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       tile: "water_6",
       glyph: "~",
       color: colors.water,
-      priority: PRIORITY_FLOOR,
+      priority: PRIORITY_TERRAIN,
     },
   },
   WATER_7: {
@@ -94,7 +94,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       tile: "water_7",
       glyph: "~",
       color: colors.water,
-      priority: PRIORITY_FLOOR,
+      priority: PRIORITY_TERRAIN,
     },
   },
   WATER_8: {
@@ -104,7 +104,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       rotation: 90,
       glyph: "~",
       color: colors.water,
-      priority: PRIORITY_FLOOR,
+      priority: PRIORITY_TERRAIN,
     },
   },
   WATER_9: {
@@ -114,7 +114,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       rotation: 180,
       glyph: "~",
       color: colors.water,
-      priority: PRIORITY_FLOOR,
+      priority: PRIORITY_TERRAIN,
     },
   },
   WATER_10: {
@@ -124,7 +124,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       rotation: 90,
       glyph: "~",
       color: colors.water,
-      priority: PRIORITY_FLOOR,
+      priority: PRIORITY_TERRAIN,
     },
   },
   WATER_11: {
@@ -134,7 +134,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       rotation: 270,
       glyph: "~",
       color: colors.water,
-      priority: PRIORITY_FLOOR,
+      priority: PRIORITY_TERRAIN,
     },
   },
   WATER_12: {
@@ -144,7 +144,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       rotation: 90,
       glyph: "~",
       color: colors.water,
-      priority: PRIORITY_FLOOR,
+      priority: PRIORITY_TERRAIN,
     },
   },
   WATER_13: {
@@ -154,7 +154,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       rotation: 180,
       glyph: "~",
       color: colors.water,
-      priority: PRIORITY_FLOOR,
+      priority: PRIORITY_TERRAIN,
     },
   },
   WATER_14: {
@@ -164,7 +164,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       rotation: 90,
       glyph: "~",
       color: colors.water,
-      priority: PRIORITY_FLOOR,
+      priority: PRIORITY_TERRAIN,
     },
   },
   WATER_15: {
@@ -173,7 +173,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       tile: "water_15",
       glyph: "~",
       color: colors.water,
-      priority: PRIORITY_FLOOR,
+      priority: PRIORITY_TERRAIN,
     },
   },
   WATER_CORNER_NE: {
@@ -181,7 +181,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       tile: "water_corner",
       glyph: "",
       color: colors.water,
-      priority: PRIORITY_FLOOR,
+      priority: PRIORITY_TERRAIN,
     },
   },
   WATER_CORNER_SE: {
@@ -190,7 +190,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       rotation: 90,
       glyph: "",
       color: colors.water,
-      priority: PRIORITY_FLOOR,
+      priority: PRIORITY_TERRAIN,
     },
   },
   WATER_CORNER_SW: {
@@ -199,7 +199,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       rotation: 180,
       glyph: "",
       color: colors.water,
-      priority: PRIORITY_FLOOR,
+      priority: PRIORITY_TERRAIN,
     },
   },
   WATER_CORNER_NW: {
@@ -208,7 +208,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       rotation: 270,
       glyph: "",
       color: colors.water,
-      priority: PRIORITY_FLOOR,
+      priority: PRIORITY_TERRAIN,
     },
   },
   MOUNTAIN: {
@@ -216,7 +216,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       tile: "mountain",
       glyph: "▲",
       color: colors.mountain,
-      priority: PRIORITY_FLOOR,
+      priority: PRIORITY_TERRAIN,
     },
     blocking: {
       moving: true,
@@ -232,7 +232,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       tile: "ore",
       glyph: ".",
       color: colors.mineral,
-      priority: PRIORITY_FLOOR,
+      priority: PRIORITY_TERRAIN,
     },
     mineable: {
       resource: "METAL",
@@ -248,7 +248,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       tile: "fertile",
       glyph: '"',
       color: colors.food,
-      priority: PRIORITY_FLOOR,
+      priority: PRIORITY_TERRAIN,
     },
     mineable: {
       resource: "FOOD",
