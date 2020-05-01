@@ -78,6 +78,12 @@ export function employment(state: RawState, colonist: HasColonist) {
   }
 }
 
+export function employees(state: RawState, jobProvider: Entity) {
+  return colonists(state).filter(
+    (colonist) => colonist.colonist.employment === jobProvider.id,
+  );
+}
+
 export function jobDisablers(state: RawState) {
   return entitiesWithComps(state, "pos", "jobDisabler");
 }

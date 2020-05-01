@@ -1,5 +1,7 @@
+/* global requestAnimationFrame */
 import { Required } from "Object/_api";
 import * as PIXI from "pixi.js";
+import * as particles from "pixi-particles";
 import colors from "~colors";
 // @ts-ignore
 import tiles from "./assets/tiles/*.png"; // eslint-disable-line import/no-unresolved
@@ -7,8 +9,8 @@ import {
   FONT_FAMILY,
   MAP_HEIGHT,
   MAP_WIDTH,
-  TILE_SIZE,
   PLAYER_ID,
+  TILE_SIZE,
 } from "./constants";
 import { Display, Entity, Pos } from "./types";
 import { arePositionsEqual } from "./utils/geometry";
@@ -32,6 +34,99 @@ export const app = new PIXI.Application({
   backgroundColor: parseInt(colors.background.substr(1), 16),
   antialias: false,
   // roundPixels: true,
+});
+
+const emitters: Record<string, particles.Emitter> = {};
+export function addSmoke(pos: Pos, offset: Pos) {
+  loadPromise.then(() => {
+    const key = `${pos.x},${pos.y},${offset.x},${offset.y}`;
+    if (emitters[key]) {
+      emitters[key].spawnChance = 1;
+      return;
+    }
+    const texture = PIXI.Texture.WHITE;
+    const emitter = new particles.Emitter(app.stage, [texture], {
+      alpha: {
+        start: 1,
+        end: 0.25,
+      },
+      scale: {
+        start: 1 / 8,
+        end: 1 / 2,
+        minimumScaleMultiplier: 1,
+      },
+      color: {
+        start: "#505050",
+        end: "#505050",
+      },
+      speed: {
+        start: 4,
+        end: 4,
+        minimumSpeedMultiplier: 1,
+      },
+      acceleration: {
+        x: 1,
+        y: 0,
+      },
+      maxSpeed: 0,
+      startRotation: {
+        min: 240,
+        max: 300,
+      },
+      noRotation: true,
+      rotationSpeed: {
+        min: 0,
+        max: 0,
+      },
+      lifetime: {
+        min: 7,
+        max: 9,
+      },
+      blendMode: "normal",
+      frequency: 0.25,
+      emitterLifetime: -1,
+      maxParticles: 1000,
+      particlesPerWave: 3,
+      pos: {
+        x: pos.x * TILE_SIZE + offset.x,
+        y: pos.y * TILE_SIZE + offset.y,
+      },
+      addAtBack: false,
+      spawnType: "point",
+    });
+    emitters[key] = emitter;
+  });
+}
+
+export function stopSmoke(pos: Pos, offset: Pos) {
+  const key = `${pos.x},${pos.y},${offset.x},${offset.y}`;
+  const emitter = emitters[key];
+  if (emitter) {
+    emitter.spawnChance = 0;
+  }
+}
+
+export function removeSmoke(pos: Pos, offset: Pos) {
+  const key = `${pos.x},${pos.y},${offset.x},${offset.y}`;
+  const emitter = emitters[key];
+  if (emitter) {
+    emitter.destroy();
+  }
+  delete emitters[key];
+}
+
+loadPromise.then(() => {
+  let lastTime = Date.now();
+  const update = () => {
+    requestAnimationFrame(update);
+    const now = Date.now();
+    Object.values(emitters).forEach((emitter) => {
+      emitter.update((now - lastTime) / 1000);
+    });
+    lastTime = now;
+    // app.render();
+  };
+  update();
 });
 
 let zoomedIn = false;

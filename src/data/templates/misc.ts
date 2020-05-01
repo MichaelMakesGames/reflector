@@ -107,6 +107,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     colonist: {
       residence: null,
       employment: null,
+      isWorking: false,
     },
   },
 };

@@ -1,7 +1,8 @@
-import { removeRenderEntity } from "~/renderer";
+import { removeRenderEntity, removeSmoke } from "~/renderer";
 import actions from "~/state/actions";
 import { registerHandler } from "~state/handleAction";
 import WrappedState from "~types/WrappedState";
+import { HasSmokeEmitter, HasPos } from "~types";
 
 function removeEntities(
   wrappedState: WrappedState,
@@ -19,6 +20,13 @@ function removeEntities(
   for (const id of entityIds) {
     if (entities[id].pos && entities[id].display) {
       removeRenderEntity(id);
+    }
+    if (entities[id].pos && entities[id].smokeEmitter) {
+      (entities[
+        id
+      ] as HasSmokeEmitter).smokeEmitter.emitters.forEach((emitter) =>
+        removeSmoke((entities[id] as HasPos).pos, emitter.offset),
+      );
     }
     delete entities[id];
   }

@@ -67,6 +67,7 @@ export interface HasPlacing {
 export interface Colonist {
   residence: string | null;
   employment: string | null;
+  isWorking: boolean;
 }
 export interface HasColonist {
   colonist: Colonist;
@@ -200,6 +201,16 @@ export interface HasDisableMarker {
   disableMarker: DisableMarker;
 }
 
+export interface SmokeEmitter {
+  emitters: {
+    offset: Pos;
+    conditions: ConditionName[];
+  }[];
+}
+export interface HasSmokeEmitter {
+  smokeEmitter: SmokeEmitter;
+}
+
 export interface Entity
   extends Partial<HasAI>,
     Partial<HasBlocking>,
@@ -225,6 +236,7 @@ export interface Entity
     Partial<HasReflector>,
     Partial<HasRemovingMarker>,
     Partial<HasRotatable>,
+    Partial<HasSmokeEmitter>,
     Partial<HasSplitter>,
     Partial<HasStairs>,
     Partial<HasValidMarker> {

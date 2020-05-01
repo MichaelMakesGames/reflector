@@ -22,6 +22,22 @@ const conditions: Record<
   isPowered(state, entity) {
     return Boolean(entity.powered && entity.powered.hasPower);
   },
+
+  hasOneActiveWorker(state, entity) {
+    return (
+      state.select
+        .employees(entity)
+        .filter((employee) => employee.colonist.isWorking).length >= 1
+    );
+  },
+
+  hasTwoActiveWorkers(state, entity) {
+    return (
+      state.select
+        .employees(entity)
+        .filter((employee) => employee.colonist.isWorking).length >= 2
+    );
+  },
 };
 
 export function areConditionsMet(

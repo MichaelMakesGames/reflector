@@ -1,9 +1,10 @@
-import { removeRenderEntity } from "~/renderer";
+import { removeRenderEntity, removeSmoke } from "~/renderer";
 import actions from "~/state/actions";
 import selectors from "~/state/selectors";
 import { getPosKey } from "~/utils/geometry";
 import { registerHandler } from "~state/handleAction";
 import WrappedState from "~types/WrappedState";
+import { Pos } from "~types";
 
 function removeEntity(
   wrappedState: WrappedState,
@@ -27,6 +28,12 @@ function removeEntity(
 
   if (prev.pos && prev.display) {
     removeRenderEntity(prev.id);
+  }
+
+  if (prev.smokeEmitter && prev.pos) {
+    prev.smokeEmitter.emitters.forEach((emitter) =>
+      removeSmoke(prev.pos as Pos, emitter.offset),
+    );
   }
 
   const entities = { ...state.entities };

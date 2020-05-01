@@ -13,6 +13,7 @@ import { choose } from "~utils/rng";
 import { TURNS_PER_NIGHT } from "~constants";
 
 export default function processColonists(state: WrappedState): void {
+  clearIsWorking(state);
   if (state.select.isNight()) {
     if (state.select.turnsUntilTimeChange() === TURNS_PER_NIGHT) {
       for (const colonist of state.select.colonists()) {
@@ -99,6 +100,18 @@ export default function processColonists(state: WrappedState): void {
   state.select
     .entitiesWithComps("colonist", "display", "pos")
     .forEach((colonist) => updateColonistTile(state, colonist));
+}
+
+function clearIsWorking(state: WrappedState) {
+  state.select
+    .colonists()
+    .filter((e) => e.colonist.isWorking)
+    .forEach((e) =>
+      state.act.updateEntity({
+        ...e,
+        colonist: { ...e.colonist, isWorking: false },
+      }),
+    );
 }
 
 function clearResidence(
@@ -270,6 +283,10 @@ function doWork(
       .every(([resource, amount]) =>
         state.act.modifyResource({ resource, amount }),
       );
+    state.act.updateEntity({
+      ...colonist,
+      colonist: { ...colonist.colonist, isWorking: true },
+    });
   }
 }
 

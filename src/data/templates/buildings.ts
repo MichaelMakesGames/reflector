@@ -135,6 +135,18 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       priority: PRIORITY_BUILDING_HIGH,
       hasBackground: true,
     },
+    smokeEmitter: {
+      emitters: [
+        {
+          conditions: ["hasOneActiveWorker"],
+          offset: { x: 3, y: 10 },
+        },
+        {
+          conditions: ["hasTwoActiveWorkers"],
+          offset: { x: 14, y: 7 },
+        },
+      ],
+    },
     blocking: {
       moving: true,
       lasers: true,
