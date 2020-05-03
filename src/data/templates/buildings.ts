@@ -224,6 +224,18 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       priority: PRIORITY_BUILDING_HIGH,
       hasBackground: true,
     },
+    smokeEmitter: {
+      emitters: [
+        {
+          conditions: ["hasOneActiveWorker"],
+          offset: { x: 8, y: 10 },
+        },
+        {
+          conditions: ["hasTwoActiveWorkers"],
+          offset: { x: 19, y: 10 },
+        },
+      ],
+    },
     destructible: {},
     jobProvider: {
       consumes: {},
@@ -296,6 +308,22 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       priority: PRIORITY_BUILDING_HIGH,
       hasBackground: true,
     },
+    smokeEmitter: {
+      emitters: [
+        {
+          conditions: ["hasOneActiveWorker"],
+          offset: { x: 5, y: 5 },
+        },
+        {
+          conditions: ["hasTwoActiveWorkers"],
+          offset: { x: 12, y: 5 },
+        },
+        {
+          conditions: ["hasThreeActiveWorkers"],
+          offset: { x: 19, y: 5 },
+        },
+      ],
+    },
     destructible: {},
     jobProvider: {
       consumes: {
@@ -306,7 +334,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
         REFINED_METAL: 1,
       },
       numberEmployed: 0,
-      maxNumberEmployed: 2,
+      maxNumberEmployed: 3,
       jobType: "REFINING",
     },
     blocking: {
@@ -316,7 +344,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     description: {
       name: "Furnace",
       description:
-        "Provides 2 jobs that consume 2 metal and 1 power to produce 1 refined metal",
+        "Provides 3 jobs that consume 2 metal and 1 power to produce 1 refined metal",
     },
   },
   WALL: {

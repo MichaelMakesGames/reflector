@@ -38,6 +38,14 @@ const conditions: Record<
         .filter((employee) => employee.colonist.isWorking).length >= 2
     );
   },
+
+  hasThreeActiveWorkers(state, entity) {
+    return (
+      state.select
+        .employees(entity)
+        .filter((employee) => employee.colonist.isWorking).length >= 3
+    );
+  },
 };
 
 export function areConditionsMet(

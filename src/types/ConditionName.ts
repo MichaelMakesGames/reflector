@@ -3,4 +3,5 @@ type ConditionName =
   | "isDay"
   | "doesNotHaveTallNeighbors"
   | "hasOneActiveWorker"
-  | "hasTwoActiveWorkers";
+  | "hasTwoActiveWorkers"
+  | "hasThreeActiveWorkers";
