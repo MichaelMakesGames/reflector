@@ -2,7 +2,7 @@ const palette = {
   black: "#111111",
   darkGray: "#333333",
   gray: "#666666",
-  lightGray: "#999999",
+  lightGray: "#888888",
   white: "#DDDDDD",
   opaqueWhite: "#DDDDDD80",
   red: "#f44336",

@@ -65,6 +65,12 @@ export function colonists(state: RawState) {
   return entitiesWithComps(state, "pos", "colonist", "display");
 }
 
+export function residence(state: RawState, colonist: HasColonist) {
+  return entitiesWithComps(state, "pos", "housing").find(
+    (e) => e.id === colonist.colonist.residence,
+  );
+}
+
 export function employment(state: RawState, colonist: HasColonist) {
   if (
     colonist.colonist.employment &&

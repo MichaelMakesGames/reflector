@@ -10,7 +10,7 @@ import {
 } from "~utils/geometry";
 import { rangeTo } from "~utils/math";
 import { choose } from "~utils/rng";
-import { TURNS_PER_NIGHT } from "~constants";
+import { TURNS_PER_NIGHT, PRIORITY_MARKER, PRIORITY_UNIT } from "~constants";
 
 export default function processColonists(state: WrappedState): void {
   clearIsWorking(state);
@@ -328,12 +328,26 @@ function updateColonistTile(
   const numColonistsAtPos = state.select
     .entitiesAtPosition(colonist.pos)
     .filter((e) => e.colonist).length;
-  if (numColonistsAtPos === 1) {
+
+  const residence = state.select.residence(colonist);
+  if (residence && arePositionsEqual(residence.pos, colonist.pos)) {
+    const tile = `colonists_${numColonistsAtPos}_${residence.template.toLowerCase()}`;
+    console.warn(colonist.display.tile, tile);
+    state.act.updateEntity({
+      ...colonist,
+      display: {
+        ...colonist.display,
+        tile,
+        priority: PRIORITY_MARKER,
+      },
+    });
+  } else if (numColonistsAtPos === 1) {
     state.act.updateEntity({
       ...colonist,
       display: {
         ...colonist.display,
         tile: "colonists1",
+        priority: PRIORITY_UNIT,
       },
     });
   } else if (numColonistsAtPos === 2) {
@@ -342,6 +356,7 @@ function updateColonistTile(
       display: {
         ...colonist.display,
         tile: "colonists2",
+        priority: PRIORITY_UNIT,
       },
     });
   } else {
@@ -350,6 +365,7 @@ function updateColonistTile(
       display: {
         ...colonist.display,
         tile: "colonists3",
+        priority: PRIORITY_UNIT,
       },
     });
   }
