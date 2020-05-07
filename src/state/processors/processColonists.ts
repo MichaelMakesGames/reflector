@@ -332,7 +332,6 @@ function updateColonistTile(
   const residence = state.select.residence(colonist);
   if (residence && arePositionsEqual(residence.pos, colonist.pos)) {
     const tile = `colonists_${numColonistsAtPos}_${residence.template.toLowerCase()}`;
-    console.warn(colonist.display.tile, tile);
     state.act.updateEntity({
       ...colonist,
       display: {

@@ -37,10 +37,6 @@ export function messageLog(state: RawState) {
   return state.messageLog;
 }
 
-export function isBuildMenuOpen(state: RawState) {
-  return state.isBuildMenuOpen;
-}
-
 export function resources(state: RawState) {
   return state.resources;
 }

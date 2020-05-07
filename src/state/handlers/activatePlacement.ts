@@ -67,7 +67,6 @@ function activatePlacement(
     return;
   }
 
-  state.act.closeBuildMenu();
   state.act.addEntity({
     ...entityToPlace,
     pos: action.payload.pos || player.pos,

@@ -11,7 +11,6 @@ export interface RawState {
   turnsUntilNextImmigrant: number;
   morale: number;
   time: TimeState;
-  isBuildMenuOpen: boolean;
   isWeaponActive: boolean;
   resources: Record<Resource, number>;
   lastAimingDirection: Direction;

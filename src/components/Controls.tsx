@@ -28,11 +28,12 @@ function getControls(
   isWeaponActive: boolean,
   playerPosition: Pos,
   placing: Required<Entity, "placing" | "pos"> | null,
-  isBuildMenuOpen: boolean,
+  buildMenuIsOpen: boolean | string,
   inspector: Entity | null,
   removingMarker: Required<Entity, "pos"> | null,
   prioritiesIsOpen: boolean,
   setPrioritiesIsOpen: (value: boolean) => void,
+  setBuildMenuIsOpen: (value: boolean | string) => void,
   disableMarker: Required<Entity, "pos"> | null,
 ): Control[] {
   if (prioritiesIsOpen) return [];
@@ -122,7 +123,7 @@ function getControls(
     {
       display: "b",
       triggers: [{ code: "KeyB" }],
-      action: actions.openBuildMenu(),
+      onClick: () => setBuildMenuIsOpen(true),
       label: "Build",
     },
     {
@@ -194,27 +195,51 @@ function getControls(
     ];
   }
 
-  if (isBuildMenuOpen) {
+  if (buildMenuIsOpen) {
+    let buildingControls: Control[] = [];
+    const makeBuildingControl = (
+      building: typeof buildings[0],
+      i: number,
+    ): Control => ({
+      display: (i + 1).toString(),
+      triggers: [{ code: `Digit${i + 1}` }],
+      action: actions.activatePlacement({
+        template: building.template,
+        cost: building.cost,
+        takesTurn: true,
+        validitySelector: building.validitySelector,
+      }),
+      label: `${building.label} (${building.cost.amount} ${building.cost.resource})`,
+      tooltip: (createEntityFromTemplate(building.template)
+        .description as Description).description,
+    });
+    if (typeof buildMenuIsOpen === "string") {
+      buildingControls = buildings
+        .filter((b) => b.category === buildMenuIsOpen)
+        .map(makeBuildingControl);
+    } else {
+      buildingControls = [
+        ...new Set(buildings.filter((b) => b.category).map((b) => b.category)),
+      ].map((category, i) => ({
+        display: (i + 1).toString(),
+        triggers: [{ code: `Digit${i + 1}` }],
+        onClick: () => setBuildMenuIsOpen(category as string),
+        label: category as string,
+      }));
+      for (const building of buildings.filter((b) => !b.category)) {
+        buildingControls.push(
+          makeBuildingControl(building, buildingControls.length),
+        );
+      }
+    }
     return [
       {
         display: "Escape",
         triggers: cancelTriggers,
-        action: actions.closeBuildMenu(),
         label: "Close",
+        onClick: () => setBuildMenuIsOpen(false),
       },
-      ...buildings.map((building) => ({
-        display: building.key,
-        triggers: [{ code: `Key${building.key.toUpperCase()}` }],
-        action: actions.activatePlacement({
-          template: building.template,
-          cost: building.cost,
-          takesTurn: true,
-          validitySelector: building.validitySelector,
-        }),
-        label: `${building.label} (${building.cost.amount} ${building.cost.resource})`,
-        tooltip: (createEntityFromTemplate(building.template)
-          .description as Description).description,
-      })),
+      ...buildingControls,
     ];
   }
 
@@ -443,12 +468,20 @@ export default function Controls() {
   const player = useSelector(selectors.player);
   const placing = useSelector(selectors.placingTarget);
   const gameOver = useSelector(selectors.gameOver);
-  const isBuildMenuOpen = useSelector(selectors.isBuildMenuOpen);
   const inspector = useSelector(selectors.inspector);
   const removingMarker = useSelector(selectors.removingMarker);
   const disableMarker = useSelector(selectors.disableMarker);
 
   const [prioritiesIsOpen, setPrioritiesIsOpen] = useState(false);
+  const [buildMenuIsOpen, setBuildMenuIsOpen] = useState<boolean | string>(
+    false,
+  );
+
+  useEffect(() => {
+    if (placing && buildMenuIsOpen) {
+      setBuildMenuIsOpen(false);
+    }
+  }, [placing]);
 
   const pos = player ? player.pos : { x: 0, y: 0 };
   const controls: Control[] = gameOver
@@ -457,11 +490,12 @@ export default function Controls() {
         isWeaponActive,
         pos,
         placing,
-        isBuildMenuOpen,
+        buildMenuIsOpen,
         inspector,
         removingMarker,
         prioritiesIsOpen,
         setPrioritiesIsOpen,
+        setBuildMenuIsOpen,
         disableMarker,
       );
 

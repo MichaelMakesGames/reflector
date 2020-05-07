@@ -1,43 +1,42 @@
 const buildings: {
   template: TemplateName;
-  key: string;
   label: string;
   cost: {
     resource: Resource;
     amount: number;
   };
   validitySelector?: string;
+  category?: string;
 }[] = [
   {
     template: "SPLITTER_HORIZONTAL",
-    key: "s",
     label: "Splitter",
     cost: {
       resource: "REFINED_METAL",
       amount: 10,
     },
+    category: "Defense",
   },
   {
     template: "SPLITTER_ADVANCED",
-    key: "a",
     label: "Advanced Splitter",
     cost: {
       resource: "REFINED_METAL",
       amount: 30,
     },
+    category: "Defense",
   },
   {
     template: "WALL",
-    key: "w",
     label: "Wall",
     cost: {
       resource: "METAL",
       amount: 10,
     },
+    category: "Defense",
   },
   {
     template: "RESIDENCE",
-    key: "r",
     label: "Residence",
     cost: {
       resource: "METAL",
@@ -46,87 +45,87 @@ const buildings: {
   },
   {
     template: "MINE",
-    key: "m",
     label: "Mine",
     cost: {
       resource: "METAL",
       amount: 25,
     },
     validitySelector: "canPlaceMine",
+    category: "Production",
   },
   {
     template: "MINING_SPOT",
-    key: "t",
     label: "Mining Spot",
     cost: {
       resource: "METAL",
       amount: 0,
     },
     validitySelector: "canPlaceMine",
+    category: "Production",
   },
   {
     template: "FARM",
-    key: "f",
     label: "Farm",
     cost: {
       resource: "METAL",
       amount: 10,
     },
     validitySelector: "canPlaceFarm",
+    category: "Production",
   },
   {
     template: "POWER_PLANT",
-    key: "o",
     label: "Power Plant",
     cost: {
       resource: "METAL",
       amount: 15,
     },
+    category: "Power",
   },
   {
     template: "SOLAR_PANEL",
-    key: "l",
     label: "Solar Panel",
     cost: {
       resource: "REFINED_METAL",
       amount: 5,
     },
+    category: "Power",
   },
   {
     template: "WINDMILL",
-    key: "n",
     label: "Windmill",
     cost: {
       resource: "METAL",
       amount: 20,
     },
+    category: "Power",
   },
   {
     template: "FURNACE",
-    key: "u",
     label: "Furnace",
     cost: {
       resource: "METAL",
       amount: 25,
     },
+    category: "Production",
   },
   {
     template: "BASIC_PROJECTOR",
-    key: "b",
     label: "Basic Projector",
     cost: {
       resource: "METAL",
       amount: 20,
     },
+    category: "Defense",
   },
   {
     template: "PROJECTOR",
-    key: "p",
     label: "Projector",
     cost: {
       resource: "REFINED_METAL",
       amount: 15,
     },
+    category: "Defense",
   },
 ];
 export default buildings;
