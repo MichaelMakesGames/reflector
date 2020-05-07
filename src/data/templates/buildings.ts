@@ -82,7 +82,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       glyph: "▲",
       color: colors.activeBuilding,
       priority: PRIORITY_BUILDING_HIGH,
-      hasBackground: true,
+      hasBackground: false,
     },
     blocking: {
       moving: true,
