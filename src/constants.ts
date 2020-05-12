@@ -1,4 +1,4 @@
-export const VERSION = "alpha-1.0.0";
+export const VERSION = "alpha-2.0.0";
 export const PLAYER_ID = "PLAYER";
 
 export const BUILDING_RANGE = 2;

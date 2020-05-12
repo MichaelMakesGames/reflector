@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 
 import { app } from "~/renderer";
 
-export default function Map() {
+export default function GameMap() {
   useEffect(() => {
     const map = document.getElementById("map");
     if (map) {
@@ -12,9 +12,8 @@ export default function Map() {
   }, []);
 
   return (
-    <div className="box map">
-      <div className="box__label">Map</div>
+    <section>
       <div id="map" />
-    </div>
+    </section>
   );
 }

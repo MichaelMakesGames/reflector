@@ -1,9 +1,9 @@
 import React from "react";
 
-export default function Resources() {
+export default function Inspector() {
   return (
     <section className="p-2 border-b border-gray">
-      <h2>Resources</h2>
+      <h2>Inspector</h2>
     </section>
   );
 }
