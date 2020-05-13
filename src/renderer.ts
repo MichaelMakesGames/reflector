@@ -156,6 +156,24 @@ export function zoomTo(pos: Pos) {
   app.stage.position = new PIXI.Point(-x * TILE_SIZE * 2, -y * TILE_SIZE * 2);
 }
 
+export function getPosFromMouse(mouseX: number, mouseY: number): Pos {
+  if (!zoomedIn) {
+    return {
+      x: Math.floor(mouseX / TILE_SIZE),
+      y: Math.floor(mouseY / TILE_SIZE),
+    };
+  } else {
+    const offsetX = Math.floor(mouseX / TILE_SIZE / 2);
+    const offsetY = Math.floor(mouseY / TILE_SIZE / 2);
+    const stageX = app.stage.position.x / TILE_SIZE / -2;
+    const stageY = app.stage.position.y / TILE_SIZE / -2;
+    return {
+      x: stageX + offsetX,
+      y: stageY + offsetY,
+    };
+  }
+}
+
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
 const renderEntities: {

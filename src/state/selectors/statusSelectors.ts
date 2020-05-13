@@ -68,3 +68,7 @@ export function jobPriorities(state: RawState) {
 export function jobPriority(state: RawState, jobType: JobType) {
   return jobPriorities(state)[jobType];
 }
+
+export function cursorPos(state: RawState) {
+  return state.cursorPos;
+}

@@ -26,7 +26,6 @@ const initialState: RawState = {
     day: 1,
     directionWeights: { n: 0, s: 0, e: 0, w: 0 },
   },
-  isBuildMenuOpen: false,
   isWeaponActive: false,
   resources: {
     METAL: STARTING_METAL,
@@ -41,6 +40,7 @@ const initialState: RawState = {
     REFINING: 4,
   },
   lastAimingDirection: RIGHT,
+  cursorPos: null,
 };
 
 export default initialState;

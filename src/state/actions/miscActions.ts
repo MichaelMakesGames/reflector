@@ -1,4 +1,5 @@
 import { createStandardAction } from "typesafe-actions";
+import { Pos } from "~types";
 
 export const move = createStandardAction("MOVE")<{
   entityId: string;
@@ -33,3 +34,7 @@ export const decreaseJobPriority = createStandardAction(
 )<JobType>();
 
 export const makeMeRich = createStandardAction("MAKE_ME_RICH")();
+
+export const setCursorPos = createStandardAction(
+  "SET_CURSOR_POS",
+)<Pos | null>();

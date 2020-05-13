@@ -1,4 +1,4 @@
-import { Entity } from "./Entity";
+import { Entity, Pos } from "./Entity";
 import { Direction } from "./Direction";
 
 export interface RawState {
@@ -15,6 +15,7 @@ export interface RawState {
   resources: Record<Resource, number>;
   lastAimingDirection: Direction;
   jobPriorities: Record<JobType, number>;
+  cursorPos: Pos | null;
 }
 
 export interface TimeState {

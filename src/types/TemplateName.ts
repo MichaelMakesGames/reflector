@@ -1,6 +1,7 @@
 type TemplateName =
   | "BASIC_PROJECTOR"
   | "COLONIST"
+  | "CURSOR"
   | "DISABLE_MARKER"
   | "ENEMY_BASE"
   | "ENEMY_DRONE"

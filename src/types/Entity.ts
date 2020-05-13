@@ -211,11 +211,17 @@ export interface HasSmokeEmitter {
   smokeEmitter: SmokeEmitter;
 }
 
+export interface Cursor {}
+export interface HasCursor {
+  cursor: Cursor;
+}
+
 export interface Entity
   extends Partial<HasAI>,
     Partial<HasBlocking>,
     Partial<HasBuilding>,
     Partial<HasColonist>,
+    Partial<HasCursor>,
     Partial<HasConductive>,
     Partial<HasDescription>,
     Partial<HasDestructible>,

@@ -29,6 +29,7 @@ import "./removeEntities";
 import "./removeEntity";
 import "./removeReflector";
 import "./rotatePlacement";
+import "./setCursorPos";
 import "./targetWeapon";
 import "./toggleDisabled";
 import "./updateEntity";

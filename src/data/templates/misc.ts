@@ -94,6 +94,15 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     inspector: {},
   },
+  CURSOR: {
+    display: {
+      glyph: "?",
+      tile: "outline_solid",
+      color: colors.secondary,
+      priority: PRIORITY_MARKER,
+    },
+    cursor: {},
+  },
   COLONIST: {
     display: {
       glyph: "c",
