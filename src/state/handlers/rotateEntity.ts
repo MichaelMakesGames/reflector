@@ -3,12 +3,12 @@ import { registerHandler } from "~state/handleAction";
 import WrappedState from "~types/WrappedState";
 import { createEntityFromTemplate } from "~utils/entities";
 
-function rotateThrow(
+function rotateEntity(
   state: WrappedState,
-  action: ReturnType<typeof actions.rotatePlacement>,
+  action: ReturnType<typeof actions.rotateEntity>,
 ): void {
-  const entity = state.select.placingTarget();
-  if (!entity || !entity.rotatable) return;
+  const entity = action.payload;
+  if (!entity.rotatable) return;
   state.act.removeEntity(entity.id);
   state.act.addEntity({
     ...entity,
@@ -16,4 +16,4 @@ function rotateThrow(
   });
 }
 
-registerHandler(rotateThrow, actions.rotatePlacement);
+registerHandler(rotateEntity, actions.rotateEntity);

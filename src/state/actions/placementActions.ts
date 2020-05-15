@@ -1,5 +1,5 @@
 import { createStandardAction } from "typesafe-actions";
-import { Pos } from "~types";
+import { Pos, Entity } from "~types";
 
 export const activatePlacement = createStandardAction("ACTIVATE_PLACEMENT")<{
   template: TemplateName;
@@ -13,7 +13,7 @@ export const movePlacement = createStandardAction("MOVE_PLACEMENT")<{
   jumpToValid: boolean;
 }>();
 export const cancelPlacement = createStandardAction("CANCEL_PLACEMENT")();
-export const rotatePlacement = createStandardAction("ROTATE_PLACEMENT")();
+export const rotateEntity = createStandardAction("ROTATE_ENTITY")<Entity>();
 export const finishPlacement = createStandardAction("FINISH_PLACEMENT")<{
   placeAnother: boolean;
 }>();

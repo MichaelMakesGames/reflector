@@ -28,7 +28,7 @@ import "./reduceMorale";
 import "./removeEntities";
 import "./removeEntity";
 import "./removeReflector";
-import "./rotatePlacement";
+import "./rotateEntity";
 import "./setCursorPos";
 import "./targetWeapon";
 import "./toggleDisabled";
