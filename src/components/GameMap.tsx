@@ -7,6 +7,18 @@ import selectors from "~state/selectors";
 import { arePositionsEqual } from "~utils/geometry";
 import { Pos } from "~types";
 import ContextMenu from "./ContextMenu";
+import { useShortcuts } from "~hookts";
+import {
+  PLAYER_ID,
+  UP,
+  RIGHT,
+  LEFT,
+  DOWN,
+  UP_KEYS,
+  RIGHT_KEYS,
+  LEFT_KEYS,
+  DOWN_KEYS,
+} from "~constants";
 
 export default function GameMap() {
   useEffect(() => {
@@ -19,6 +31,21 @@ export default function GameMap() {
   const dispatch = useDispatch();
   const cursorPos = useSelector(selectors.cursorPos);
   const [contextMenuPos, setContextMenuPos] = useState<Pos | null>(null);
+
+  const moveUp = () => dispatch(actions.move({ entityId: PLAYER_ID, ...UP }));
+  const moveRight = () =>
+    dispatch(actions.move({ entityId: PLAYER_ID, ...RIGHT }));
+  const moveDown = () =>
+    dispatch(actions.move({ entityId: PLAYER_ID, ...DOWN }));
+  const moveLeft = () =>
+    dispatch(actions.move({ entityId: PLAYER_ID, ...LEFT }));
+  const movementShortcuts = Object.fromEntries<() => void>([
+    ...UP_KEYS.map((key): [string, () => void] => [key, moveUp]),
+    ...RIGHT_KEYS.map((key): [string, () => void] => [key, moveRight]),
+    ...DOWN_KEYS.map((key): [string, () => void] => [key, moveDown]),
+    ...LEFT_KEYS.map((key): [string, () => void] => [key, moveLeft]),
+  ]);
+  useShortcuts(movementShortcuts);
 
   return (
     <section className="relative">

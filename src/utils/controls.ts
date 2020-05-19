@@ -24,7 +24,10 @@ function addMoveAction(state: RawState, pos: Pos, results: Results) {
   const player = selectors.player(state);
   if (player) {
     const playerPos = player.pos;
-    if (Math.abs(playerPos.x - pos.x) + Math.abs(playerPos.y - pos.y) === 1) {
+    if (
+      Math.abs(playerPos.x - pos.x) + Math.abs(playerPos.y - pos.y) === 1 &&
+      !selectors.isPositionBlocked(state, pos)
+    ) {
       results.push({
         label: "Move",
         action: actions.move({
@@ -43,7 +46,7 @@ function addDisableBuildingActions(
   results: Results,
 ) {
   const entitiesAtPos = selectors.entitiesAtPosition(state, pos);
-  if (entitiesAtPos.some((e) => e.building)) {
+  if (entitiesAtPos.some((e) => e.jobProvider)) {
     results.push({
       label: entitiesAtPos.some((e) => e.jobDisabler)
         ? "Enable Jobs"
