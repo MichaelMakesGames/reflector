@@ -8,4 +8,4 @@ Assuming you have npm installed on your system, go to the root directory of this
 
 ## License
 
-The code is licensed under an MIT license. The art assets are all public domain, either created by me or public domain assets from https://kenney.nl.
+The code is licensed under a GPL license. The art assets are all public domain, either created by me or public domain assets from https://kenney.nl.

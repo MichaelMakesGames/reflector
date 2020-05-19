@@ -13,7 +13,7 @@
     "format:fix": "prettier --write src/**/*.{ts,tsx}"
   },
   "author": "",
-  "license": "MIT",
+  "license": "GPL",
   "prettier": {
     "trailingComma": "all"
   },
