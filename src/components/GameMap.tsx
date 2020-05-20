@@ -18,6 +18,7 @@ import {
   RIGHT_KEYS,
   LEFT_KEYS,
   DOWN_KEYS,
+  CANCEL_KEYS,
 } from "~constants";
 
 export default function GameMap() {
@@ -47,6 +48,37 @@ export default function GameMap() {
     ...LEFT_KEYS.map((key): [string, () => void] => [key, moveLeft]),
   ]);
   useShortcuts(movementShortcuts, !isWeaponActive);
+
+  const moveCursorUp = () => dispatch(actions.moveCursor({ ...UP }));
+  const moveCursorRight = () => dispatch(actions.moveCursor({ ...RIGHT }));
+  const moveCursorDown = () => dispatch(actions.moveCursor({ ...DOWN }));
+  const moveCursorLeft = () => dispatch(actions.moveCursor({ ...LEFT }));
+  const cursorShortcuts = Object.fromEntries<() => void>([
+    ...UP_KEYS.map((key): [string, () => void] => [
+      `shift + ${key}`,
+      moveCursorUp,
+    ]),
+    ...RIGHT_KEYS.map((key): [string, () => void] => [
+      `shift + ${key}`,
+      moveCursorRight,
+    ]),
+    ...DOWN_KEYS.map((key): [string, () => void] => [
+      `shift + ${key}`,
+      moveCursorDown,
+    ]),
+    ...LEFT_KEYS.map((key): [string, () => void] => [
+      `shift + ${key}`,
+      moveCursorLeft,
+    ]),
+    ...CANCEL_KEYS.map((key): [string, () => void] => [
+      key,
+      () => {
+        setContextMenuPos(null);
+        dispatch(actions.setCursorPos(null));
+      },
+    ]),
+  ]);
+  useShortcuts(cursorShortcuts);
 
   return (
     <section className="relative">

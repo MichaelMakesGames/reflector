@@ -33,6 +33,11 @@ export function player(state: RawState) {
   > | null;
 }
 
+export function playerPos(state: RawState) {
+  const entity = player(state);
+  return entity ? entity.pos : null;
+}
+
 export function entitiesAtPosition(state: RawState, position: Pos) {
   const key = getPosKey(position);
   return (state.entitiesByPosition[key] || []).map(

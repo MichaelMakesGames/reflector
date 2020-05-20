@@ -1,5 +1,5 @@
 import { createStandardAction } from "typesafe-actions";
-import { Pos } from "~types";
+import { Pos, Direction } from "~types";
 
 export const move = createStandardAction("MOVE")<{
   entityId: string;
@@ -38,3 +38,4 @@ export const makeMeRich = createStandardAction("MAKE_ME_RICH")();
 export const setCursorPos = createStandardAction(
   "SET_CURSOR_POS",
 )<Pos | null>();
+export const moveCursor = createStandardAction("MOVE_CURSOR")<Direction>();

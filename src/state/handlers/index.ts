@@ -21,6 +21,7 @@ import "./logMessage";
 import "./makeMeRich";
 import "./modifyResource";
 import "./move";
+import "./moveCursor";
 import "./movePlacement";
 import "./newGame";
 import "./playerTookTurn";
