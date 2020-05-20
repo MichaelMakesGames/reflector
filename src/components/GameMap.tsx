@@ -7,7 +7,7 @@ import selectors from "~state/selectors";
 import { arePositionsEqual } from "~utils/geometry";
 import { Pos } from "~types";
 import ContextMenu from "./ContextMenu";
-import { useShortcuts } from "~hookts";
+import { useShortcuts } from "~hooks";
 import {
   PLAYER_ID,
   UP,
@@ -31,6 +31,7 @@ export default function GameMap() {
   const dispatch = useDispatch();
   const cursorPos = useSelector(selectors.cursorPos);
   const [contextMenuPos, setContextMenuPos] = useState<Pos | null>(null);
+  const isWeaponActive = useSelector(selectors.isWeaponActive);
 
   const moveUp = () => dispatch(actions.move({ entityId: PLAYER_ID, ...UP }));
   const moveRight = () =>
@@ -45,7 +46,7 @@ export default function GameMap() {
     ...DOWN_KEYS.map((key): [string, () => void] => [key, moveDown]),
     ...LEFT_KEYS.map((key): [string, () => void] => [key, moveLeft]),
   ]);
-  useShortcuts(movementShortcuts);
+  useShortcuts(movementShortcuts, !isWeaponActive);
 
   return (
     <section className="relative">

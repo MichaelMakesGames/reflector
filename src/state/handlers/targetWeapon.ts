@@ -30,6 +30,7 @@ function targetWeapon(
   }
   state.setRaw({
     ...state.raw,
+    isWeaponActive: true,
     lastAimingDirection: action.payload,
   });
   const lasers = state.select.entitiesWithComps("laser", "pos");

@@ -6,7 +6,6 @@ function activateWeapon(
   state: WrappedState,
   action: ReturnType<typeof actions.activateWeapon>,
 ): void {
-  state.setRaw({ ...state.raw, isWeaponActive: true });
   state.act.targetWeapon(state.select.lastAimingDirection());
 }
 
