@@ -1,4 +1,4 @@
-import { Pos, HasPos } from "~/types";
+import { Pos, HasPos, Direction } from "~/types";
 import { DOWN, RIGHT, LEFT, UP, MAP_WIDTH, MAP_HEIGHT } from "~/constants";
 import { rangeFromTo } from "./math";
 
@@ -50,6 +50,10 @@ export function getConstDir(direction: { dx: number; dy: number }) {
   if (dx === LEFT.dx && dy === LEFT.dy) return LEFT;
   if (dx === UP.dx && dy === UP.dy) return UP;
   return direction;
+}
+
+export function areDirectionsEqual(d1: Direction, d2: Direction) {
+  return d1.dx === d2.dx && d1.dy === d2.dy;
 }
 
 export function isPositionInMap(position: Pos) {

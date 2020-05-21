@@ -3,6 +3,7 @@ import { RIGHT, DOWN, LEFT, UP } from "~/constants";
 import { createEntityFromTemplate } from "./entities";
 import { getConstDir } from "./geometry";
 import colors from "~colors";
+import WrappedState from "~types/WrappedState";
 
 export function createLaser(
   direction: Direction,
@@ -28,7 +29,7 @@ export function createLaser(
     },
     laser: {
       ...template.laser,
-      direction,
+      direction: { dx: direction.dx, dy: direction.dy },
       hit,
       strength,
     },
@@ -125,4 +126,17 @@ function getSplitOrientation(direction: Direction) {
   if (constDir === DOWN) return "DOWN";
   if (constDir === LEFT) return "LEFT";
   return "RIGHT";
+}
+
+export function retargetLaserOnReflectorChange(state: WrappedState, pos?: Pos) {
+  if (state.select.isWeaponActive) {
+    if (pos) {
+      const entitiesAtPos = state.select.entitiesAtPosition(pos);
+      if (entitiesAtPos.some((e) => e.laser)) {
+        state.act.targetWeapon(state.select.lastAimingDirection());
+      }
+    } else {
+      state.act.targetWeapon(state.select.lastAimingDirection());
+    }
+  }
 }

@@ -51,15 +51,6 @@ export default function Laser() {
   ]);
   useShortcuts(laserShortcuts);
 
-  console.warn({
-    isWeaponActive,
-    aimingDirection,
-    up: isAimingInDirection(UP),
-    down: isAimingInDirection(DOWN),
-    left: isAimingInDirection(LEFT),
-    right: isAimingInDirection(RIGHT),
-  });
-
   return (
     <section className="p-2 border-b border-gray">
       <h2>Laser</h2>

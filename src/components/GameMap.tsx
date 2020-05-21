@@ -19,6 +19,7 @@ import {
   LEFT_KEYS,
   DOWN_KEYS,
   CANCEL_KEYS,
+  CONFIRM_KEYS,
 } from "~constants";
 
 export default function GameMap() {
@@ -80,9 +81,19 @@ export default function GameMap() {
   ]);
   useShortcuts(cursorShortcuts);
 
+  const reflectorShortcuts = Object.fromEntries<() => void>([
+    ...CONFIRM_KEYS.map((key): [string, () => void] => [
+      key,
+      () => {
+        if (cursorPos) dispatch(actions.cycleReflector(cursorPos));
+      },
+    ]),
+  ]);
+  useShortcuts(reflectorShortcuts);
+
   return (
     <section className="relative">
-      {/* eslint-disable-next-line jsx-a11y/mouse-events-have-key-events */}
+      {/* eslint-disable-next-line jsx-a11y/mouse-events-have-key-events, jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events */}
       <div
         id="map"
         onMouseMove={(e) => {
@@ -113,6 +124,17 @@ export default function GameMap() {
             dispatch(actions.setCursorPos(gamePos));
           }
           setContextMenuPos(mousePos);
+        }}
+        onClick={(e) => {
+          const mousePos = {
+            x: e.nativeEvent.offsetX,
+            y: e.nativeEvent.offsetY,
+          };
+          const gamePos = getPosFromMouse(mousePos.x, mousePos.y);
+          if (!cursorPos || !arePositionsEqual(cursorPos, gamePos)) {
+            dispatch(actions.setCursorPos(gamePos));
+          }
+          dispatch(actions.cycleReflector(gamePos));
         }}
       />
       {contextMenuPos ? (

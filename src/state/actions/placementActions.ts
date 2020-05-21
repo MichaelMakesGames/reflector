@@ -20,3 +20,4 @@ export const finishPlacement = createStandardAction("FINISH_PLACEMENT")<{
 
 export const clearReflectors = createStandardAction("CLEAR_REFLECTORS")();
 export const removeReflector = createStandardAction("REMOVE_REFLECTOR")<Pos>();
+export const cycleReflector = createStandardAction("CYCLE_REFLECTOR")<Pos>();

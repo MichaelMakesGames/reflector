@@ -5,6 +5,7 @@ import { Entity } from "~/types";
 import { getPosKey } from "~/utils/geometry";
 import { registerHandler } from "~state/handleAction";
 import WrappedState from "~types/WrappedState";
+import { retargetLaserOnReflectorChange } from "~utils/lasers";
 
 function addEntity(
   wrappedState: WrappedState,
@@ -35,6 +36,10 @@ function addEntity(
   };
 
   wrappedState.setRaw(state);
+
+  if (entity.reflector && entity.pos) {
+    retargetLaserOnReflectorChange(wrappedState, entity.pos);
+  }
 }
 
 registerHandler(addEntity, actions.addEntity);

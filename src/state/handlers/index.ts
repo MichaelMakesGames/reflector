@@ -8,6 +8,7 @@ import "./cancelInspect";
 import "./cancelPlacement";
 import "./cancelRemoveBuilding";
 import "./clearReflectors";
+import "./cycleReflector";
 import "./deactivateWeapon";
 import "./decreaseJobPriority";
 import "./destroy";

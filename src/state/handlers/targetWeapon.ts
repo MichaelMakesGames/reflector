@@ -12,7 +12,7 @@ import {
   LEFT,
   RIGHT,
 } from "~constants";
-import { getConstDir } from "~utils/geometry";
+import { getConstDir, areDirectionsEqual } from "~utils/geometry";
 
 function targetWeapon(
   state: WrappedState,
@@ -71,9 +71,13 @@ function targetWeapon(
           (e) =>
             e.laser &&
             e.laser.strength >= beam.strength &&
-            getConstDir(beam) === getConstDir(e.laser.direction),
+            areDirectionsEqual(beam, e.laser.direction),
         )
       ) {
+        console.warn(
+          `other same direction laser already at ${nextPos.x},${nextPos.y}`,
+          entitiesAtPos.filter((e) => e.laser),
+        );
         beam.strength = 0;
       } else if (!solidEntity && !reflectorEntity) {
         state.act.addEntity(createLaser(beam, beam.strength, false, nextPos));

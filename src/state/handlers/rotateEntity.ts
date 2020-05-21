@@ -2,6 +2,7 @@ import actions from "~/state/actions";
 import { registerHandler } from "~state/handleAction";
 import WrappedState from "~types/WrappedState";
 import { createEntityFromTemplate } from "~utils/entities";
+import { retargetLaserOnReflectorChange } from "~utils/lasers";
 
 function rotateEntity(
   state: WrappedState,
@@ -14,6 +15,9 @@ function rotateEntity(
     ...entity,
     ...createEntityFromTemplate(entity.rotatable.rotatesTo),
   });
+  if (entity.reflector && entity.pos) {
+    retargetLaserOnReflectorChange(state, entity.pos);
+  }
 }
 
 registerHandler(rotateEntity, actions.rotateEntity);

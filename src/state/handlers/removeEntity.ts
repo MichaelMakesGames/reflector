@@ -5,6 +5,7 @@ import { getPosKey } from "~/utils/geometry";
 import { registerHandler } from "~state/handleAction";
 import WrappedState from "~types/WrappedState";
 import { Pos } from "~types";
+import { retargetLaserOnReflectorChange } from "~utils/lasers";
 
 function removeEntity(
   wrappedState: WrappedState,
@@ -43,6 +44,10 @@ function removeEntity(
     entitiesByPosition,
     entities,
   });
+
+  if (prev.pos && prev.reflector) {
+    retargetLaserOnReflectorChange(wrappedState, prev.pos);
+  }
 }
 
 registerHandler(removeEntity, actions.removeEntity);

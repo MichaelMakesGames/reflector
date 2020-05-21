@@ -45,3 +45,4 @@ export const RIGHT_KEYS = ["d", "right", "l"];
 export const DOWN_KEYS = ["s", "down", "j"];
 export const LEFT_KEYS = ["a", "left", "h"];
 export const CANCEL_KEYS = ["esc", "del", "backspace", "q"];
+export const CONFIRM_KEYS = ["space", "enter"];

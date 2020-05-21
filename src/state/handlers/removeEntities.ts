@@ -3,6 +3,7 @@ import actions from "~/state/actions";
 import { registerHandler } from "~state/handleAction";
 import WrappedState from "~types/WrappedState";
 import { HasSmokeEmitter, HasPos } from "~types";
+import { retargetLaserOnReflectorChange } from "~utils/lasers";
 
 function removeEntities(
   wrappedState: WrappedState,
@@ -17,9 +18,13 @@ function removeEntities(
   const entities = {
     ...state.entities,
   };
+  let isRemovingReflector = false;
   for (const id of entityIds) {
     if (entities[id].pos && entities[id].display) {
       removeRenderEntity(id);
+    }
+    if (entities[id].reflector) {
+      isRemovingReflector = true;
     }
     if (entities[id].pos && entities[id].smokeEmitter) {
       (entities[
@@ -28,6 +33,7 @@ function removeEntities(
         removeSmoke((entities[id] as HasPos).pos, emitter.offset),
       );
     }
+
     delete entities[id];
   }
   wrappedState.setRaw({
@@ -35,6 +41,10 @@ function removeEntities(
     entitiesByPosition: { ...entitiesByPosition },
     entities,
   });
+
+  if (isRemovingReflector) {
+    retargetLaserOnReflectorChange(wrappedState);
+  }
 }
 
 registerHandler(removeEntities, actions.removeEntities);
