@@ -2,11 +2,11 @@ import { Required } from "Object/_api";
 import { PLAYER_ID } from "~constants";
 import {
   Entity,
-  Pos,
-  RawState,
   HasColonist,
   HasJobProvider,
   HasPos,
+  Pos,
+  RawState,
 } from "~types";
 import { filterEntitiesWithComps } from "~utils/entities";
 import { getAdjacentPositions, getPosKey } from "~utils/geometry";
@@ -43,6 +43,11 @@ export function entitiesAtPosition(state: RawState, position: Pos) {
   return (state.entitiesByPosition[key] || []).map(
     (id) => state.entities[id],
   ) as Required<Entity, "pos">[];
+}
+
+export function entitiesAtCursor(state: RawState) {
+  const { cursorPos } = state;
+  return cursorPos && entitiesAtPosition(state, cursorPos);
 }
 
 export function adjacentEntities(state: RawState, position: Pos) {

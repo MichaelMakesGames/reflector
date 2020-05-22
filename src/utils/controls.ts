@@ -1,14 +1,19 @@
 import { RawState, Pos, Action } from "~types";
 import selectors from "~state/selectors";
 import actions from "~state/actions";
-import { PLAYER_ID } from "~constants";
+import { PLAYER_ID, UP, DOWN, LEFT, RIGHT } from "~constants";
 import wrapState from "~state/wrapState";
 import { findValidPositions } from "./building";
 import { areConditionsMet } from "./conditions";
-import { arePositionsEqual } from "./geometry";
+import { arePositionsEqual, areDirectionsEqual } from "./geometry";
 import { createEntityFromTemplate } from "./entities";
 
-type Results = { label: string; action: Action }[];
+type Results = {
+  label: string;
+  key: string;
+  doNotRegisterShortcut?: boolean;
+  action: Action;
+}[];
 
 export function getActionsAvailableAtPos(state: RawState, pos: Pos): Results {
   const results: Results = [];
@@ -16,7 +21,6 @@ export function getActionsAvailableAtPos(state: RawState, pos: Pos): Results {
   addRemoveBuildingAction(state, pos, results);
   addDisableBuildingActions(state, pos, results);
   addMoveAction(state, pos, results);
-  results.push({ label: "Make Me Rich", action: actions.makeMeRich() });
   return results;
 }
 
@@ -28,12 +32,24 @@ function addMoveAction(state: RawState, pos: Pos, results: Results) {
       Math.abs(playerPos.x - pos.x) + Math.abs(playerPos.y - pos.y) === 1 &&
       !selectors.isPositionBlocked(state, pos)
     ) {
+      const dir = { dx: pos.x - playerPos.x, dy: pos.y - playerPos.y };
+      let key = "";
+      if (areDirectionsEqual(dir, UP)) {
+        key = "w";
+      } else if (areDirectionsEqual(dir, DOWN)) {
+        key = "s";
+      } else if (areDirectionsEqual(dir, LEFT)) {
+        key = "a";
+      } else if (areDirectionsEqual(dir, RIGHT)) {
+        key = "d";
+      }
       results.push({
         label: "Move",
+        key,
+        doNotRegisterShortcut: true,
         action: actions.move({
           entityId: PLAYER_ID,
-          dx: pos.x - playerPos.x,
-          dy: pos.y - playerPos.y,
+          ...dir,
         }),
       });
     }
@@ -51,6 +67,7 @@ function addDisableBuildingActions(
       label: entitiesAtPos.some((e) => e.jobDisabler)
         ? "Enable Jobs"
         : "Disable Jobs",
+      key: "t",
       action: actions.toggleDisabled(pos),
     });
   }
@@ -61,6 +78,7 @@ function addRemoveBuildingAction(state: RawState, pos: Pos, results: Results) {
   if (entitiesAtPos.some((e) => e.building)) {
     results.push({
       label: "Remove Building",
+      key: "x",
       action: actions.executeRemoveBuilding(pos),
     });
   }
@@ -91,6 +109,7 @@ function addReflectorActions(state: RawState, pos: Pos, results: Results) {
   if (validPositions.some((validPos) => arePositionsEqual(pos, validPos))) {
     results.push({
       label: "Place Reflector",
+      key: "f",
       action: actions.addEntity(
         createEntityFromTemplate("REFLECTOR_UP_RIGHT", { pos }),
       ),
@@ -102,10 +121,12 @@ function addReflectorActions(state: RawState, pos: Pos, results: Results) {
   if (reflectorAtPos) {
     results.push({
       label: "Rotate Reflector",
+      key: "r",
       action: actions.rotateEntity(reflectorAtPos),
     });
     results.push({
       label: "Remove Reflector",
+      key: "e",
       action: actions.removeEntity(reflectorAtPos.id),
     });
   }
