@@ -52,8 +52,77 @@ export default function Laser() {
   useShortcuts(laserShortcuts);
 
   return (
-    <section className="p-2 border-b border-gray">
-      <h2>Laser</h2>
+    <section className="p-2 border-b border-gray flex flex-row items-center">
+      <h2 className="text-xl flex-grow">Laser</h2>
+      <div className="flex flex-row">
+        <div className="flex flex-col flex-1">
+          <div className="flex-1" />
+          <button
+            className={`flex-1 ${
+              isAimingInDirection(LEFT) ? "text-laser" : ""
+            }`}
+            type="button"
+            onClick={aimLeft}
+          >
+            ◀
+          </button>
+          <div className="flex-1" />
+        </div>
+        <div className="flex flex-col flex-1">
+          <button
+            className={`flex-1 ${isAimingInDirection(UP) ? "text-laser" : ""}`}
+            type="button"
+            onClick={aimUp}
+          >
+            ▲
+          </button>
+          <div className="flex-1" />
+          <button
+            className={`flex-1 ${
+              isAimingInDirection(DOWN) ? "text-laser" : ""
+            }`}
+            type="button"
+            onClick={aimDown}
+          >
+            ▼
+          </button>
+        </div>
+        <div className="flex flex-col flex-1">
+          <div className="flex-1" />
+          <button
+            className={`flex-1 ${
+              isAimingInDirection(RIGHT) ? "text-laser" : ""
+            }`}
+            type="button"
+            onClick={aimRight}
+          >
+            ▶
+          </button>
+          <div className="flex-1" />
+        </div>
+      </div>
+      <button
+        className="btn ml-2"
+        type="button"
+        disabled={!isWeaponActive}
+        onClick={(e) => {
+          cancel();
+          (e.target as HTMLButtonElement).blur();
+        }}
+      >
+        Cancel
+      </button>
+      <button
+        className="btn ml-2"
+        type="button"
+        disabled={!isWeaponActive}
+        onClick={(e) => {
+          fire();
+          (e.target as HTMLButtonElement).blur();
+        }}
+      >
+        Fire
+      </button>
     </section>
   );
 }

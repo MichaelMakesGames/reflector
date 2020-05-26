@@ -1,10 +1,30 @@
 @tailwind base;
 
+/* purgecss start ignore */
+
 body {
   @apply bg-black;
   @apply text-white;
   @apply leading-normal;
 }
+
+.btn {
+  @apply font-normal;
+  @apply border;
+  @apply border-gray;
+  @apply rounded;
+  @apply px-2;
+  @apply py-1;
+}
+.btn:disabled {
+  @apply opacity-50;
+  @apply cursor-not-allowed;
+}
+.btn:not(:disabled):hover {
+  @apply border-white;
+}
+
+/* purgecss end ignore */
 
 @tailwind components;
 
