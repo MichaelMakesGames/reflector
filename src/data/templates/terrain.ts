@@ -1,6 +1,7 @@
 import { PRIORITY_TERRAIN } from "~/constants";
 import colors from "~colors";
 import { Entity } from "~types";
+import { ResourceCode } from "~data/resources";
 
 const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   FLOOR: {
@@ -235,7 +236,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       priority: PRIORITY_TERRAIN,
     },
     mineable: {
-      resource: "METAL",
+      resource: ResourceCode.Metal,
     },
     description: {
       name: "Ore",
@@ -251,7 +252,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       priority: PRIORITY_TERRAIN,
     },
     mineable: {
-      resource: "FOOD",
+      resource: ResourceCode.Food,
     },
     description: {
       name: "Fertile Land",

@@ -1,131 +1,135 @@
+import { BuildingCategoryCode } from "./buildingCategories";
+import { ResourceCode } from "./resources";
+
 const buildings: {
   template: TemplateName;
   label: string;
   cost: {
-    resource: Resource;
+    resource: ResourceCode;
     amount: number;
   };
   validitySelector?: string;
-  category?: string;
+  category: BuildingCategoryCode;
 }[] = [
   {
     template: "SPLITTER_HORIZONTAL",
     label: "Splitter",
     cost: {
-      resource: "REFINED_METAL",
+      resource: ResourceCode.Machinery,
       amount: 10,
     },
-    category: "Defense",
+    category: BuildingCategoryCode.Laser,
   },
   {
     template: "SPLITTER_ADVANCED",
-    label: "Advanced Splitter",
+    label: "Adv Splitter",
     cost: {
-      resource: "REFINED_METAL",
+      resource: ResourceCode.Machinery,
       amount: 30,
     },
-    category: "Defense",
+    category: BuildingCategoryCode.Laser,
   },
   {
     template: "WALL",
     label: "Wall",
     cost: {
-      resource: "METAL",
+      resource: ResourceCode.Metal,
       amount: 10,
     },
-    category: "Defense",
+    category: BuildingCategoryCode.Misc,
   },
   {
     template: "RESIDENCE",
     label: "Residence",
     cost: {
-      resource: "METAL",
+      resource: ResourceCode.Metal,
       amount: 25,
     },
+    category: BuildingCategoryCode.Misc,
   },
   {
     template: "MINE",
     label: "Mine",
     cost: {
-      resource: "METAL",
+      resource: ResourceCode.Metal,
       amount: 25,
     },
     validitySelector: "canPlaceMine",
-    category: "Production",
+    category: BuildingCategoryCode.Production,
   },
   {
     template: "MINING_SPOT",
     label: "Mining Spot",
     cost: {
-      resource: "METAL",
+      resource: ResourceCode.Metal,
       amount: 0,
     },
     validitySelector: "canPlaceMine",
-    category: "Production",
+    category: BuildingCategoryCode.Production,
   },
   {
     template: "FARM",
     label: "Farm",
     cost: {
-      resource: "METAL",
+      resource: ResourceCode.Metal,
       amount: 10,
     },
     validitySelector: "canPlaceFarm",
-    category: "Production",
+    category: BuildingCategoryCode.Production,
   },
   {
     template: "POWER_PLANT",
     label: "Power Plant",
     cost: {
-      resource: "METAL",
+      resource: ResourceCode.Metal,
       amount: 15,
     },
-    category: "Power",
+    category: BuildingCategoryCode.Power,
   },
   {
     template: "SOLAR_PANEL",
     label: "Solar Panel",
     cost: {
-      resource: "REFINED_METAL",
+      resource: ResourceCode.Machinery,
       amount: 5,
     },
-    category: "Power",
+    category: BuildingCategoryCode.Power,
   },
   {
     template: "WINDMILL",
     label: "Windmill",
     cost: {
-      resource: "METAL",
+      resource: ResourceCode.Metal,
       amount: 20,
     },
-    category: "Power",
+    category: BuildingCategoryCode.Power,
   },
   {
     template: "FURNACE",
     label: "Furnace",
     cost: {
-      resource: "METAL",
+      resource: ResourceCode.Metal,
       amount: 25,
     },
-    category: "Production",
+    category: BuildingCategoryCode.Production,
   },
   {
     template: "BASIC_PROJECTOR",
-    label: "Basic Projector",
+    label: "Projector",
     cost: {
-      resource: "METAL",
+      resource: ResourceCode.Metal,
       amount: 20,
     },
-    category: "Defense",
+    category: BuildingCategoryCode.Laser,
   },
   {
     template: "PROJECTOR",
-    label: "Projector",
+    label: "Adv Projector",
     cost: {
-      resource: "REFINED_METAL",
+      resource: ResourceCode.Machinery,
       amount: 15,
     },
-    category: "Defense",
+    category: BuildingCategoryCode.Laser,
   },
 ];
 export default buildings;

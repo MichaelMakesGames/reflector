@@ -1,5 +1,6 @@
 import { createStandardAction } from "typesafe-actions";
 import { Pos, Direction } from "~types";
+import { ResourceCode } from "~data/resources";
 
 export const move = createStandardAction("MOVE")<{
   entityId: string;
@@ -22,7 +23,7 @@ export const logMessage = createStandardAction("LOG_MESSAGE")<{
 }>();
 
 export const modifyResource = createStandardAction("MODIFY_RESOURCE")<{
-  resource: Resource;
+  resource: ResourceCode;
   amount: number;
 }>();
 

@@ -31,7 +31,7 @@ const initialState: RawState = {
     METAL: STARTING_METAL,
     FOOD: STARTING_FOOD,
     POWER: STARTING_POWER,
-    REFINED_METAL: 0,
+    MACHINERY: 0,
   },
   jobPriorities: {
     POWER: 1,

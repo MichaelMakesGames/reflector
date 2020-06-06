@@ -3,7 +3,7 @@ import { Entity, Pos, RawState } from "~types";
 import { entitiesAtPosition, entitiesWithComps } from "./entitySelectors";
 
 export function placingTarget(state: RawState) {
-  const entities = entitiesWithComps(state, "placing", "pos");
+  const entities = entitiesWithComps(state, "placing", "pos", "display");
   if (entities.length) return entities[0];
   return null;
 }
@@ -36,4 +36,8 @@ export function removingMarker(
   state: RawState,
 ): Required<Entity, "removingMarker" | "pos"> | null {
   return entitiesWithComps(state, "removingMarker", "pos")[0] || null;
+}
+
+export function isPlacing(state: RawState): boolean {
+  return Boolean(placingTarget(state));
 }

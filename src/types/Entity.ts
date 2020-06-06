@@ -1,4 +1,5 @@
 import { Direction } from "./Direction";
+import { ResourceCode } from "~data/resources";
 
 export interface Pos {
   x: number;
@@ -56,9 +57,10 @@ export interface HasDestructible {
 export interface Placing {
   takesTurn: boolean;
   cost?: {
-    resource: Resource;
+    resource: ResourceCode;
     amount: number;
   };
+  validitySelector?: string;
 }
 export interface HasPlacing {
   placing: Placing;
@@ -120,7 +122,7 @@ export interface HasHousing {
 }
 
 export interface Production {
-  resource: Resource;
+  resource: ResourceCode;
   amount: number;
   conditions: ConditionName[];
 }
@@ -129,7 +131,7 @@ export interface HasProduction {
 }
 
 export interface Mineable {
-  resource: Resource;
+  resource: ResourceCode;
 }
 export interface HasMineable {
   mineable: Mineable;
@@ -167,8 +169,8 @@ export interface HasDescription {
 }
 
 export interface JobProvider {
-  consumes: Partial<Record<Resource, number>>;
-  produces: Partial<Record<Resource, number>>;
+  consumes: Partial<Record<ResourceCode, number>>;
+  produces: Partial<Record<ResourceCode, number>>;
   numberEmployed: number;
   maxNumberEmployed: number;
   jobType: JobType;

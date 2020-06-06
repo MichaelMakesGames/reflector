@@ -1,5 +1,6 @@
 import { RawState } from "~types";
 import { entitiesWithComps } from "./entitySelectors";
+import { ResourceCode } from "~data/resources";
 
 export function population(state: RawState): number {
   return entitiesWithComps(state, "colonist").length;
@@ -41,16 +42,16 @@ export function resources(state: RawState) {
   return state.resources;
 }
 
-export function resource(state: RawState, resourceName: Resource) {
-  return resources(state)[resourceName];
+export function resource(state: RawState, resourceCode: ResourceCode) {
+  return resources(state)[resourceCode];
 }
 
 export function canAffordToPay(
   state: RawState,
-  resourceName: Resource,
+  resourceCode: ResourceCode,
   cost: number,
 ) {
-  return resource(state, resourceName) >= cost;
+  return resource(state, resourceCode) >= cost;
 }
 
 export function isWeaponActive(state: RawState): boolean {

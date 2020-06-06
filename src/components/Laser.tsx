@@ -58,7 +58,7 @@ export default function Laser() {
         <div className="flex flex-col flex-1">
           <div className="flex-1" />
           <button
-            className={`flex-1 ${
+            className={`flex-1 font-serif ${
               isAimingInDirection(LEFT) ? "text-laser" : ""
             }`}
             type="button"
@@ -70,7 +70,9 @@ export default function Laser() {
         </div>
         <div className="flex flex-col flex-1">
           <button
-            className={`flex-1 ${isAimingInDirection(UP) ? "text-laser" : ""}`}
+            className={`flex-1 font-serif ${
+              isAimingInDirection(UP) ? "text-laser" : ""
+            }`}
             type="button"
             onClick={aimUp}
           >
@@ -78,7 +80,7 @@ export default function Laser() {
           </button>
           <div className="flex-1" />
           <button
-            className={`flex-1 ${
+            className={`flex-1 font-serif ${
               isAimingInDirection(DOWN) ? "text-laser" : ""
             }`}
             type="button"
@@ -90,7 +92,7 @@ export default function Laser() {
         <div className="flex flex-col flex-1">
           <div className="flex-1" />
           <button
-            className={`flex-1 ${
+            className={`flex-1 font-serif ${
               isAimingInDirection(RIGHT) ? "text-laser" : ""
             }`}
             type="button"

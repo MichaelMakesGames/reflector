@@ -13,9 +13,8 @@ function cancelPlacement(
       .map((e) => e.id),
   );
   const entity = state.select.placingTarget();
-  const marker = state.select.placingMarker();
-  if (!entity || !marker) return;
-  state.act.removeEntities([entity.id, marker.id]);
+  if (!entity) return;
+  state.act.removeEntities([entity.id]);
 }
 
 registerHandler(cancelPlacement, actions.cancelPlacement);

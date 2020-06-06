@@ -34,6 +34,7 @@ export default function GameMap() {
   const cursorPos = useSelector(selectors.cursorPos);
   const [contextMenuPos, setContextMenuPos] = useState<Pos | null>(null);
   const isWeaponActive = useSelector(selectors.isWeaponActive);
+  const isPlacing = useSelector(selectors.isPlacing);
 
   const moveUp = () => dispatch(actions.move({ entityId: PLAYER_ID, ...UP }));
   const moveRight = () =>
@@ -48,7 +49,7 @@ export default function GameMap() {
     ...DOWN_KEYS.map((key): [string, () => void] => [key, moveDown]),
     ...LEFT_KEYS.map((key): [string, () => void] => [key, moveLeft]),
   ]);
-  useShortcuts(movementShortcuts, !isWeaponActive);
+  useShortcuts(movementShortcuts, !isWeaponActive && !isPlacing);
 
   const moveCursorUp = () => dispatch(actions.moveCursor({ ...UP }));
   const moveCursorRight = () => dispatch(actions.moveCursor({ ...RIGHT }));
@@ -81,15 +82,22 @@ export default function GameMap() {
   ]);
   useShortcuts(cursorShortcuts);
 
-  const reflectorShortcuts = Object.fromEntries<() => void>([
+  const performDefaultAction = (pos: Pos | null) => {
+    if (pos) {
+      if (isPlacing) {
+        dispatch(actions.finishPlacement({ placeAnother: true }));
+      } else {
+        dispatch(actions.cycleReflector(pos));
+      }
+    }
+  };
+  const defaultActionShortcuts = Object.fromEntries<() => void>([
     ...CONFIRM_KEYS.map((key): [string, () => void] => [
       key,
-      () => {
-        if (cursorPos) dispatch(actions.cycleReflector(cursorPos));
-      },
+      () => performDefaultAction(cursorPos),
     ]),
   ]);
-  useShortcuts(reflectorShortcuts);
+  useShortcuts(defaultActionShortcuts);
 
   return (
     <section className="relative">
@@ -134,7 +142,7 @@ export default function GameMap() {
           if (!cursorPos || !arePositionsEqual(cursorPos, gamePos)) {
             dispatch(actions.setCursorPos(gamePos));
           }
-          dispatch(actions.cycleReflector(gamePos));
+          performDefaultAction(gamePos);
         }}
       />
       {contextMenuPos ? (

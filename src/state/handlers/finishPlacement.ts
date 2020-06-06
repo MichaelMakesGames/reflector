@@ -1,14 +1,14 @@
 import actions from "~/state/actions";
 import { registerHandler } from "~state/handleAction";
 import WrappedState from "~types/WrappedState";
+import { createEntityFromTemplate } from "~utils/entities";
 
 function finishPlacement(
   state: WrappedState,
   action: ReturnType<typeof actions.finishPlacement>,
 ): void {
   const placingTarget = state.select.placingTarget();
-  const placingMarker = state.select.placingMarker();
-  if (!placingTarget || !placingMarker) return;
+  if (!placingTarget) return;
 
   const { pos } = placingTarget;
   const entitiesAtPosition = state.select.entitiesAtPosition(pos);
@@ -42,13 +42,11 @@ function finishPlacement(
   state.act.updateEntity({
     id: placingTarget.id,
     placing: undefined,
+    display: createEntityFromTemplate(placingTarget.template).display,
   });
 
   state.act.removeEntities(
-    state.select
-      .entitiesWithComps("validMarker")
-      .map((e) => e.id)
-      .concat([placingMarker.id]),
+    state.select.entitiesWithComps("validMarker").map((e) => e.id),
   );
 
   if (placingTarget.placing.takesTurn) {
@@ -57,9 +55,10 @@ function finishPlacement(
 
   if (action.payload.placeAnother) {
     state.act.activatePlacement({
-      template: "REFLECTOR_UP_RIGHT",
-      takesTurn: false,
-      validitySelector: "canPlaceReflector",
+      template: placingTarget.template,
+      takesTurn: placingTarget.placing.takesTurn,
+      cost: placingTarget.placing.cost,
+      validitySelector: placingTarget.placing.validitySelector,
       pos: placingTarget.pos,
     });
   }

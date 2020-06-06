@@ -1,6 +1,7 @@
 import colors from "~colors";
 import { Entity } from "~types";
 import { PRIORITY_BUILDING_HIGH, PRIORITY_BUILDING_LOW } from "~constants";
+import { ResourceCode } from "~data/resources";
 
 const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   REFLECTOR_BASE: {
@@ -155,7 +156,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     jobProvider: {
       consumes: {},
       produces: {
-        METAL: 1,
+        [ResourceCode.Metal]: 1,
       },
       numberEmployed: 0,
       maxNumberEmployed: 2,
@@ -178,7 +179,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     jobProvider: {
       consumes: {},
       produces: {
-        METAL: 0.5,
+        [ResourceCode.Metal]: 0.5,
       },
       numberEmployed: 0,
       maxNumberEmployed: 1,
@@ -203,7 +204,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     jobProvider: {
       consumes: {},
       produces: {
-        FOOD: 0.2,
+        [ResourceCode.Food]: 0.2,
       },
       numberEmployed: 0,
       maxNumberEmployed: 1,
@@ -240,7 +241,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     jobProvider: {
       consumes: {},
       produces: {
-        POWER: 0.5,
+        [ResourceCode.Power]: 0.5,
       },
       numberEmployed: 0,
       maxNumberEmployed: 2,
@@ -267,7 +268,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     destructible: {},
     production: {
-      resource: "POWER",
+      resource: ResourceCode.Power,
       amount: 1,
       conditions: ["isDay"],
     },
@@ -289,7 +290,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     destructible: {},
     blocking: { moving: true, lasers: true },
     production: {
-      resource: "POWER",
+      resource: ResourceCode.Power,
       amount: 1,
       conditions: ["doesNotHaveTallNeighbors"],
     },
@@ -331,7 +332,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
         METAL: 2,
       },
       produces: {
-        REFINED_METAL: 1,
+        [ResourceCode.Machinery]: 1,
       },
       numberEmployed: 0,
       maxNumberEmployed: 3,

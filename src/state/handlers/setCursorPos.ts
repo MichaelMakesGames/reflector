@@ -27,6 +27,11 @@ function setCursorPos(
         id: CURSOR_ID,
       });
     }
+
+    const placingTarget = state.select.placingTarget();
+    if (placingTarget) {
+      state.act.movePlacement({ to: pos });
+    }
   } else if (cursor) {
     state.act.removeEntity(CURSOR_ID);
   }

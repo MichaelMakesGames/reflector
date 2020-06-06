@@ -7,6 +7,8 @@ import { registerHandler } from "~state/handleAction";
 import { findValidPositions } from "~utils/building";
 import WrappedState from "~types/WrappedState";
 import { areConditionsMet } from "~utils/conditions";
+import { arePositionsEqual } from "~utils/geometry";
+import colors from "~colors";
 
 function activatePlacement(
   state: WrappedState,
@@ -14,6 +16,11 @@ function activatePlacement(
 ): void {
   const player = state.select.player();
   if (!player) return;
+
+  const placingTarget = state.select.placingTarget();
+  if (placingTarget) {
+    state.act.cancelPlacement();
+  }
 
   const { cost, takesTurn, template, validitySelector } = action.payload;
 
@@ -28,7 +35,7 @@ function activatePlacement(
   }
 
   const entityToPlace = createEntityFromTemplate(template, {
-    placing: { takesTurn, cost },
+    placing: { takesTurn, cost, validitySelector },
   });
 
   const canPlace = (gameState: RawState, pos: Pos) => {
@@ -67,15 +74,18 @@ function activatePlacement(
     return;
   }
 
+  const targetPos = action.payload.pos || player.pos;
+  const targetPosIsValid = validPositions.some((p) =>
+    arePositionsEqual(p, targetPos),
+  );
   state.act.addEntity({
     ...entityToPlace,
-    pos: action.payload.pos || player.pos,
+    pos: targetPos,
+    display: entityToPlace.display && {
+      ...entityToPlace.display,
+      color: targetPosIsValid ? colors.secondary : colors.invalid,
+    },
   });
-  state.act.addEntity(
-    createEntityFromTemplate("PLACING_MARKER", {
-      pos: action.payload.pos || player.pos,
-    }),
-  );
   for (const pos of validPositions) {
     state.act.addEntity(createEntityFromTemplate("VALID_MARKER", { pos }));
   }

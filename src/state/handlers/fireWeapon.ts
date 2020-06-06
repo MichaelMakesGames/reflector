@@ -1,6 +1,7 @@
 import actions from "~/state/actions";
 import { registerHandler } from "~state/handleAction";
 import WrappedState from "~types/WrappedState";
+import { ResourceCode } from "~data/resources";
 
 function fireWeapon(
   state: WrappedState,
@@ -11,8 +12,8 @@ function fireWeapon(
 
   const lasers = state.select.entitiesWithComps("laser", "pos");
 
-  if (state.select.canAffordToPay("POWER", 1)) {
-    state.act.modifyResource({ resource: "POWER", amount: -1 });
+  if (state.select.canAffordToPay(ResourceCode.Power, 1)) {
+    state.act.modifyResource({ resource: ResourceCode.Power, amount: -1 });
   }
 
   const entitiesToDestroy: string[] = [];

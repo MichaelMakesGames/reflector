@@ -10,6 +10,7 @@ import Laser from "./Laser";
 import LoadGame from "./LoadGame";
 import Resources from "./Resources";
 import Status from "./Status";
+import IconMasks from "./IconMasks";
 
 export default function Game() {
   useEffect(() => {
@@ -35,6 +36,7 @@ export default function Game() {
           <BuildMenu />
         </div>
       </div>
+      <IconMasks />
     </main>
   );
 }

@@ -1,5 +1,6 @@
 import { Entity, Pos } from "./Entity";
 import { Direction } from "./Direction";
+import { ResourceCode } from "~data/resources";
 
 export interface RawState {
   version: string;
@@ -12,7 +13,7 @@ export interface RawState {
   morale: number;
   time: TimeState;
   isWeaponActive: boolean;
-  resources: Record<Resource, number>;
+  resources: Record<ResourceCode, number>;
   lastAimingDirection: Direction;
   jobPriorities: Record<JobType, number>;
   cursorPos: Pos | null;
