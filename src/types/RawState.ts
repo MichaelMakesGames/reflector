@@ -14,6 +14,11 @@ export interface RawState {
   time: TimeState;
   isWeaponActive: boolean;
   resources: Record<ResourceCode, number>;
+  resourceChanges: Record<ResourceCode, { reason: string; amount: number }[]>;
+  resourceChangesThisTurn: Record<
+    ResourceCode,
+    { reason: string; amount: number }[]
+  >;
   lastAimingDirection: Direction;
   jobPriorities: Record<JobType, number>;
   cursorPos: Pos | null;

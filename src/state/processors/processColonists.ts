@@ -1,5 +1,7 @@
 import { Required } from "Object/_api";
-import { Entity, Pos, HasPos, HasJobProvider } from "~types";
+import { PRIORITY_MARKER, PRIORITY_UNIT, TURNS_PER_NIGHT } from "~constants";
+import { ResourceCode } from "~data/resources";
+import { Entity, HasJobProvider, HasPos, Pos } from "~types";
 import WrappedState from "~types/WrappedState";
 import { getDirectionTowardTarget } from "~utils/ai";
 import { createEntityFromTemplate } from "~utils/entities";
@@ -10,7 +12,6 @@ import {
 } from "~utils/geometry";
 import { rangeTo } from "~utils/math";
 import { choose } from "~utils/rng";
-import { TURNS_PER_NIGHT, PRIORITY_MARKER, PRIORITY_UNIT } from "~constants";
 
 export default function processColonists(state: WrappedState): void {
   clearIsWorking(state);
@@ -270,18 +271,26 @@ function doWork(
   ) as Required<Entity, "jobProvider">;
   if (
     Object.entries(employment.jobProvider.consumes)
-      .filter((entry): entry is [Resource, number] => Boolean(entry[1]))
+      .filter((entry): entry is [ResourceCode, number] => Boolean(entry[1]))
       .every(([resource, cost]) => state.select.canAffordToPay(resource, cost))
   ) {
     Object.entries(employment.jobProvider.consumes)
-      .filter((entry): entry is [Resource, number] => Boolean(entry[1]))
+      .filter((entry): entry is [ResourceCode, number] => Boolean(entry[1]))
       .every(([resource, cost]) =>
-        state.act.modifyResource({ resource, amount: -cost }),
+        state.act.modifyResource({
+          resource,
+          amount: -cost,
+          reason: employment.jobProvider.resourceChangeReason,
+        }),
       );
     Object.entries(employment.jobProvider.produces)
-      .filter((entry): entry is [Resource, number] => Boolean(entry[1]))
+      .filter((entry): entry is [ResourceCode, number] => Boolean(entry[1]))
       .every(([resource, amount]) =>
-        state.act.modifyResource({ resource, amount }),
+        state.act.modifyResource({
+          resource,
+          amount,
+          reason: employment.jobProvider.resourceChangeReason,
+        }),
       );
     state.act.updateEntity({
       ...colonist,

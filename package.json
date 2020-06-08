@@ -58,7 +58,8 @@
       ],
       "@typescript-eslint/indent": "off",
       "react/jsx-one-expression-per-line": "off",
-      "react/jsx-indent": "off"
+      "react/jsx-indent": "off",
+      "react/jsx-wrap-multilines": "off"
     }
   },
   "devDependencies": {

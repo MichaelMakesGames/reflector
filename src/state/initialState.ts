@@ -33,6 +33,18 @@ const initialState: RawState = {
     POWER: STARTING_POWER,
     MACHINERY: 0,
   },
+  resourceChanges: {
+    METAL: [],
+    FOOD: [],
+    POWER: [],
+    MACHINERY: [],
+  },
+  resourceChangesThisTurn: {
+    METAL: [],
+    FOOD: [],
+    POWER: [],
+    MACHINERY: [],
+  },
   jobPriorities: {
     POWER: 1,
     MINING: 2,

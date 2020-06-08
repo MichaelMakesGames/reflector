@@ -161,6 +161,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       numberEmployed: 0,
       maxNumberEmployed: 2,
       jobType: "MINING",
+      resourceChangeReason: "Mining",
     },
     description: {
       name: "Mine",
@@ -184,6 +185,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       numberEmployed: 0,
       maxNumberEmployed: 1,
       jobType: "MINING",
+      resourceChangeReason: "Mining (at mining spot)",
     },
     description: {
       name: "Mine",
@@ -209,6 +211,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       numberEmployed: 0,
       maxNumberEmployed: 1,
       jobType: "FARMING",
+      resourceChangeReason: "Farming",
     },
     description: {
       name: "Farm",
@@ -246,6 +249,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       numberEmployed: 0,
       maxNumberEmployed: 2,
       jobType: "POWER",
+      resourceChangeReason: "Power Plant",
     },
     blocking: {
       moving: true,
@@ -271,6 +275,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       resource: ResourceCode.Power,
       amount: 1,
       conditions: ["isDay"],
+      resourceChangeReason: "Solar Panels",
     },
     description: {
       name: "Solar Panel",
@@ -293,6 +298,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       resource: ResourceCode.Power,
       amount: 1,
       conditions: ["doesNotHaveTallNeighbors"],
+      resourceChangeReason: "Windmills",
     },
     description: {
       name: "Windmill",
@@ -337,6 +343,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       numberEmployed: 0,
       maxNumberEmployed: 3,
       jobType: "REFINING",
+      resourceChangeReason: "Manufacturing",
     },
     blocking: {
       moving: true,
@@ -406,6 +413,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     powered: {
       hasPower: true,
       powerNeeded: 1,
+      resourceChangeReason: "Projectors",
     },
     projector: {
       condition: "isPowered",
@@ -433,6 +441,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     powered: {
       hasPower: true,
       powerNeeded: 2,
+      resourceChangeReason: "Adv. Projectors",
     },
     projector: {
       condition: "isPowered",

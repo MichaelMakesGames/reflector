@@ -28,6 +28,7 @@ function finishPlacement(
       state.act.modifyResource({
         resource: cost.resource,
         amount: -cost.amount,
+        reason: "Building",
       });
     }
   }

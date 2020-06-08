@@ -25,6 +25,7 @@ export const logMessage = createStandardAction("LOG_MESSAGE")<{
 export const modifyResource = createStandardAction("MODIFY_RESOURCE")<{
   resource: ResourceCode;
   amount: number;
+  reason: string;
 }>();
 
 export const increaseJobPriority = createStandardAction(

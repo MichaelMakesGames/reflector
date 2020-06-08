@@ -8,6 +8,7 @@ function makeMeRich(state: WrappedState) {
     state.act.modifyResource({
       resource: resource as ResourceCode,
       amount: 1000,
+      reason: "I'm rich!",
     });
   }
 }

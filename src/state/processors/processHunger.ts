@@ -8,11 +8,13 @@ export default function processHunger(state: WrappedState): void {
       state.act.modifyResource({
         resource: ResourceCode.Food,
         amount: -population,
+        reason: "Colonists Eating",
       });
     } else {
       state.act.modifyResource({
         resource: ResourceCode.Food,
         amount: -Math.floor(state.select.resource(ResourceCode.Food)),
+        reason: "Colonists Eating",
       });
       state.act.reduceMorale({ amount: 1 });
       state.act.logMessage({

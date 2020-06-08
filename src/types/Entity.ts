@@ -125,6 +125,7 @@ export interface Production {
   resource: ResourceCode;
   amount: number;
   conditions: ConditionName[];
+  resourceChangeReason: string;
 }
 export interface HasProduction {
   production: Production;
@@ -174,6 +175,7 @@ export interface JobProvider {
   numberEmployed: number;
   maxNumberEmployed: number;
   jobType: JobType;
+  resourceChangeReason: string;
 }
 export interface HasJobProvider {
   jobProvider: JobProvider;
@@ -182,6 +184,7 @@ export interface HasJobProvider {
 export interface Powered {
   hasPower: boolean;
   powerNeeded: number;
+  resourceChangeReason: string;
 }
 
 export interface HasPowered {

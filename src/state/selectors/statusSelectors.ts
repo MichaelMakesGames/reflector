@@ -46,6 +46,14 @@ export function resource(state: RawState, resourceCode: ResourceCode) {
   return resources(state)[resourceCode];
 }
 
+export function resourceChanges(state: RawState) {
+  return state.resourceChanges;
+}
+
+export function resourceChange(state: RawState, resourceCode: ResourceCode) {
+  return resourceChanges(state)[resourceCode];
+}
+
 export function canAffordToPay(
   state: RawState,
   resourceCode: ResourceCode,
