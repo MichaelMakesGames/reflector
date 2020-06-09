@@ -1,17 +1,16 @@
 import Tooltip from "rc-tooltip";
 import React from "react";
 import { useSelector } from "react-redux";
-import resources from "~data/resources";
+import resources, { Resource } from "~data/resources";
 import selectors from "~state/selectors";
+import { RawState } from "~types";
 import ResourceIcon from "./ResourceIcon";
 
 export default function Resources() {
-  const resourceAmounts = useSelector(selectors.resources);
-  const resourceChanges = useSelector(selectors.resourceChanges);
   return (
     <section className="p-2 border-b border-gray">
       <h2 className="text-xl">Resources</h2>
-      <table>
+      <table className="w-full">
         <thead className="hidden">
           <tr>
             <th />
@@ -20,40 +19,71 @@ export default function Resources() {
             <th>Change</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="w-full">
           {Object.values(resources).map((r) => (
-            <tr key={r.code}>
-              <td>
-                <ResourceIcon resourceCode={r.code} />
-              </td>
-              <td>{r.label}</td>
-              <td>{resourceAmounts[r.code]}</td>
-              <Tooltip
-                placement="right"
-                overlay={
-                  <ul>
-                    {resourceChanges[r.code].length === 0 && (
-                      <li>No changes</li>
-                    )}
-                    {resourceChanges[r.code].map((change) => (
-                      <li key={change.reason}>
-                        {change.reason} {change.amount}
-                      </li>
-                    ))}
-                  </ul>
-                }
-              >
-                <td>
-                  {resourceChanges[r.code].reduce(
-                    (acc, cur) => acc + cur.amount,
-                    0,
-                  )}
-                </td>
-              </Tooltip>
-            </tr>
+            <ResourceRow resource={r} />
           ))}
         </tbody>
       </table>
     </section>
+  );
+}
+
+function ResourceRow({ resource }: { resource: Resource }) {
+  const amount = useSelector((state: RawState) =>
+    selectors.resource(state, resource.code),
+  );
+  const changes = useSelector((state: RawState) =>
+    selectors.resourceChange(state, resource.code),
+  );
+  const totalChange = changes.reduce((acc, cur) => acc + cur.amount, 0);
+  const formatNumber = Intl.NumberFormat(undefined, {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+  }).format;
+  const getChangeColorClass = (change: number) => {
+    if (change > 0) return "text-green";
+    if (change < 0) return "text-red";
+    return "text-lightGray";
+  };
+
+  return (
+    <tr className="flex flex-row items-center">
+      <td className="flex-initial">
+        <ResourceIcon resourceCode={resource.code} />
+      </td>
+      <td className="flex-1">{resource.label}</td>
+      <td className="flex-1 text-right">{formatNumber(amount)}</td>
+      <Tooltip
+        placement="right"
+        overlay={
+          <table>
+            {changes.length === 0 && (
+              <tr>
+                <td>No changes</td>
+              </tr>
+            )}
+            {changes.map((change) => (
+              <tr key={change.reason}>
+                <td>{change.reason}</td>
+                <td
+                  className={`text-right pl-2 ${getChangeColorClass(
+                    change.amount,
+                  )}`}
+                >
+                  {change.amount > 0 ? "+" : null}
+                  {formatNumber(change.amount)}
+                </td>
+              </tr>
+            ))}
+          </table>
+        }
+      >
+        <td className={`flex-1 text-right ${getChangeColorClass(totalChange)}`}>
+          {totalChange > 0 ? "+" : null}
+          {formatNumber(totalChange)}
+        </td>
+      </Tooltip>
+    </tr>
   );
 }

@@ -6,6 +6,7 @@
     "target": "esnext",
     "module": "commonjs",
     "baseUrl": "./src",
+    "resolveJsonModule": true,
     "paths": {
       "~*": ["./*"]
     },
