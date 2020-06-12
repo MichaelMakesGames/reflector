@@ -1,6 +1,7 @@
 import { Entity, Pos } from "./Entity";
 import { Direction } from "./Direction";
 import { ResourceCode } from "~data/resources";
+import { JobTypeCode } from "~data/jobTypes";
 
 export interface RawState {
   version: string;
@@ -20,7 +21,7 @@ export interface RawState {
     { reason: string; amount: number }[]
   >;
   lastAimingDirection: Direction;
-  jobPriorities: Record<JobType, number>;
+  jobPriorities: Record<JobTypeCode, number>;
   cursorPos: Pos | null;
 }
 

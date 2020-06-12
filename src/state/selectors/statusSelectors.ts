@@ -1,6 +1,7 @@
 import { RawState } from "~types";
 import { entitiesWithComps } from "./entitySelectors";
 import { ResourceCode } from "~data/resources";
+import { JobTypeCode } from "~data/jobTypes";
 
 export function population(state: RawState): number {
   return entitiesWithComps(state, "colonist").length;
@@ -74,7 +75,7 @@ export function jobPriorities(state: RawState) {
   return state.jobPriorities;
 }
 
-export function jobPriority(state: RawState, jobType: JobType) {
+export function jobPriority(state: RawState, jobType: JobTypeCode) {
   return jobPriorities(state)[jobType];
 }
 

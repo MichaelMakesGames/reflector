@@ -2,6 +2,7 @@ import colors from "~colors";
 import { Entity } from "~types";
 import { PRIORITY_BUILDING_HIGH, PRIORITY_BUILDING_LOW } from "~constants";
 import { ResourceCode } from "~data/resources";
+import { JobTypeCode } from "~data/jobTypes";
 
 const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   REFLECTOR_BASE: {
@@ -160,7 +161,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       },
       numberEmployed: 0,
       maxNumberEmployed: 2,
-      jobType: "MINING",
+      jobType: JobTypeCode.Mining,
       resourceChangeReason: "Mining",
     },
     description: {
@@ -184,7 +185,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       },
       numberEmployed: 0,
       maxNumberEmployed: 1,
-      jobType: "MINING",
+      jobType: JobTypeCode.Mining,
       resourceChangeReason: "Mining (at mining spot)",
     },
     description: {
@@ -210,7 +211,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       },
       numberEmployed: 0,
       maxNumberEmployed: 1,
-      jobType: "FARMING",
+      jobType: JobTypeCode.Farming,
       resourceChangeReason: "Farming",
     },
     description: {
@@ -248,7 +249,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       },
       numberEmployed: 0,
       maxNumberEmployed: 2,
-      jobType: "POWER",
+      jobType: JobTypeCode.Power,
       resourceChangeReason: "Power Plant",
     },
     blocking: {
@@ -342,7 +343,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       },
       numberEmployed: 0,
       maxNumberEmployed: 3,
-      jobType: "REFINING",
+      jobType: JobTypeCode.Manufacturing,
       resourceChangeReason: "Manufacturing",
     },
     blocking: {

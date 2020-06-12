@@ -1,5 +1,6 @@
 import { Required } from "Object/_api";
 import { PLAYER_ID } from "~constants";
+import { JobTypeCode } from "~data/jobTypes";
 import {
   Entity,
   HasColonist,
@@ -9,7 +10,11 @@ import {
   RawState,
 } from "~types";
 import { filterEntitiesWithComps } from "~utils/entities";
-import { getAdjacentPositions, getPosKey } from "~utils/geometry";
+import {
+  arePositionsEqual,
+  getAdjacentPositions,
+  getPosKey,
+} from "~utils/geometry";
 
 export function entityList(state: RawState) {
   return Object.values(state.entities);
@@ -102,6 +107,38 @@ export function employees(state: RawState, jobProvider: Entity) {
 
 export function jobDisablers(state: RawState) {
   return entitiesWithComps(state, "pos", "jobDisabler");
+}
+
+export function enabledJobProviders(state: RawState, jobType?: JobTypeCode) {
+  const disablers = jobDisablers(state);
+  const jobProviders = entitiesWithComps(
+    state,
+    "jobProvider",
+    "pos",
+  ).filter((e) =>
+    disablers.map((d) => d.pos).every((pos) => !arePositionsEqual(pos, e.pos)),
+  );
+  if (jobType) {
+    return jobProviders.filter((e) => e.jobProvider.jobType === jobType);
+  } else {
+    return jobProviders;
+  }
+}
+
+export function maxNumberEmployed(state: RawState, jobType: JobTypeCode) {
+  const providers = enabledJobProviders(state, jobType);
+  return providers.reduce(
+    (acc, cur) => acc + cur.jobProvider.maxNumberEmployed,
+    0,
+  );
+}
+
+export function numberEmployed(state: RawState, jobType: JobTypeCode) {
+  const providers = enabledJobProviders(state, jobType);
+  return providers.reduce(
+    (acc, cur) => acc + cur.jobProvider.numberEmployed,
+    0,
+  );
 }
 
 export function disableMarker(

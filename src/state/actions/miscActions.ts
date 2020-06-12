@@ -1,6 +1,7 @@
 import { createStandardAction } from "typesafe-actions";
 import { Pos, Direction } from "~types";
 import { ResourceCode } from "~data/resources";
+import { JobTypeCode } from "~data/jobTypes";
 
 export const move = createStandardAction("MOVE")<{
   entityId: string;
@@ -30,10 +31,14 @@ export const modifyResource = createStandardAction("MODIFY_RESOURCE")<{
 
 export const increaseJobPriority = createStandardAction(
   "INCREASE_JOB_PRIORITY",
-)<JobType>();
+)<JobTypeCode>();
 export const decreaseJobPriority = createStandardAction(
   "DECREASE_JOB_PRIORITY",
-)<JobType>();
+)<JobTypeCode>();
+export const setJobPriority = createStandardAction("SET_JOB_PRIORITY")<{
+  jobType: JobTypeCode;
+  priority: number;
+}>();
 
 export const makeMeRich = createStandardAction("MAKE_ME_RICH")();
 

@@ -13,13 +13,14 @@ import {
   RIGHT,
 } from "~constants";
 import { getConstDir, areDirectionsEqual } from "~utils/geometry";
+import { ResourceCode } from "~data/resources";
 
 function targetWeapon(
   state: WrappedState,
   action: ReturnType<typeof actions.targetWeapon>,
 ): void {
   if (
-    !state.select.canAffordToPay("POWER", 1) &&
+    !state.select.canAffordToPay(ResourceCode.Power, 1) &&
     getConstDir(state.select.lastAimingDirection()) ===
       getConstDir(action.payload)
   ) {
@@ -42,7 +43,7 @@ function targetWeapon(
 
   const beams = [
     {
-      strength: state.select.canAffordToPay("POWER", 1)
+      strength: state.select.canAffordToPay(ResourceCode.Power, 1)
         ? BASE_LASER_STRENGTH
         : UNPOWERED_LASER_STRENGTH,
       dx: action.payload.dx,

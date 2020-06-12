@@ -21,7 +21,7 @@ export default function Resources() {
         </thead>
         <tbody className="w-full">
           {Object.values(resources).map((r) => (
-            <ResourceRow resource={r} />
+            <ResourceRow key={r.code} resource={r} />
           ))}
         </tbody>
       </table>
@@ -49,7 +49,7 @@ function ResourceRow({ resource }: { resource: Resource }) {
 
   return (
     <tr className="flex flex-row items-center">
-      <td className="flex-initial">
+      <td className="flex-initial h-6">
         <ResourceIcon resourceCode={resource.code} />
       </td>
       <td className="flex-1">{resource.label}</td>
@@ -58,24 +58,26 @@ function ResourceRow({ resource }: { resource: Resource }) {
         placement="right"
         overlay={
           <table>
-            {changes.length === 0 && (
-              <tr>
-                <td>No changes</td>
-              </tr>
-            )}
-            {changes.map((change) => (
-              <tr key={change.reason}>
-                <td>{change.reason}</td>
-                <td
-                  className={`text-right pl-2 ${getChangeColorClass(
-                    change.amount,
-                  )}`}
-                >
-                  {change.amount > 0 ? "+" : null}
-                  {formatNumber(change.amount)}
-                </td>
-              </tr>
-            ))}
+            <tbody>
+              {changes.length === 0 && (
+                <tr>
+                  <td>No changes</td>
+                </tr>
+              )}
+              {changes.map((change) => (
+                <tr key={change.reason}>
+                  <td>{change.reason}</td>
+                  <td
+                    className={`text-right pl-2 ${getChangeColorClass(
+                      change.amount,
+                    )}`}
+                  >
+                    {change.amount > 0 ? "+" : null}
+                    {formatNumber(change.amount)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
           </table>
         }
       >

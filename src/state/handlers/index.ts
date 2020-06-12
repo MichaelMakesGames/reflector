@@ -32,6 +32,7 @@ import "./removeEntity";
 import "./removeReflector";
 import "./rotateEntity";
 import "./setCursorPos";
+import "./setJobPriority";
 import "./targetWeapon";
 import "./toggleDisabled";
 import "./updateEntity";

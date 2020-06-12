@@ -1,5 +1,6 @@
 import { Direction } from "./Direction";
 import { ResourceCode } from "~data/resources";
+import { JobTypeCode } from "~data/jobTypes";
 
 export interface Pos {
   x: number;
@@ -174,7 +175,7 @@ export interface JobProvider {
   produces: Partial<Record<ResourceCode, number>>;
   numberEmployed: number;
   maxNumberEmployed: number;
-  jobType: JobType;
+  jobType: JobTypeCode;
   resourceChangeReason: string;
 }
 export interface HasJobProvider {
