@@ -48,7 +48,7 @@ function ResourceRow({ resource }: { resource: Resource }) {
   };
 
   return (
-    <tr className="flex flex-row items-center">
+    <tr className="flex flex-row items-center h-8 box-content border-t border-darkGray">
       <td className="flex-initial h-6">
         <ResourceIcon resourceCode={resource.code} />
       </td>

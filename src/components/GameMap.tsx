@@ -21,6 +21,7 @@ import {
   CANCEL_KEYS,
   CONFIRM_KEYS,
 } from "~constants";
+import { isDndFocused } from "~utils/controls";
 
 export default function GameMap() {
   useEffect(() => {
@@ -36,13 +37,26 @@ export default function GameMap() {
   const isWeaponActive = useSelector(selectors.isWeaponActive);
   const isPlacing = useSelector(selectors.isPlacing);
 
-  const moveUp = () => dispatch(actions.move({ entityId: PLAYER_ID, ...UP }));
-  const moveRight = () =>
-    dispatch(actions.move({ entityId: PLAYER_ID, ...RIGHT }));
-  const moveDown = () =>
-    dispatch(actions.move({ entityId: PLAYER_ID, ...DOWN }));
-  const moveLeft = () =>
-    dispatch(actions.move({ entityId: PLAYER_ID, ...LEFT }));
+  const moveUp = () => {
+    if (!isDndFocused()) {
+      dispatch(actions.move({ entityId: PLAYER_ID, ...UP }));
+    }
+  };
+  const moveRight = () => {
+    if (!isDndFocused()) {
+      dispatch(actions.move({ entityId: PLAYER_ID, ...RIGHT }));
+    }
+  };
+  const moveDown = () => {
+    if (!isDndFocused()) {
+      dispatch(actions.move({ entityId: PLAYER_ID, ...DOWN }));
+    }
+  };
+  const moveLeft = () => {
+    if (!isDndFocused()) {
+      dispatch(actions.move({ entityId: PLAYER_ID, ...LEFT }));
+    }
+  };
   const movementShortcuts = Object.fromEntries<() => void>([
     ...UP_KEYS.map((key): [string, () => void] => [key, moveUp]),
     ...RIGHT_KEYS.map((key): [string, () => void] => [key, moveRight]),
@@ -51,10 +65,26 @@ export default function GameMap() {
   ]);
   useShortcuts(movementShortcuts, !isWeaponActive && !isPlacing);
 
-  const moveCursorUp = () => dispatch(actions.moveCursor({ ...UP }));
-  const moveCursorRight = () => dispatch(actions.moveCursor({ ...RIGHT }));
-  const moveCursorDown = () => dispatch(actions.moveCursor({ ...DOWN }));
-  const moveCursorLeft = () => dispatch(actions.moveCursor({ ...LEFT }));
+  const moveCursorUp = () => {
+    if (!isDndFocused()) {
+      dispatch(actions.moveCursor({ ...UP }));
+    }
+  };
+  const moveCursorRight = () => {
+    if (!isDndFocused()) {
+      dispatch(actions.moveCursor({ ...RIGHT }));
+    }
+  };
+  const moveCursorDown = () => {
+    if (!isDndFocused()) {
+      dispatch(actions.moveCursor({ ...DOWN }));
+    }
+  };
+  const moveCursorLeft = () => {
+    if (!isDndFocused()) {
+      dispatch(actions.moveCursor({ ...LEFT }));
+    }
+  };
   const cursorShortcuts = Object.fromEntries<() => void>([
     ...UP_KEYS.map((key): [string, () => void] => [
       `shift + ${key}`,
@@ -79,6 +109,7 @@ export default function GameMap() {
         dispatch(actions.setCursorPos(null));
       },
     ]),
+    ["z", () => dispatch(actions.playerTookTurn())],
   ]);
   useShortcuts(cursorShortcuts);
 

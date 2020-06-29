@@ -1,3 +1,4 @@
+/* global document */
 import { RawState, Pos, Action } from "~types";
 import selectors from "~state/selectors";
 import actions from "~state/actions";
@@ -130,4 +131,12 @@ function addReflectorActions(state: RawState, pos: Pos, results: Results) {
       action: actions.removeEntity(reflectorAtPos.id),
     });
   }
+}
+
+export function isDndFocused() {
+  if (document.activeElement) {
+    const activeElement = document.activeElement as HTMLElement;
+    return Boolean(activeElement.dataset.jobsDndIndex);
+  }
+  return false;
 }
