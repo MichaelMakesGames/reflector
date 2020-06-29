@@ -16,7 +16,7 @@ import { choose } from "~utils/rng";
 export default function processColonists(state: WrappedState): void {
   clearIsWorking(state);
   if (state.select.isNight()) {
-    if (state.select.turnsUntilTimeChange() === TURNS_PER_NIGHT) {
+    if (state.select.turnOfNight() === 0) {
       for (const colonist of state.select.colonists()) {
         clearResidence(state, colonist);
       }

@@ -26,10 +26,7 @@ export interface RawState {
 }
 
 export interface TimeState {
-  day: number;
   turn: number;
-  isNight: boolean;
-  turnsUntilChange: number;
   directionWeights: {
     n: number;
     s: number;

@@ -2,6 +2,7 @@ import { RawState } from "~types";
 import { entitiesWithComps } from "./entitySelectors";
 import { ResourceCode } from "~data/resources";
 import { JobTypeCode } from "~data/jobTypes";
+import { TURNS_PER_DAY, TURNS_PER_NIGHT } from "~constants";
 
 export function population(state: RawState): number {
   return entitiesWithComps(state, "colonist").length;
@@ -23,12 +24,20 @@ export function morale(state: RawState) {
   return state.morale;
 }
 
-export function isNight(state: RawState) {
-  return state.time.isNight;
+export function day(state: RawState) {
+  return Math.floor(state.time.turn / TURNS_PER_DAY);
 }
 
-export function turnsUntilTimeChange(state: RawState) {
-  return state.time.turnsUntilChange;
+export function isNight(state: RawState) {
+  return turnOfNight(state) >= 0;
+}
+
+export function turnOfNight(state: RawState) {
+  return turnOfDay(state) - (TURNS_PER_DAY - TURNS_PER_NIGHT);
+}
+
+export function turnOfDay(state: RawState) {
+  return state.time.turn % TURNS_PER_DAY;
 }
 
 export function version(state: RawState) {

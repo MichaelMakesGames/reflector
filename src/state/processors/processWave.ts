@@ -14,14 +14,10 @@ import { rangeTo } from "~utils/math";
 import { choose, pickWeighted } from "~utils/rng";
 
 export default function processWave(state: WrappedState): void {
-  if (
-    state.raw.time.isNight &&
-    state.raw.time.turnsUntilChange > NIGHT_SPAWN_END_BUFFER &&
-    TURNS_PER_NIGHT - state.raw.time.turnsUntilChange > NIGHT_SPAWN_START_BUFFER
-  ) {
+  if (state.select.isNight()) {
     let numberOfSpawns =
       ENEMIES_PER_TURN_POPULATION_MULTIPLIER * state.select.population() +
-      ENEMIES_PER_TURN_DAY_MULTIPLIER * state.raw.time.day;
+      ENEMIES_PER_TURN_DAY_MULTIPLIER * state.select.day();
     if (Math.floor(numberOfSpawns) !== numberOfSpawns) {
       numberOfSpawns =
         Math.floor(numberOfSpawns) +
