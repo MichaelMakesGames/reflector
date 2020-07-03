@@ -53,7 +53,7 @@ export default function BuildMenu() {
   const showCategory: boolean = !category;
   const showBuildings: boolean = Boolean(category && !placingTarget);
 
-  const buttonStyle: React.CSSProperties = { margin: "-1 -1 -1 0" };
+  const buttonStyle: React.CSSProperties = { margin: "-1px -1px -1px 0" };
   const buttonClassName =
     "font-normal border border-gray hover:border-white hover:z-10 px-2 py-1 flex flex-row items-center";
   return (

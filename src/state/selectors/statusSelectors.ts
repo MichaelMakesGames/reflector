@@ -2,7 +2,13 @@ import { RawState } from "~types";
 import { entitiesWithComps } from "./entitySelectors";
 import { ResourceCode } from "~data/resources";
 import { JobTypeCode } from "~data/jobTypes";
-import { TURNS_PER_DAY, TURNS_PER_NIGHT } from "~constants";
+import {
+  TURNS_PER_DAY,
+  TURNS_PER_NIGHT,
+  MINUTES_PER_TURN,
+  DAY_START_MINUTES,
+  VICTORY_ON_TURN,
+} from "~constants";
 
 export function population(state: RawState): number {
   return entitiesWithComps(state, "colonist").length;
@@ -38,6 +44,29 @@ export function turnOfNight(state: RawState) {
 
 export function turnOfDay(state: RawState) {
   return state.time.turn % TURNS_PER_DAY;
+}
+
+export function time(state: RawState) {
+  const timeInMinutes =
+    (turnOfDay(state) * MINUTES_PER_TURN + DAY_START_MINUTES) % (24 * 60);
+  const hours = Math.floor(timeInMinutes / 60);
+  const minutes = timeInMinutes % 60;
+  return Intl.DateTimeFormat(undefined, {
+    hour: "numeric",
+    minute: "2-digit",
+  }).format(new Date(0, 0, 0, hours, minutes));
+}
+
+export function turnsUntilVictory(state: RawState) {
+  return VICTORY_ON_TURN - state.time.turn;
+}
+
+export function timeUntilVictory(state: RawState) {
+  const minutesUntilVictory = turnsUntilVictory(state) * MINUTES_PER_TURN;
+  const days = Math.floor(minutesUntilVictory / (24 * 60));
+  const hours = Math.floor((minutesUntilVictory - days * 24 * 60) / 60);
+  const minutes = minutesUntilVictory - days * 24 * 60 - hours * 60;
+  return `${days ? `${days}d ` : ""}${hours}h ${minutes}m`;
 }
 
 export function version(state: RawState) {

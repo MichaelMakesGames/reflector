@@ -21,6 +21,8 @@ export const MINUTES_PER_TURN = 30;
 export const TURNS_PER_DAY = (24 * 60) / MINUTES_PER_TURN;
 export const TURNS_PER_NIGHT = TURNS_PER_DAY / 2;
 export const BASE_IMMIGRATION_RATE = TURNS_PER_DAY;
+export const DAY_START_MINUTES = 8 * 60; // 8:00am
+export const VICTORY_ON_TURN = TURNS_PER_DAY * 10;
 
 export const PRIORITY_MARKER = 25;
 export const PRIORITY_LASER = 20;
