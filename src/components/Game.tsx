@@ -11,6 +11,7 @@ import LoadGame from "./LoadGame";
 import Resources from "./Resources";
 import Status from "./Status";
 import IconMasks from "./IconMasks";
+import GameOver from "./GameOver";
 
 export default function Game() {
   useEffect(() => {
@@ -37,6 +38,7 @@ export default function Game() {
         </div>
       </div>
       <IconMasks />
+      <GameOver />
     </main>
   );
 }

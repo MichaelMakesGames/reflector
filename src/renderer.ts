@@ -301,6 +301,10 @@ export function clearRenderer() {
   for (const id of Object.keys(renderEntities)) {
     removeRenderEntity(id);
   }
+  for (const [key, emitter] of Object.entries(emitters)) {
+    emitter.destroy();
+    delete emitters[key];
+  }
 }
 
 export async function updateRenderEntity(
