@@ -54,6 +54,11 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     splitter: { type: "horizontal" },
     rotatable: { rotatesTo: "SPLITTER_VERTICAL" },
+    powered: {
+      hasPower: true,
+      powerNeeded: 1,
+      resourceChangeReason: "Splitters",
+    },
   },
   SPLITTER_VERTICAL: {
     parentTemplate: "SPLITTER_BASE",
@@ -66,6 +71,11 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     splitter: { type: "vertical" },
     rotatable: { rotatesTo: "SPLITTER_HORIZONTAL" },
+    powered: {
+      hasPower: true,
+      powerNeeded: 1,
+      resourceChangeReason: "Splitters",
+    },
   },
   SPLITTER_ADVANCED: {
     parentTemplate: "SPLITTER_BASE",
@@ -76,6 +86,11 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       priority: PRIORITY_BUILDING_HIGH,
     },
     splitter: { type: "advanced" },
+    powered: {
+      hasPower: true,
+      powerNeeded: 2,
+      resourceChangeReason: "Adv. Splitters",
+    },
   },
   TENT: {
     building: {},

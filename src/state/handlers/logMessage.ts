@@ -6,10 +6,20 @@ function logMessage(
   state: WrappedState,
   action: ReturnType<typeof actions.logMessage>,
 ): void {
-  const { message } = action.payload;
+  const { message, type } = action.payload;
+  const turn = state.select.turn();
   state.setRaw({
     ...state.raw,
-    messageLog: [...state.raw.messageLog, message],
+    messageLog: {
+      ...state.raw.messageLog,
+      [turn]: [
+        ...(state.raw.messageLog[turn] || []),
+        {
+          message,
+          type,
+        },
+      ],
+    },
   });
 }
 

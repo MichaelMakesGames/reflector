@@ -7,7 +7,7 @@ export interface RawState {
   version: string;
   entities: Record<string, Entity>;
   entitiesByPosition: Record<string, string[]>;
-  messageLog: string[];
+  messageLog: Record<number, { type?: string; message: string }[]>;
   gameOver: boolean;
   victory: boolean;
   turnsUntilNextImmigrant: number;

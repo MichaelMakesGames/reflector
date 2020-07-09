@@ -38,6 +38,10 @@ export function isNight(state: RawState) {
   return turnOfNight(state) >= 0;
 }
 
+export function turn(state: RawState) {
+  return state.time.turn;
+}
+
 export function turnOfNight(state: RawState) {
   return turnOfDay(state) - (TURNS_PER_DAY - TURNS_PER_NIGHT);
 }

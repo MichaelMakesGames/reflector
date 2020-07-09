@@ -21,6 +21,7 @@ export const destroy = createStandardAction("DESTROY")<string>();
 
 export const logMessage = createStandardAction("LOG_MESSAGE")<{
   message: string;
+  type?: string;
 }>();
 
 export const modifyResource = createStandardAction("MODIFY_RESOURCE")<{

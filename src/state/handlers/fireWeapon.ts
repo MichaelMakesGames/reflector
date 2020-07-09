@@ -1,7 +1,6 @@
 import actions from "~/state/actions";
 import { registerHandler } from "~state/handleAction";
 import WrappedState from "~types/WrappedState";
-import { ResourceCode } from "~data/resources";
 
 function fireWeapon(
   state: WrappedState,
@@ -11,14 +10,6 @@ function fireWeapon(
   if (!player) return;
 
   const lasers = state.select.entitiesWithComps("laser", "pos");
-
-  if (state.select.canAffordToPay(ResourceCode.Power, 1)) {
-    state.act.modifyResource({
-      resource: ResourceCode.Power,
-      amount: -1,
-      reason: "Fired Laser",
-    });
-  }
 
   const entitiesToDestroy: string[] = [];
   for (const laser of lasers.filter((entity) => !entity.laser.cosmetic)) {

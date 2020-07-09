@@ -13,22 +13,12 @@ import {
   RIGHT,
 } from "~constants";
 import { getConstDir, areDirectionsEqual } from "~utils/geometry";
-import { ResourceCode } from "~data/resources";
+import { areConditionsMet } from "~utils/conditions";
 
 function targetWeapon(
   state: WrappedState,
   action: ReturnType<typeof actions.targetWeapon>,
 ): void {
-  if (
-    !state.select.canAffordToPay(ResourceCode.Power, 1) &&
-    getConstDir(state.select.lastAimingDirection()) ===
-      getConstDir(action.payload)
-  ) {
-    state.act.logMessage({
-      message:
-        "You are out of power! Your laser cannot be split and cannot shoot through enemies.",
-    });
-  }
   state.setRaw({
     ...state.raw,
     isWeaponActive: true,
@@ -43,9 +33,7 @@ function targetWeapon(
 
   const beams = [
     {
-      strength: state.select.canAffordToPay(ResourceCode.Power, 1)
-        ? BASE_LASER_STRENGTH
-        : UNPOWERED_LASER_STRENGTH,
+      strength: BASE_LASER_STRENGTH,
       dx: action.payload.dx,
       dy: action.payload.dy,
       lastPos: playerPosition,
@@ -85,6 +73,7 @@ function targetWeapon(
       } else if (
         splitterEntity &&
         splitterEntity.splitter &&
+        areConditionsMet(state, splitterEntity, "isPowered") &&
         ((splitterEntity.splitter.type === "horizontal" && beam.dy) ||
           (splitterEntity.splitter.type === "vertical" && beam.dx) ||
           splitterEntity.splitter.type === "advanced")
