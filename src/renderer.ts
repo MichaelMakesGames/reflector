@@ -47,21 +47,21 @@ export function addSmoke(pos: Pos, offset: Pos) {
     const texture = PIXI.Texture.WHITE;
     const emitter = new particles.Emitter(app.stage, [texture], {
       alpha: {
-        start: 1,
-        end: 0.25,
+        start: 0.5,
+        end: 0.0,
       },
       scale: {
         start: 1 / 8,
-        end: 1 / 2,
+        end: 3 / 4,
         minimumScaleMultiplier: 1,
       },
       color: {
-        start: "#505050",
-        end: "#505050",
+        start: colors.ground,
+        end: colors.ground,
       },
       speed: {
-        start: 4,
-        end: 4,
+        start: 5,
+        end: 3,
         minimumSpeedMultiplier: 1,
       },
       acceleration: {
@@ -70,7 +70,7 @@ export function addSmoke(pos: Pos, offset: Pos) {
       },
       maxSpeed: 0,
       startRotation: {
-        min: 240,
+        min: 270,
         max: 300,
       },
       noRotation: true,
@@ -79,8 +79,8 @@ export function addSmoke(pos: Pos, offset: Pos) {
         max: 0,
       },
       lifetime: {
-        min: 7,
-        max: 9,
+        min: 3,
+        max: 6,
       },
       blendMode: "normal",
       frequency: 0.25,
