@@ -10,6 +10,7 @@ import processTime from "./processTime";
 import processWave from "./processWave";
 import processPowered from "./processPowered";
 import processEmitters from "./processEmitters";
+import processBorders from "./processBorders";
 
 const processors: ((state: WrappedState) => void)[] = [
   processAI,
@@ -23,6 +24,7 @@ const processors: ((state: WrappedState) => void)[] = [
   processTime,
   processGameOver,
   processEmitters,
+  processBorders,
 ];
 
 export default processors;

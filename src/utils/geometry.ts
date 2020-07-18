@@ -43,6 +43,13 @@ export function getPositionsWithinRange(pos: Pos, range: number): Pos[] {
   return positions;
 }
 
+export function getPositionToDirection(pos: Pos, direction: Direction) {
+  return {
+    x: pos.x + direction.dx,
+    y: pos.y + direction.dy,
+  };
+}
+
 export function getConstDir(direction: { dx: number; dy: number }) {
   const { dx, dy } = direction;
   if (dx === RIGHT.dx && dy === RIGHT.dy) return RIGHT;

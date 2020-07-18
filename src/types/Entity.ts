@@ -222,9 +222,15 @@ export interface HasCursor {
   cursor: Cursor;
 }
 
+export interface Border {}
+export interface HasBorder {
+  border: Border;
+}
+
 export interface Entity
   extends Partial<HasAI>,
     Partial<HasBlocking>,
+    Partial<HasBorder>,
     Partial<HasBuilding>,
     Partial<HasColonist>,
     Partial<HasCursor>,

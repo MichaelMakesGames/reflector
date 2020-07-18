@@ -1,5 +1,9 @@
 type TemplateName =
   | "BASIC_PROJECTOR"
+  | "BORDER_EAST"
+  | "BORDER_NORTH"
+  | "BORDER_SOUTH"
+  | "BORDER_WEST"
   | "COLONIST"
   | "CURSOR"
   | "DISABLE_MARKER"

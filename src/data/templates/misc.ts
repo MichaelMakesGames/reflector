@@ -119,6 +119,46 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       isWorking: false,
     },
   },
+  BORDER_NORTH: {
+    display: {
+      glyph: "",
+      tile: "border",
+      color: colors.secondary,
+      rotation: 0,
+      priority: PRIORITY_MARKER,
+    },
+    border: {},
+  },
+  BORDER_EAST: {
+    display: {
+      glyph: "",
+      tile: "border",
+      color: colors.secondary,
+      rotation: 90,
+      priority: PRIORITY_MARKER,
+    },
+    border: {},
+  },
+  BORDER_SOUTH: {
+    display: {
+      glyph: "",
+      tile: "border",
+      color: colors.secondary,
+      rotation: 180,
+      priority: PRIORITY_MARKER,
+    },
+    border: {},
+  },
+  BORDER_WEST: {
+    display: {
+      glyph: "",
+      tile: "border",
+      color: colors.secondary,
+      rotation: 270,
+      priority: PRIORITY_MARKER,
+    },
+    border: {},
+  },
 };
 
 export default templates;
