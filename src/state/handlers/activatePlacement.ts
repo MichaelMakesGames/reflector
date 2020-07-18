@@ -39,6 +39,17 @@ function activatePlacement(
   });
 
   const canPlace = (gameState: RawState, pos: Pos) => {
+    // don't allow multiple buildings in same pos
+    if (
+      entityToPlace.building &&
+      selectors
+        .entitiesAtPosition(gameState, pos)
+        .some((e) => e.building && e.id !== entityToPlace.id)
+    ) {
+      return false;
+    }
+
+    // check for building-specific placement restrictions
     if (validitySelector && (selectors as any)[validitySelector]) {
       return Boolean((selectors as any)[validitySelector](gameState, pos));
     } else {
