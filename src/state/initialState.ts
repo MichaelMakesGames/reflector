@@ -1,12 +1,9 @@
 import {
-  VERSION,
   BASE_IMMIGRATION_RATE,
-  STARTING_MORALE,
-  STARTING_METAL,
-  TURNS_PER_DAY,
   RIGHT,
-  STARTING_FOOD,
-  STARTING_POWER,
+  STARTING_MORALE,
+  TURNS_PER_DAY,
+  VERSION,
 } from "~constants";
 import { RawState } from "~types";
 
@@ -28,9 +25,9 @@ const initialState: RawState = {
   },
   isWeaponActive: false,
   resources: {
-    METAL: STARTING_METAL,
-    FOOD: STARTING_FOOD,
-    POWER: STARTING_POWER,
+    METAL: 0,
+    FOOD: 0,
+    POWER: 0,
     MACHINERY: 0,
   },
   resourceChanges: {

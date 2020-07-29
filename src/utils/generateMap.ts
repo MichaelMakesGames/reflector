@@ -90,8 +90,12 @@ export default function generateMap(): Entity[] {
     .filter((entity) => entity.template === "FLOOR")
     .map((entity) => entity.pos)
     .sort((a, b) => getDistance(a, centerPos) - getDistance(b, centerPos));
-  const orePosititions = (results as Required<Entity, "pos">[])
+  const orePositions = (results as Required<Entity, "pos">[])
     .filter((entity) => entity.template === "ORE")
+    .map((entity) => entity.pos)
+    .sort((a, b) => getDistance(a, centerPos) - getDistance(b, centerPos));
+  const fertilePositions = (results as Required<Entity, "pos">[])
+    .filter((entity) => entity.template === "FERTILE")
     .map((entity) => entity.pos)
     .sort((a, b) => getDistance(a, centerPos) - getDistance(b, centerPos));
 
@@ -150,23 +154,31 @@ export default function generateMap(): Entity[] {
     }
   });
 
+  rangeTo(3).forEach((i) => {
+    results.push(
+      createEntityFromTemplate("COLONIST", {
+        pos: floorPositions[i],
+      }),
+    );
+  });
+
   results.push(
-    createEntityFromTemplate("COLONIST", {
-      pos: floorPositions[0],
-    }),
+    createEntityFromTemplate("RESIDENCE", { pos: floorPositions[3] }),
   );
 
   results.push({
     ...createEntityFromTemplate("PLAYER"),
-    pos: floorPositions[10],
+    pos: floorPositions[5],
     id: PLAYER_ID,
   });
 
   results.push(
     createEntityFromTemplate("MINE", {
-      pos: orePosititions[0],
+      pos: orePositions[0],
     }),
   );
+
+  results.push(createEntityFromTemplate("FARM", { pos: fertilePositions[0] }));
 
   return results;
 }
