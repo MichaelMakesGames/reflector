@@ -1,7 +1,7 @@
 /* global document */
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { app, getPosFromMouse } from "~/renderer";
+import { app, getPosFromMouse, zoomOut, zoomTo } from "~/renderer";
 import actions from "~state/actions";
 import selectors from "~state/selectors";
 import { arePositionsEqual } from "~utils/geometry";
@@ -36,6 +36,7 @@ export default function GameMap() {
   const [contextMenuPos, setContextMenuPos] = useState<Pos | null>(null);
   const isWeaponActive = useSelector(selectors.isWeaponActive);
   const isPlacing = useSelector(selectors.isPlacing);
+  const playerPos = useSelector(selectors.playerPos);
 
   const moveUp = () => {
     if (!isDndFocused()) {
@@ -150,6 +151,13 @@ export default function GameMap() {
         onMouseOut={() => {
           if (!contextMenuPos) {
             dispatch(actions.setCursorPos(null));
+          }
+        }}
+        onWheel={(e) => {
+          if (e.nativeEvent.deltaY > 0) {
+            zoomOut();
+          } else if (e.nativeEvent.deltaY < 0 && playerPos) {
+            zoomTo(playerPos);
           }
         }}
         onContextMenu={(e) => {
