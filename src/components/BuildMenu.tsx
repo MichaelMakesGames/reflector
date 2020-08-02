@@ -7,6 +7,9 @@ import { useShortcuts } from "~hooks";
 import actions from "~state/actions";
 import selectors from "~state/selectors";
 import ResourceAmount from "./ResourceAmount";
+import Tooltip from "rc-tooltip";
+import { createEntityFromTemplate } from "~utils/entities";
+import templates from "~data/templates";
 
 export default function BuildMenu() {
   const dispatch = useDispatch();
@@ -89,29 +92,45 @@ export default function BuildMenu() {
       ) : null}
       {showBuildings &&
         categoryBuildings.map((b, i) => (
-          <button
-            key={b.template}
-            type="button"
-            onClick={() =>
-              dispatch(
-                actions.activatePlacement({
-                  ...b,
-                  pos: cursorPos || undefined,
-                  takesTurn: true,
-                }),
-              )
+          <Tooltip
+            placement="top"
+            overlayStyle={{ width: "10rem" }}
+            overlay={
+              <span>
+                {
+                  (
+                    templates[b.template].description || {
+                      description: "No description",
+                    }
+                  ).description
+                }
+              </span>
             }
-            style={buttonStyle}
-            className={buttonClassName}
           >
-            <kbd className="bg-darkGray px-1 rounded mr-1">{i + 1}</kbd>
-            {b.label}
-            <ResourceAmount
-              className="ml-1"
-              resourceCode={b.cost.resource}
-              amount={b.cost.amount}
-            />
-          </button>
+            <button
+              key={b.template}
+              type="button"
+              onClick={() =>
+                dispatch(
+                  actions.activatePlacement({
+                    ...b,
+                    pos: cursorPos || undefined,
+                    takesTurn: true,
+                  }),
+                )
+              }
+              style={buttonStyle}
+              className={buttonClassName}
+            >
+              <kbd className="bg-darkGray px-1 rounded mr-1">{i + 1}</kbd>
+              {b.label}
+              <ResourceAmount
+                className="ml-1"
+                resourceCode={b.cost.resource}
+                amount={b.cost.amount}
+              />
+            </button>
+          </Tooltip>
         ))}
       {showCategory &&
         buildingCategories.map((c, i) => (
