@@ -170,9 +170,11 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     destructible: {},
     jobProvider: {
-      consumes: {},
+      consumes: {
+        [ResourceCode.Power]: 1,
+      },
       produces: {
-        [ResourceCode.Metal]: 1,
+        [ResourceCode.Metal]: 2,
       },
       numberEmployed: 0,
       maxNumberEmployed: 2,
@@ -181,7 +183,8 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     description: {
       name: "Mine",
-      description: "Automatically mines metal, but must be built over ore.",
+      description:
+        "Provides jobs for 2 colonists that each produce 2 metal but consume 1 power.",
     },
   },
   MINING_SPOT: {
@@ -196,7 +199,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     jobProvider: {
       consumes: {},
       produces: {
-        [ResourceCode.Metal]: 0.5,
+        [ResourceCode.Metal]: 1,
       },
       numberEmployed: 0,
       maxNumberEmployed: 1,
@@ -206,7 +209,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     description: {
       name: "Mine",
       description:
-        "Free to build, but less efficient than a mine. Provides 1 job that produces 0.5 metal when mined.",
+        "Free to build, but less efficient than a mine. Provides 1 job that produces 1 metal when mined.",
     },
   },
   FARM: {
@@ -222,7 +225,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     jobProvider: {
       consumes: {},
       produces: {
-        [ResourceCode.Food]: 0.2,
+        [ResourceCode.Food]: 1,
       },
       numberEmployed: 0,
       maxNumberEmployed: 1,
@@ -232,7 +235,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     description: {
       name: "Farm",
       description:
-        "Produces 0.2 food when worked by colonist. Up to 1 colonist can work at a time.",
+        "Produces 1 food when worked by colonist. Up to 1 colonist can work at a time.",
     },
   },
   POWER_PLANT: {
@@ -260,7 +263,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     jobProvider: {
       consumes: {},
       produces: {
-        [ResourceCode.Power]: 0.5,
+        [ResourceCode.Power]: 1,
       },
       numberEmployed: 0,
       maxNumberEmployed: 2,
@@ -274,7 +277,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     description: {
       name: "Power Plant",
       description:
-        "Produces 0.5 power when worked by colonist. Up to 2 colonists can work at a time.",
+        "Produces 1 power when worked by colonist. Up to 2 colonists can work at a time.",
     },
   },
   SOLAR_PANEL: {
@@ -322,7 +325,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
         "Produces 1 power as long as the neighboring tiles are not blocked.",
     },
   },
-  FURNACE: {
+  FACTORY: {
     building: {},
     display: {
       tile: "furnace",
@@ -366,7 +369,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       lasers: true,
     },
     description: {
-      name: "Furnace",
+      name: "Factory",
       description:
         "Provides 3 jobs that consume 2 metal and 1 power to produce 1 refined metal",
     },

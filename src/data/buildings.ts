@@ -105,8 +105,8 @@ const buildings: {
     category: BuildingCategoryCode.Power,
   },
   {
-    template: "FURNACE",
-    label: "Furnace",
+    template: "FACTORY",
+    label: "Factory",
     cost: {
       resource: ResourceCode.Metal,
       amount: 25,

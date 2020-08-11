@@ -4,14 +4,7 @@ import { createLaser, getSplitTemplateName, reflect } from "~/utils/lasers";
 import { registerHandler } from "~state/handleAction";
 import WrappedState from "~types/WrappedState";
 import { createEntityFromTemplate } from "~utils/entities";
-import {
-  BASE_LASER_STRENGTH,
-  UNPOWERED_LASER_STRENGTH,
-  UP,
-  DOWN,
-  LEFT,
-  RIGHT,
-} from "~constants";
+import { BASE_LASER_STRENGTH, UP, DOWN, LEFT, RIGHT } from "~constants";
 import { getConstDir, areDirectionsEqual } from "~utils/geometry";
 import { areConditionsMet } from "~utils/conditions";
 

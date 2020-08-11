@@ -168,12 +168,12 @@ export default function generateMap(): Entity[] {
 
   results.push({
     ...createEntityFromTemplate("PLAYER"),
-    pos: floorPositions[5],
+    pos: floorPositions[4],
     id: PLAYER_ID,
   });
 
   results.push(
-    createEntityFromTemplate("MINE", {
+    createEntityFromTemplate("MINING_SPOT", {
       pos: orePositions[0],
     }),
   );

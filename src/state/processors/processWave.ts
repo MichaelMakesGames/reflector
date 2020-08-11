@@ -3,9 +3,8 @@ import {
   ENEMIES_PER_TURN_POPULATION_MULTIPLIER,
   MAP_HEIGHT,
   MAP_WIDTH,
-  NIGHT_SPAWN_END_BUFFER,
-  NIGHT_SPAWN_START_BUFFER,
-  TURNS_PER_NIGHT,
+  TURNS_PER_DAY,
+  END_OF_NIGHT_ENEMY_SPAWNING_BUFFER,
 } from "~constants";
 import { Pos } from "~types";
 import WrappedState from "~types/WrappedState";
@@ -14,7 +13,11 @@ import { rangeTo } from "~utils/math";
 import { choose, pickWeighted } from "~utils/rng";
 
 export default function processWave(state: WrappedState): void {
-  if (state.select.isNight()) {
+  if (
+    state.select.isNight() &&
+    state.select.turnOfDay() <
+      TURNS_PER_DAY - END_OF_NIGHT_ENEMY_SPAWNING_BUFFER
+  ) {
     let numberOfSpawns =
       ENEMIES_PER_TURN_POPULATION_MULTIPLIER * state.select.population() +
       ENEMIES_PER_TURN_DAY_MULTIPLIER * state.select.day();
