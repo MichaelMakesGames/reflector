@@ -5,17 +5,11 @@ import * as particles from "pixi-particles";
 import colors from "~colors";
 // @ts-ignore
 import tiles from "./assets/tiles/*.png"; // eslint-disable-line import/no-unresolved
-import {
-  FONT_FAMILY,
-  MAP_HEIGHT,
-  MAP_WIDTH,
-  PLAYER_ID,
-  TILE_SIZE,
-} from "./constants";
+import { MAP_HEIGHT, MAP_WIDTH, PLAYER_ID, TILE_SIZE } from "./constants";
 import { Display, Entity, Pos } from "./types";
 import { arePositionsEqual } from "./utils/geometry";
 
-const loadPromise = new Promise((resolve) => {
+export const loadPromise = new Promise((resolve) => {
   PIXI.Loader.shared
     .add(
       Object.entries(tiles as Record<string, string>).map(([name, file]) => ({
@@ -180,7 +174,6 @@ const renderEntities: {
   [id: string]: {
     displayComp: Display;
     pos: Pos;
-    text: PIXI.Text;
     sprite?: PIXI.Sprite;
     background?: PIXI.Graphics;
   };
@@ -205,21 +198,11 @@ function getLayer(priority: number) {
   return layer;
 }
 
-export async function addRenderEntity(
-  entity: Required<Entity, "display" | "pos">,
-) {
-  await loadPromise;
+export function addRenderEntity(entity: Required<Entity, "display" | "pos">) {
   const { pos, display } = entity;
-  const text = new PIXI.Text(display.glyph, {
-    fontFamily: FONT_FAMILY,
-    fontSize: TILE_SIZE,
-    fill: display.color,
-  });
-  text.position.set(pos.x * TILE_SIZE, pos.y * TILE_SIZE);
   renderEntities[entity.id] = {
     displayComp: { ...display },
     pos: { ...pos },
-    text,
   };
 
   if (display.hasBackground) {
@@ -238,8 +221,6 @@ export async function addRenderEntity(
     const sprite = createSprite(pos, display);
     renderEntities[entity.id].sprite = sprite;
     getLayer(display.priority).addChild(sprite);
-  } else {
-    getLayer(display.priority).addChild(text);
   }
 }
 
@@ -275,24 +256,15 @@ function setSpritePosition(sprite: PIXI.Sprite, pos: Pos, display: Display) {
   sprite.position.set(x * TILE_SIZE, y * TILE_SIZE);
 }
 
-export async function removeRenderEntity(entityId: string) {
-  await loadPromise;
+export function removeRenderEntity(entityId: string) {
   const renderEntity = renderEntities[entityId];
   if (renderEntity) {
     delete renderEntities[entityId];
     if (renderEntity.background) {
-      getLayer(renderEntity.displayComp.priority).removeChild(
-        renderEntity.background,
-      );
+      renderEntity.background.parent.removeChild(renderEntity.background);
     }
     if (renderEntity.sprite) {
-      getLayer(renderEntity.displayComp.priority).removeChild(
-        renderEntity.sprite,
-      );
-    } else {
-      getLayer(renderEntity.displayComp.priority).removeChild(
-        renderEntity.text,
-      );
+      renderEntity.sprite.parent.removeChild(renderEntity.sprite);
     }
   }
 }
@@ -307,18 +279,13 @@ export function clearRenderer() {
   }
 }
 
-export async function updateRenderEntity(
+export function updateRenderEntity(
   entity: Required<Entity, "display" | "pos">,
 ) {
-  await loadPromise;
   const renderEntity = renderEntities[entity.id];
   if (renderEntity) {
     if (!arePositionsEqual(renderEntity.pos, entity.pos)) {
       renderEntity.pos = entity.pos;
-      renderEntity.text.position.set(
-        entity.pos.x * TILE_SIZE,
-        entity.pos.y * TILE_SIZE,
-      );
       if (renderEntity.sprite) {
         setSpritePosition(
           renderEntity.sprite,
@@ -339,14 +306,13 @@ export async function updateRenderEntity(
 
     if (
       renderEntity.displayComp.tile !== entity.display.tile ||
-      renderEntity.displayComp.glyph !== entity.display.glyph ||
       renderEntity.displayComp.color !== entity.display.color ||
       renderEntity.displayComp.priority !== entity.display.priority ||
       renderEntity.displayComp.rotation !== entity.display.rotation ||
       renderEntity.displayComp.hasBackground !== entity.display.hasBackground
     ) {
-      await removeRenderEntity(entity.id);
-      await addRenderEntity(entity);
+      removeRenderEntity(entity.id);
+      addRenderEntity(entity);
     }
   }
 }

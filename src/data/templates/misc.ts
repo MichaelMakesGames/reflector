@@ -13,7 +13,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     pos: { x: 1, y: 1 },
     display: {
       tile: "player",
-      glyph: "@",
       color: colors.payer,
       priority: PRIORITY_UNIT,
     },
@@ -34,7 +33,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   PLAYER_CORPSE: {
     display: {
       tile: "skull",
-      glyph: "%",
       color: colors.payer,
       priority: PRIORITY_UNIT,
     },
@@ -42,7 +40,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   },
   VALID_MARKER: {
     display: {
-      glyph: ".",
       tile: "outline_dashed",
       color: colors.secondary,
       priority: PRIORITY_MARKER,
@@ -51,7 +48,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   },
   PLACING_MARKER: {
     display: {
-      glyph: ".",
       tile: "outline_solid",
       color: colors.invalid,
       priority: PRIORITY_MARKER,
@@ -60,7 +56,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   },
   REMOVING_MARKER: {
     display: {
-      glyph: ".",
       tile: "outline_solid",
       color: colors.invalid,
       priority: PRIORITY_MARKER,
@@ -69,7 +64,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   },
   DISABLE_MARKER: {
     display: {
-      glyph: ".",
       tile: "outline_solid",
       color: colors.invalid,
       priority: PRIORITY_MARKER,
@@ -78,7 +72,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   },
   JOB_DISABLER: {
     display: {
-      glyph: "X",
       tile: "disabled",
       color: colors.invalid,
       priority: PRIORITY_MARKER,
@@ -87,7 +80,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   },
   INSPECTOR: {
     display: {
-      glyph: "?",
       tile: "outline_solid",
       color: colors.secondary,
       priority: PRIORITY_MARKER,
@@ -96,7 +88,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   },
   CURSOR: {
     display: {
-      glyph: "?",
       tile: "outline_solid",
       color: colors.secondary,
       priority: PRIORITY_MARKER,
@@ -105,7 +96,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   },
   COLONIST: {
     display: {
-      glyph: "c",
       tile: "colonists1",
       color: colors.payer,
       priority: PRIORITY_UNIT,
@@ -121,7 +111,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   },
   BORDER_NORTH: {
     display: {
-      glyph: "",
       tile: "border",
       color: colors.secondary,
       rotation: 0,
@@ -131,7 +120,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   },
   BORDER_EAST: {
     display: {
-      glyph: "",
       tile: "border",
       color: colors.secondary,
       rotation: 90,
@@ -141,7 +129,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   },
   BORDER_SOUTH: {
     display: {
-      glyph: "",
       tile: "border",
       color: colors.secondary,
       rotation: 180,
@@ -151,7 +138,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   },
   BORDER_WEST: {
     display: {
-      glyph: "",
       tile: "border",
       color: colors.secondary,
       rotation: 270,

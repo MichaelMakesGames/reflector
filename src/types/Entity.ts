@@ -11,9 +11,8 @@ export interface HasPos {
 }
 
 export interface Display {
-  tile?: string;
+  tile: string;
   rotation?: number;
-  glyph: string;
   color: string;
   priority: number;
   hasBackground?: boolean;

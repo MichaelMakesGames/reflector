@@ -22,7 +22,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   LASER_BURST: {
     parentTemplate: "LASER_BASE",
     display: {
-      glyph: "*",
       tile: "laser_burst",
       color: colors.laser,
       priority: PRIORITY_LASER,
@@ -31,7 +30,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   LASER_HORIZONTAL: {
     parentTemplate: "LASER_BASE",
     display: {
-      glyph: "─",
       tile: "laser",
       color: colors.laser,
       priority: PRIORITY_LASER,
@@ -40,7 +38,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   LASER_VERTICAL: {
     parentTemplate: "LASER_BASE",
     display: {
-      glyph: "│",
       tile: "laser",
       color: colors.laser,
       priority: PRIORITY_LASER,
@@ -50,7 +47,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   LASER_REFLECTED_UP_LEFT: {
     parentTemplate: "LASER_COSMETIC_BASE",
     display: {
-      glyph: "",
       tile: "laser_reflected",
       rotation: 180,
       color: colors.laser,
@@ -60,7 +56,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   LASER_REFLECTED_UP_RIGHT: {
     parentTemplate: "LASER_COSMETIC_BASE",
     display: {
-      glyph: "",
       tile: "laser_reflected",
       rotation: 270,
       color: colors.laser,
@@ -70,7 +65,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   LASER_REFLECTED_DOWN_LEFT: {
     parentTemplate: "LASER_COSMETIC_BASE",
     display: {
-      glyph: "",
       tile: "laser_reflected",
       rotation: 90,
       color: colors.laser,
@@ -80,7 +74,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   LASER_REFLECTED_DOWN_RIGHT: {
     parentTemplate: "LASER_COSMETIC_BASE",
     display: {
-      glyph: "",
       tile: "laser_reflected",
       rotation: 0,
       color: colors.laser,
@@ -90,7 +83,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   LASER_4SPLIT: {
     parentTemplate: "LASER_COSMETIC_BASE",
     display: {
-      glyph: "",
       tile: "laser_4split",
       rotation: 0,
       color: colors.laser,
@@ -100,7 +92,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   LASER_SPLIT_UP: {
     parentTemplate: "LASER_COSMETIC_BASE",
     display: {
-      glyph: "",
       tile: "laser_split",
       rotation: 0,
       color: colors.laser,
@@ -110,7 +101,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   LASER_SPLIT_RIGHT: {
     parentTemplate: "LASER_COSMETIC_BASE",
     display: {
-      glyph: "",
       tile: "laser_split",
       rotation: 90,
       color: colors.laser,
@@ -120,7 +110,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   LASER_SPLIT_DOWN: {
     parentTemplate: "LASER_COSMETIC_BASE",
     display: {
-      glyph: "",
       tile: "laser_split",
       rotation: 180,
       color: colors.laser,
@@ -130,7 +119,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   LASER_SPLIT_LEFT: {
     parentTemplate: "LASER_COSMETIC_BASE",
     display: {
-      glyph: "",
       tile: "laser_split",
       rotation: 270,
       color: colors.laser,

@@ -93,6 +93,7 @@ export default function BuildMenu() {
       {showBuildings &&
         categoryBuildings.map((b, i) => (
           <Tooltip
+            key={b.template}
             placement="top"
             overlayStyle={{ width: "10rem" }}
             overlay={
@@ -108,7 +109,6 @@ export default function BuildMenu() {
             }
           >
             <button
-              key={b.template}
               type="button"
               onClick={() =>
                 dispatch(

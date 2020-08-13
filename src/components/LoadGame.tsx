@@ -5,13 +5,14 @@ import actions from "~state/actions";
 import selectors from "~state/selectors";
 import { RawState } from "~types";
 import { load } from "~utils/gameSave";
+import { loadPromise } from "~renderer";
 
 export default function LoadGame() {
   const [oldSave, setOldSave] = useState<null | RawState>(null);
   const dispatch = useDispatch();
   const version = useSelector(selectors.version);
   useEffect(() => {
-    load().then((savedGame) => {
+    loadPromise.then(load).then((savedGame) => {
       if (!savedGame) {
         dispatch(actions.newGame());
       } else if (selectors.version(savedGame) === version) {

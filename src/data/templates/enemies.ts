@@ -12,7 +12,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     parentTemplate: "ENEMY_BASE",
     display: {
       tile: "enemy_drone",
-      glyph: "D",
       color: colors.enemyUnit,
       priority: PRIORITY_UNIT,
     },

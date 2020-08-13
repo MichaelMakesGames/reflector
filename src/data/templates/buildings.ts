@@ -16,7 +16,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     parentTemplate: "REFLECTOR_BASE",
     display: {
       tile: "reflector",
-      glyph: "/",
       color: colors.activeBuilding,
       priority: PRIORITY_BUILDING_HIGH,
     },
@@ -28,7 +27,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     display: {
       tile: "reflector",
       rotation: 90,
-      glyph: "\\",
       color: colors.activeBuilding,
       priority: PRIORITY_BUILDING_HIGH,
     },
@@ -48,7 +46,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     parentTemplate: "SPLITTER_BASE",
     display: {
       tile: "splitter",
-      glyph: "⬌",
       color: colors.activeBuilding,
       priority: PRIORITY_BUILDING_HIGH,
     },
@@ -65,7 +62,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     display: {
       tile: "splitter",
       rotation: 90,
-      glyph: "⬍",
       color: colors.activeBuilding,
       priority: PRIORITY_BUILDING_HIGH,
     },
@@ -81,7 +77,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     parentTemplate: "SPLITTER_BASE",
     display: {
       tile: "splitter_advanced",
-      glyph: "+",
       color: colors.activeBuilding,
       priority: PRIORITY_BUILDING_HIGH,
     },
@@ -96,7 +91,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     building: {},
     display: {
       tile: "tent",
-      glyph: "▲",
       color: colors.activeBuilding,
       priority: PRIORITY_BUILDING_HIGH,
       hasBackground: false,
@@ -122,7 +116,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     building: {},
     display: {
       tile: "residence",
-      glyph: "R",
       color: colors.activeBuilding,
       priority: PRIORITY_BUILDING_HIGH,
       hasBackground: true,
@@ -147,7 +140,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     building: {},
     display: {
       tile: "mine",
-      glyph: "M",
       color: colors.activeBuilding,
       priority: PRIORITY_BUILDING_HIGH,
       hasBackground: true,
@@ -191,7 +183,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     building: {},
     display: {
       tile: "outline_solid",
-      glyph: "m",
       color: colors.activeBuilding,
       priority: PRIORITY_BUILDING_LOW,
     },
@@ -216,7 +207,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     building: {},
     display: {
       tile: "farm",
-      glyph: "F",
       color: colors.food,
       priority: PRIORITY_BUILDING_LOW,
       hasBackground: true,
@@ -242,7 +232,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     building: {},
     display: {
       tile: "powerplant",
-      glyph: "P",
       color: colors.activeBuilding,
       priority: PRIORITY_BUILDING_HIGH,
       hasBackground: true,
@@ -284,7 +273,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     building: {},
     display: {
       tile: "solarpanel",
-      glyph: "S",
       color: colors.activeBuilding,
       priority: PRIORITY_BUILDING_LOW,
       hasBackground: true,
@@ -306,7 +294,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     building: {},
     display: {
       tile: "windmill",
-      glyph: "W",
       color: colors.activeBuilding,
       priority: PRIORITY_BUILDING_HIGH,
       hasBackground: true,
@@ -329,7 +316,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     building: {},
     display: {
       tile: "furnace",
-      glyph: "R",
       color: colors.activeBuilding,
       priority: PRIORITY_BUILDING_HIGH,
       hasBackground: true,
@@ -378,7 +364,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     building: {},
     display: {
       tile: "wall",
-      glyph: "#",
       color: colors.inactiveBuilding,
       priority: PRIORITY_BUILDING_HIGH,
       hasBackground: true,
@@ -400,7 +385,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     building: {},
     display: {
       tile: "wall_damaged",
-      glyph: "#",
       color: colors.inactiveBuilding,
       priority: PRIORITY_BUILDING_HIGH,
       hasBackground: true,
@@ -419,7 +403,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     building: {},
     display: {
       tile: "basic_projector",
-      glyph: "p",
       color: colors.activeBuilding,
       priority: PRIORITY_BUILDING_HIGH,
       hasBackground: true,
@@ -447,7 +430,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     building: {},
     display: {
       tile: "projector",
-      glyph: "p",
       color: colors.activeBuilding,
       priority: PRIORITY_BUILDING_HIGH,
       hasBackground: true,
