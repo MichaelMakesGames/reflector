@@ -11,6 +11,7 @@ import processWave from "./processWave";
 import processPowered from "./processPowered";
 import processEmitters from "./processEmitters";
 import processBorders from "./processBorders";
+import processColorToggle from "./processColorToggle";
 
 const processors: ((state: WrappedState) => void)[] = [
   processAI,
@@ -25,6 +26,7 @@ const processors: ((state: WrappedState) => void)[] = [
   processGameOver,
   processEmitters,
   processBorders,
+  processColorToggle,
 ];
 
 export default processors;

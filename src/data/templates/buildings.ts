@@ -41,6 +41,11 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       name: "Splitter",
       description: "Splits one incoming beam into two weaker beams.",
     },
+    colorToggle: {
+      conditions: ["isPowered"],
+      trueColor: colors.activeBuilding,
+      falseColor: colors.inactiveBuilding,
+    },
   },
   SPLITTER_HORIZONTAL: {
     parentTemplate: "SPLITTER_BASE",
@@ -277,6 +282,11 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       priority: PRIORITY_BUILDING_LOW,
       hasBackground: true,
     },
+    colorToggle: {
+      conditions: ["isDay"],
+      trueColor: colors.activeBuilding,
+      falseColor: colors.inactiveBuilding,
+    },
     destructible: {},
     production: {
       resource: ResourceCode.Power,
@@ -297,6 +307,11 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       color: colors.activeBuilding,
       priority: PRIORITY_BUILDING_HIGH,
       hasBackground: true,
+    },
+    colorToggle: {
+      conditions: ["doesNotHaveTallNeighbors"],
+      trueColor: colors.activeBuilding,
+      falseColor: colors.inactiveBuilding,
     },
     destructible: {},
     blocking: { moving: true, lasers: true },
@@ -407,6 +422,11 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       priority: PRIORITY_BUILDING_HIGH,
       hasBackground: true,
     },
+    colorToggle: {
+      conditions: ["isPowered"],
+      trueColor: colors.activeBuilding,
+      falseColor: colors.inactiveBuilding,
+    },
     blocking: {
       moving: true,
       lasers: true,
@@ -433,6 +453,11 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       color: colors.activeBuilding,
       priority: PRIORITY_BUILDING_HIGH,
       hasBackground: true,
+    },
+    colorToggle: {
+      conditions: ["isPowered"],
+      trueColor: colors.activeBuilding,
+      falseColor: colors.inactiveBuilding,
     },
     blocking: {
       moving: true,

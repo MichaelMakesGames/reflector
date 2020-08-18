@@ -21,6 +21,15 @@ export interface HasDisplay {
   display: Display;
 }
 
+export interface ColorToggle {
+  conditions: ConditionName[];
+  trueColor: string;
+  falseColor: string;
+}
+export interface HasColorToggle {
+  colorToggle: ColorToggle;
+}
+
 export type AIType = "DRONE";
 export interface AI {
   type: AIType;
@@ -232,6 +241,7 @@ export interface Entity
     Partial<HasBorder>,
     Partial<HasBuilding>,
     Partial<HasColonist>,
+    Partial<HasColorToggle>,
     Partial<HasCursor>,
     Partial<HasConductive>,
     Partial<HasDescription>,
