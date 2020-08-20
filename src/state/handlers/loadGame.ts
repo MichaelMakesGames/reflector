@@ -1,8 +1,9 @@
-import { addRenderEntity, zoomTo } from "~renderer";
+import { addRenderEntity, zoomTo, setBackgroundColor } from "~renderer";
 import { registerHandler } from "~state/handleAction";
 import WrappedState from "~types/WrappedState";
 import actions from "../actions";
 import processEmitters from "~state/processors/processEmitters";
+import colors from "~colors";
 
 function loadGame(
   state: WrappedState,
@@ -22,6 +23,11 @@ function loadGame(
     zoomTo(player.pos);
   }
   processEmitters(state);
+  if (state.select.isNight()) {
+    setBackgroundColor(colors.backgroundNight);
+  } else {
+    setBackgroundColor(colors.backgroundDay);
+  }
 }
 
 registerHandler(loadGame, actions.loadGame);

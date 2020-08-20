@@ -207,7 +207,7 @@ export function addRenderEntity(entity: Required<Entity, "display" | "pos">) {
 
   if (display.hasBackground) {
     const background = new PIXI.Graphics();
-    background.beginFill(parseInt(colors.background.substr(1), 16));
+    background.beginFill(app.renderer.backgroundColor);
     background.lineStyle(0);
     background.drawRect(0, 0, TILE_SIZE, TILE_SIZE);
     background.endFill();
@@ -266,6 +266,19 @@ export function removeRenderEntity(entityId: string) {
     if (renderEntity.sprite) {
       renderEntity.sprite.parent.removeChild(renderEntity.sprite);
     }
+  }
+}
+
+export function setBackgroundColor(color: string) {
+  app.renderer.backgroundColor = parseInt(color.substr(1), 16);
+  for (const [id, renderEntity] of Object.entries(renderEntities)) {
+    removeRenderEntity(id);
+    addRenderEntity({
+      id,
+      display: renderEntity.displayComp,
+      pos: renderEntity.pos,
+      template: "" as TemplateName,
+    });
   }
 }
 

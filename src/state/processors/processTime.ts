@@ -1,6 +1,8 @@
 import { TURNS_PER_DAY, TURNS_PER_NIGHT } from "~constants";
 import WrappedState from "~types/WrappedState";
 import { choose } from "~utils/rng";
+import { setBackgroundColor } from "~renderer";
+import colors from "~colors";
 
 export default function processTime(state: WrappedState): void {
   state.setRaw({
@@ -18,6 +20,11 @@ export default function processTime(state: WrappedState): void {
         directionWeights: makeRandomDirectionWeights(),
       },
     });
+    setBackgroundColor(colors.backgroundDay);
+  }
+
+  if (state.select.turnOfNight() === 0) {
+    setBackgroundColor(colors.backgroundNight);
   }
 }
 

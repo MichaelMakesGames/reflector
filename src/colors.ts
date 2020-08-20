@@ -2,6 +2,8 @@ import palette from "./data/colors.json";
 
 const colors = {
   background: palette.black,
+  backgroundDay: palette.darkerBrown,
+  backgroundNight: palette.darkerBlue,
   text: palette.white,
   primary: palette.red,
   secondary: palette.lightBlue,

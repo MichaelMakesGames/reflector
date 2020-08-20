@@ -1,9 +1,10 @@
 import actions from "~/state/actions";
 import makeLevel from "~/utils/makeLevel";
-import { clearRenderer, zoomTo } from "~renderer";
+import { clearRenderer, zoomTo, setBackgroundColor } from "~renderer";
 import { registerHandler } from "~state/handleAction";
 import initialState from "~state/initialState";
 import WrappedState from "~types/WrappedState";
+import colors from "~colors";
 
 function newGame(
   state: WrappedState,
@@ -16,6 +17,7 @@ function newGame(
   if (player && player.pos) {
     zoomTo(player.pos);
   }
+  setBackgroundColor(colors.backgroundNight);
 }
 
 registerHandler(newGame, actions.newGame);
