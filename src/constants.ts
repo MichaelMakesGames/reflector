@@ -40,10 +40,3 @@ export const RIGHT = { dx: 1, dy: 0 };
 export const DOWN = { dx: 0, dy: 1 };
 export const LEFT = { dx: -1, dy: 0 };
 export const UP = { dx: 0, dy: -1 };
-
-export const UP_KEYS = ["w", "up", "k"];
-export const RIGHT_KEYS = ["d", "right", "l"];
-export const DOWN_KEYS = ["s", "down", "j"];
-export const LEFT_KEYS = ["a", "left", "h"];
-export const CANCEL_KEYS = ["q", "esc", "del", "backspace"];
-export const CONFIRM_KEYS = ["space", "enter"];

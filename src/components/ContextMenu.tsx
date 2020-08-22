@@ -15,7 +15,9 @@ export default function ContextMenu({ pos, onClose }: Props) {
   const cursorPos = useSelector(selectors.cursorPos);
   const state = useSelector(selectors.state);
   const [ref] = useOutsideClickRef<HTMLDivElement>(onClose);
-  const actions = cursorPos ? getActionsAvailableAtPos(state, cursorPos) : [];
+  const actionControls = cursorPos
+    ? getActionsAvailableAtPos(state, cursorPos)
+    : [];
   return (
     <div
       ref={ref}
@@ -39,18 +41,19 @@ export default function ContextMenu({ pos, onClose }: Props) {
         }}
       />
       <ul className="flex flex-col">
-        {actions.length === 0 && (
+        {actionControls.length === 0 && (
           <li className="border-b border-gray py-1 px-2">
             No actions available
           </li>
         )}
-        {actions.map((a) => (
+        {actionControls.map((a) => (
           <li key={a.label}>
             <button
               className="border-b border-gray py-1 px-2 w-full text-left"
               type="button"
               onClick={() => {
-                dispatch(a.action);
+                const actions = Array.isArray(a.action) ? a.action : [a.action];
+                actions.forEach((action) => dispatch(action));
                 onClose();
               }}
             >

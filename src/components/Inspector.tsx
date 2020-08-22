@@ -1,27 +1,18 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useControl } from "~hooks";
 import selectors from "~state/selectors";
-import { getActionsAvailableAtPos } from "~utils/controls";
-import { useShortcuts } from "~hooks";
+import { getActionsAvailableAtPos, ActionControl } from "~utils/controls";
+import controls from "~data/controls";
 
 export default function Inspector() {
-  const dispatch = useDispatch();
   const entitiesAtCursor = useSelector(selectors.entitiesAtCursor);
   const entitiesWithDescription =
     entitiesAtCursor && entitiesAtCursor.filter((e) => e.description);
   const cursorPos = useSelector(selectors.cursorPos);
   const state = useSelector(selectors.state);
   const actions = cursorPos ? getActionsAvailableAtPos(state, cursorPos) : [];
-  useShortcuts(
-    Object.fromEntries<() => void>(
-      actions
-        .filter((a) => !a.doNotRegisterShortcut)
-        .map((action): [string, () => void] => [
-          action.key,
-          () => dispatch(action.action),
-        ]),
-    ),
-  );
+
   return (
     <section className="p-2 border-b border-gray">
       <h2 className="text-xl">Inspector</h2>
@@ -44,15 +35,32 @@ export default function Inspector() {
         {actions.length === 0 && <li>None</li>}
         {actions.map((action) => (
           <li key={action.label} className="mb-1">
-            <button type="button" className="font-normal">
-              <kbd className="font-mono bg-darkGray rounded p-1 mr-1">
-                {action.key}
-              </kbd>
-              {action.label}
-            </button>
+            <InspectorAction action={action} />
           </li>
         ))}
       </ul>
     </section>
+  );
+}
+
+function InspectorAction({ action }: { action: ActionControl }) {
+  const dispatch = useDispatch();
+  useControl(
+    action.controlCode,
+    () => {
+      const actions = Array.isArray(action.action)
+        ? action.action
+        : [action.action];
+      actions.forEach((a) => dispatch(a));
+    },
+    !action.doNotRegisterShortcut,
+  );
+  return (
+    <button type="button" className="font-normal">
+      <kbd className="font-mono bg-darkGray rounded p-1 mr-1">
+        {controls[action.controlCode][0]}
+      </kbd>
+      {action.label}
+    </button>
   );
 }

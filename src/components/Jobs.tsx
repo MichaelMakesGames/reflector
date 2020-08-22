@@ -1,14 +1,10 @@
-/* global document, window */
-import React, { useEffect } from "react";
+import React from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { useDispatch, useSelector } from "react-redux";
 import jobTypes, { JobTypeCode } from "~data/jobTypes";
 import actions from "~state/actions";
 import selectors from "~state/selectors";
 import { RawState } from "~types";
-import { UP_KEYS, DOWN_KEYS, CANCEL_KEYS } from "~constants";
-import { useShortcuts } from "~hooks";
-import { isDndFocused } from "~utils/controls";
 
 export default function Jobs() {
   const dispatch = useDispatch();
@@ -16,67 +12,6 @@ export default function Jobs() {
   const orderedJobTypes = Object.entries(jobPriorities)
     .sort((a, b) => a[1] - b[1])
     .map(([code]) => jobTypes[code as JobTypeCode]);
-
-  useShortcuts(
-    Object.fromEntries([
-      ...UP_KEYS.map((key) => [
-        key,
-        () => {
-          if (isDndFocused()) {
-            const activeElement = document.activeElement as HTMLElement;
-            const isBeingDragged = Boolean(activeElement.getAttribute("style"));
-            if (!isBeingDragged) {
-              const index = parseInt(
-                activeElement.dataset.jobsDndIndex || "",
-                10,
-              );
-              const maxIndex =
-                document.querySelectorAll("[data-jobs-dnd-index]").length - 1;
-              const nextIndex = index === 0 ? maxIndex : index - 1;
-              const nextEl = document.querySelector(
-                `[data-jobs-dnd-index="${nextIndex}"]`,
-              );
-              if (nextEl) {
-                (nextEl as HTMLElement).focus();
-              }
-            }
-          }
-        },
-      ]),
-      ...DOWN_KEYS.map((key) => [
-        key,
-        () => {
-          if (isDndFocused()) {
-            const activeElement = document.activeElement as HTMLElement;
-            const isBeingDragged = Boolean(activeElement.getAttribute("style"));
-            if (!isBeingDragged) {
-              const index = parseInt(
-                activeElement.dataset.jobsDndIndex || "",
-                10,
-              );
-              const maxIndex =
-                document.querySelectorAll("[data-jobs-dnd-index]").length - 1;
-              const nextIndex = index < maxIndex ? index + 1 : 0;
-              const nextEl = document.querySelector(
-                `[data-jobs-dnd-index="${nextIndex}"]`,
-              );
-              if (nextEl) {
-                (nextEl as HTMLElement).focus();
-              }
-            }
-          }
-        },
-      ]),
-      ...CANCEL_KEYS.map((key) => [
-        key,
-        () => {
-          if (isDndFocused()) {
-            (document.activeElement as HTMLElement).blur();
-          }
-        },
-      ]),
-    ]),
-  );
 
   return (
     <section className="p-2 border-b border-gray">

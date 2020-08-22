@@ -1,15 +1,14 @@
+import Tooltip from "rc-tooltip";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { CANCEL_KEYS } from "~constants";
 import buildingCategories, { BuildingCategory } from "~data/buildingCategories";
 import buildings from "~data/buildings";
-import { useShortcuts } from "~hooks";
+import controls, { ControlCode } from "~data/controls";
+import templates from "~data/templates";
+import { useControl } from "~hooks";
 import actions from "~state/actions";
 import selectors from "~state/selectors";
 import ResourceAmount from "./ResourceAmount";
-import Tooltip from "rc-tooltip";
-import { createEntityFromTemplate } from "~utils/entities";
-import templates from "~data/templates";
 
 export default function BuildMenu() {
   const dispatch = useDispatch();
@@ -30,28 +29,35 @@ export default function BuildMenu() {
     }
   };
 
-  useShortcuts(
-    Object.fromEntries([
-      ...CANCEL_KEYS.map((key) => [key, cancel]),
-      ...(placingTarget && placingTarget.rotatable ? [["r", rotate]] : []),
-      ...(category
-        ? categoryBuildings.map((b, i) => [
-            (i + 1).toString(),
-            () =>
-              dispatch(
-                actions.activatePlacement({
-                  ...b,
-                  pos: cursorPos || undefined,
-                  takesTurn: true,
-                }),
-              ),
-          ])
-        : buildingCategories.map((c, i) => [
-            (i + 1).toString(),
-            () => setCategory(c),
-          ])),
-    ]),
+  useControl(ControlCode.Back, cancel);
+  useControl(
+    ControlCode.RotateBuilding,
+    rotate,
+    Boolean(placingTarget && placingTarget.rotatable),
   );
+  const makeBuildingCallback = (n: number) => () => {
+    if (categoryBuildings.length) {
+      dispatch(
+        actions.activatePlacement({
+          ...categoryBuildings[n - 1],
+          pos: cursorPos || undefined,
+          takesTurn: true,
+        }),
+      );
+    } else {
+      setCategory(buildingCategories[n - 1]);
+    }
+  };
+  useControl(ControlCode.Building1, makeBuildingCallback(1), !placingTarget);
+  useControl(ControlCode.Building2, makeBuildingCallback(2), !placingTarget);
+  useControl(ControlCode.Building3, makeBuildingCallback(3), !placingTarget);
+  useControl(ControlCode.Building4, makeBuildingCallback(4), !placingTarget);
+  useControl(ControlCode.Building5, makeBuildingCallback(5), !placingTarget);
+  useControl(ControlCode.Building6, makeBuildingCallback(6), !placingTarget);
+  useControl(ControlCode.Building7, makeBuildingCallback(7), !placingTarget);
+  useControl(ControlCode.Building8, makeBuildingCallback(8), !placingTarget);
+  useControl(ControlCode.Building9, makeBuildingCallback(9), !placingTarget);
+  useControl(ControlCode.Building0, makeBuildingCallback(0), !placingTarget);
 
   const showCategory: boolean = !category;
   const showBuildings: boolean = Boolean(category && !placingTarget);
@@ -73,7 +79,9 @@ export default function BuildMenu() {
           style={buttonStyle}
           className={buttonClassName}
         >
-          <kbd className="bg-darkGray px-1 rounded mr-1">{CANCEL_KEYS[0]}</kbd>
+          <kbd className="bg-darkGray px-1 rounded mr-1">
+            {controls[ControlCode.Back][0]}
+          </kbd>
           Cancel
         </button>
       ) : (

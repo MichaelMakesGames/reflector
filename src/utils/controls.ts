@@ -1,23 +1,27 @@
 /* global document */
-import { RawState, Pos, Action } from "~types";
-import selectors from "~state/selectors";
+import { DOWN, LEFT, PLAYER_ID, UP } from "~constants";
+import { ControlCode } from "~data/controls";
 import actions from "~state/actions";
-import { PLAYER_ID, UP, DOWN, LEFT, RIGHT } from "~constants";
+import selectors from "~state/selectors";
 import wrapState from "~state/wrapState";
+import { Action, Pos, RawState } from "~types";
 import { findValidPositions } from "./building";
 import { areConditionsMet } from "./conditions";
-import { arePositionsEqual, areDirectionsEqual } from "./geometry";
 import { createEntityFromTemplate } from "./entities";
+import { areDirectionsEqual, arePositionsEqual } from "./geometry";
 
-type Results = {
+export interface ActionControl {
   label: string;
-  key: string;
+  controlCode: ControlCode;
   doNotRegisterShortcut?: boolean;
-  action: Action;
-}[];
+  action: Action | Action[];
+}
 
-export function getActionsAvailableAtPos(state: RawState, pos: Pos): Results {
-  const results: Results = [];
+export function getActionsAvailableAtPos(
+  state: RawState,
+  pos: Pos,
+): ActionControl[] {
+  const results: ActionControl[] = [];
   addReflectorActions(state, pos, results);
   addRemoveBuildingAction(state, pos, results);
   addDisableBuildingActions(state, pos, results);
@@ -25,7 +29,7 @@ export function getActionsAvailableAtPos(state: RawState, pos: Pos): Results {
   return results;
 }
 
-function addMoveAction(state: RawState, pos: Pos, results: Results) {
+function addMoveAction(state: RawState, pos: Pos, results: ActionControl[]) {
   const player = selectors.player(state);
   if (player) {
     const playerPos = player.pos;
@@ -34,19 +38,20 @@ function addMoveAction(state: RawState, pos: Pos, results: Results) {
       !selectors.isPositionBlocked(state, pos)
     ) {
       const dir = { dx: pos.x - playerPos.x, dy: pos.y - playerPos.y };
-      let key = "";
+      let controlCode: ControlCode;
       if (areDirectionsEqual(dir, UP)) {
-        key = "w";
+        controlCode = ControlCode.PlayerUp;
       } else if (areDirectionsEqual(dir, DOWN)) {
-        key = "s";
+        controlCode = ControlCode.PlayerDown;
       } else if (areDirectionsEqual(dir, LEFT)) {
-        key = "a";
-      } else if (areDirectionsEqual(dir, RIGHT)) {
-        key = "d";
+        controlCode = ControlCode.PlayerLeft;
+      } else {
+        // if (areDirectionsEqual(dir, RIGHT))
+        controlCode = ControlCode.PlayerRight;
       }
       results.push({
         label: "Move",
-        key,
+        controlCode,
         doNotRegisterShortcut: true,
         action: actions.move({
           entityId: PLAYER_ID,
@@ -60,7 +65,7 @@ function addMoveAction(state: RawState, pos: Pos, results: Results) {
 function addDisableBuildingActions(
   state: RawState,
   pos: Pos,
-  results: Results,
+  results: ActionControl[],
 ) {
   const entitiesAtPos = selectors.entitiesAtPosition(state, pos);
   if (entitiesAtPos.some((e) => e.jobProvider)) {
@@ -68,24 +73,32 @@ function addDisableBuildingActions(
       label: entitiesAtPos.some((e) => e.jobDisabler)
         ? "Enable Jobs"
         : "Disable Jobs",
-      key: "t",
+      controlCode: ControlCode.ToggleJobs,
       action: actions.toggleDisabled(pos),
     });
   }
 }
 
-function addRemoveBuildingAction(state: RawState, pos: Pos, results: Results) {
+function addRemoveBuildingAction(
+  state: RawState,
+  pos: Pos,
+  results: ActionControl[],
+) {
   const entitiesAtPos = selectors.entitiesAtPosition(state, pos);
   if (entitiesAtPos.some((e) => e.building)) {
     results.push({
       label: "Remove Building",
-      key: "x",
+      controlCode: ControlCode.RemoveBuilding,
       action: actions.executeRemoveBuilding(pos),
     });
   }
 }
 
-function addReflectorActions(state: RawState, pos: Pos, results: Results) {
+function addReflectorActions(
+  state: RawState,
+  pos: Pos,
+  results: ActionControl[],
+) {
   const wrappedState = wrapState(state);
   const player = selectors.player(state);
   if (!player) return;
@@ -104,31 +117,46 @@ function addReflectorActions(state: RawState, pos: Pos, results: Results) {
           range: e.projector.range,
         })),
     ],
-    selectors.canPlaceReflector,
+    () => true, // selectors.canPlaceReflector,
     true,
   );
   if (validPositions.some((validPos) => arePositionsEqual(pos, validPos))) {
-    results.push({
-      label: "Place Reflector",
-      key: "f",
-      action: actions.addEntity(
-        createEntityFromTemplate("REFLECTOR_UP_RIGHT", { pos }),
-      ),
-    });
+    results.push(
+      {
+        label: "Place \\ Reflector",
+        controlCode: ControlCode.PlaceReflectorA,
+        action: [
+          actions.removeReflector(pos),
+          actions.addEntity(
+            createEntityFromTemplate("REFLECTOR_DOWN_RIGHT", { pos }),
+          ),
+        ],
+      },
+      {
+        label: "Place / Reflector",
+        controlCode: ControlCode.PlaceReflectorB,
+        action: [
+          actions.removeReflector(pos),
+          actions.addEntity(
+            createEntityFromTemplate("REFLECTOR_UP_RIGHT", { pos }),
+          ),
+        ],
+      },
+    );
   }
 
   const entitiesAtPos = wrappedState.select.entitiesAtPosition(pos);
   const reflectorAtPos = entitiesAtPos.find((e) => e.reflector);
   if (reflectorAtPos) {
-    results.push({
-      label: "Rotate Reflector",
-      key: "r",
-      action: actions.rotateEntity(reflectorAtPos),
-    });
+    // results.push({
+    //   label: "Rotate Reflector",
+    //   controlCode: ControlCode.RotateReflector,
+    //   action: actions.rotateEntity(reflectorAtPos),
+    // });
     results.push({
       label: "Remove Reflector",
-      key: "e",
-      action: actions.removeEntity(reflectorAtPos.id),
+      controlCode: ControlCode.RemoveReflector,
+      action: actions.removeReflector(pos),
     });
   }
 }

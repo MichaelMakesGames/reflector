@@ -1,20 +1,23 @@
 import * as clack from "@reasonink/clack";
 import { useEffect } from "react";
+import controls, { ControlCode } from "~data/controls";
 
-export function useShortcuts(
-  shortcuts: Record<string, (e: KeyboardEvent) => void>,
+export function useControl(
+  controlCode: ControlCode,
+  callback: (e: KeyboardEvent) => void,
   enabled: boolean = true,
-): clack.Group {
+): void {
   let group = clack.group({});
 
   useEffect(() => {
+    const shortcuts = controls[controlCode];
     // prevent defaults to disable browser shortcuts where possible
-    const shortcutsWithPreventDefault = Object.entries(shortcuts).reduce<
+    const shortcutsWithPreventDefault = shortcuts.reduce<
       Record<string, (e: KeyboardEvent) => void>
     >((acc, cur) => {
-      acc[cur[0]] = (e: KeyboardEvent) => {
+      acc[cur] = (e: KeyboardEvent) => {
         e.preventDefault();
-        cur[1](e);
+        callback(e);
       };
       return acc;
     }, {});
@@ -25,6 +28,4 @@ export function useShortcuts(
       group.enabled = false;
     };
   });
-
-  return group;
 }

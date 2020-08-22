@@ -2,26 +2,15 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { app, getPosFromMouse, zoomOut, zoomTo } from "~/renderer";
+import { DOWN, LEFT, PLAYER_ID, RIGHT, UP } from "~constants";
+import { ControlCode } from "~data/controls";
+import { useControl } from "~hooks";
 import actions from "~state/actions";
 import selectors from "~state/selectors";
-import { arePositionsEqual } from "~utils/geometry";
 import { Pos } from "~types";
-import ContextMenu from "./ContextMenu";
-import { useShortcuts } from "~hooks";
-import {
-  PLAYER_ID,
-  UP,
-  RIGHT,
-  LEFT,
-  DOWN,
-  UP_KEYS,
-  RIGHT_KEYS,
-  LEFT_KEYS,
-  DOWN_KEYS,
-  CANCEL_KEYS,
-  CONFIRM_KEYS,
-} from "~constants";
 import { isDndFocused } from "~utils/controls";
+import { arePositionsEqual } from "~utils/geometry";
+import ContextMenu from "./ContextMenu";
 
 export default function GameMap() {
   useEffect(() => {
@@ -58,13 +47,11 @@ export default function GameMap() {
       dispatch(actions.move({ entityId: PLAYER_ID, ...LEFT }));
     }
   };
-  const movementShortcuts = Object.fromEntries<() => void>([
-    ...UP_KEYS.map((key): [string, () => void] => [key, moveUp]),
-    ...RIGHT_KEYS.map((key): [string, () => void] => [key, moveRight]),
-    ...DOWN_KEYS.map((key): [string, () => void] => [key, moveDown]),
-    ...LEFT_KEYS.map((key): [string, () => void] => [key, moveLeft]),
-  ]);
-  useShortcuts(movementShortcuts, !isWeaponActive && !isPlacing);
+  const moveEnabled = !isWeaponActive && !isPlacing;
+  useControl(ControlCode.PlayerUp, moveUp, moveEnabled);
+  useControl(ControlCode.PlayerDown, moveDown, moveEnabled);
+  useControl(ControlCode.PlayerLeft, moveLeft, moveEnabled);
+  useControl(ControlCode.PlayerRight, moveRight, moveEnabled);
 
   const moveCursorUp = () => {
     if (!isDndFocused()) {
@@ -86,33 +73,16 @@ export default function GameMap() {
       dispatch(actions.moveCursor({ ...LEFT }));
     }
   };
-  const cursorShortcuts = Object.fromEntries<() => void>([
-    ...UP_KEYS.map((key): [string, () => void] => [
-      `shift + ${key}`,
-      moveCursorUp,
-    ]),
-    ...RIGHT_KEYS.map((key): [string, () => void] => [
-      `shift + ${key}`,
-      moveCursorRight,
-    ]),
-    ...DOWN_KEYS.map((key): [string, () => void] => [
-      `shift + ${key}`,
-      moveCursorDown,
-    ]),
-    ...LEFT_KEYS.map((key): [string, () => void] => [
-      `shift + ${key}`,
-      moveCursorLeft,
-    ]),
-    ...CANCEL_KEYS.map((key): [string, () => void] => [
-      key,
-      () => {
-        setContextMenuPos(null);
-        dispatch(actions.setCursorPos(null));
-      },
-    ]),
-    ["z", () => dispatch(actions.playerTookTurn())],
-  ]);
-  useShortcuts(cursorShortcuts);
+
+  useControl(ControlCode.CursorUp, moveCursorUp);
+  useControl(ControlCode.CursorDown, moveCursorDown);
+  useControl(ControlCode.CursorLeft, moveCursorLeft);
+  useControl(ControlCode.CursorRight, moveCursorRight);
+  useControl(ControlCode.Back, () => {
+    setContextMenuPos(null);
+    dispatch(actions.setCursorPos(null));
+  });
+  useControl(ControlCode.Wait, () => dispatch(actions.playerTookTurn()));
 
   const performDefaultAction = (pos: Pos | null) => {
     if (pos) {
@@ -123,13 +93,7 @@ export default function GameMap() {
       }
     }
   };
-  const defaultActionShortcuts = Object.fromEntries<() => void>([
-    ...CONFIRM_KEYS.map((key): [string, () => void] => [
-      key,
-      () => performDefaultAction(cursorPos),
-    ]),
-  ]);
-  useShortcuts(defaultActionShortcuts);
+  useControl(ControlCode.QuickAction, () => performDefaultAction(cursorPos));
 
   return (
     <section className="relative">
