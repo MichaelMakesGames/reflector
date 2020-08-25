@@ -4,6 +4,7 @@ import WrappedState from "~types/WrappedState";
 import actions from "../actions";
 import processEmitters from "~state/processors/processEmitters";
 import colors from "~colors";
+import processAnimationToggle from "~state/processors/processAnimationToggle";
 
 function loadGame(
   state: WrappedState,
@@ -23,6 +24,7 @@ function loadGame(
     zoomTo(player.pos);
   }
   processEmitters(state);
+  processAnimationToggle(state);
   if (state.select.isNight()) {
     setBackgroundColor(colors.backgroundNight);
   } else {

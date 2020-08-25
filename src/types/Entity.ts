@@ -11,7 +11,7 @@ export interface HasPos {
 }
 
 export interface Display {
-  tile: string;
+  tile: string | string[];
   rotation?: number;
   color: string;
   priority: number;
@@ -19,6 +19,13 @@ export interface Display {
 }
 export interface HasDisplay {
   display: Display;
+}
+
+export interface AnimationToggle {
+  conditions: ConditionName[];
+}
+export interface HasAnimationToggle {
+  animationToggle: AnimationToggle;
 }
 
 export interface ColorToggle {
@@ -243,6 +250,7 @@ export interface Entity
     Partial<HasColonist>,
     Partial<HasColorToggle>,
     Partial<HasCursor>,
+    Partial<HasAnimationToggle>,
     Partial<HasConductive>,
     Partial<HasDescription>,
     Partial<HasDestructible>,

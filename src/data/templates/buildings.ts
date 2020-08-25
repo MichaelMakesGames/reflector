@@ -303,10 +303,13 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   WINDMILL: {
     building: {},
     display: {
-      tile: "windmill",
+      tile: ["windmill-1", "windmill-2", "windmill-3", "windmill-4"],
       color: colors.activeBuilding,
       priority: PRIORITY_BUILDING_HIGH,
       hasBackground: true,
+    },
+    animationToggle: {
+      conditions: ["doesNotHaveTallNeighbors"],
     },
     colorToggle: {
       conditions: ["doesNotHaveTallNeighbors"],

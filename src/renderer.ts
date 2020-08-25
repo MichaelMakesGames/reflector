@@ -225,9 +225,18 @@ export function addRenderEntity(entity: Required<Entity, "display" | "pos">) {
 }
 
 function createSprite(pos: Pos, display: Display) {
-  const sprite = new PIXI.Sprite(
-    PIXI.utils.TextureCache[display.tile || "unknown"],
-  );
+  let sprite: PIXI.Sprite | PIXI.AnimatedSprite;
+  if (typeof display.tile === "string") {
+    sprite = new PIXI.Sprite(
+      PIXI.utils.TextureCache[display.tile || "unknown"],
+    );
+  } else {
+    sprite = new PIXI.AnimatedSprite(
+      display.tile.map((tile) => PIXI.utils.TextureCache[tile || "unknown"]),
+    );
+    (sprite as PIXI.AnimatedSprite).animationSpeed = 0.2;
+    (sprite as PIXI.AnimatedSprite).play();
+  }
   sprite.angle = display.rotation || 0;
   setSpritePosition(sprite, pos, display);
   sprite.width = TILE_SIZE;
@@ -235,6 +244,28 @@ function createSprite(pos: Pos, display: Display) {
   sprite.tint = parseInt((display.color || "#FFFFFF").substr(1), 16);
 
   return sprite;
+}
+
+export function playAnimation(entityId: string) {
+  const renderEntity = renderEntities[entityId];
+  if (
+    renderEntity &&
+    renderEntity.sprite &&
+    renderEntity.sprite instanceof PIXI.AnimatedSprite
+  ) {
+    renderEntity.sprite.play();
+  }
+}
+
+export function stopAnimation(entityId: string) {
+  const renderEntity = renderEntities[entityId];
+  if (
+    renderEntity &&
+    renderEntity.sprite &&
+    renderEntity.sprite instanceof PIXI.AnimatedSprite
+  ) {
+    renderEntity.sprite.stop();
+  }
 }
 
 function setSpritePosition(sprite: PIXI.Sprite, pos: Pos, display: Display) {
@@ -272,8 +303,7 @@ export function removeRenderEntity(entityId: string) {
 export function setBackgroundColor(color: string) {
   app.renderer.backgroundColor = parseInt(color.substr(1), 16);
   for (const [id, renderEntity] of Object.entries(renderEntities)) {
-    removeRenderEntity(id);
-    addRenderEntity({
+    reAddRenderEntity({
       id,
       display: renderEntity.displayComp,
       pos: renderEntity.pos,
@@ -324,8 +354,24 @@ export function updateRenderEntity(
       renderEntity.displayComp.rotation !== entity.display.rotation ||
       renderEntity.displayComp.hasBackground !== entity.display.hasBackground
     ) {
-      removeRenderEntity(entity.id);
-      addRenderEntity(entity);
+      reAddRenderEntity(entity);
+    }
+  }
+}
+
+export function reAddRenderEntity(entity: Required<Entity, "display" | "pos">) {
+  const renderEntity = renderEntities[entity.id];
+  const isPlaying =
+    renderEntity && renderEntity.sprite instanceof PIXI.AnimatedSprite
+      ? renderEntity.sprite.playing
+      : false;
+  removeRenderEntity(entity.id);
+  addRenderEntity(entity);
+  if (renderEntity && renderEntity.sprite instanceof PIXI.AnimatedSprite) {
+    if (isPlaying) {
+      playAnimation(entity.id);
+    } else {
+      stopAnimation(entity.id);
     }
   }
 }
