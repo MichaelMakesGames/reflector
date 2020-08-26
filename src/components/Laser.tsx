@@ -1,15 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DOWN, LEFT, RIGHT, UP } from "~constants";
-import { ControlCode } from "~data/controls";
+import { ControlCode } from "~types/ControlCode";
 import { useControl } from "~hooks";
 import actions from "~state/actions";
 import selectors from "~state/selectors";
 import { Direction } from "~types";
 import { getConstDir } from "~utils/geometry";
+import { SettingsContext } from "~contexts";
 
 export default function Laser() {
   const dispatch = useDispatch();
+  const settings = useContext(SettingsContext);
   const isWeaponActive = useSelector(selectors.isWeaponActive);
   const aimingDirection = useSelector(selectors.lastAimingDirection);
   const isAimingInDirection = (d: Direction): boolean =>
@@ -17,16 +19,29 @@ export default function Laser() {
 
   const fire = () => dispatch(actions.fireWeapon());
   const cancel = () => dispatch(actions.deactivateWeapon());
-  const aimUp = () => dispatch(actions.targetWeapon(UP));
-  const aimRight = () => dispatch(actions.targetWeapon(RIGHT));
-  const aimDown = () => dispatch(actions.targetWeapon(DOWN));
-  const aimLeft = () => dispatch(actions.targetWeapon(LEFT));
-  useControl(ControlCode.AimUp, aimUp);
-  useControl(ControlCode.AimDown, aimDown);
-  useControl(ControlCode.AimLeft, aimLeft);
-  useControl(ControlCode.AimRight, aimRight);
   useControl(ControlCode.Back, cancel);
   useControl(ControlCode.Fire, fire, isWeaponActive);
+  useControl(
+    ControlCode.Fire,
+    () => dispatch(actions.targetWeapon(aimingDirection)),
+    settings.fireKeyActivatesAiming && !isWeaponActive,
+  );
+
+  const makeAimHandler = (direction: Direction) => () => {
+    if (settings.aimInSameDirectionToFire && isAimingInDirection(direction)) {
+      dispatch(actions.fireWeapon());
+    } else {
+      dispatch(actions.targetWeapon(direction));
+    }
+  };
+  const modifiers =
+    settings.unmodifiedAiming && isWeaponActive
+      ? ["", settings.aimingModifierKey]
+      : [settings.aimingModifierKey];
+  useControl(ControlCode.Up, makeAimHandler(UP), true, modifiers);
+  useControl(ControlCode.Down, makeAimHandler(DOWN), true, modifiers);
+  useControl(ControlCode.Left, makeAimHandler(LEFT), true, modifiers);
+  useControl(ControlCode.Right, makeAimHandler(RIGHT), true, modifiers);
 
   return (
     <section className="p-2 border-b border-gray flex flex-row items-center">
@@ -39,7 +54,7 @@ export default function Laser() {
               isAimingInDirection(LEFT) ? "text-red" : ""
             }`}
             type="button"
-            onClick={aimLeft}
+            onClick={makeAimHandler(LEFT)}
           >
             ◀
           </button>
@@ -51,7 +66,7 @@ export default function Laser() {
               isAimingInDirection(UP) ? "text-red" : ""
             }`}
             type="button"
-            onClick={aimUp}
+            onClick={makeAimHandler(UP)}
           >
             ▲
           </button>
@@ -61,7 +76,7 @@ export default function Laser() {
               isAimingInDirection(DOWN) ? "text-red" : ""
             }`}
             type="button"
-            onClick={aimDown}
+            onClick={makeAimHandler(DOWN)}
           >
             ▼
           </button>
@@ -73,7 +88,7 @@ export default function Laser() {
               isAimingInDirection(RIGHT) ? "text-red" : ""
             }`}
             type="button"
-            onClick={aimRight}
+            onClick={makeAimHandler(RIGHT)}
           >
             ▶
           </button>

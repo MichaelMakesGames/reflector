@@ -1,23 +1,27 @@
 import Tooltip from "rc-tooltip";
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import buildingCategories, { BuildingCategory } from "~data/buildingCategories";
 import buildings from "~data/buildings";
-import controls, { ControlCode } from "~data/controls";
+import { ControlCode } from "~types/ControlCode";
 import templates from "~data/templates";
 import { useControl } from "~hooks";
 import actions from "~state/actions";
 import selectors from "~state/selectors";
 import ResourceAmount from "./ResourceAmount";
+import { SettingsContext } from "~contexts";
 
 export default function BuildMenu() {
   const dispatch = useDispatch();
+  const settings = useContext(SettingsContext);
   const cursorPos = useSelector(selectors.cursorPos);
   const [category, setCategory] = useState<BuildingCategory | null>(null);
   const categoryBuildings = category
     ? buildings.filter((b) => b.category === category.code)
     : [];
   const placingTarget = useSelector(selectors.placingTarget);
+  const isWeaponActive = useSelector(selectors.isWeaponActive);
+  const isPlacing = useSelector(selectors.isPlacing);
 
   const cancel = () => {
     setCategory(null);
@@ -29,6 +33,12 @@ export default function BuildMenu() {
     }
   };
 
+  useEffect(() => {
+    if (isWeaponActive) {
+      cancel();
+    }
+  }, [isWeaponActive]);
+
   useControl(ControlCode.Back, cancel);
   useControl(
     ControlCode.RotateBuilding,
@@ -36,6 +46,9 @@ export default function BuildMenu() {
     Boolean(placingTarget && placingTarget.rotatable),
   );
   const makeBuildingCallback = (n: number) => () => {
+    if (isWeaponActive) {
+      dispatch(actions.deactivateWeapon());
+    }
     if (categoryBuildings.length) {
       dispatch(
         actions.activatePlacement({
@@ -59,6 +72,19 @@ export default function BuildMenu() {
   useControl(ControlCode.Building9, makeBuildingCallback(9), !placingTarget);
   useControl(ControlCode.Building0, makeBuildingCallback(0), !placingTarget);
 
+  const clearAllEnabled = Boolean(
+    !cursorPos &&
+      !isWeaponActive &&
+      !category &&
+      !isPlacing &&
+      settings.backClearsAllReflector,
+  );
+  useControl(
+    ControlCode.Back,
+    () => dispatch(actions.clearReflectors()),
+    clearAllEnabled,
+  );
+
   const showCategory: boolean = !category;
   const showBuildings: boolean = Boolean(category && !placingTarget);
 
@@ -69,7 +95,7 @@ export default function BuildMenu() {
     <section className="border-t border-b border-gray flex flex-row">
       {placingTarget && placingTarget.description ? (
         <h2 className="text-xl px-2">
-          Buidling {placingTarget.description.name}
+          Building {placingTarget.description.name}
         </h2>
       ) : null}
       {category ? (
@@ -80,7 +106,7 @@ export default function BuildMenu() {
           className={buttonClassName}
         >
           <kbd className="bg-darkGray px-1 rounded mr-1">
-            {controls[ControlCode.Back][0]}
+            {settings.keyboardShortcuts[ControlCode.Back][0]}
           </kbd>
           Cancel
         </button>

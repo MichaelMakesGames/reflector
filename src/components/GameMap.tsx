@@ -1,9 +1,9 @@
 /* global document */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { app, getPosFromMouse, zoomOut, zoomTo } from "~/renderer";
 import { DOWN, LEFT, PLAYER_ID, RIGHT, UP } from "~constants";
-import { ControlCode } from "~data/controls";
+import { ControlCode } from "~types/ControlCode";
 import { useControl } from "~hooks";
 import actions from "~state/actions";
 import selectors from "~state/selectors";
@@ -11,6 +11,7 @@ import { Pos } from "~types";
 import { isDndFocused } from "~utils/controls";
 import { arePositionsEqual } from "~utils/geometry";
 import ContextMenu from "./ContextMenu";
+import { SettingsContext } from "~contexts";
 
 export default function GameMap() {
   useEffect(() => {
@@ -21,6 +22,7 @@ export default function GameMap() {
   }, []);
 
   const dispatch = useDispatch();
+  const settings = useContext(SettingsContext);
   const cursorPos = useSelector(selectors.cursorPos);
   const [contextMenuPos, setContextMenuPos] = useState<Pos | null>(null);
   const isWeaponActive = useSelector(selectors.isWeaponActive);
@@ -48,10 +50,10 @@ export default function GameMap() {
     }
   };
   const moveEnabled = !isWeaponActive && !isPlacing;
-  useControl(ControlCode.PlayerUp, moveUp, moveEnabled);
-  useControl(ControlCode.PlayerDown, moveDown, moveEnabled);
-  useControl(ControlCode.PlayerLeft, moveLeft, moveEnabled);
-  useControl(ControlCode.PlayerRight, moveRight, moveEnabled);
+  useControl(ControlCode.Up, moveUp, moveEnabled);
+  useControl(ControlCode.Down, moveDown, moveEnabled);
+  useControl(ControlCode.Left, moveLeft, moveEnabled);
+  useControl(ControlCode.Right, moveRight, moveEnabled);
 
   const moveCursorUp = () => {
     if (!isDndFocused()) {
@@ -74,10 +76,14 @@ export default function GameMap() {
     }
   };
 
-  useControl(ControlCode.CursorUp, moveCursorUp);
-  useControl(ControlCode.CursorDown, moveCursorDown);
-  useControl(ControlCode.CursorLeft, moveCursorLeft);
-  useControl(ControlCode.CursorRight, moveCursorRight);
+  const cursorModifiers =
+    settings.unmodifiedBuilding && isPlacing
+      ? ["", settings.cursorModifierKey]
+      : [settings.cursorModifierKey];
+  useControl(ControlCode.Up, moveCursorUp, true, cursorModifiers);
+  useControl(ControlCode.Down, moveCursorDown, true, cursorModifiers);
+  useControl(ControlCode.Left, moveCursorLeft, true, cursorModifiers);
+  useControl(ControlCode.Right, moveCursorRight, true, cursorModifiers);
   useControl(ControlCode.Back, () => {
     setContextMenuPos(null);
     dispatch(actions.setCursorPos(null));

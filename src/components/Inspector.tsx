@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useControl } from "~hooks";
 import selectors from "~state/selectors";
 import { getActionsAvailableAtPos, ActionControl } from "~utils/controls";
-import controls from "~data/controls";
+import { SettingsContext } from "~contexts";
 
 export default function Inspector() {
   const entitiesAtCursor = useSelector(selectors.entitiesAtCursor);
@@ -44,6 +44,7 @@ export default function Inspector() {
 }
 
 function InspectorAction({ action }: { action: ActionControl }) {
+  const settings = useContext(SettingsContext);
   const dispatch = useDispatch();
   useControl(
     action.controlCode,
@@ -58,7 +59,7 @@ function InspectorAction({ action }: { action: ActionControl }) {
   return (
     <button type="button" className="font-normal">
       <kbd className="font-mono bg-darkGray rounded p-1 mr-1">
-        {controls[action.controlCode][0]}
+        {settings.keyboardShortcuts[action.controlCode][0]}
       </kbd>
       {action.label}
     </button>

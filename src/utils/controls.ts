@@ -1,6 +1,6 @@
 /* global document */
 import { DOWN, LEFT, PLAYER_ID, UP } from "~constants";
-import { ControlCode } from "~data/controls";
+import { ControlCode } from "~types/ControlCode";
 import actions from "~state/actions";
 import selectors from "~state/selectors";
 import wrapState from "~state/wrapState";
@@ -40,14 +40,14 @@ function addMoveAction(state: RawState, pos: Pos, results: ActionControl[]) {
       const dir = { dx: pos.x - playerPos.x, dy: pos.y - playerPos.y };
       let controlCode: ControlCode;
       if (areDirectionsEqual(dir, UP)) {
-        controlCode = ControlCode.PlayerUp;
+        controlCode = ControlCode.Up;
       } else if (areDirectionsEqual(dir, DOWN)) {
-        controlCode = ControlCode.PlayerDown;
+        controlCode = ControlCode.Down;
       } else if (areDirectionsEqual(dir, LEFT)) {
-        controlCode = ControlCode.PlayerLeft;
+        controlCode = ControlCode.Left;
       } else {
         // if (areDirectionsEqual(dir, RIGHT))
-        controlCode = ControlCode.PlayerRight;
+        controlCode = ControlCode.Right;
       }
       results.push({
         label: "Move",
