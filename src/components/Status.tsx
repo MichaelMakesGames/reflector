@@ -9,6 +9,7 @@ export default function Status() {
   const day = useSelector(selectors.day);
   const timeUntilVictory = useSelector(selectors.timeUntilVictory);
   const population = useSelector(selectors.population);
+  const housingCapacity = useSelector(selectors.housingCapacity);
   const morale = useSelector(selectors.morale);
   return (
     <section className="p-2 border-b border-gray">
@@ -17,7 +18,7 @@ export default function Status() {
           <p className="text-xl">
             Day {day + 1}, {time}
           </p>
-          <p className="opacity-75">Victory in {timeUntilVictory}</p>
+          <p className="text-lightGray">Victory in {timeUntilVictory}</p>
         </div>
         <button
           className="btn"
@@ -29,12 +30,13 @@ export default function Status() {
       </div>
       <div className="flex flex-row">
         <p>
-          <span className="opacity-75">Morale: </span>
+          <span className="text-lightGray">Morale: </span>
           {morale}
         </p>
         <p>
-          <span className="opacity-75 ml-3">Population: </span>
+          <span className="text-lightGray ml-3">Population: </span>
           {population}
+          <span className="text-lightGray"> / {housingCapacity}</span>
         </p>
       </div>
     </section>

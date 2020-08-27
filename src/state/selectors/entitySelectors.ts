@@ -86,6 +86,12 @@ export function residence(state: RawState, colonist: HasColonist) {
   );
 }
 
+export function housingCapacity(state: RawState) {
+  return entitiesWithComps(state, "housing")
+    .filter((entity) => !entity.housing.removeOnVacancy)
+    .reduce((sum, entity) => sum + entity.housing.capacity, 0);
+}
+
 export function employment(state: RawState, colonist: HasColonist) {
   if (
     colonist.colonist.employment &&
