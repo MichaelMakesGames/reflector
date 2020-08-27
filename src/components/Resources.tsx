@@ -37,10 +37,7 @@ function ResourceRow({ resource }: { resource: Resource }) {
     selectors.resourceChange(state, resource.code),
   );
   const totalChange = changes.reduce((acc, cur) => acc + cur.amount, 0);
-  const formatNumber = Intl.NumberFormat(undefined, {
-    minimumFractionDigits: 1,
-    maximumFractionDigits: 1,
-  }).format;
+  const formatNumber = Intl.NumberFormat().format;
   const getChangeColorClass = (change: number) => {
     if (change > 0) return "text-green";
     if (change < 0) return "text-red";
@@ -72,7 +69,7 @@ function ResourceRow({ resource }: { resource: Resource }) {
                       change.amount,
                     )}`}
                   >
-                    {change.amount > 0 ? "+" : null}
+                    {change.amount >= 0 ? "+" : null}
                     {formatNumber(change.amount)}
                   </td>
                 </tr>
@@ -82,7 +79,7 @@ function ResourceRow({ resource }: { resource: Resource }) {
         }
       >
         <td className={`flex-1 text-right ${getChangeColorClass(totalChange)}`}>
-          {totalChange > 0 ? "+" : null}
+          {totalChange >= 0 ? "+" : null}
           {formatNumber(totalChange)}
         </td>
       </Tooltip>
