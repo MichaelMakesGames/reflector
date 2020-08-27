@@ -141,6 +141,11 @@ export function numberEmployed(state: RawState, jobType: JobTypeCode) {
   );
 }
 
+export function numberOfUnemployedColonists(state: RawState) {
+  return colonists(state).filter((entity) => !entity.colonist.employment)
+    .length;
+}
+
 export function disableMarker(
   state: RawState,
 ): null | Required<Entity, "pos" | "disabledMarker"> {

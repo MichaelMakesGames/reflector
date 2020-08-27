@@ -12,6 +12,7 @@ export default function Jobs() {
   const orderedJobTypes = Object.entries(jobPriorities)
     .sort((a, b) => a[1] - b[1])
     .map(([code]) => jobTypes[code as JobTypeCode]);
+  const numberUnemployed = useSelector(selectors.numberOfUnemployedColonists);
 
   return (
     <section className="p-2 border-b border-gray">
@@ -42,6 +43,10 @@ export default function Jobs() {
           )}
         </Droppable>
       </DragDropContext>
+      <div className="text-center text-lightGray">
+        {numberUnemployed} {numberUnemployed === 1 ? "colonist" : "colonists"}{" "}
+        unemployed.
+      </div>
     </section>
   );
 }
