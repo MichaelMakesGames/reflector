@@ -233,7 +233,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
         "Produces 1 food when worked by colonist. Up to 1 colonist can work at a time.",
     },
   },
-  POWER_PLANT: {
+  REACTOR: {
     building: {},
     display: {
       tile: "powerplant",
@@ -262,14 +262,14 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       numberEmployed: 0,
       maxNumberEmployed: 2,
       jobType: JobTypeCode.Power,
-      resourceChangeReason: "Power Plant",
+      resourceChangeReason: "Reactor",
     },
     blocking: {
       moving: true,
       lasers: true,
     },
     description: {
-      name: "Power Plant",
+      name: "Reactor",
       description:
         "Produces 1 power when worked by colonist. Up to 2 colonists can work at a time.",
     },
@@ -286,6 +286,10 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       conditions: ["isDay"],
       trueColor: colors.activeBuilding,
       falseColor: colors.inactiveBuilding,
+    },
+    blocking: {
+      moving: true,
+      lasers: false,
     },
     destructible: {},
     production: {

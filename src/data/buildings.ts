@@ -15,8 +15,8 @@ const buildings: {
     template: "SPLITTER_HORIZONTAL",
     label: "Splitter",
     cost: {
-      resource: ResourceCode.Machinery,
-      amount: 10,
+      resource: ResourceCode.Metal,
+      amount: 25,
     },
     category: BuildingCategoryCode.Laser,
   },
@@ -78,11 +78,11 @@ const buildings: {
     category: BuildingCategoryCode.Production,
   },
   {
-    template: "POWER_PLANT",
-    label: "Power Plant",
+    template: "REACTOR",
+    label: "Reactor",
     cost: {
-      resource: ResourceCode.Metal,
-      amount: 15,
+      resource: ResourceCode.Machinery,
+      amount: 25,
     },
     category: BuildingCategoryCode.Power,
   },
