@@ -9,6 +9,8 @@ function fireWeapon(
   const player = state.select.player();
   if (!player) return;
 
+  state.act.playerWillTakeTurn();
+
   const lasers = state.select.entitiesWithComps("laser", "pos");
 
   const entitiesToDestroy: string[] = [];

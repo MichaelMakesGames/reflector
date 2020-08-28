@@ -38,6 +38,15 @@ export default function GameOver() {
           >
             New Game
           </button>
+          {!victory && (
+            <button
+              className="btn ml-2"
+              type="button"
+              onClick={() => dispatch(actions.undoTurn())}
+            >
+              Undo Last Turn
+            </button>
+          )}
           {victory && (
             <button
               className="btn ml-2"

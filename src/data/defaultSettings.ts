@@ -39,6 +39,7 @@ const defaultSettings: Settings = {
 
     [ControlCode.Wait]: ["z"],
     [ControlCode.Back]: ["q", "esc"],
+    [ControlCode.Undo]: ["ctrl z"],
   },
 };
 

@@ -22,7 +22,10 @@ export default function Status() {
         </div>
         <button
           className="btn"
-          onClick={() => dispatch(actions.playerTookTurn())}
+          onClick={() => {
+            dispatch(actions.playerWillTakeTurn());
+            dispatch(actions.playerTookTurn());
+          }}
           type="button"
         >
           Wait

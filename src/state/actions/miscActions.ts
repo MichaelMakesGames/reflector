@@ -9,6 +9,9 @@ export const move = createStandardAction("MOVE")<{
   dy: number;
 }>();
 
+export const playerWillTakeTurn = createStandardAction(
+  "PLAYER_WILL_TAKE_TURN",
+)();
 export const playerTookTurn = createStandardAction("PLAYER_TOOK_TURN")();
 
 export const newGame = createStandardAction("NEW_GAME")();
@@ -47,3 +50,5 @@ export const setCursorPos = createStandardAction(
   "SET_CURSOR_POS",
 )<Pos | null>();
 export const moveCursor = createStandardAction("MOVE_CURSOR")<Direction>();
+
+export const undoTurn = createStandardAction("UNDO_TURN")();

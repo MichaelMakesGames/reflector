@@ -1,4 +1,9 @@
-import { addRenderEntity, zoomTo, setBackgroundColor } from "~renderer";
+import {
+  addRenderEntity,
+  zoomTo,
+  setBackgroundColor,
+  clearRenderer,
+} from "~renderer";
 import { registerHandler } from "~state/handleAction";
 import WrappedState from "~types/WrappedState";
 import actions from "../actions";
@@ -16,6 +21,7 @@ function loadGame(
     version: state.select.version(),
   });
   state.act.setCursorPos(null);
+  clearRenderer();
   state.select
     .entitiesWithComps("pos", "display")
     .forEach((entity) => addRenderEntity(entity));

@@ -23,6 +23,7 @@ export interface RawState {
   lastAimingDirection: Direction;
   jobPriorities: Record<JobTypeCode, number>;
   cursorPos: Pos | null;
+  previousState: null | RawState;
 }
 
 export interface TimeState {

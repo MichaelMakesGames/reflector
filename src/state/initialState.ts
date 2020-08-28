@@ -2,7 +2,6 @@ import {
   BASE_IMMIGRATION_RATE,
   RIGHT,
   STARTING_MORALE,
-  TURNS_PER_DAY,
   VERSION,
 } from "~constants";
 import { RawState } from "~types";
@@ -17,10 +16,7 @@ const initialState: RawState = {
   turnsUntilNextImmigrant: BASE_IMMIGRATION_RATE,
   morale: STARTING_MORALE,
   time: {
-    isNight: false,
-    turnsUntilChange: TURNS_PER_DAY,
     turn: 1,
-    day: 1,
     directionWeights: { n: 0, s: 0, e: 0, w: 0 },
   },
   isWeaponActive: false,
@@ -50,6 +46,7 @@ const initialState: RawState = {
   },
   lastAimingDirection: RIGHT,
   cursorPos: null,
+  previousState: null,
 };
 
 export default initialState;

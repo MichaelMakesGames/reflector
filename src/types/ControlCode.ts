@@ -28,4 +28,5 @@ export enum ControlCode {
   Wait = "WAIT",
   QuickAction = "QUICK_ACTION",
   Back = "BACK",
+  Undo = "UNDO",
 }

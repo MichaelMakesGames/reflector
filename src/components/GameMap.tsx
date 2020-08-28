@@ -88,7 +88,11 @@ export default function GameMap() {
     setContextMenuPos(null);
     dispatch(actions.setCursorPos(null));
   });
-  useControl(ControlCode.Wait, () => dispatch(actions.playerTookTurn()));
+  useControl(ControlCode.Wait, () => {
+    dispatch(actions.playerWillTakeTurn());
+    dispatch(actions.playerTookTurn());
+  });
+  useControl(ControlCode.Undo, () => dispatch(actions.undoTurn()));
 
   const performDefaultAction = (pos: Pos | null) => {
     if (pos) {

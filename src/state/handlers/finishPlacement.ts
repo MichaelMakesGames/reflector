@@ -9,6 +9,7 @@ function finishPlacement(
 ): void {
   const placingTarget = state.select.placingTarget();
   if (!placingTarget) return;
+  const { takesTurn } = placingTarget.placing;
 
   const { pos } = placingTarget;
   const entitiesAtPosition = state.select.entitiesAtPosition(pos);
@@ -25,12 +26,15 @@ function finishPlacement(
       console.warn("Failed to place due to cost. This should be impossible");
       return;
     } else {
+      if (takesTurn) state.act.playerWillTakeTurn();
       state.act.modifyResource({
         resource: cost.resource,
         amount: -cost.amount,
         reason: "Building",
       });
     }
+  } else if (takesTurn) {
+    state.act.playerWillTakeTurn();
   }
 
   const otherReflector = entitiesAtPosition.find(
