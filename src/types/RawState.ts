@@ -13,7 +13,7 @@ export interface RawState {
   turnsUntilNextImmigrant: number;
   morale: number;
   time: TimeState;
-  isWeaponActive: boolean;
+  laserState: "READY" | "ACTIVE" | "FIRING" | "RECHARGING";
   resources: Record<ResourceCode, number>;
   resourceChanges: Record<ResourceCode, { reason: string; amount: number }[]>;
   resourceChangesThisTurn: Record<

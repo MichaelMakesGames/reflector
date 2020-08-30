@@ -30,6 +30,18 @@ body {
   border-color: #373737;
 }
 
+.tippy-box {
+  @apply bg-darkGray;
+  @apply border;
+  @apply border-black;
+  max-width: 15rem !important;
+}
+
+.tippy-arrow {
+  @apply text-darkGray;
+  bottom: -1px;
+}
+
 /* purgecss end ignore */
 
 @tailwind components;

@@ -19,7 +19,7 @@ const initialState: RawState = {
     turn: 1,
     directionWeights: { n: 0, s: 0, e: 0, w: 0 },
   },
-  isWeaponActive: false,
+  laserState: "READY",
   resources: {
     METAL: 0,
     FOOD: 0,

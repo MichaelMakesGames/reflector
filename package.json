@@ -90,6 +90,7 @@
     "@babel/polyfill": "^7.2.5",
     "@reasonink/clack": "0.0.3",
     "@rooks/use-outside-click-ref": "^3.6.0",
+    "@tippyjs/react": "^4.1.0",
     "@types/classnames": "^2.2.9",
     "classnames": "^2.2.6",
     "has": "^1.0.3",
@@ -108,6 +109,7 @@
     "redux-devtools-extension": "^2.13.8",
     "rot-js": "^2.1.1",
     "tailwindcss": "^1.4.5",
+    "tippy.js": "^6.2.6",
     "ts-toolbelt": "^4.10.21",
     "typesafe-actions": "^4.4.2"
   }

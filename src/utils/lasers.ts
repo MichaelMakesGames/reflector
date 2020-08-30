@@ -129,7 +129,7 @@ function getSplitOrientation(direction: Direction) {
 }
 
 export function retargetLaserOnReflectorChange(state: WrappedState, pos?: Pos) {
-  if (state.select.isWeaponActive) {
+  if (state.select.isWeaponActive()) {
     if (pos) {
       const entitiesAtPos = state.select.entitiesAtPosition(pos);
       if (entitiesAtPos.some((e) => e.laser)) {

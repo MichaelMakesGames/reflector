@@ -12,9 +12,16 @@ function targetWeapon(
   state: WrappedState,
   action: ReturnType<typeof actions.targetWeapon>,
 ): void {
+  if (state.select.laserState() === "RECHARGING") {
+    state.act.logMessage({
+      message:
+        "Your laser needs to recharge. It will be ready again next turn.",
+    });
+    return;
+  }
   state.setRaw({
     ...state.raw,
-    isWeaponActive: true,
+    laserState: "ACTIVE",
     lastAimingDirection: action.payload,
   });
   const lasers = state.select.entitiesWithComps("laser", "pos");
@@ -56,10 +63,7 @@ function targetWeapon(
             areDirectionsEqual(beam, e.laser.direction),
         )
       ) {
-        console.warn(
-          `other same direction laser already at ${nextPos.x},${nextPos.y}`,
-          entitiesAtPos.filter((e) => e.laser),
-        );
+        // if there's already a laser in the same direction, set beam to zero to avoid infinite loops
         beam.strength = 0;
       } else if (!solidEntity && !reflectorEntity) {
         state.act.addEntity(createLaser(beam, beam.strength, false, nextPos));

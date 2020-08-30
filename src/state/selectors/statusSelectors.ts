@@ -106,7 +106,11 @@ export function canAffordToPay(
 }
 
 export function isWeaponActive(state: RawState): boolean {
-  return state.isWeaponActive;
+  return state.laserState === "ACTIVE";
+}
+
+export function laserState(state: RawState) {
+  return state.laserState;
 }
 
 export function lastAimingDirection(state: RawState) {

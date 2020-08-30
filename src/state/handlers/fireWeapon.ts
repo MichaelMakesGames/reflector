@@ -6,8 +6,8 @@ function fireWeapon(
   state: WrappedState,
   action: ReturnType<typeof actions.fireWeapon>,
 ): void {
-  const player = state.select.player();
-  if (!player) return;
+  if (!state.select.isWeaponActive()) return;
+  if (!state.select.player()) return;
 
   state.act.playerWillTakeTurn();
 
@@ -32,6 +32,10 @@ function fireWeapon(
   }
 
   state.act.deactivateWeapon();
+  state.setRaw({
+    ...state.raw,
+    laserState: "FIRING",
+  });
   state.act.playerTookTurn();
 }
 

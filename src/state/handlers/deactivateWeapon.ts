@@ -6,13 +6,15 @@ function deactivateWeapon(
   state: WrappedState,
   action: ReturnType<typeof actions.deactivateWeapon>,
 ): void {
-  state.setRaw({
-    ...state.raw,
-    isWeaponActive: false,
-  });
-  state.act.removeEntities(
-    state.select.entitiesWithComps("laser").map((e) => e.id),
-  );
+  if (state.raw.laserState === "ACTIVE") {
+    state.setRaw({
+      ...state.raw,
+      laserState: "READY",
+    });
+    state.act.removeEntities(
+      state.select.entitiesWithComps("laser").map((e) => e.id),
+    );
+  }
 }
 
 registerHandler(deactivateWeapon, actions.deactivateWeapon);

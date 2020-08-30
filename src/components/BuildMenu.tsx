@@ -33,6 +33,7 @@ export default function BuildMenu() {
     }
   };
 
+  // cancel build when laser activated
   useEffect(() => {
     if (isWeaponActive) {
       cancel();
@@ -47,6 +48,7 @@ export default function BuildMenu() {
   );
   const makeBuildingCallback = (n: number) => () => {
     if (isWeaponActive) {
+      // cancel laser when initiating build
       dispatch(actions.deactivateWeapon());
     }
     if (categoryBuildings.length) {
