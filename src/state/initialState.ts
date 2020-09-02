@@ -46,7 +46,15 @@ const initialState: RawState = {
   },
   lastAimingDirection: RIGHT,
   cursorPos: null,
-  previousState: null,
+  isStartOfTurn: true,
+  startOfThisTurn: null,
+  startOfLastTurn: null,
+};
+
+initialState.startOfThisTurn = {
+  ...initialState,
+  startOfThisTurn: null,
+  startOfLastTurn: null,
 };
 
 export default initialState;

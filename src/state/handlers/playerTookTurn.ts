@@ -14,6 +14,23 @@ function playerTookTurn(
     ...state.raw,
     resourceChanges: state.raw.resourceChangesThisTurn,
     resourceChangesThisTurn: initialState.resourceChangesThisTurn,
+    isStartOfTurn: true,
+  });
+  state.setRaw({
+    ...state.raw,
+    startOfLastTurn: {
+      ...(state.raw.startOfThisTurn || state.raw),
+      startOfThisTurn: null,
+      startOfLastTurn: null,
+    },
+  });
+  state.setRaw({
+    ...state.raw,
+    startOfThisTurn: {
+      ...state.raw,
+      startOfThisTurn: null,
+      startOfLastTurn: null,
+    },
   });
   save(state.raw);
 }

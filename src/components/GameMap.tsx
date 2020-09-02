@@ -89,7 +89,6 @@ export default function GameMap() {
     dispatch(actions.setCursorPos(null));
   });
   useControl(ControlCode.Wait, () => {
-    dispatch(actions.playerWillTakeTurn());
     dispatch(actions.playerTookTurn());
   });
   useControl(ControlCode.Undo, () => dispatch(actions.undoTurn()));

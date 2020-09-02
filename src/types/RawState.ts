@@ -23,7 +23,10 @@ export interface RawState {
   lastAimingDirection: Direction;
   jobPriorities: Record<JobTypeCode, number>;
   cursorPos: Pos | null;
-  previousState: null | RawState;
+
+  isStartOfTurn: boolean;
+  startOfThisTurn: RawState | null;
+  startOfLastTurn: RawState | null;
 }
 
 export interface TimeState {

@@ -9,9 +9,6 @@ export const move = createStandardAction("MOVE")<{
   dy: number;
 }>();
 
-export const playerWillTakeTurn = createStandardAction(
-  "PLAYER_WILL_TAKE_TURN",
-)();
 export const playerTookTurn = createStandardAction("PLAYER_TOOK_TURN")();
 
 export const newGame = createStandardAction("NEW_GAME")();

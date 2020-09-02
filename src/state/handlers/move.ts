@@ -24,9 +24,6 @@ function move(
   ) {
     return;
   }
-  if (entity.id === PLAYER_ID) {
-    state.act.playerWillTakeTurn();
-  }
   state.act.updateEntity({
     id: entity.id,
     pos: newPosition,

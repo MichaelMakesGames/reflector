@@ -23,7 +23,6 @@ export default function Status() {
         <button
           className="btn"
           onClick={() => {
-            dispatch(actions.playerWillTakeTurn());
             dispatch(actions.playerTookTurn());
           }}
           type="button"
