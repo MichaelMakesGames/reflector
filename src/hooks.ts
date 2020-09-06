@@ -1,5 +1,5 @@
 import * as clack from "@reasonink/clack";
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState, useCallback } from "react";
 import { ControlCode } from "~types/ControlCode";
 import { SettingsContext } from "~contexts";
 
@@ -38,4 +38,14 @@ export function useControl(
       group.enabled = false;
     };
   });
+}
+
+export function useBoolean(
+  initialValue: boolean,
+): [boolean, () => void, () => void, () => void] {
+  const [value, setValue] = useState(initialValue);
+  const setTrue = useCallback(() => setValue(true), [setValue]);
+  const setFalse = useCallback(() => setValue(false), [setValue]);
+  const toggle = useCallback(() => setValue(!value), [setValue, value]);
+  return [value, setTrue, setFalse, toggle];
 }
