@@ -1,10 +1,10 @@
-import Tooltip from "rc-tooltip";
 import React from "react";
 import { useSelector } from "react-redux";
 import resources, { Resource } from "~data/resources";
 import selectors from "~state/selectors";
 import { RawState } from "~types";
 import ResourceIcon from "./ResourceIcon";
+import Tippy from "@tippyjs/react";
 
 export default function Resources() {
   return (
@@ -51,9 +51,9 @@ function ResourceRow({ resource }: { resource: Resource }) {
       </td>
       <td className="flex-1">{resource.label}</td>
       <td className="flex-1 text-right">{formatNumber(amount)}</td>
-      <Tooltip
+      <Tippy
         placement="right"
-        overlay={
+        content={
           <table>
             <tbody>
               {changes.length === 0 && (
@@ -82,7 +82,7 @@ function ResourceRow({ resource }: { resource: Resource }) {
           {totalChange >= 0 ? "+" : null}
           {formatNumber(totalChange)}
         </td>
-      </Tooltip>
+      </Tippy>
     </tr>
   );
 }

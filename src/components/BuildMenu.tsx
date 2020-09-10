@@ -1,4 +1,3 @@
-import Tooltip from "rc-tooltip";
 import React, { useState, useContext, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import buildingCategories, { BuildingCategory } from "~data/buildingCategories";
@@ -10,6 +9,7 @@ import actions from "~state/actions";
 import selectors from "~state/selectors";
 import ResourceAmount from "./ResourceAmount";
 import { SettingsContext } from "~contexts";
+import Tippy from "@tippyjs/react";
 
 export default function BuildMenu() {
   const dispatch = useDispatch();
@@ -128,20 +128,15 @@ export default function BuildMenu() {
       ) : null}
       {showBuildings &&
         categoryBuildings.map((b, i) => (
-          <Tooltip
+          <Tippy
             key={b.template}
             placement="top"
-            overlayStyle={{ width: "10rem" }}
-            overlay={
-              <span>
-                {
-                  (
-                    templates[b.template].description || {
-                      description: "No description",
-                    }
-                  ).description
+            content={
+              (
+                templates[b.template].description || {
+                  description: "No description",
                 }
-              </span>
+              ).description
             }
           >
             <button
@@ -166,7 +161,7 @@ export default function BuildMenu() {
                 amount={b.cost.amount}
               />
             </button>
-          </Tooltip>
+          </Tippy>
         ))}
       {showCategory &&
         buildingCategories.map((c, i) => (
