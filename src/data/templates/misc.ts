@@ -6,6 +6,7 @@ import {
 } from "~/constants";
 import colors from "~colors";
 import { Entity } from "~types";
+import { ColonistStatusCode } from "~data/colonistStatuses";
 
 const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   PLAYER: {
@@ -106,7 +107,11 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     colonist: {
       residence: null,
       employment: null,
-      isWorking: false,
+      status: ColonistStatusCode.Wandering,
+    },
+    description: {
+      name: "Colonist",
+      description: "",
     },
   },
   BORDER_NORTH: {

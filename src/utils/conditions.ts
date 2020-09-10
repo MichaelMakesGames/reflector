@@ -1,6 +1,7 @@
 import WrappedState from "~types/WrappedState";
 import { Entity } from "~types";
 import { getAdjacentPositions } from "./geometry";
+import { ColonistStatusCode } from "~data/colonistStatuses";
 
 const conditions: Record<
   ConditionName,
@@ -27,7 +28,9 @@ const conditions: Record<
     return (
       state.select
         .employees(entity)
-        .filter((employee) => employee.colonist.isWorking).length >= 1
+        .filter(
+          (employee) => employee.colonist.status === ColonistStatusCode.Working,
+        ).length >= 1
     );
   },
 
@@ -35,7 +38,9 @@ const conditions: Record<
     return (
       state.select
         .employees(entity)
-        .filter((employee) => employee.colonist.isWorking).length >= 2
+        .filter(
+          (employee) => employee.colonist.status === ColonistStatusCode.Working,
+        ).length >= 2
     );
   },
 
@@ -43,7 +48,9 @@ const conditions: Record<
     return (
       state.select
         .employees(entity)
-        .filter((employee) => employee.colonist.isWorking).length >= 3
+        .filter(
+          (employee) => employee.colonist.status === ColonistStatusCode.Working,
+        ).length >= 3
     );
   },
 };

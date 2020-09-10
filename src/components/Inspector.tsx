@@ -1,14 +1,18 @@
 import React, { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { SettingsContext } from "~contexts";
 import { useControl } from "~hooks";
 import selectors from "~state/selectors";
-import { getActionsAvailableAtPos, ActionControl } from "~utils/controls";
-import { SettingsContext } from "~contexts";
+import { Entity, HasDescription } from "~types";
+import { ActionControl, getActionsAvailableAtPos } from "~utils/controls";
+import colonistStatuses from "~data/colonistStatuses";
 
 export default function Inspector() {
   const entitiesAtCursor = useSelector(selectors.entitiesAtCursor);
   const entitiesWithDescription =
-    entitiesAtCursor && entitiesAtCursor.filter((e) => e.description);
+    entitiesAtCursor &&
+    (entitiesAtCursor.filter((e) => e.description) as (Entity &
+      HasDescription)[]);
   const cursorPos = useSelector(selectors.cursorPos);
   const state = useSelector(selectors.state);
   const actions = cursorPos ? getActionsAvailableAtPos(state, cursorPos) : [];
@@ -18,16 +22,16 @@ export default function Inspector() {
       <h2 className="text-xl">Inspector</h2>
       <ul className="ml-3">
         {entitiesWithDescription && entitiesWithDescription.length ? (
-          entitiesWithDescription.map((e) =>
-            e.description ? <li key={e.id}>{e.description.name}</li> : null,
-          )
+          entitiesWithDescription.map((e) => (
+            <InspectorEntity entity={e} key={e.id} />
+          ))
         ) : (
           <li>Nothing here</li>
         )}
       </ul>
       <h2 className="text-xl mt-2">Available Actions</h2>
       {actions.length > 0 && (
-        <div className="text-lightGray text-sm opacity-75 mb-2">
+        <div className="text-lightGray text-sm mb-2">
           Right click map or use shortcuts
         </div>
       )}
@@ -63,5 +67,18 @@ function InspectorAction({ action }: { action: ActionControl }) {
       </kbd>
       {action.label}
     </button>
+  );
+}
+
+function InspectorEntity({ entity }: { entity: Entity & HasDescription }) {
+  return (
+    <li>
+      <div>{entity.description.name}</div>
+      {entity.colonist && (
+        <div className="ml-3 text-lightGray text-sm">
+          {colonistStatuses[entity.colonist.status].label}
+        </div>
+      )}
+    </li>
   );
 }

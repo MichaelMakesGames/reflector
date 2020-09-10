@@ -1,6 +1,7 @@
 import { Direction } from "./Direction";
 import { ResourceCode } from "~data/resources";
 import { JobTypeCode } from "~data/jobTypes";
+import { ColonistStatusCode } from "~data/colonistStatuses";
 
 export interface Pos {
   x: number;
@@ -85,7 +86,7 @@ export interface HasPlacing {
 export interface Colonist {
   residence: string | null;
   employment: string | null;
-  isWorking: boolean;
+  status: ColonistStatusCode;
 }
 export interface HasColonist {
   colonist: Colonist;

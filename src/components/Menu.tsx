@@ -16,7 +16,6 @@ export default function Menu() {
     <Tippy
       visible={isOpen}
       arrow={false}
-      hideOnClick={false}
       interactive
       onClickOutside={close}
       placement="bottom-end"

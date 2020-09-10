@@ -203,7 +203,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       resourceChangeReason: "Mining (at mining spot)",
     },
     description: {
-      name: "Mine",
+      name: "Mining Spot",
       description:
         "Free to build, but less efficient than a mine. Provides 1 job that produces 1 metal when mined.",
     },

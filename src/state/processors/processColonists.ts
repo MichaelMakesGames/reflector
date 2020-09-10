@@ -12,9 +12,9 @@ import {
 } from "~utils/geometry";
 import { rangeTo } from "~utils/math";
 import { choose } from "~utils/rng";
+import { ColonistStatusCode } from "~data/colonistStatuses";
 
 export default function processColonists(state: WrappedState): void {
-  clearIsWorking(state);
   if (state.select.isNight()) {
     if (state.select.turnOfNight() === 0) {
       for (const colonist of state.select.colonists()) {
@@ -38,7 +38,7 @@ export default function processColonists(state: WrappedState): void {
 
     for (const colonist of state.select.colonists()) {
       if (colonist.colonist.residence) {
-        goHome(state, colonist);
+        goHomeOrSleep(state, colonist);
       } else if (state.select.isPositionBlocked(colonist.pos)) {
         wander(state, colonist);
       } else {
@@ -101,18 +101,6 @@ export default function processColonists(state: WrappedState): void {
   state.select
     .entitiesWithComps("colonist", "display", "pos")
     .forEach((colonist) => updateColonistTile(state, colonist));
-}
-
-function clearIsWorking(state: WrappedState) {
-  state.select
-    .colonists()
-    .filter((e) => e.colonist.isWorking)
-    .forEach((e) =>
-      state.act.updateEntity({
-        ...e,
-        colonist: { ...e.colonist, isWorking: false },
-      }),
-    );
 }
 
 function clearResidence(
@@ -212,17 +200,23 @@ function assignResidence(
   }
 }
 
-function goHome(
+function goHomeOrSleep(
   state: WrappedState,
   colonist: Required<Entity, "colonist" | "pos">,
 ) {
-  if (
-    colonist.colonist.residence &&
-    !arePositionsEqual(
-      colonist.pos,
-      state.select.entityById(colonist.colonist.residence).pos as Pos,
-    )
-  ) {
+  if (colonist.colonist.residence) {
+    if (
+      arePositionsEqual(
+        colonist.pos,
+        state.select.entityById(colonist.colonist.residence).pos as Pos,
+      )
+    ) {
+      state.act.updateEntity({
+        ...colonist,
+        colonist: { ...colonist.colonist, status: ColonistStatusCode.Sleeping },
+      });
+      return;
+    }
     const residence = state.select.entityById(colonist.colonist.residence);
     if (residence.pos) {
       const direction = getDirectionTowardTarget(
@@ -232,9 +226,24 @@ function goHome(
       );
       if (direction) {
         state.act.move({ entityId: colonist.id, ...direction });
+        state.act.updateEntity({
+          ...state.select.entityById(colonist.id),
+          colonist: {
+            ...colonist.colonist,
+            status: ColonistStatusCode.GoingHome,
+          },
+        });
+        return;
       }
     }
   }
+  state.act.updateEntity({
+    ...colonist,
+    colonist: {
+      ...colonist.colonist,
+      status: ColonistStatusCode.CannotFindPathHome,
+    },
+  });
 }
 
 function goToWork(
@@ -257,9 +266,24 @@ function goToWork(
       );
       if (direction) {
         state.act.move({ entityId: colonist.id, ...direction });
+        state.act.updateEntity({
+          ...state.select.entityById(colonist.id),
+          colonist: {
+            ...colonist.colonist,
+            status: ColonistStatusCode.GoingToWork,
+          },
+        });
+        return;
       }
     }
   }
+  state.act.updateEntity({
+    ...colonist,
+    colonist: {
+      ...colonist.colonist,
+      status: ColonistStatusCode.CannotFindPathToWork,
+    },
+  });
 }
 
 function doWork(
@@ -294,7 +318,15 @@ function doWork(
       );
     state.act.updateEntity({
       ...colonist,
-      colonist: { ...colonist.colonist, isWorking: true },
+      colonist: { ...colonist.colonist, status: ColonistStatusCode.Working },
+    });
+  } else {
+    state.act.updateEntity({
+      ...colonist,
+      colonist: {
+        ...colonist.colonist,
+        status: ColonistStatusCode.MissingResources,
+      },
     });
   }
 }
@@ -313,6 +345,13 @@ function wander(
       pos: newPos,
     });
   }
+  state.act.updateEntity({
+    ...state.select.entityById(colonist.id),
+    colonist: {
+      ...colonist.colonist,
+      status: ColonistStatusCode.Wandering,
+    },
+  });
 }
 
 function pitchTent(
@@ -326,6 +365,7 @@ function pitchTent(
     colonist: {
       ...colonist.colonist,
       residence: tent.id,
+      status: ColonistStatusCode.Sleeping,
     },
   });
 }
