@@ -15,27 +15,27 @@ import { choose } from "~utils/rng";
 import { ColonistStatusCode } from "~data/colonistStatuses";
 
 export default function processColonists(state: WrappedState): void {
-  if (state.select.isNight()) {
-    if (state.select.turnOfNight() === 0) {
-      for (const colonist of state.select.colonists()) {
-        clearResidence(state, colonist);
-      }
-
-      for (const colonist of state.select.colonists().sort((a, b) => {
-        const aEmployment = state.select.employment(a);
-        const bEmployment = state.select.employment(b);
-        const aPriority = aEmployment
-          ? state.select.jobPriority(aEmployment.jobProvider.jobType)
-          : Infinity;
-        const bPriority = bEmployment
-          ? state.select.jobPriority(bEmployment.jobProvider.jobType)
-          : Infinity;
-        return aPriority - bPriority;
-      })) {
-        assignResidence(state, colonist);
-      }
+  if (!state.select.isNight() || state.select.turnOfNight() === 0) {
+    for (const colonist of state.select.colonists()) {
+      clearResidence(state, colonist);
     }
 
+    for (const colonist of state.select.colonists().sort((a, b) => {
+      const aEmployment = state.select.employment(a);
+      const bEmployment = state.select.employment(b);
+      const aPriority = aEmployment
+        ? state.select.jobPriority(aEmployment.jobProvider.jobType)
+        : Infinity;
+      const bPriority = bEmployment
+        ? state.select.jobPriority(bEmployment.jobProvider.jobType)
+        : Infinity;
+      return aPriority - bPriority;
+    })) {
+      assignResidence(state, colonist);
+    }
+  }
+
+  if (state.select.isNight()) {
     for (const colonist of state.select.colonists()) {
       if (colonist.colonist.residence) {
         goHomeOrSleep(state, colonist);
