@@ -15,7 +15,10 @@ export default function LoadGame() {
     loadPromise.then(load).then((savedGame) => {
       if (!savedGame) {
         dispatch(actions.newGame());
-      } else if (selectors.version(savedGame) === version) {
+      } else if (
+        selectors.version(savedGame) === version &&
+        !selectors.version(savedGame).includes("unstable")
+      ) {
         dispatch(actions.loadGame({ state: savedGame }));
       } else {
         setOldSave(savedGame);
@@ -33,12 +36,20 @@ export default function LoadGame() {
       overlayClassName="inset-0 fixed h-screen w-screen bg-opaqueWhite"
       className="w-2/5 h-auto mx-auto my-8 shadow-2xl bg-black p-8 border border-white border-solid rounded"
     >
-      <p>
-        The saved game is from version {selectors.version(oldSave)}, and may not
-        work with the current version, {version}.
-      </p>
+      {selectors.version(oldSave).includes("unstable") ? (
+        <p>
+          Your save is from an unstable version of the game. Loading the game
+          may not work.
+        </p>
+      ) : (
+        <p>
+          Your save is from version {selectors.version(oldSave)}, and may not
+          work with the current version, {version}.
+        </p>
+      )}
       <button
         type="button"
+        className="btn mt-3 mr-2"
         onClick={() => {
           setOldSave(null);
           dispatch(actions.loadGame({ state: oldSave }));
@@ -48,6 +59,7 @@ export default function LoadGame() {
       </button>
       <button
         type="button"
+        className="btn mt-3 mr-2"
         onClick={() => {
           setOldSave(null);
           dispatch(actions.newGame());
