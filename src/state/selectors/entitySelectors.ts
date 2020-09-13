@@ -86,6 +86,12 @@ export function residence(state: RawState, colonist: HasColonist) {
   );
 }
 
+export function residents(state: RawState, entity: Entity) {
+  return colonists(state).filter(
+    (colonist) => colonist.colonist.residence === entity.id,
+  );
+}
+
 export function housingCapacity(state: RawState) {
   return entitiesWithComps(state, "housing")
     .filter((entity) => !entity.housing.removeOnVacancy)

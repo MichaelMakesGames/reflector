@@ -13,6 +13,7 @@ type TemplateName =
   | "FARM"
   | "FERTILE"
   | "FLOOR"
+  | "HIGHLIGHT"
   | "INSPECTOR"
   | "JOB_DISABLER"
   | "LASER_4SPLIT"

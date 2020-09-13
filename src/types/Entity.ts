@@ -14,6 +14,7 @@ export interface HasPos {
 export interface Display {
   tile: string | string[];
   rotation?: number;
+  speed?: number;
   color: string;
   priority: number;
   hasBackground?: boolean;
@@ -238,6 +239,11 @@ export interface HasCursor {
   cursor: Cursor;
 }
 
+export interface Highlight {}
+export interface HasHighlight {
+  highlight: Highlight;
+}
+
 export interface Border {}
 export interface HasBorder {
   border: Border;
@@ -257,6 +263,7 @@ export interface Entity
     Partial<HasDestructible>,
     Partial<HasDisableMarker>,
     Partial<HasDisplay>,
+    Partial<HasHighlight>,
     Partial<HasHousing>,
     Partial<HasInspector>,
     Partial<HasJobDisabler>,

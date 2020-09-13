@@ -95,6 +95,15 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     cursor: {},
   },
+  HIGHLIGHT: {
+    display: {
+      tile: ["outline_dashed", "blank"],
+      speed: 0.05,
+      color: colors.secondary,
+      priority: PRIORITY_MARKER,
+    },
+    highlight: {},
+  },
   COLONIST: {
     display: {
       tile: "colonists1",

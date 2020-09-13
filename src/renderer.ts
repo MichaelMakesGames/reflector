@@ -234,7 +234,7 @@ function createSprite(pos: Pos, display: Display) {
     sprite = new PIXI.AnimatedSprite(
       display.tile.map((tile) => PIXI.utils.TextureCache[tile || "unknown"]),
     );
-    (sprite as PIXI.AnimatedSprite).animationSpeed = 0.2;
+    (sprite as PIXI.AnimatedSprite).animationSpeed = display.speed || 0.2;
     (sprite as PIXI.AnimatedSprite).play();
   }
   sprite.angle = display.rotation || 0;
