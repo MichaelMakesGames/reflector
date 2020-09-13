@@ -105,6 +105,26 @@ function InspectorEntity({ entity }: { entity: Entity & HasDescription }) {
             {colonistStatuses[entity.colonist.status].label}
           </span>
         )}
+        {entity.jobProvider && (
+          <span className="text-lightGray text-sm">
+            {` - ${entity.jobProvider.numberEmployed}/${entity.jobProvider.maxNumberEmployed} jobs filled`}
+          </span>
+        )}
+        {entity.housing && (
+          <span className="text-lightGray text-sm">
+            {` - ${entity.housing.occupancy}/${entity.housing.capacity} units filled`}
+          </span>
+        )}
+        {entity.powered && (
+          <span className="text-lightGray text-sm">
+            {entity.powered.hasPower ? " - Powered" : " - No power"}
+          </span>
+        )}
+        {entity.production && (
+          <span className="text-lightGray text-sm">
+            {entity.production.producedLastTurn ? " - Active" : " - Inactive"}
+          </span>
+        )}
       </div>
       {employment && (
         <div className="ml-3 text-lightGray text-sm">

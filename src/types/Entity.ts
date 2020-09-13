@@ -142,6 +142,7 @@ export interface HasHousing {
 export interface Production {
   resource: ResourceCode;
   amount: number;
+  producedLastTurn?: boolean;
   conditions: ConditionName[];
   resourceChangeReason: string;
 }
