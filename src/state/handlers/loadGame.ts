@@ -10,6 +10,7 @@ import actions from "../actions";
 import processEmitters from "~state/processors/processEmitters";
 import colors from "~colors";
 import processAnimationToggle from "~state/processors/processAnimationToggle";
+import processBorders from "~state/processors/processBorders";
 
 function loadGame(
   state: WrappedState,
@@ -31,6 +32,7 @@ function loadGame(
   }
   processEmitters(state);
   processAnimationToggle(state);
+  processBorders(state);
   if (state.select.isNight()) {
     setBackgroundColor(colors.backgroundNight);
   } else {
