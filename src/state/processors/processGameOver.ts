@@ -8,7 +8,7 @@ export default function processGameOver(state: WrappedState): void {
       gameOver: true,
       victory: false,
     });
-  } else if (state.raw.time.turn >= VICTORY_ON_TURN) {
+  } else if (state.raw.time.turn >= VICTORY_ON_TURN && !state.raw.victory) {
     state.setRaw({
       ...state.raw,
       gameOver: true,

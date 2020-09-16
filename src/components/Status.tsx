@@ -8,6 +8,7 @@ export default function Status() {
   const time = useSelector(selectors.time);
   const day = useSelector(selectors.day);
   const timeUntilVictory = useSelector(selectors.timeUntilVictory);
+  const victory = useSelector(selectors.victory);
   const population = useSelector(selectors.population);
   const housingCapacity = useSelector(selectors.housingCapacity);
   const morale = useSelector(selectors.morale);
@@ -18,7 +19,9 @@ export default function Status() {
           <p className="text-xl">
             Day {day + 1}, {time}
           </p>
-          <p className="text-lightGray">Victory in {timeUntilVictory}</p>
+          <p className="text-lightGray">
+            {victory ? "Victory!" : `Victory in ${timeUntilVictory}`}
+          </p>
         </div>
         <button
           className="btn"

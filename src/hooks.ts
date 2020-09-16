@@ -1,7 +1,9 @@
 import * as clack from "@reasonink/clack";
-import { useEffect, useContext, useState, useCallback } from "react";
-import { ControlCode } from "~types/ControlCode";
+import { useCallback, useContext, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { SettingsContext } from "~contexts";
+import selectors from "~state/selectors";
+import { ControlCode } from "~types/ControlCode";
 
 export function useControl(
   controlCode: ControlCode,
@@ -9,6 +11,7 @@ export function useControl(
   enabled: boolean = true,
   modifiers: string[] = [""],
 ): void {
+  const gameOver = useSelector(selectors.gameOver);
   const settings = useContext(SettingsContext);
   let group = clack.group({});
 
@@ -33,7 +36,7 @@ export function useControl(
     }, {});
 
     group = clack.group(shortcutsWithPreventDefault);
-    group.enabled = enabled;
+    group.enabled = Boolean(enabled && !gameOver);
     return () => {
       group.enabled = false;
     };

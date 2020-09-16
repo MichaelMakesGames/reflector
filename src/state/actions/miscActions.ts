@@ -12,6 +12,7 @@ export const move = createStandardAction("MOVE")<{
 export const playerTookTurn = createStandardAction("PLAYER_TOOK_TURN")();
 
 export const newGame = createStandardAction("NEW_GAME")();
+export const continueVictory = createStandardAction("CONTINUE_VICTORY")();
 
 export const reduceMorale = createStandardAction("REDUCE_MORALE")<{
   amount: number;

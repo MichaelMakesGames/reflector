@@ -1,15 +1,15 @@
-import React, { useState, useContext, useEffect } from "react";
+import Tippy from "@tippyjs/react";
+import React, { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { SettingsContext } from "~contexts";
 import buildingCategories, { BuildingCategory } from "~data/buildingCategories";
 import buildings from "~data/buildings";
-import { ControlCode } from "~types/ControlCode";
 import templates from "~data/templates";
 import { useControl } from "~hooks";
 import actions from "~state/actions";
 import selectors from "~state/selectors";
+import { ControlCode } from "~types/ControlCode";
 import ResourceAmount from "./ResourceAmount";
-import { SettingsContext } from "~contexts";
-import Tippy from "@tippyjs/react";
 
 export default function BuildMenu() {
   const dispatch = useDispatch();

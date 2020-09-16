@@ -1,20 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import selectors from "~state/selectors";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import actions from "~state/actions";
+import selectors from "~state/selectors";
 
 export default function GameOver() {
   const dispatch = useDispatch();
-  const [isOpen, setIsOpen] = useState(false);
   const gameOver = useSelector(selectors.gameOver);
   const victory = useSelector(selectors.victory);
   const player = useSelector(selectors.player);
   const morale = useSelector(selectors.morale);
-  useEffect(() => {
-    setIsOpen(gameOver);
-  }, [gameOver]);
 
-  if (!isOpen) return null;
+  if (!gameOver) return null;
 
   return (
     <div className="fixed w-screen h-screen">
@@ -51,7 +47,7 @@ export default function GameOver() {
             <button
               className="btn ml-2"
               type="button"
-              onClick={() => setIsOpen(false)}
+              onClick={() => dispatch(actions.continueVictory())}
             >
               Continue Playing
             </button>

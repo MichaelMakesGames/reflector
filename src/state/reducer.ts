@@ -11,11 +11,20 @@ const START_OF_TURN_ALLOW_LIST: string[] = [
   getType(actions.setCursorPos),
 ];
 
+const GAME_OVER_ALLOW_LIST: string[] = [
+  getType(actions.newGame),
+  getType(actions.undoTurn),
+  getType(actions.continueVictory),
+];
+
 export default function reducer(
   state: RawState = initialState,
   action: Action,
 ): RawState {
   const wrappedState = wrapState(state);
+  if (state.gameOver && !GAME_OVER_ALLOW_LIST.includes(action.type)) {
+    return state;
+  }
   if (state.isStartOfTurn && !START_OF_TURN_ALLOW_LIST.includes(action.type)) {
     wrappedState.setRaw({
       ...wrappedState.raw,
