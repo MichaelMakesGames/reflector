@@ -24,6 +24,12 @@ function cancelRemoveBuilding(
     }
   }
   state.act.removeEntity(removingTarget.id);
+
+  // remove job disabler
+  state.select
+    .entitiesAtPosition(action.payload)
+    .filter((e) => e.jobDisabler)
+    .forEach((e) => state.act.removeEntity(e.id));
 }
 
 registerHandler(cancelRemoveBuilding, actions.executeRemoveBuilding);
