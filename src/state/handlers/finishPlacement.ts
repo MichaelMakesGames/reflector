@@ -41,9 +41,9 @@ function finishPlacement(
   }
 
   state.act.updateEntity({
+    ...createEntityFromTemplate(placingTarget.template),
     id: placingTarget.id,
-    placing: undefined,
-    display: createEntityFromTemplate(placingTarget.template).display,
+    pos: placingTarget.pos,
   });
 
   state.act.removeEntities(

@@ -1,5 +1,6 @@
 import WrappedState from "~types/WrappedState";
 import processAI from "./processAI";
+import processAiming from "./processAiming";
 import processAnimationToggle from "./processAnimationToggle";
 import processBorders from "./processBorders";
 import processColonists from "./processColonists";
@@ -14,6 +15,7 @@ import processProduction from "./processProduction";
 import processReflectors from "./processReflectors";
 import processTime from "./processTime";
 import processWave from "./processWave";
+import processBuilding from "./processBuilding";
 
 const processors: ((state: WrappedState) => void)[] = [
   processAI,
@@ -25,6 +27,8 @@ const processors: ((state: WrappedState) => void)[] = [
   processPowered,
   processReflectors,
   processLaserRecharging,
+  processAiming,
+  processBuilding,
   processTime,
   processGameOver,
   processEmitters,

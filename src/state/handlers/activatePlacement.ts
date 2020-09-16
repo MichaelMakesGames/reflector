@@ -90,7 +90,10 @@ function activatePlacement(
     arePositionsEqual(p, targetPos),
   );
   state.act.addEntity({
-    ...entityToPlace,
+    id: entityToPlace.id,
+    template: entityToPlace.template,
+    parentTemplate: entityToPlace.parentTemplate,
+    placing: entityToPlace.placing,
     pos: targetPos,
     display: entityToPlace.display && {
       ...entityToPlace.display,
