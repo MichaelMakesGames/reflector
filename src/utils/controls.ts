@@ -21,6 +21,7 @@ export function getActionsAvailableAtPos(
   state: RawState,
   pos: Pos,
 ): ActionControl[] {
+  if (selectors.isPlacing(state)) return [];
   const results: ActionControl[] = [];
   addReflectorActions(state, pos, results);
   addRemoveBuildingAction(state, pos, results);

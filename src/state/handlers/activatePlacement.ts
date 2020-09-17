@@ -94,6 +94,7 @@ function activatePlacement(
     template: entityToPlace.template,
     parentTemplate: entityToPlace.parentTemplate,
     placing: entityToPlace.placing,
+    rotatable: entityToPlace.rotatable,
     pos: targetPos,
     display: entityToPlace.display && {
       ...entityToPlace.display,

@@ -40,11 +40,17 @@ function finishPlacement(
     state.act.removeEntity(otherReflector.id);
   }
 
-  state.act.updateEntity({
-    ...createEntityFromTemplate(placingTarget.template),
-    id: placingTarget.id,
-    pos: placingTarget.pos,
-  });
+  state.act.removeEntity(placingTarget.id);
+  state.act.addEntity(
+    createEntityFromTemplate(placingTarget.template, {
+      pos: placingTarget.pos,
+    }),
+  );
+  // state.act.updateEntity({
+  //   ...createEntityFromTemplate(placingTarget.template),
+  //   id: placingTarget.id,
+  //   pos: placingTarget.pos,
+  // });
 
   state.act.removeEntities(
     state.select.entitiesWithComps("validMarker").map((e) => e.id),
