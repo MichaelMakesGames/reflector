@@ -10,6 +10,7 @@ export function useControl(
   callback: (e: KeyboardEvent) => void,
   enabled: boolean = true,
   modifiers: string[] = [""],
+  allowOnGameOver: boolean = false,
 ): void {
   const gameOver = useSelector(selectors.gameOver);
   const settings = useContext(SettingsContext);
@@ -36,7 +37,7 @@ export function useControl(
     }, {});
 
     group = clack.group(shortcutsWithPreventDefault);
-    group.enabled = Boolean(enabled && !gameOver);
+    group.enabled = Boolean(enabled && (!gameOver || allowOnGameOver));
     return () => {
       group.enabled = false;
     };

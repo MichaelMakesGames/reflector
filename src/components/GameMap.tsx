@@ -91,7 +91,13 @@ export default function GameMap() {
   useControl(ControlCode.Wait, () => {
     dispatch(actions.playerTookTurn());
   });
-  useControl(ControlCode.Undo, () => dispatch(actions.undoTurn()));
+  useControl(
+    ControlCode.Undo,
+    () => dispatch(actions.undoTurn()),
+    true,
+    [""],
+    true,
+  );
 
   const performDefaultAction = (pos: Pos | null) => {
     if (pos) {
