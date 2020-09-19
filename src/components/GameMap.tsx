@@ -18,6 +18,7 @@ export default function GameMap() {
     const map = document.getElementById("map");
     if (map) {
       map.appendChild(app.view);
+      app.view.id = "map";
     }
   }, []);
 
@@ -114,6 +115,7 @@ export default function GameMap() {
     <section className="relative">
       {/* eslint-disable-next-line jsx-a11y/mouse-events-have-key-events, jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events */}
       <div
+        className="w-full h-full"
         id="map"
         onMouseMove={(e) => {
           const pos = getPosFromMouse(

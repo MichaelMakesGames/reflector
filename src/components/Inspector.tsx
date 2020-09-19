@@ -22,11 +22,11 @@ export default function Inspector() {
   const actions = cursorPos ? getActionsAvailableAtPos(state, cursorPos) : [];
 
   return (
-    <section className="p-2 border-b border-gray">
+    <section className="p-2">
       <h2 className="text-xl">
         {cursorPos
           ? `Location ${cursorPos.x}, ${cursorPos.y}`
-          : "No location selected"}
+          : "Move cursor over a location to see details"}
       </h2>
       {cursorPos && (
         <ul className="ml-3">

@@ -12,6 +12,7 @@ import Resources from "./Resources";
 import Status from "./Status";
 import IconMasks from "./IconMasks";
 import GameOver from "./GameOver";
+import { TILE_SIZE, MAP_WIDTH, MAP_CSS_WIDTH } from "~constants";
 
 export default function Game() {
   useEffect(() => {
@@ -24,17 +25,24 @@ export default function Game() {
     <main className="h-full flex flex-col">
       <Header />
       <LoadGame />
-      <div className="flex flex-row flex-1 w-full max-w-screen-lg mx-auto">
-        <div className="flex-1 h-full flex flex-col border-l border-gray">
+      <div className="flex flex-row flex-1 w-full max-w-screen-xl mx-auto">
+        <div className="flex-none w-64 h-full flex flex-col border-l border-r border-gray z-10">
           <Status />
           <Laser />
           <Resources />
           <Jobs />
-          <Inspector />
         </div>
-        <div className="flex-none h-full border-l border-r border-gray">
+        <div
+          className="flex-none h-full border-gray"
+          style={{
+            width: MAP_CSS_WIDTH,
+          }}
+        >
           <GameMap />
           <BuildMenu />
+        </div>
+        <div className="flex-none w-64 h-full flex flex-col border-l border-r border-gray z-10">
+          <Inspector />
         </div>
       </div>
       <IconMasks />

@@ -9,6 +9,11 @@ body {
   @apply h-screen;
 }
 
+#map {
+  @apply w-full;
+  @apply h-full;
+}
+
 .btn {
   @apply font-normal;
   @apply border;

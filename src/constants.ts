@@ -14,6 +14,14 @@ export const FOOD_PER_COLONIST = 10;
 
 export const MAP_WIDTH = 32;
 export const MAP_HEIGHT = MAP_WIDTH;
+export const TILE_SIZE = 24;
+export const SIDE_BAR_CSS_WIDTH = "256px";
+export const HEADER_CSS_HEIGHT = "33px";
+export const BUILD_MENU_CSS_HEIGHT = "34px";
+export const MAP_CSS_WIDTH = `min(calc(100vw - ${SIDE_BAR_CSS_WIDTH} - ${SIDE_BAR_CSS_WIDTH}), calc(100vh - ${BUILD_MENU_CSS_HEIGHT} - ${HEADER_CSS_HEIGHT}), ${
+  TILE_SIZE * MAP_WIDTH
+}px)`;
+export const HEADER_CSS_WIDTH = `calc(${MAP_CSS_WIDTH} + ${SIDE_BAR_CSS_WIDTH} + ${SIDE_BAR_CSS_WIDTH})`;
 
 export const MINUTES_PER_TURN = 15;
 export const TURNS_PER_DAY = (24 * 60) / MINUTES_PER_TURN;
@@ -31,7 +39,6 @@ export const PRIORITY_UNIT = 10;
 export const PRIORITY_BUILDING_LOW = 5;
 export const PRIORITY_TERRAIN = 0;
 
-export const TILE_SIZE = 24;
 export const FONT_FAMILY = "Nova Mono";
 
 export const TRANSPARENT = "transparent";

@@ -1,4 +1,4 @@
-/* global requestAnimationFrame */
+/* global requestAnimationFrame, document */
 import { Required } from "Object/_api";
 import * as PIXI from "pixi.js";
 import * as particles from "pixi-particles";
@@ -151,14 +151,19 @@ export function zoomTo(pos: Pos) {
 }
 
 export function getPosFromMouse(mouseX: number, mouseY: number): Pos {
+  const canvas = document.getElementById("map") as HTMLCanvasElement;
+  const scaleX = (MAP_WIDTH * TILE_SIZE) / canvas.clientWidth;
+  const scaleY = (MAP_HEIGHT * TILE_SIZE) / canvas.clientHeight;
+  const scaledMouseX = mouseX * scaleX;
+  const scaledMouseY = mouseY * scaleY;
   if (!zoomedIn) {
     return {
-      x: Math.floor(mouseX / TILE_SIZE),
-      y: Math.floor(mouseY / TILE_SIZE),
+      x: Math.floor(scaledMouseX / TILE_SIZE),
+      y: Math.floor(scaledMouseY / TILE_SIZE),
     };
   } else {
-    const offsetX = Math.floor(mouseX / TILE_SIZE / 2);
-    const offsetY = Math.floor(mouseY / TILE_SIZE / 2);
+    const offsetX = Math.floor(scaledMouseX / TILE_SIZE / 2);
+    const offsetY = Math.floor(scaledMouseY / TILE_SIZE / 2);
     const stageX = app.stage.position.x / TILE_SIZE / -2;
     const stageY = app.stage.position.y / TILE_SIZE / -2;
     return {
