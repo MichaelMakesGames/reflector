@@ -1,13 +1,16 @@
+import Tippy from "@tippyjs/react";
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-import selectors from "~state/selectors";
+import { useDispatch, useSelector } from "react-redux";
+import { MINUTES_PER_TURN } from "~constants";
 import actions from "~state/actions";
+import selectors from "~state/selectors";
 
 export default function Status() {
   const dispatch = useDispatch();
   const time = useSelector(selectors.time);
   const day = useSelector(selectors.day);
   const timeUntilVictory = useSelector(selectors.timeUntilVictory);
+  const turnsUntilVictory = useSelector(selectors.turnsUntilVictory);
   const victory = useSelector(selectors.victory);
   const population = useSelector(selectors.population);
   const housingCapacity = useSelector(selectors.housingCapacity);
@@ -16,33 +19,65 @@ export default function Status() {
     <section className="p-2 border-b border-gray">
       <div className="flex flex-row justify-between items-start mb-2">
         <div className="flex flex-col">
-          <p className="text-xl">
-            Day {day + 1}, {time}
-          </p>
-          <p className="text-lightGray">
-            {victory ? "Victory!" : `Victory in ${timeUntilVictory}`}
-          </p>
+          <Tippy
+            content={
+              <>
+                <p className="mb-1">This is the current time.</p>
+                <p className="mb-1">Each turn is {MINUTES_PER_TURN} minutes.</p>
+                <p className="mb-1">
+                  During the day (8:00am - 8:00pm), colonists go to work to
+                  produce various resources.
+                </p>
+                <p className="mb-1">
+                  At night, colonists go home and enemies attack.
+                </p>
+                <p>Survive 10 days to win!</p>
+              </>
+            }
+          >
+            <p className="text-xl">
+              Day {day + 1}, {time}
+            </p>
+          </Tippy>
+          <Tippy
+            content={`Survive ${turnsUntilVictory} more ${
+              turnsUntilVictory === 1 ? "turn" : "turns"
+            } without the player dying or morale reaching 0 to win!`}
+          >
+            <p className="text-lightGray">
+              {victory ? "Victory!" : `Victory in ${timeUntilVictory}`}
+            </p>
+          </Tippy>
         </div>
-        <button
-          className="btn"
-          onClick={() => {
-            dispatch(actions.playerTookTurn());
-          }}
-          type="button"
+        <Tippy
+          placement="right"
+          content="Pass your turn without doing anything."
         >
-          Wait
-        </button>
+          <button
+            className="btn"
+            onClick={() => {
+              dispatch(actions.playerTookTurn());
+            }}
+            type="button"
+          >
+            Wait
+          </button>
+        </Tippy>
       </div>
       <div className="flex flex-row">
-        <p>
-          <span className="text-lightGray">Morale: </span>
-          {morale}
-        </p>
-        <p>
-          <span className="text-lightGray ml-3">Population: </span>
-          {population}
-          <span className="text-lightGray"> / {housingCapacity}</span>
-        </p>
+        <Tippy content="This represents the confidence and discipline of your colony. You lose morale every time a colonist dies, or if you don't have enough food at night. If you ever reach 0 morale, you lose!">
+          <p>
+            <span className="text-lightGray">Morale: </span>
+            {morale}
+          </p>
+        </Tippy>
+        <Tippy content="This is your current population / your housing capacity. At night, colonists will return to their residences. If you don't have enough, they will build temporary tents wherever they are.">
+          <p>
+            <span className="text-lightGray ml-3">Population: </span>
+            {population}
+            <span className="text-lightGray"> / {housingCapacity}</span>
+          </p>
+        </Tippy>
       </div>
     </section>
   );
