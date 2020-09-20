@@ -12,49 +12,13 @@ const buildings: {
   category: BuildingCategoryCode;
 }[] = [
   {
-    template: "SPLITTER_HORIZONTAL",
-    label: "Splitter",
-    cost: {
-      resource: ResourceCode.Metal,
-      amount: 25,
-    },
-    category: BuildingCategoryCode.Laser,
-  },
-  {
-    template: "SPLITTER_ADVANCED",
-    label: "Adv Splitter",
-    cost: {
-      resource: ResourceCode.Machinery,
-      amount: 30,
-    },
-    category: BuildingCategoryCode.Laser,
-  },
-  {
-    template: "WALL",
-    label: "Wall",
+    template: "FARM",
+    label: "Farm",
     cost: {
       resource: ResourceCode.Metal,
       amount: 10,
     },
-    category: BuildingCategoryCode.Misc,
-  },
-  {
-    template: "RESIDENCE",
-    label: "Residence",
-    cost: {
-      resource: ResourceCode.Metal,
-      amount: 25,
-    },
-    category: BuildingCategoryCode.Misc,
-  },
-  {
-    template: "MINE",
-    label: "Mine",
-    cost: {
-      resource: ResourceCode.Metal,
-      amount: 25,
-    },
-    validitySelector: "canPlaceMine",
+    validitySelector: "canPlaceFarm",
     category: BuildingCategoryCode.Production,
   },
   {
@@ -68,21 +32,30 @@ const buildings: {
     category: BuildingCategoryCode.Production,
   },
   {
-    template: "FARM",
-    label: "Farm",
+    template: "MINE",
+    label: "Mine",
     cost: {
       resource: ResourceCode.Metal,
-      amount: 10,
+      amount: 25,
     },
-    validitySelector: "canPlaceFarm",
+    validitySelector: "canPlaceMine",
     category: BuildingCategoryCode.Production,
   },
   {
-    template: "REACTOR",
-    label: "Reactor",
+    template: "FACTORY",
+    label: "Factory",
     cost: {
-      resource: ResourceCode.Machinery,
+      resource: ResourceCode.Metal,
       amount: 25,
+    },
+    category: BuildingCategoryCode.Production,
+  },
+  {
+    template: "WINDMILL",
+    label: "Windmill",
+    cost: {
+      resource: ResourceCode.Metal,
+      amount: 20,
     },
     category: BuildingCategoryCode.Power,
   },
@@ -96,22 +69,13 @@ const buildings: {
     category: BuildingCategoryCode.Power,
   },
   {
-    template: "WINDMILL",
-    label: "Windmill",
+    template: "REACTOR",
+    label: "Reactor",
     cost: {
-      resource: ResourceCode.Metal,
-      amount: 20,
-    },
-    category: BuildingCategoryCode.Power,
-  },
-  {
-    template: "FACTORY",
-    label: "Factory",
-    cost: {
-      resource: ResourceCode.Metal,
+      resource: ResourceCode.Machinery,
       amount: 25,
     },
-    category: BuildingCategoryCode.Production,
+    category: BuildingCategoryCode.Power,
   },
   {
     template: "BASIC_PROJECTOR",
@@ -123,6 +87,15 @@ const buildings: {
     category: BuildingCategoryCode.Laser,
   },
   {
+    template: "SPLITTER_HORIZONTAL",
+    label: "Splitter",
+    cost: {
+      resource: ResourceCode.Metal,
+      amount: 25,
+    },
+    category: BuildingCategoryCode.Laser,
+  },
+  {
     template: "PROJECTOR",
     label: "Adv Projector",
     cost: {
@@ -130,6 +103,33 @@ const buildings: {
       amount: 15,
     },
     category: BuildingCategoryCode.Laser,
+  },
+  {
+    template: "SPLITTER_ADVANCED",
+    label: "Adv Splitter",
+    cost: {
+      resource: ResourceCode.Machinery,
+      amount: 30,
+    },
+    category: BuildingCategoryCode.Laser,
+  },
+  {
+    template: "RESIDENCE",
+    label: "Residence",
+    cost: {
+      resource: ResourceCode.Metal,
+      amount: 25,
+    },
+    category: BuildingCategoryCode.Misc,
+  },
+  {
+    template: "WALL",
+    label: "Wall",
+    cost: {
+      resource: ResourceCode.Metal,
+      amount: 10,
+    },
+    category: BuildingCategoryCode.Misc,
   },
 ];
 export default buildings;

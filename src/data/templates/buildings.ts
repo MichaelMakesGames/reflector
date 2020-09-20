@@ -39,12 +39,18 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     destructible: {},
     description: {
       name: "Splitter",
-      description: "Splits one incoming beam into two weaker beams.",
+      description:
+        "Splits one laser beam into 2 more beams. Needs 1 power per turn.",
     },
     colorToggle: {
       conditions: ["isPowered"],
       trueColor: colors.activeBuilding,
       falseColor: colors.inactiveBuilding,
+    },
+    powered: {
+      hasPower: true,
+      powerNeeded: 1,
+      resourceChangeReason: "Splitters",
     },
   },
   SPLITTER_HORIZONTAL: {
@@ -56,11 +62,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     splitter: { type: "horizontal" },
     rotatable: { rotatesTo: "SPLITTER_VERTICAL" },
-    powered: {
-      hasPower: true,
-      powerNeeded: 1,
-      resourceChangeReason: "Splitters",
-    },
   },
   SPLITTER_VERTICAL: {
     parentTemplate: "SPLITTER_BASE",
@@ -72,11 +73,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     splitter: { type: "vertical" },
     rotatable: { rotatesTo: "SPLITTER_HORIZONTAL" },
-    powered: {
-      hasPower: true,
-      powerNeeded: 1,
-      resourceChangeReason: "Splitters",
-    },
   },
   SPLITTER_ADVANCED: {
     parentTemplate: "SPLITTER_BASE",
@@ -86,6 +82,11 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       priority: PRIORITY_BUILDING_HIGH,
     },
     splitter: { type: "advanced" },
+    description: {
+      name: "Adv. Splitter",
+      description:
+        "Splits one laser beam into 3 more beams. Needs 2 power per turn.",
+    },
     powered: {
       hasPower: true,
       powerNeeded: 2,
@@ -138,7 +139,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     description: {
       name: "Residence",
       description:
-        "Provides housing for up to 3 colonists. Colonists will move out of tents to move into residences.",
+        "Provides housing for up to 3 colonists. Colonists with higher priority jobs get first pick.",
     },
   },
   MINE: {
@@ -181,7 +182,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     description: {
       name: "Mine",
       description:
-        "Provides jobs for 2 colonists that each produce 2 metal but consume 1 power.",
+        "Provides 2 jobs, that each consume 1 power to produce 2 metal per turn.",
     },
   },
   MINING_SPOT: {
@@ -204,7 +205,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     description: {
       name: "Mining Spot",
       description:
-        "Free to build, but less efficient than a mine. Provides 1 job that produces 1 metal when mined.",
+        "Provides 1 job that produces 1 metal per turn. Less efficient than a Mine, but is free to build and doesn't need power.",
     },
   },
   FARM: {
@@ -228,8 +229,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     description: {
       name: "Farm",
-      description:
-        "Produces 1 food when worked by colonist. Up to 1 colonist can work at a time.",
+      description: "Provided 1 job that produces 1 food per turn.",
     },
   },
   REACTOR: {
@@ -269,8 +269,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     description: {
       name: "Reactor",
-      description:
-        "Produces 1 power when worked by colonist. Up to 2 colonists can work at a time.",
+      description: "Provides 2 jobs that each produce 1 power per turn.",
     },
   },
   SOLAR_PANEL: {
@@ -300,7 +299,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     description: {
       name: "Solar Panel",
       description:
-        "Produces 1 power during day. Does not require a working colonist.",
+        "Produces 1 power per turn during day. Does not require a colonist to work.",
     },
   },
   WINDMILL: {
@@ -330,7 +329,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     description: {
       name: "Windmill",
       description:
-        "Produces 1 power as long as the neighboring tiles are not blocked.",
+        "Produces 1 power as long as neighboring tiles are not blocked. Does not require a colonist to work.",
     },
   },
   FACTORY: {
@@ -378,7 +377,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     description: {
       name: "Factory",
       description:
-        "Provides 3 jobs that consume 2 metal and 1 power to produce 1 refined metal",
+        "Provides 3 jobs that consume 1 power and 2 metal to produce 1 machinery per turn.",
     },
   },
   WALL: {
@@ -449,7 +448,8 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     description: {
       name: "Projector",
-      description: "Lets you place reflectors around it.",
+      description:
+        "Lets you place reflectors in neighboring tiles. Needs 1 power per turn.",
     },
   },
   PROJECTOR: {
@@ -480,8 +480,9 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       range: 2,
     },
     description: {
-      name: "Projector",
-      description: "Lets you place reflectors around it.",
+      name: "Adv. Projector",
+      description:
+        "Lets you place reflector within 2 spaces. Needs 2 power per turn.",
     },
   },
 };
