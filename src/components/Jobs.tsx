@@ -5,6 +5,7 @@ import jobTypes, { JobTypeCode } from "~data/jobTypes";
 import actions from "~state/actions";
 import selectors from "~state/selectors";
 import { RawState } from "~types";
+import Tippy from "@tippyjs/react";
 
 export default function Jobs() {
   const dispatch = useDispatch();
@@ -74,7 +75,19 @@ function JobRow({ code, index }: { code: JobTypeCode; index: number }) {
               : "border-t border-darkGray"
           }`}
         >
-          <span className="flex-1">{jobType.label}</span>
+          <Tippy
+            content={
+              <>
+                <p className="mb-1">{jobType.description}</p>
+                <p>
+                  Click and drag to change priority. Colonists fill higher
+                  priority jobs first.
+                </p>
+              </>
+            }
+          >
+            <span className="flex-1">{jobType.label}</span>
+          </Tippy>
           <span>
             {employed} / {max}
           </span>

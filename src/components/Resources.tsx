@@ -46,10 +46,14 @@ function ResourceRow({ resource }: { resource: Resource }) {
 
   return (
     <tr className="flex flex-row items-center h-8 box-content border-t border-darkGray">
-      <td className="flex-initial h-6">
-        <ResourceIcon resourceCode={resource.code} />
-      </td>
-      <td className="flex-1">{resource.label}</td>
+      <Tippy content={resource.description}>
+        <td className="flex-initial h-6">
+          <ResourceIcon resourceCode={resource.code} />
+        </td>
+      </Tippy>
+      <Tippy content={resource.description}>
+        <td className="flex-1">{resource.label}</td>
+      </Tippy>
       <td className="flex-1 text-right">{formatNumber(amount)}</td>
       <Tippy
         placement="right"
