@@ -165,16 +165,17 @@ export default function BuildMenu() {
         ))}
       {showCategory &&
         buildingCategories.map((c, i) => (
-          <button
-            key={c.code}
-            type="button"
-            onClick={() => setCategory(c)}
-            style={buttonStyle}
-            className={buttonClassName}
-          >
-            <kbd className="bg-darkGray px-1 rounded mr-1">{i + 1}</kbd>
-            {c.label}
-          </button>
+          <Tippy key={c.code} placement="top" content={c.description}>
+            <button
+              type="button"
+              onClick={() => setCategory(c)}
+              style={buttonStyle}
+              className={buttonClassName}
+            >
+              <kbd className="bg-darkGray px-1 rounded mr-1">{i + 1}</kbd>
+              {c.label}
+            </button>
+          </Tippy>
         ))}
     </section>
   );

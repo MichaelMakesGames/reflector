@@ -8,13 +8,30 @@ export enum BuildingCategoryCode {
 export interface BuildingCategory {
   code: BuildingCategoryCode;
   label: string;
+  description: string;
 }
 
 const buildingCategories: BuildingCategory[] = [
-  { code: BuildingCategoryCode.Production, label: "Production" },
-  { code: BuildingCategoryCode.Power, label: "Power" },
-  { code: BuildingCategoryCode.Laser, label: "Laser" },
-  { code: BuildingCategoryCode.Misc, label: "Misc" },
+  {
+    code: BuildingCategoryCode.Production,
+    label: "Production",
+    description: "Buildings for that produce resources other than power.",
+  },
+  {
+    code: BuildingCategoryCode.Power,
+    label: "Power",
+    description: "Buildings that produce power.",
+  },
+  {
+    code: BuildingCategoryCode.Laser,
+    label: "Laser",
+    description: "Buildings that manipulate lasers.",
+  },
+  {
+    code: BuildingCategoryCode.Misc,
+    label: "Misc",
+    description: "Miscellaneous buildings: walls and residences.",
+  },
 ];
 
 export default buildingCategories;
