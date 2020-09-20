@@ -27,6 +27,7 @@ const defaultSettings: Settings = {
     [ControlCode.Building8]: ["8"],
     [ControlCode.Building9]: ["9"],
     [ControlCode.Building0]: ["0"],
+    [ControlCode.RotateBuilding]: ["r"],
 
     [ControlCode.QuickAction]: ["space"],
     [ControlCode.PlaceReflectorA]: ["e"],
@@ -35,7 +36,6 @@ const defaultSettings: Settings = {
     [ControlCode.RemoveReflector]: ["t"],
     [ControlCode.RemoveBuilding]: ["x"],
     [ControlCode.ToggleJobs]: ["j"],
-    [ControlCode.RotateBuilding]: ["r"],
 
     [ControlCode.Wait]: ["z"],
     [ControlCode.Back]: ["q", "esc"],

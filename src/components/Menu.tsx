@@ -4,14 +4,12 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { useBoolean } from "~hooks";
 import actions from "~state/actions";
+import KeyboardControls from "./KeyboardControls";
 
 export default function Menu() {
   const [isOpen, _, close, toggle] = useBoolean(false);
+  const [controlsIsOpen, openControls, closeControls] = useBoolean(false);
   const dispatch = useDispatch();
-  const todo = () => {
-    close();
-    alert("TODO"); // eslint-disable-line
-  };
   return (
     <Tippy
       visible={isOpen}
@@ -59,14 +57,16 @@ export default function Menu() {
             </button>
           </li>
           <li>
-            <button type="button" onClick={todo}>
+            <button
+              type="button"
+              onClick={() => {
+                close();
+                openControls();
+              }}
+            >
               Controls
             </button>
-          </li>
-          <li>
-            <button type="button" onClick={todo}>
-              Help
-            </button>
+            {controlsIsOpen && <KeyboardControls onClose={closeControls} />}
           </li>
         </ul>
       }

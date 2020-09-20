@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import Modal from "react-modal";
 import { useDispatch, useSelector } from "react-redux";
+import { loadPromise } from "~renderer";
 import actions from "~state/actions";
 import selectors from "~state/selectors";
 import { RawState } from "~types";
 import { load } from "~utils/gameSave";
-import { loadPromise } from "~renderer";
+import Modal from "./Modal";
 
 export default function LoadGame() {
   const [oldSave, setOldSave] = useState<null | RawState>(null);
@@ -31,11 +31,7 @@ export default function LoadGame() {
   }
 
   return (
-    <Modal
-      isOpen
-      overlayClassName="inset-0 fixed h-screen w-screen bg-opaqueWhite"
-      className="w-2/5 h-auto mx-auto my-8 shadow-2xl bg-black p-8 border border-white border-solid rounded"
-    >
+    <Modal isOpen>
       {selectors.version(oldSave).includes("unstable") ? (
         <p>
           Your save is from an unstable version of the game. Loading the game

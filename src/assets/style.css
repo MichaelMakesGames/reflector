@@ -29,10 +29,9 @@ body {
 .btn:not(:disabled):hover {
   @apply border-white;
 }
-.rc-tooltip-inner {
-  @apply bg-black;
-  @apply border;
-  border-color: #373737;
+
+.max-h-modal {
+  max-height: calc(100vh - 4rem);
 }
 
 .tippy-box {
