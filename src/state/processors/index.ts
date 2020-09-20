@@ -20,9 +20,9 @@ import processEvents from "./processEvents";
 
 const processors: ((state: WrappedState) => void)[] = [
   processAI,
+  processProduction,
   processColonists,
   processImmigration,
-  processProduction,
   processHunger,
   processWave,
   processPowered,
