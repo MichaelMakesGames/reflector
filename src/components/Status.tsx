@@ -1,7 +1,7 @@
 import Tippy from "@tippyjs/react";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { MINUTES_PER_TURN } from "~constants";
+import { MINUTES_PER_TURN, COLONISTS_PER_IMMIGRATION_WAVE } from "~constants";
 import actions from "~state/actions";
 import selectors from "~state/selectors";
 
@@ -22,14 +22,22 @@ export default function Status() {
           <Tippy
             content={
               <>
-                <p className="mb-1">This is the current time.</p>
-                <p className="mb-1">Each turn is {MINUTES_PER_TURN} minutes.</p>
-                <p className="mb-1">
+                <p className="mb-2">This is the current time.</p>
+                <p className="mb-2">
+                  Each turn is {MINUTES_PER_TURN} minutes. Moving, building,
+                  shooting, and waiting all take a turn. Everything else happens
+                  instantly.
+                </p>
+                <p className="mb-2">
                   During the day (8:00am - 8:00pm), colonists go to work to
                   produce various resources.
                 </p>
-                <p className="mb-1">
+                <p className="mb-2">
                   At night, colonists go home and enemies attack.
+                </p>
+                <p className="mb-2">
+                  Each morning, {COLONISTS_PER_IMMIGRATION_WAVE} new colonists
+                  will arrive.
                 </p>
                 <p>Survive 10 days to win!</p>
               </>

@@ -191,7 +191,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       color: colors.activeBuilding,
       priority: PRIORITY_BUILDING_LOW,
     },
-    destructible: {},
     jobProvider: {
       consumes: {},
       produces: {

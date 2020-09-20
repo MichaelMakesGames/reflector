@@ -19,6 +19,7 @@ import "./fireWeapon";
 import "./increaseJobPriority";
 import "./inspect";
 import "./loadGame";
+import "./logEvent";
 import "./logMessage";
 import "./makeMeRich";
 import "./modifyResource";

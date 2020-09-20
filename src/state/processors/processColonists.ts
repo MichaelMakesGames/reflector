@@ -35,6 +35,16 @@ export default function processColonists(state: WrappedState): void {
     }
   }
 
+  if (
+    state.select.turnOfNight() === 0 &&
+    state.select.population() > state.select.housingCapacity()
+  ) {
+    state.act.logMessage({
+      message:
+        "You do not have enough housing, so some colonists are pitching tents.",
+    });
+  }
+
   if (state.select.isNight()) {
     for (const colonist of state.select.colonists()) {
       if (colonist.colonist.residence) {

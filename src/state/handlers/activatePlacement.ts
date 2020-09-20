@@ -9,6 +9,7 @@ import WrappedState from "~types/WrappedState";
 import { areConditionsMet } from "~utils/conditions";
 import { arePositionsEqual } from "~utils/geometry";
 import colors from "~colors";
+import resources from "~data/resources";
 
 function activatePlacement(
   state: WrappedState,
@@ -26,7 +27,7 @@ function activatePlacement(
 
   if (cost && !state.select.canAffordToPay(cost.resource, cost.amount)) {
     const message = `You do not have enough ${
-      cost.resource
+      resources[cost.resource].label
     }. You have ${state.select.resource(cost.resource)} out of ${
       cost.amount
     } required`;

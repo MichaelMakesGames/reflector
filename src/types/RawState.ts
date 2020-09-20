@@ -23,6 +23,7 @@ export interface RawState {
   lastAimingDirection: Direction;
   jobPriorities: Record<JobTypeCode, number>;
   cursorPos: Pos | null;
+  events: Record<string, number>;
 
   isStartOfTurn: boolean;
   startOfThisTurn: RawState | null;

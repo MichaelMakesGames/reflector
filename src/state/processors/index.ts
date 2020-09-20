@@ -16,6 +16,7 @@ import processReflectors from "./processReflectors";
 import processTime from "./processTime";
 import processWave from "./processWave";
 import processBuilding from "./processBuilding";
+import processEvents from "./processEvents";
 
 const processors: ((state: WrappedState) => void)[] = [
   processAI,
@@ -29,6 +30,7 @@ const processors: ((state: WrappedState) => void)[] = [
   processLaserRecharging,
   processAiming,
   processBuilding,
+  processEvents,
   processTime,
   processGameOver,
   processEmitters,

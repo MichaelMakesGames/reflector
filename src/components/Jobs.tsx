@@ -89,7 +89,7 @@ function JobRow({ code, index }: { code: JobTypeCode; index: number }) {
           <Tippy
             content={
               <>
-                <p className="mb-1">{jobType.description}</p>
+                <p className="mb-2">{jobType.description}</p>
                 <p>
                   Click and drag to change priority. Colonists fill higher
                   priority jobs first.

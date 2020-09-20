@@ -33,6 +33,7 @@ export default function processImmigration(state: WrappedState): void {
       }
       state.act.logMessage({
         message: `${COLONISTS_PER_IMMIGRATION_WAVE} new colonists have arrived!`,
+        type: "success",
       });
     }
 

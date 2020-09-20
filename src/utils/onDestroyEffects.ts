@@ -9,7 +9,7 @@ const onDestroyEffects: {
   colonist(state: WrappedState, entity: Entity) {
     const results: Action[] = [
       actions.reduceMorale({ amount: 1 }),
-      actions.logMessage({ message: "A colonist died! You lost 1 morale." }),
+      actions.logEvent({ type: "COLONIST_DIED" }),
     ];
     if (entity.colonist && entity.colonist.residence) {
       const residence = state.select.entityById(entity.colonist.residence);

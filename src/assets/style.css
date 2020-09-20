@@ -39,6 +39,7 @@ body {
   @apply bg-darkGray;
   @apply border;
   @apply border-black;
+  @apply leading-snug;
   max-width: 15rem !important;
 }
 

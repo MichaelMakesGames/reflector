@@ -50,3 +50,8 @@ export const setCursorPos = createStandardAction(
 export const moveCursor = createStandardAction("MOVE_CURSOR")<Direction>();
 
 export const undoTurn = createStandardAction("UNDO_TURN")();
+
+export const logEvent = createStandardAction("LOG_EVENT")<{
+  type: string;
+  count?: number;
+}>();

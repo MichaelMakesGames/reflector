@@ -44,6 +44,7 @@ const initialState: RawState = {
     MINING: 3,
     MANUFACTURING: 4,
   },
+  events: {},
   lastAimingDirection: RIGHT,
   cursorPos: null,
   isStartOfTurn: true,
