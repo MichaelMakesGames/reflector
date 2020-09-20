@@ -7,7 +7,7 @@ const defaultSettings: Settings = {
   fireKeyActivatesAiming: true,
   aimInSameDirectionToFire: false,
   unmodifiedAiming: true,
-  unmodifiedBuilding: true,
+  unmodifiedBuilding: false,
   backClearsAllReflector: true,
   keyboardShortcuts: {
     [ControlCode.Fire]: ["f", "shift f"],

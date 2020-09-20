@@ -50,7 +50,8 @@ export default function GameMap() {
       dispatch(actions.move({ entityId: PLAYER_ID, ...LEFT }));
     }
   };
-  const moveEnabled = !isWeaponActive && !isPlacing;
+  const moveEnabled =
+    !isWeaponActive && (!settings.unmodifiedBuilding || !isPlacing);
   useControl(ControlCode.Up, moveUp, moveEnabled);
   useControl(ControlCode.Down, moveDown, moveEnabled);
   useControl(ControlCode.Left, moveLeft, moveEnabled);
