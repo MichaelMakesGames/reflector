@@ -1,10 +1,10 @@
+import Tippy from "@tippyjs/react";
 import React from "react";
 import { useSelector } from "react-redux";
 import resources, { Resource } from "~data/resources";
 import selectors from "~state/selectors";
 import { RawState } from "~types";
 import ResourceIcon from "./ResourceIcon";
-import Tippy from "@tippyjs/react";
 
 export default function Resources() {
   return (

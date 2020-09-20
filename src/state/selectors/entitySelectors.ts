@@ -15,6 +15,7 @@ import {
   getAdjacentPositions,
   getPosKey,
 } from "~utils/geometry";
+import { sum } from "~utils/math";
 
 export function entityList(state: RawState) {
   return Object.values(state.entities);
@@ -95,7 +96,7 @@ export function residents(state: RawState, entity: Entity) {
 export function housingCapacity(state: RawState) {
   return entitiesWithComps(state, "housing")
     .filter((entity) => !entity.housing.removeOnVacancy)
-    .reduce((sum, entity) => sum + entity.housing.capacity, 0);
+    .reduce((acc, entity) => acc + entity.housing.capacity, 0);
 }
 
 export function employment(state: RawState, colonist: HasColonist) {
@@ -137,6 +138,30 @@ export function enabledJobProviders(state: RawState, jobType?: JobTypeCode) {
   }
 }
 
+export function disabledJobProviders(state: RawState, jobType?: JobTypeCode) {
+  const disablers = jobDisablers(state);
+  const jobProviders = entitiesWithComps(
+    state,
+    "jobProvider",
+    "pos",
+  ).filter((e) =>
+    disablers.map((d) => d.pos).some((pos) => arePositionsEqual(pos, e.pos)),
+  );
+  if (jobType) {
+    return jobProviders.filter((e) => e.jobProvider.jobType === jobType);
+  } else {
+    return jobProviders;
+  }
+}
+
+export function numberOfDisabledJobs(state: RawState, jobType: JobTypeCode) {
+  return sum(
+    ...disabledJobProviders(state, jobType).map(
+      (e) => e.jobProvider.maxNumberEmployed,
+    ),
+  );
+}
+
 export function maxNumberEmployed(state: RawState, jobType: JobTypeCode) {
   const providers = enabledJobProviders(state, jobType);
   return providers.reduce(
@@ -151,6 +176,16 @@ export function numberEmployed(state: RawState, jobType: JobTypeCode) {
     (acc, cur) => acc + cur.jobProvider.numberEmployed,
     0,
   );
+}
+
+export function colonistsEmployedInJobType(
+  state: RawState,
+  jobType: JobTypeCode,
+) {
+  const providers = enabledJobProviders(state, jobType);
+
+  const providerIds = new Set<null | string>(providers.map((e) => e.id));
+  return colonists(state).filter((e) => providerIds.has(e.colonist.employment));
 }
 
 export function numberOfUnemployedColonists(state: RawState) {
