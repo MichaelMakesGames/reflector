@@ -39,9 +39,9 @@ const initialState: RawState = {
     MACHINERY: [],
   },
   jobPriorities: {
-    POWER: 1,
-    MINING: 2,
-    FARMING: 3,
+    FARMING: 1,
+    POWER: 2,
+    MINING: 3,
     MANUFACTURING: 4,
   },
   lastAimingDirection: RIGHT,
