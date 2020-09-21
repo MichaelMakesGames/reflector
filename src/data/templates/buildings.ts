@@ -35,7 +35,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   },
   SPLITTER_BASE: {
     building: {},
-    blocking: { moving: true, lasers: true },
+    blocking: { moving: true, lasers: true, windmill: true },
     destructible: {},
     description: {
       name: "Splitter",
@@ -103,7 +103,8 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     blocking: {
       moving: true,
-      lasers: true,
+      lasers: false,
+      windmill: false,
     },
     housing: {
       capacity: 1,
@@ -129,6 +130,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     blocking: {
       moving: true,
       lasers: true,
+      windmill: true,
     },
     housing: {
       occupancy: 0,
@@ -165,6 +167,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     blocking: {
       moving: true,
       lasers: true,
+      windmill: true,
     },
     destructible: {},
     jobProvider: {
@@ -266,6 +269,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     blocking: {
       moving: true,
       lasers: true,
+      windmill: true,
     },
     description: {
       name: "Reactor",
@@ -288,6 +292,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     blocking: {
       moving: true,
       lasers: false,
+      windmill: false,
     },
     destructible: {},
     production: {
@@ -319,7 +324,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       falseColor: colors.inactiveBuilding,
     },
     destructible: {},
-    blocking: { moving: true, lasers: true },
+    blocking: { moving: true, lasers: true, windmill: true },
     production: {
       resource: ResourceCode.Power,
       amount: 1,
@@ -373,6 +378,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     blocking: {
       moving: true,
       lasers: true,
+      windmill: true,
     },
     description: {
       name: "Factory",
@@ -391,6 +397,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     blocking: {
       moving: true,
       lasers: true,
+      windmill: true,
     },
     destructible: {
       onDestroy: "wall",
@@ -412,6 +419,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     blocking: {
       moving: true,
       lasers: true,
+      windmill: true,
     },
     destructible: {},
     description: {
@@ -435,6 +443,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     blocking: {
       moving: true,
       lasers: true,
+      windmill: true,
     },
     destructible: {},
     powered: {
@@ -468,6 +477,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     blocking: {
       moving: true,
       lasers: true,
+      windmill: true,
     },
     destructible: {},
     powered: {

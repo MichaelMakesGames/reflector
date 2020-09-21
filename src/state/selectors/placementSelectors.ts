@@ -1,6 +1,7 @@
 import { Required } from "Object/_api";
 import { Entity, Pos, RawState } from "~types";
 import { entitiesAtPosition, entitiesWithComps } from "./entitySelectors";
+import { getAdjacentPositions } from "~utils/geometry";
 
 export function placingTarget(state: RawState) {
   const entities = entitiesWithComps(state, "placing", "pos", "display");
@@ -23,6 +24,14 @@ export function canPlaceMine(state: RawState, pos: Pos) {
 export function canPlaceFarm(state: RawState, pos: Pos) {
   return entitiesAtPosition(state, pos).some(
     (entity) => entity.mineable && entity.mineable.resource === "FOOD",
+  );
+}
+
+export function canPlaceWindmill(state: RawState, pos: Pos) {
+  return getAdjacentPositions(pos).every((adjacentPos) =>
+    entitiesAtPosition(state, adjacentPos).every(
+      (neighbor) => !neighbor.blocking || !neighbor.blocking.windmill,
+    ),
   );
 }
 

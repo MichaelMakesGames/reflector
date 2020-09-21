@@ -15,6 +15,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     blocking: {
       moving: true,
       lasers: false,
+      windmill: false,
     },
     description: {
       name: "Water",
@@ -200,6 +201,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     blocking: {
       moving: true,
       lasers: true,
+      windmill: true,
     },
     description: {
       name: "Mountain",

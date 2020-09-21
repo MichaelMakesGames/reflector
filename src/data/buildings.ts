@@ -58,6 +58,7 @@ const buildings: {
       amount: 20,
     },
     category: BuildingCategoryCode.Power,
+    validitySelector: "canPlaceWindmill",
   },
   {
     template: "SOLAR_PANEL",

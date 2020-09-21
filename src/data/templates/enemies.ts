@@ -4,7 +4,7 @@ import { PRIORITY_UNIT } from "~constants";
 
 const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   ENEMY_BASE: {
-    blocking: { moving: true, lasers: true },
+    blocking: { moving: true, lasers: true, windmill: false },
     destructible: {},
     conductive: {},
   },

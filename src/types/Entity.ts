@@ -50,6 +50,7 @@ export interface HasAI {
 export interface Blocking {
   moving: boolean;
   lasers: boolean;
+  windmill: boolean;
 }
 export interface HasBlocking {
   blocking: Blocking;

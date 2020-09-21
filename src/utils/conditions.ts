@@ -12,7 +12,7 @@ const conditions: Record<
     return getAdjacentPositions(entity.pos).every((pos) =>
       state.select
         .entitiesAtPosition(pos)
-        .every((neighbor) => !neighbor.blocking || !neighbor.blocking.lasers),
+        .every((neighbor) => !neighbor.blocking || !neighbor.blocking.windmill),
     );
   },
 

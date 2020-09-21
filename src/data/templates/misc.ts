@@ -17,7 +17,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       color: colors.payer,
       priority: PRIORITY_UNIT,
     },
-    blocking: { moving: true, lasers: true },
+    blocking: { moving: true, lasers: true, windmill: false },
     destructible: {
       onDestroy: "player",
     },
@@ -37,7 +37,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       color: colors.payer,
       priority: PRIORITY_UNIT,
     },
-    blocking: { moving: true, lasers: true },
+    blocking: { moving: true, lasers: true, windmill: false },
   },
   VALID_MARKER: {
     display: {
