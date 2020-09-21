@@ -105,6 +105,24 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     highlight: {},
   },
+  NO_METAL_INDICATOR: {
+    display: {
+      tile: ["metal", "blank"],
+      speed: 0.05,
+      color: colors.mineral,
+      priority: PRIORITY_MARKER,
+    },
+    missingResourceIndicator: {},
+  },
+  NO_POWER_INDICATOR: {
+    display: {
+      tile: ["power", "blank"],
+      speed: 0.05,
+      color: colors.power,
+      priority: PRIORITY_MARKER,
+    },
+    missingResourceIndicator: {},
+  },
   COLONIST: {
     display: {
       tile: "colonists1",
@@ -118,6 +136,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       residence: null,
       employment: null,
       status: ColonistStatusCode.Wandering,
+      missingResources: [],
     },
     description: {
       name: "Colonist",

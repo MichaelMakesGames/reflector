@@ -34,6 +34,8 @@ type TemplateName =
   | "MINING_SPOT"
   | "MOUNTAIN"
   | "NONE"
+  | "NO_METAL_INDICATOR"
+  | "NO_POWER_INDICATOR"
   | "ORE"
   | "PLACING_MARKER"
   | "PLAYER_CORPSE"

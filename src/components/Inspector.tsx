@@ -5,7 +5,8 @@ import { useControl } from "~hooks";
 import selectors from "~state/selectors";
 import { Entity, HasDescription, RawState, HasColonist } from "~types";
 import { ActionControl, getActionsAvailableAtPos } from "~utils/controls";
-import colonistStatuses from "~data/colonistStatuses";
+import colonistStatuses, { ColonistStatusCode } from "~data/colonistStatuses";
+import resources from "~data/resources";
 
 export default function Inspector() {
   const entitiesAtCursor = useSelector(selectors.entitiesAtCursor);
@@ -102,7 +103,11 @@ function InspectorEntity({ entity }: { entity: Entity & HasDescription }) {
         {entity.colonist && (
           <span className="text-lightGray text-sm">
             {" - "}
-            {colonistStatuses[entity.colonist.status].label}
+            {entity.colonist.status === ColonistStatusCode.MissingResources
+              ? `Not enough ${entity.colonist.missingResources
+                  .map((resourceCode) => resources[resourceCode].label)
+                  .join(", ")}`
+              : colonistStatuses[entity.colonist.status].label}
           </span>
         )}
         {entity.jobProvider && (

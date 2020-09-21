@@ -331,11 +331,20 @@ function doWork(
       colonist: { ...colonist.colonist, status: ColonistStatusCode.Working },
     });
   } else {
+    const missingResources: ResourceCode[] = Object.entries(
+      employment.jobProvider.consumes,
+    )
+      .filter((entry): entry is [ResourceCode, number] => Boolean(entry[1]))
+      .filter(
+        ([resource, cost]) => !state.select.canAffordToPay(resource, cost),
+      )
+      .map(([resource, _]) => resource);
     state.act.updateEntity({
       ...colonist,
       colonist: {
         ...colonist.colonist,
         status: ColonistStatusCode.MissingResources,
+        missingResources,
       },
     });
   }

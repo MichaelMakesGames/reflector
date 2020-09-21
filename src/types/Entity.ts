@@ -88,6 +88,7 @@ export interface Colonist {
   residence: string | null;
   employment: string | null;
   status: ColonistStatusCode;
+  missingResources: ResourceCode[];
 }
 export interface HasColonist {
   colonist: Colonist;
@@ -245,6 +246,11 @@ export interface HasHighlight {
   highlight: Highlight;
 }
 
+export interface MissingResourceIndicator {}
+export interface HasMissingResourceIndicator {
+  missingResourceIndicator: MissingResourceIndicator;
+}
+
 export interface Border {}
 export interface HasBorder {
   border: Border;
@@ -271,6 +277,7 @@ export interface Entity
     Partial<HasJobProvider>,
     Partial<HasLaser>,
     Partial<HasMineable>,
+    Partial<HasMissingResourceIndicator>,
     Partial<HasPlacing>,
     Partial<HasPlacingMarker>,
     Partial<HasPos>,
