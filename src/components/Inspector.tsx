@@ -21,6 +21,9 @@ export default function Inspector() {
   const cursorPos = useSelector(selectors.cursorPos);
   const state = useSelector(selectors.state);
   const actions = cursorPos ? getActionsAvailableAtPos(state, cursorPos) : [];
+  const isCursorInProjectorRange = useSelector((s: RawState) =>
+    selectors.isInProjectorRange(s, cursorPos),
+  );
 
   return (
     <section className="p-2">
@@ -43,6 +46,11 @@ export default function Inspector() {
       {cursorPos && (
         <>
           <h2 className="text-xl mt-2">Available Actions</h2>
+          {isCursorInProjectorRange && (
+            <div className="text-lightGray text-sm mb-2">
+              Click or press space to cycle reflector
+            </div>
+          )}
           {actions.length > 0 && (
             <div className="text-lightGray text-sm mb-2">
               Right click map or use shortcuts

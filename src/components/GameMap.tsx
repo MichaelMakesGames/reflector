@@ -1,17 +1,17 @@
 /* global document */
-import React, { useEffect, useState, useContext } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { app, getPosFromMouse, zoomOut, zoomTo } from "~/renderer";
 import { DOWN, LEFT, PLAYER_ID, RIGHT, UP } from "~constants";
-import { ControlCode } from "~types/ControlCode";
+import { SettingsContext } from "~contexts";
 import { useControl } from "~hooks";
 import actions from "~state/actions";
 import selectors from "~state/selectors";
-import { Pos } from "~types";
+import { Pos, RawState } from "~types";
+import { ControlCode } from "~types/ControlCode";
 import { isDndFocused } from "~utils/controls";
 import { arePositionsEqual } from "~utils/geometry";
 import ContextMenu from "./ContextMenu";
-import { SettingsContext } from "~contexts";
 
 export default function GameMap() {
   useEffect(() => {
@@ -29,6 +29,12 @@ export default function GameMap() {
   const isWeaponActive = useSelector(selectors.isWeaponActive);
   const isPlacing = useSelector(selectors.isPlacing);
   const playerPos = useSelector(selectors.playerPos);
+  const isCursorInProjectorRange = useSelector((state: RawState) =>
+    selectors.isInProjectorRange(state, cursorPos),
+  );
+  const mousePosRef = useRef<Pos | null>(null);
+
+  useEffect(() => setContextMenuPos(null), [playerPos]);
 
   const moveUp = () => {
     if (!isDndFocused()) {
@@ -113,16 +119,20 @@ export default function GameMap() {
   useControl(ControlCode.QuickAction, () => performDefaultAction(cursorPos));
 
   return (
-    <section className="relative">
+    <section
+      className={`relative ${isCursorInProjectorRange ? "cursor-pointer" : ""}`}
+    >
       {/* eslint-disable-next-line jsx-a11y/mouse-events-have-key-events, jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events */}
       <div
         className="w-full h-full"
         id="map"
         onMouseMove={(e) => {
-          const pos = getPosFromMouse(
-            e.nativeEvent.offsetX,
-            e.nativeEvent.offsetY,
-          );
+          const mousePos = {
+            x: e.nativeEvent.offsetX,
+            y: e.nativeEvent.offsetY,
+          };
+          mousePosRef.current = mousePos;
+          const pos = getPosFromMouse(mousePos.x, mousePos.y);
           if (
             !cursorPos ||
             (!arePositionsEqual(cursorPos, pos) && !contextMenuPos)
@@ -131,6 +141,7 @@ export default function GameMap() {
           }
         }}
         onMouseOut={() => {
+          mousePosRef.current = null;
           if (!contextMenuPos) {
             dispatch(actions.setCursorPos(null));
           }
@@ -141,6 +152,15 @@ export default function GameMap() {
           } else if (e.nativeEvent.deltaY < 0 && playerPos) {
             zoomTo(playerPos);
           }
+          if (mousePosRef.current) {
+            const gamePos = getPosFromMouse(
+              mousePosRef.current.x,
+              mousePosRef.current.y,
+            );
+            if (!cursorPos || !arePositionsEqual(cursorPos, gamePos)) {
+              dispatch(actions.setCursorPos(gamePos));
+            }
+          }
         }}
         onContextMenu={(e) => {
           e.preventDefault();
@@ -148,6 +168,7 @@ export default function GameMap() {
             x: e.nativeEvent.offsetX,
             y: e.nativeEvent.offsetY,
           };
+          mousePosRef.current = mousePos;
           const gamePos = getPosFromMouse(mousePos.x, mousePos.y);
           if (!cursorPos || !arePositionsEqual(cursorPos, gamePos)) {
             dispatch(actions.setCursorPos(gamePos));
@@ -159,6 +180,7 @@ export default function GameMap() {
             x: e.nativeEvent.offsetX,
             y: e.nativeEvent.offsetY,
           };
+          mousePosRef.current = mousePos;
           const gamePos = getPosFromMouse(mousePos.x, mousePos.y);
           if (!cursorPos || !arePositionsEqual(cursorPos, gamePos)) {
             dispatch(actions.setCursorPos(gamePos));

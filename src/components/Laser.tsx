@@ -1,3 +1,4 @@
+/* global document */
 import React, { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Tippy from "@tippyjs/react";
@@ -20,7 +21,12 @@ export default function Laser() {
   const isAimingInDirection = (d: Direction): boolean =>
     isWeaponActive && getConstDir(d) === getConstDir(aimingDirection);
 
-  const fire = () => dispatch(actions.fireWeapon());
+  const fire = () => {
+    dispatch(actions.fireWeapon());
+    if (document.activeElement && (document.activeElement as any).blur) {
+      (document.activeElement as any).blur();
+    }
+  };
   const cancel = () => dispatch(actions.deactivateWeapon());
   useControl(ControlCode.Back, cancel);
   useControl(ControlCode.Fire, fire, isWeaponActive);
@@ -35,7 +41,7 @@ export default function Laser() {
     aimInSameDirectionToFire: boolean,
   ) => () => {
     if (aimInSameDirectionToFire && isAimingInDirection(direction)) {
-      dispatch(actions.fireWeapon());
+      fire();
     } else {
       dispatch(actions.targetWeapon(direction));
     }

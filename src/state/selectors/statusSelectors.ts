@@ -1,14 +1,15 @@
-import { RawState } from "~types";
-import { entitiesWithComps } from "./entitySelectors";
-import { ResourceCode } from "~data/resources";
-import { JobTypeCode } from "~data/jobTypes";
 import {
+  DAY_START_MINUTES,
+  MINUTES_PER_TURN,
   TURNS_PER_DAY,
   TURNS_PER_NIGHT,
-  MINUTES_PER_TURN,
-  DAY_START_MINUTES,
   VICTORY_ON_TURN,
 } from "~constants";
+import { JobTypeCode } from "~data/jobTypes";
+import { ResourceCode } from "~data/resources";
+import { Pos, RawState } from "~types";
+import { getDistance } from "~utils/geometry";
+import { entitiesWithComps } from "./entitySelectors";
 
 export function population(state: RawState): number {
   return entitiesWithComps(state, "colonist").length;
@@ -127,4 +128,13 @@ export function jobPriority(state: RawState, jobType: JobTypeCode) {
 
 export function cursorPos(state: RawState) {
   return state.cursorPos;
+}
+
+export function isInProjectorRange(state: RawState, pos?: Pos | null): boolean {
+  if (!pos) return false;
+  return (
+    entitiesWithComps(state, "projector", "pos")
+      .filter((e) => getDistance(pos, e.pos) <= e.projector.range)
+      .filter((e) => !e.powered || e.powered.hasPower).length > 0
+  );
 }
