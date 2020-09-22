@@ -74,19 +74,6 @@ export default function BuildMenu() {
   useControl(ControlCode.Building9, makeBuildingCallback(9), !placingTarget);
   useControl(ControlCode.Building0, makeBuildingCallback(0), !placingTarget);
 
-  const clearAllEnabled = Boolean(
-    !cursorPos &&
-      !isWeaponActive &&
-      !category &&
-      !isPlacing &&
-      settings.backClearsAllReflector,
-  );
-  useControl(
-    ControlCode.Back,
-    () => dispatch(actions.clearReflectors()),
-    clearAllEnabled,
-  );
-
   const showCategory: boolean = !category;
   const showBuildings: boolean = Boolean(category && !placingTarget);
 

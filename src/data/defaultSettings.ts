@@ -34,6 +34,7 @@ const defaultSettings: Settings = {
     [ControlCode.PlaceReflectorB]: ["r"],
     [ControlCode.RotateReflector]: ["shift r"],
     [ControlCode.RemoveReflector]: ["t"],
+    [ControlCode.ClearAllReflectors]: ["c"],
     [ControlCode.RemoveBuilding]: ["x"],
     [ControlCode.ToggleJobs]: ["j"],
 

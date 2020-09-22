@@ -106,6 +106,9 @@ export default function GameMap() {
     [""],
     true,
   );
+  useControl(ControlCode.ClearAllReflectors, () =>
+    dispatch(actions.clearReflectors()),
+  );
 
   const performDefaultAction = (pos: Pos | null) => {
     if (pos) {

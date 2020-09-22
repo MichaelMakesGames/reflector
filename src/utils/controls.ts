@@ -160,6 +160,12 @@ function addReflectorActions(
       action: actions.removeReflector(pos),
     });
   }
+
+  results.push({
+    label: "Clear All Reflectors",
+    controlCode: ControlCode.ClearAllReflectors,
+    action: actions.clearReflectors(),
+  });
 }
 
 export function isDndFocused() {

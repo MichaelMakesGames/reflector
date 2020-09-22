@@ -21,6 +21,7 @@ export enum ControlCode {
   PlaceReflectorB = "PLACE_REFLECTOR_B",
   RotateReflector = "ROTATE_REFLECTOR",
   RemoveReflector = "REMOVE_REFLECTOR",
+  ClearAllReflectors = "CLEAR_ALL_REFLECTORS",
 
   RemoveBuilding = "REMOVE_BUILDING",
   RotateBuilding = "ROTATE_BUILDING",
