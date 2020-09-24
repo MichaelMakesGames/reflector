@@ -11,6 +11,7 @@ import selectors from "~state/selectors";
 import { Direction } from "~types";
 import { ControlCode } from "~types/ControlCode";
 import { getConstDir } from "~utils/geometry";
+import Kbd from "./Kbd";
 
 export default function Laser() {
   const dispatch = useDispatch();
@@ -82,8 +83,9 @@ export default function Laser() {
           {(laserState === "READY" || laserState === "ACTIVE") && (
             <>
               <p className="mb-1">
-                Your laser is ready to fire. Click one of the arrow buttons to
-                aim, and click again to fire.
+                Your laser is ready to fire. Click the Activate button to
+                activate your laser, then use the arrows or wasd keys to aim,
+                then click the Fire button.
               </p>
               <p>
                 You can also press f to activate your laser, use the arrow keys
@@ -98,23 +100,15 @@ export default function Laser() {
       }
     >
       <section className="p-2 border-b border-gray flex flex-row items-center">
-        <div className="mr-2 flex-grow">
-          <span className="text-lightGray">Laser: </span>
-          {laserState}
+        <div className="mr-2 flex-grow flex-col">
+          <div className="text-lightGray">Laser: </div>
+          <div>
+            {laserState === "READY" && "Ready"}
+            {laserState === "RECHARGING" && "Recharging"}
+            {laserState === "ACTIVE" && "Aiming"}
+          </div>
         </div>
-        {isWeaponActive && (
-          <button
-            className="btn mr-2 text-sm"
-            type="button"
-            disabled={!isWeaponActive}
-            onClick={(e) => {
-              cancel();
-              (e.target as HTMLButtonElement).blur();
-            }}
-          >
-            Cancel
-          </button>
-        )}
+
         <div className="flex flex-row">
           <div className="flex flex-col flex-1">
             <div className="flex-1" />
@@ -124,7 +118,7 @@ export default function Laser() {
                 isAimingInDirection(LEFT) ? "text-red" : ""
               }`}
               type="button"
-              onClick={makeAimHandler(LEFT, true)}
+              onClick={makeAimHandler(LEFT, settings.aimInSameDirectionToFire)}
             >
               ◀
             </button>
@@ -137,7 +131,7 @@ export default function Laser() {
                 isAimingInDirection(UP) ? "text-red" : ""
               }`}
               type="button"
-              onClick={makeAimHandler(UP, true)}
+              onClick={makeAimHandler(UP, settings.aimInSameDirectionToFire)}
             >
               ▲
             </button>
@@ -148,7 +142,7 @@ export default function Laser() {
                 isAimingInDirection(DOWN) ? "text-red" : ""
               }`}
               type="button"
-              onClick={makeAimHandler(DOWN, true)}
+              onClick={makeAimHandler(DOWN, settings.aimInSameDirectionToFire)}
             >
               ▼
             </button>
@@ -161,12 +155,47 @@ export default function Laser() {
                 isAimingInDirection(RIGHT) ? "text-red" : ""
               }`}
               type="button"
-              onClick={makeAimHandler(RIGHT, true)}
+              onClick={makeAimHandler(RIGHT, settings.aimInSameDirectionToFire)}
             >
               ▶
             </button>
             <div className="flex-1" />
           </div>
+        </div>
+
+        <div className="flex-column ml-2">
+          <button
+            className="btn text-sm mb-1 block text-left pl-1"
+            style={{ width: "5.5rem" }}
+            type="button"
+            disabled={!["READY", "ACTIVE"].includes(laserState)}
+            onClick={(e) => {
+              if (laserState === "READY") {
+                dispatch(actions.targetWeapon(aimingDirection));
+              } else {
+                fire();
+              }
+              (e.target as HTMLButtonElement).blur();
+            }}
+          >
+            <Kbd>{settings.keyboardShortcuts[ControlCode.Fire][0]}</Kbd>
+            <span className="ml-1">
+              {laserState === "ACTIVE" ? "Fire" : "Activate"}
+            </span>
+          </button>
+          <button
+            className="btn text-sm block text-left pl-1"
+            style={{ width: "5.5rem" }}
+            type="button"
+            disabled={!isWeaponActive}
+            onClick={(e) => {
+              cancel();
+              (e.target as HTMLButtonElement).blur();
+            }}
+          >
+            <Kbd>{settings.keyboardShortcuts[ControlCode.Back][0]}</Kbd>
+            <span className="ml-1">Cancel</span>
+          </button>
         </div>
       </section>
     </Tippy>

@@ -1,6 +1,7 @@
-import React, { PropsWithChildren, useContext } from "react";
+import React, { useContext } from "react";
 import { SettingsContext } from "~contexts";
 import { ControlCode } from "~types/ControlCode";
+import Kbd from "./Kbd";
 import Modal from "./Modal";
 
 export default function KeyboardControls({ onClose }: { onClose: () => void }) {
@@ -89,13 +90,5 @@ function Shortcut({ code, label }: { code: ControlCode; label: string }) {
         <Kbd key={key}>{key}</Kbd>
       ))}
     </div>
-  );
-}
-
-function Kbd({ children }: PropsWithChildren<{}>) {
-  return (
-    <kbd className="bg-darkGray text-white font-mono ml-1 rounded px-1">
-      {children}
-    </kbd>
   );
 }

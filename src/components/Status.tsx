@@ -1,20 +1,25 @@
 import Tippy from "@tippyjs/react";
-import React from "react";
+import React, { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { MINUTES_PER_TURN, COLONISTS_PER_IMMIGRATION_WAVE } from "~constants";
 import actions from "~state/actions";
 import selectors from "~state/selectors";
+import Kbd from "./Kbd";
+import { SettingsContext } from "~contexts";
+import { ControlCode } from "~types/ControlCode";
 
 export default function Status() {
   const dispatch = useDispatch();
   const time = useSelector(selectors.time);
   const day = useSelector(selectors.day);
+  const isNight = useSelector(selectors.isNight);
   const timeUntilVictory = useSelector(selectors.timeUntilVictory);
   const turnsUntilVictory = useSelector(selectors.turnsUntilVictory);
   const victory = useSelector(selectors.victory);
   const population = useSelector(selectors.population);
   const housingCapacity = useSelector(selectors.housingCapacity);
   const morale = useSelector(selectors.morale);
+  const settings = useContext(SettingsContext);
   return (
     <section className="p-2 border-b border-gray">
       <div className="flex flex-row justify-between items-start mb-2">
@@ -44,7 +49,7 @@ export default function Status() {
             }
           >
             <p className="text-xl">
-              Day {day + 1}, {time}
+              {isNight ? "Night" : "Day"} {day + 1}, {time}
             </p>
           </Tippy>
           <Tippy
@@ -62,13 +67,14 @@ export default function Status() {
           content="Pass your turn without doing anything."
         >
           <button
-            className="btn"
+            className="btn pl-1 text-sm"
             onClick={() => {
               dispatch(actions.playerTookTurn());
             }}
             type="button"
           >
-            Wait
+            <Kbd>{settings.keyboardShortcuts[ControlCode.Wait]}</Kbd>
+            <span className="ml-1">Wait</span>
           </button>
         </Tippy>
       </div>
