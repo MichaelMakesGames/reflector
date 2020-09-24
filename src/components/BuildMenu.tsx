@@ -21,7 +21,6 @@ export default function BuildMenu() {
     : [];
   const placingTarget = useSelector(selectors.placingTarget);
   const isWeaponActive = useSelector(selectors.isWeaponActive);
-  const isPlacing = useSelector(selectors.isPlacing);
 
   const cancel = () => {
     setCategory(null);

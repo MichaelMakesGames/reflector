@@ -7,6 +7,5 @@ export default interface Settings {
   unmodifiedBuilding: boolean;
   aimingModifierKey: string;
   cursorModifierKey: string;
-  backClearsAllReflector: boolean;
   keyboardShortcuts: Record<ControlCode, string[]>;
 }
