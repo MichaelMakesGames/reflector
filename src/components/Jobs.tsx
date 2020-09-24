@@ -1,5 +1,5 @@
 import Tippy from "@tippyjs/react";
-import React from "react";
+import React, { useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { useDispatch, useSelector } from "react-redux";
 import jobTypes, { JobTypeCode } from "~data/jobTypes";
@@ -8,6 +8,8 @@ import selectors from "~state/selectors";
 import { RawState } from "~types";
 import Warning from "./Warning";
 import colonistStatuses, { ColonistStatusCode } from "~data/colonistStatuses";
+import Icons from "./Icons";
+import colors from "~colors";
 
 export default function Jobs() {
   const dispatch = useDispatch();
@@ -71,21 +73,48 @@ function JobRow({ code, index }: { code: JobTypeCode; index: number }) {
   const max = useSelector((state: RawState) =>
     selectors.maxNumberEmployed(state, code),
   );
+  // const priority = useSelector((state: RawState) =>
+  //   selectors.jobPriority(state, code),
+  // );
+  const priority = index + 1;
+  const priorityColorClass = priority <= 2 ? "text-red" : "text-blue";
+  const [isHovered, setIsHovered] = useState(false);
   return (
     <Draggable draggableId={code} index={index}>
       {(provided, snapshot) => (
         <div
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           data-jobs-dnd-index={index}
           data-job-type-code={code}
-          className={`flex border-t p-1 ${
-            snapshot.isDragging
-              ? "border border-white"
-              : "border-t border-darkGray"
+          className={`flex border-t p-1 border border-black
           }`}
+          style={{
+            ...provided.draggableProps.style,
+            borderColor:
+              snapshot.isDragging || isHovered ? colors.text : undefined,
+            borderTopColor:
+              snapshot.isDragging || isHovered ? colors.text : colors.ground,
+          }}
         >
+          <span
+            className={`h-6 w-6 mr-1 ${
+              snapshot.isDragging ? "text-white" : priorityColorClass
+            }`}
+          >
+            {snapshot.isDragging && <Icons.Dragging />}
+            {!snapshot.isDragging && priority === 1 && (
+              <Icons.VeryHighPriority />
+            )}
+            {!snapshot.isDragging && priority === 2 && <Icons.HighPriority />}
+            {!snapshot.isDragging && priority === 3 && <Icons.LowPriority />}
+            {!snapshot.isDragging && priority === 4 && (
+              <Icons.VeryLowPriority />
+            )}
+          </span>
           <Tippy
             content={
               <>
