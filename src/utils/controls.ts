@@ -1,4 +1,4 @@
-/* global document */
+/* global document, navigator */
 import { DOWN, LEFT, PLAYER_ID, UP } from "~constants";
 import { ControlCode } from "~types/ControlCode";
 import actions from "~state/actions";
@@ -174,4 +174,8 @@ export function isDndFocused() {
     return Boolean(activeElement.dataset.jobsDndIndex);
   }
   return false;
+}
+
+export function isMac() {
+  return navigator.platform.toUpperCase().includes("MAC");
 }

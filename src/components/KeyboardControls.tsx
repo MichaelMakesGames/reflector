@@ -3,6 +3,7 @@ import { SettingsContext } from "~contexts";
 import { ControlCode } from "~types/ControlCode";
 import Kbd from "./Kbd";
 import Modal from "./Modal";
+import { isMac } from "~utils/controls";
 
 export default function KeyboardControls({ onClose }: { onClose: () => void }) {
   const settings = useContext(SettingsContext);
@@ -76,6 +77,9 @@ export default function KeyboardControls({ onClose }: { onClose: () => void }) {
         </div>
         <Shortcut code={ControlCode.Wait} label="Wait" />
         <Shortcut code={ControlCode.Undo} label="Undo" />
+        <div className="ml-3">
+          Toggle Fullscreen: <Kbd>{isMac() ? "Ctrl+Command+F" : "F11"}</Kbd>
+        </div>
       </section>
     </Modal>
   );
