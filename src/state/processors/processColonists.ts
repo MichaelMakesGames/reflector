@@ -1,5 +1,10 @@
 import { Required } from "Object/_api";
-import { PRIORITY_MARKER, PRIORITY_UNIT, TURNS_PER_NIGHT } from "~constants";
+import {
+  PRIORITY_MARKER,
+  PRIORITY_UNIT,
+  TURNS_PER_NIGHT,
+  PRIORITY_BUILDING_DETAIL,
+} from "~constants";
 import { ResourceCode } from "~data/resources";
 import { Entity, HasJobProvider, HasPos, Pos } from "~types";
 import WrappedState from "~types/WrappedState";
@@ -405,7 +410,7 @@ function updateColonistTile(
       display: {
         ...colonist.display,
         tile,
-        priority: PRIORITY_MARKER,
+        priority: PRIORITY_BUILDING_DETAIL,
       },
     });
   } else if (numColonistsAtPos === 1) {

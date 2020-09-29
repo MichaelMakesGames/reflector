@@ -32,8 +32,9 @@ export const BASE_IMMIGRATION_RATE = TURNS_PER_DAY;
 export const DAY_START_MINUTES = 6 * 60; // 6:00am
 export const VICTORY_ON_TURN = TURNS_PER_DAY * 10;
 
-export const PRIORITY_MARKER = 25;
-export const PRIORITY_LASER = 20;
+export const PRIORITY_MARKER = 30;
+export const PRIORITY_LASER = 25;
+export const PRIORITY_BUILDING_DETAIL = 20;
 export const PRIORITY_BUILDING_HIGH = 15;
 export const PRIORITY_UNIT = 10;
 export const PRIORITY_BUILDING_LOW = 5;
