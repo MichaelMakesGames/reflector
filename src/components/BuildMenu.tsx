@@ -1,10 +1,10 @@
+/* global document */
 import Tippy from "@tippyjs/react";
 import React, { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { SettingsContext } from "~contexts";
 import buildingCategories, { BuildingCategory } from "~data/buildingCategories";
 import buildings from "~data/buildings";
-import templates from "~data/templates";
 import { useControl } from "~hooks";
 import actions from "~state/actions";
 import selectors from "~state/selectors";
@@ -32,6 +32,20 @@ export default function BuildMenu() {
       dispatch(actions.rotateEntity(placingTarget));
     }
   };
+
+  useEffect(() => {
+    if (placingTarget) {
+      const listener = (e: MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        cancel();
+      };
+      document.addEventListener("contextmenu", listener, true);
+      return () => document.removeEventListener("contextmenu", listener, true);
+    } else {
+      return () => {};
+    }
+  });
 
   // cancel build when laser activated
   useEffect(() => {
