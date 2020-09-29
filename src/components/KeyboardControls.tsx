@@ -10,10 +10,21 @@ export default function KeyboardControls({ onClose }: { onClose: () => void }) {
   return (
     <Modal isOpen onRequestClose={onClose}>
       <div className="flex flex-row">
-        <h2 className="text-2xl flex-grow">Keyboard Shortcuts</h2>
+        <h2 className="text-2xl flex-grow">Mouse Controls</h2>
         <button type="button" className="btn" onClick={onClose}>
           Close
         </button>
+      </div>
+      <section className="my-3 pl-3">
+        <p>Click within the blue borders to place/rotate/remove reflector.</p>
+        <p>Hover over a location to see contents and contextual actions.</p>
+        <p>Right click location for contextual actions.</p>
+        <p>Scroll to zoom in or zoom out.</p>
+        <p>While building, click to place, right click to cancel.</p>
+        <p>Click and drag jobs to change priority.</p>
+      </section>
+      <div className="flex flex-row">
+        <h2 className="text-2xl flex-grow">Keyboard Shortcuts</h2>
       </div>
       <section className="my-3">
         <h3 className="text-xl">Movement</h3>

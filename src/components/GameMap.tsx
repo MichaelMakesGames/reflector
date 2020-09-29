@@ -176,7 +176,11 @@ export default function GameMap() {
           if (!cursorPos || !arePositionsEqual(cursorPos, gamePos)) {
             dispatch(actions.setCursorPos(gamePos));
           }
-          setContextMenuPos(mousePos);
+          if (!contextMenuPos) {
+            setContextMenuPos(mousePos);
+          } else {
+            setContextMenuPos(null);
+          }
         }}
         onClick={(e) => {
           const mousePos = {
