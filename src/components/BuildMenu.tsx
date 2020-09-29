@@ -10,6 +10,7 @@ import actions from "~state/actions";
 import selectors from "~state/selectors";
 import { ControlCode } from "~types/ControlCode";
 import ResourceAmount from "./ResourceAmount";
+import { createEntityFromTemplate } from "~utils/entities";
 
 export default function BuildMenu() {
   const dispatch = useDispatch();
@@ -119,7 +120,7 @@ export default function BuildMenu() {
             placement="top"
             content={
               (
-                templates[b.template].description || {
+                createEntityFromTemplate(b.template).description || {
                   description: "No description",
                 }
               ).description
