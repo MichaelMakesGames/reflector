@@ -4,6 +4,7 @@ import { useBoolean, useControl } from "~hooks";
 import selectors from "~state/selectors";
 import Modal from "./Modal";
 import { ControlCode } from "~types/ControlCode";
+import Kbd from "./Kbd";
 
 export default function Introduction() {
   const [isOpen, open, close] = useBoolean(false);
@@ -22,7 +23,7 @@ export default function Introduction() {
 
   return (
     <Modal isOpen onRequestClose={close}>
-      <h2 className="text-xl">Welcome to Reflector: Laser Defense</h2>
+      <h2 className="text-2xl">Welcome to Reflector: Laser Defense</h2>
       <p className="my-2">
         Your assignment is simple: build a colony and survive 10 days.
       </p>
@@ -38,7 +39,22 @@ export default function Introduction() {
         Colonists will work during the day, and we&apos;ll send more each
         morning. Keep them safe and fed to maintain morale.
       </p>
-      <button type="button" className="btn" onClick={close}>
+      <h3 className="text-2xl my-2">Basic Controls</h3>
+      <p className="my-2">
+        <Kbd>wasd</Kbd> or arrow keys to move
+      </p>
+      <p className="my-2">
+        <Kbd>f</Kbd> to activate laser, <Kbd>wasd</Kbd> to aim, then{" "}
+        <Kbd>f</Kbd> again to fire.
+      </p>
+      <p className="my-2">
+        Number keys to select building category then select building, then click
+        in map to place.
+      </p>
+      <p className="my-2">
+        You can see the full controls in the menu at the top right.
+      </p>
+      <button type="button" className="btn mt-2" onClick={close}>
         Start Game
       </button>
     </Modal>

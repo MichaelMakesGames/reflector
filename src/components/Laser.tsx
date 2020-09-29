@@ -165,7 +165,7 @@ export default function Laser() {
 
         <div className="flex-column ml-2">
           <button
-            className="btn text-sm mb-1 block text-left pl-1"
+            className="btn text-sm mb-1 block text-left"
             style={{ width: "5.5rem" }}
             type="button"
             disabled={!["READY", "ACTIVE"].includes(laserState)}
@@ -184,7 +184,7 @@ export default function Laser() {
             </span>
           </button>
           <button
-            className="btn text-sm block text-left pl-1"
+            className="btn text-sm block text-left"
             style={{ width: "5.5rem" }}
             type="button"
             disabled={!isWeaponActive}

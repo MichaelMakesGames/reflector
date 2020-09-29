@@ -46,15 +46,15 @@ export default function KeyboardControls({ onClose }: { onClose: () => void }) {
         <h3 className="text-xl">Building</h3>
         <div className="ml-3">
           Select Category/Building: <Kbd>1</Kbd>
-          <Kbd>2</Kbd>
-          <Kbd>3</Kbd>
-          <Kbd>4</Kbd>
-          <Kbd>5</Kbd>
-          <Kbd>6</Kbd>
-          <Kbd>7</Kbd>
-          <Kbd>8</Kbd>
-          <Kbd>9</Kbd>
-          <Kbd>0</Kbd>
+          <Kbd className="ml-1">2</Kbd>
+          <Kbd className="ml-1">3</Kbd>
+          <Kbd className="ml-1">4</Kbd>
+          <Kbd className="ml-1">5</Kbd>
+          <Kbd className="ml-1">6</Kbd>
+          <Kbd className="ml-1">7</Kbd>
+          <Kbd className="ml-1">8</Kbd>
+          <Kbd className="ml-1">9</Kbd>
+          <Kbd className="ml-1">0</Kbd>
         </div>
         <div className="ml-3">
           Move Blueprint: <Kbd>{settings.cursorModifierKey}</Kbd> + movement key
@@ -102,7 +102,9 @@ function Shortcut({ code, label }: { code: ControlCode; label: string }) {
     <div className="ml-3">
       {label}:
       {settings.keyboardShortcuts[code].map((key) => (
-        <Kbd key={key}>{key}</Kbd>
+        <Kbd className="ml-1" key={key}>
+          {key}
+        </Kbd>
       ))}
     </div>
   );

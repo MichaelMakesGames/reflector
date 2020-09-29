@@ -67,7 +67,7 @@ export default function Status() {
           content="Pass your turn without doing anything."
         >
           <button
-            className="btn pl-1 text-sm"
+            className="btn text-sm"
             onClick={() => {
               dispatch(actions.playerTookTurn());
             }}
