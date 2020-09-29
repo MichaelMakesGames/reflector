@@ -13,9 +13,9 @@ export default function Status() {
   const time = useSelector(selectors.time);
   const day = useSelector(selectors.day);
   const isNight = useSelector(selectors.isNight);
-  const timeUntilVictory = useSelector(selectors.timeUntilVictory);
-  const turnsUntilVictory = useSelector(selectors.turnsUntilVictory);
-  const victory = useSelector(selectors.victory);
+  const turnsUntilSunriseOrSunset = useSelector(
+    selectors.turnsUntilSunriseOrSunset,
+  );
   const population = useSelector(selectors.population);
   const housingCapacity = useSelector(selectors.housingCapacity);
   const morale = useSelector(selectors.morale);
@@ -52,15 +52,11 @@ export default function Status() {
               {isNight ? "Night" : "Day"} {day + 1}, {time}
             </p>
           </Tippy>
-          <Tippy
-            content={`Survive ${turnsUntilVictory} more ${
-              turnsUntilVictory === 1 ? "turn" : "turns"
-            } without the player dying or morale reaching 0 to win!`}
-          >
-            <p className="text-lightGray">
-              {victory ? "Victory!" : `Victory in ${timeUntilVictory}`}
-            </p>
-          </Tippy>
+          <p className="text-lightGray">
+            {turnsUntilSunriseOrSunset}{" "}
+            {turnsUntilSunriseOrSunset === 1 ? "turn" : "turns"} until{" "}
+            {isNight ? "sunrise" : "sunset"}
+          </p>
         </div>
         <Tippy
           placement="right"

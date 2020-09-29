@@ -29,8 +29,8 @@ function move(
     id: entity.id,
     pos: newPosition,
   });
-  if (entity.id === PLAYER_ID && isZoomedIn()) {
-    if (state.select.cursorPos()) {
+  if (entity.id === PLAYER_ID) {
+    if (state.select.cursorPos() && isZoomedIn()) {
       state.act.moveCursor({ dx: action.payload.dx, dy: action.payload.dy });
     }
     state.act.playerTookTurn();

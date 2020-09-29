@@ -51,6 +51,14 @@ export function turnOfDay(state: RawState) {
   return state.time.turn % TURNS_PER_DAY;
 }
 
+export function turnsUntilSunriseOrSunset(state: RawState) {
+  if (isNight(state)) {
+    return TURNS_PER_DAY - turnOfDay(state) + 1;
+  } else {
+    return TURNS_PER_DAY - TURNS_PER_NIGHT - turnOfDay(state) + 1;
+  }
+}
+
 export function time(state: RawState) {
   const timeInMinutes =
     ((turnOfDay(state) - 1) * MINUTES_PER_TURN + DAY_START_MINUTES) % (24 * 60);
