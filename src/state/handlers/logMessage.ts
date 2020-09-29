@@ -5,7 +5,7 @@ import WrappedState from "~types/WrappedState";
 
 const notyf = new Notyf({
   position: { x: "right", y: "top" },
-  duration: 5000,
+  duration: 10000,
   dismissible: true,
 });
 

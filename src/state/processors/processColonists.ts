@@ -36,7 +36,7 @@ export default function processColonists(state: WrappedState): void {
   }
 
   if (
-    state.select.turnOfNight() === 1 &&
+    state.select.turnOfNight() === 0 &&
     state.select.population() > state.select.housingCapacity()
   ) {
     state.act.logMessage({
