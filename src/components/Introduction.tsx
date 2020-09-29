@@ -52,7 +52,8 @@ export default function Introduction() {
         in map to place.
       </p>
       <p className="my-2">
-        You can see the full controls in the menu at the top right.
+        You can see the full controls in the menu at the top right or by
+        pressing <Kbd>?</Kbd>.
       </p>
       <button type="button" className="btn mt-2" onClick={close}>
         Start Game

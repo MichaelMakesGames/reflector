@@ -1,12 +1,15 @@
 import React, { useContext } from "react";
 import { SettingsContext } from "~contexts";
 import { ControlCode } from "~types/ControlCode";
+import { isMac } from "~utils/controls";
 import Kbd from "./Kbd";
 import Modal from "./Modal";
-import { isMac } from "~utils/controls";
+import { useControl } from "~hooks";
 
 export default function KeyboardControls({ onClose }: { onClose: () => void }) {
   const settings = useContext(SettingsContext);
+  useControl(ControlCode.Back, onClose);
+
   return (
     <Modal isOpen onRequestClose={onClose}>
       <div className="flex flex-row">
@@ -91,6 +94,10 @@ export default function KeyboardControls({ onClose }: { onClose: () => void }) {
         <div className="ml-3">
           Toggle Fullscreen: <Kbd>{isMac() ? "Ctrl+Command+F" : "F11"}</Kbd>
         </div>
+        <div className="ml-3">
+          Open This Menu: <Kbd>?</Kbd>
+        </div>
+        <Shortcut code={ControlCode.Back} label="Close This Menu" />
       </section>
     </Modal>
   );

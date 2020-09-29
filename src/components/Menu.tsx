@@ -1,6 +1,6 @@
-/* global document */
+/* global document, window */
 import Tippy from "@tippyjs/react";
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useBoolean } from "~hooks";
 import actions from "~state/actions";
@@ -10,6 +10,18 @@ export default function Menu() {
   const [isOpen, _, close, toggle] = useBoolean(false);
   const [controlsIsOpen, openControls, closeControls] = useBoolean(false);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const listener = (e: KeyboardEvent) => {
+      if (e.key === "?" || e.key === "/") {
+        e.preventDefault();
+        openControls();
+      }
+    };
+    window.addEventListener("keydown", listener);
+    return () => window.removeEventListener("keydown", listener);
+  });
+
   return (
     <Tippy
       visible={isOpen}
@@ -66,13 +78,13 @@ export default function Menu() {
             >
               Controls
             </button>
-            {controlsIsOpen && <KeyboardControls onClose={closeControls} />}
           </li>
         </ul>
       }
     >
       <button onClick={toggle} type="button">
         Menu
+        {controlsIsOpen && <KeyboardControls onClose={closeControls} />}
       </button>
     </Tippy>
   );
