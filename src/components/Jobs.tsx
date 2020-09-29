@@ -90,7 +90,7 @@ function JobRow({ code, index }: { code: JobTypeCode; index: number }) {
           {...provided.dragHandleProps}
           data-jobs-dnd-index={index}
           data-job-type-code={code}
-          className={`flex border-t p-1 border border-black
+          className={`flex border-t p-1 pl-0 border border-black
           }`}
           style={{
             ...provided.draggableProps.style,
