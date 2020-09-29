@@ -15,7 +15,7 @@ import { choose } from "~utils/rng";
 import { ColonistStatusCode } from "~data/colonistStatuses";
 
 export default function processColonists(state: WrappedState): void {
-  if (!state.select.isNight() || state.select.turnOfNight() === 0) {
+  if (!state.select.isNight() || state.select.turnOfNight() === 1) {
     for (const colonist of state.select.colonists()) {
       clearResidence(state, colonist);
     }
@@ -36,7 +36,7 @@ export default function processColonists(state: WrappedState): void {
   }
 
   if (
-    state.select.turnOfNight() === 0 &&
+    state.select.turnOfNight() === 1 &&
     state.select.population() > state.select.housingCapacity()
   ) {
     state.act.logMessage({

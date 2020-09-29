@@ -29,7 +29,7 @@ export const TURNS_PER_NIGHT = TURNS_PER_DAY / 2;
 export const END_OF_NIGHT_ENEMY_SPAWNING_BUFFER =
   Math.max(MAP_HEIGHT, MAP_WIDTH) / 2;
 export const BASE_IMMIGRATION_RATE = TURNS_PER_DAY;
-export const DAY_START_MINUTES = 8 * 60; // 8:00am
+export const DAY_START_MINUTES = 6 * 60; // 6:00am
 export const VICTORY_ON_TURN = TURNS_PER_DAY * 10;
 
 export const PRIORITY_MARKER = 25;

@@ -36,7 +36,7 @@ export function day(state: RawState) {
 }
 
 export function isNight(state: RawState) {
-  return turnOfNight(state) >= 0;
+  return turnOfNight(state) > 0;
 }
 
 export function turn(state: RawState) {
@@ -53,7 +53,7 @@ export function turnOfDay(state: RawState) {
 
 export function time(state: RawState) {
   const timeInMinutes =
-    (turnOfDay(state) * MINUTES_PER_TURN + DAY_START_MINUTES) % (24 * 60);
+    ((turnOfDay(state) - 1) * MINUTES_PER_TURN + DAY_START_MINUTES) % (24 * 60);
   const hours = Math.floor(timeInMinutes / 60);
   const minutes = timeInMinutes % 60;
   return Intl.DateTimeFormat(undefined, {

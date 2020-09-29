@@ -3,7 +3,7 @@ import { ResourceCode } from "~data/resources";
 import { FOOD_PER_COLONIST } from "~constants";
 
 export default function processHunger(state: WrappedState): void {
-  if (state.select.turnOfNight() === -1) {
+  if (state.select.turnOfNight() === 1) {
     const population = state.select.population();
     const amountOfFoodNeeded = population * FOOD_PER_COLONIST;
     if (state.select.canAffordToPay(ResourceCode.Food, amountOfFoodNeeded)) {

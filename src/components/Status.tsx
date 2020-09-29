@@ -34,7 +34,7 @@ export default function Status() {
                   instantly.
                 </p>
                 <p className="mb-2">
-                  During the day (8:00am - 8:00pm), colonists go to work to
+                  During the day (6:00am - 6:00pm), colonists go to work to
                   produce various resources.
                 </p>
                 <p className="mb-2">
