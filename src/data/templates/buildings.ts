@@ -141,7 +141,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     description: {
       name: "Residence",
       description:
-        "Provides housing for up to 3 colonists. Colonists with higher priority jobs get first pick.",
+        "Provides housing for up to 3 colonists. Colonists will otherwise pitch tents wherever they are at sunset.",
     },
   },
   MINE: {

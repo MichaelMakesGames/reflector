@@ -17,7 +17,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     ai: { type: "DRONE" },
     description: {
-      name: "Drone",
+      name: "Bug",
       description:
         "The most basic enemy. It targets the player or nearest building.",
     },
