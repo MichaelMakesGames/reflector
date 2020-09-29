@@ -2,6 +2,7 @@ import { PLAYER_ID, CURSOR_ID } from "~/constants";
 import actions from "~/state/actions";
 import { registerHandler } from "~state/handleAction";
 import WrappedState from "~types/WrappedState";
+import { isZoomedIn } from "~renderer";
 
 function move(
   state: WrappedState,
@@ -28,7 +29,7 @@ function move(
     id: entity.id,
     pos: newPosition,
   });
-  if (entity.id === PLAYER_ID) {
+  if (entity.id === PLAYER_ID && isZoomedIn()) {
     if (state.select.cursorPos()) {
       state.act.moveCursor({ dx: action.payload.dx, dy: action.payload.dy });
     }

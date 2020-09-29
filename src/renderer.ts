@@ -124,6 +124,11 @@ loadPromise.then(() => {
 });
 
 let zoomedIn = false;
+
+export function isZoomedIn() {
+  return zoomedIn;
+}
+
 export function toggleZoom(pos: Pos) {
   if (zoomedIn) {
     zoomOut();
