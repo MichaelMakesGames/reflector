@@ -14,6 +14,7 @@ import {
   arePositionsEqual,
   getAdjacentPositions,
   getClosest,
+  getDistance,
 } from "~utils/geometry";
 import { rangeTo } from "~utils/math";
 import { choose } from "~utils/rng";
@@ -51,6 +52,8 @@ export default function processColonists(state: WrappedState): void {
   }
 
   if (state.select.isNight()) {
+    doResidenceSanityCheck(state);
+    checkForEmptyHomesAndHomelessColonists(state);
     for (const colonist of state.select.colonists()) {
       if (colonist.colonist.residence) {
         goHomeOrSleep(state, colonist);
@@ -515,5 +518,84 @@ function assignColonistToWorkPlace(
         employment: workPlaceCopy.id,
       },
     });
+  }
+}
+
+// clear any invalid residence assignment
+function doResidenceSanityCheck(state: WrappedState) {
+  for (const colonist of state.select.colonists()) {
+    if (colonist.colonist.residence) {
+      const residence = state.select.residence(colonist);
+      if (!residence) {
+        state.act.updateEntity({
+          ...colonist,
+          colonist: {
+            ...colonist.colonist,
+            residence: null,
+          },
+        });
+      }
+    }
+  }
+
+  for (const residence of state.select.entitiesWithComps("pos", "housing")) {
+    const residents = state.select.residents(residence);
+    if (residence.housing.occupancy !== residents.length) {
+      state.act.updateEntity({
+        ...residence,
+        housing: {
+          ...residence.housing,
+          occupancy: residents.length,
+        },
+      });
+    }
+  }
+}
+
+function checkForEmptyHomesAndHomelessColonists(state: WrappedState) {
+  let residencesUnderCapacity = state.select.residencesUnderCapacity();
+  let homelessColonists = state.select.homelessColonists();
+
+  while (residencesUnderCapacity.length && homelessColonists.length) {
+    // eslint-disable-next-line no-loop-func
+    homelessColonists.sort((a, b) => {
+      const aValue = Math.min(
+        ...residencesUnderCapacity.map((e) => getDistance(a.pos, e.pos)),
+      );
+      const bValue = Math.min(
+        ...residencesUnderCapacity.map((e) => getDistance(b.pos, e.pos)),
+      );
+      return aValue - bValue;
+    });
+    const colonistToAssign = homelessColonists[0];
+
+    residencesUnderCapacity.sort((a, b) => {
+      const aValue = getDistance(colonistToAssign.pos, a.pos);
+      const bValue = getDistance(colonistToAssign.pos, b.pos);
+      return aValue - bValue;
+    });
+    const residenceToAssign = residencesUnderCapacity[0];
+
+    if (colonistToAssign.colonist.residence) {
+      // residence must be a tent
+      state.act.removeEntity(colonistToAssign.colonist.residence);
+    }
+    state.act.updateEntity({
+      ...colonistToAssign,
+      colonist: {
+        ...colonistToAssign.colonist,
+        residence: residenceToAssign.id,
+      },
+    });
+    state.act.updateEntity({
+      ...residenceToAssign,
+      housing: {
+        ...residenceToAssign.housing,
+        occupancy: residenceToAssign.housing.occupancy + 1,
+      },
+    });
+
+    residencesUnderCapacity = state.select.residencesUnderCapacity();
+    homelessColonists = state.select.homelessColonists();
   }
 }

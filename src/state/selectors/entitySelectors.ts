@@ -99,6 +99,22 @@ export function housingCapacity(state: RawState) {
     .reduce((acc, entity) => acc + entity.housing.capacity, 0);
 }
 
+export function homelessColonists(state: RawState) {
+  return colonists(state).filter((eColonist) => {
+    if (!eColonist.colonist.residence) return true;
+    const eResidence = residence(state, eColonist);
+    if (!eResidence) return true;
+    if (eResidence.housing.removeOnVacancy) return true;
+    return false;
+  });
+}
+
+export function residencesUnderCapacity(state: RawState) {
+  return entitiesWithComps(state, "housing", "pos").filter(
+    (e) => e.housing.occupancy < e.housing.capacity,
+  );
+}
+
 export function employment(state: RawState, colonist: HasColonist) {
   if (
     colonist.colonist.employment &&
