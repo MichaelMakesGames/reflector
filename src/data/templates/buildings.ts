@@ -492,7 +492,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     description: {
       name: "Adv. Projector",
       description:
-        "Lets you place reflector within 2 spaces. Needs 2 power per turn.",
+        "Lets you place reflectors within 2 spaces. Needs 2 power per turn.",
     },
   },
 };
