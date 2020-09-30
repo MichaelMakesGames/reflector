@@ -9,7 +9,6 @@ import WrappedState from "~types/WrappedState";
 import { areConditionsMet } from "~utils/conditions";
 import { arePositionsEqual } from "~utils/geometry";
 import colors from "~colors";
-import resources from "~data/resources";
 
 function activatePlacement(
   state: WrappedState,
@@ -23,20 +22,16 @@ function activatePlacement(
     state.act.cancelPlacement();
   }
 
-  const { cost, takesTurn, template, validitySelector } = action.payload;
-
-  if (cost && !state.select.canAffordToPay(cost.resource, cost.amount)) {
-    const message = `You do not have enough ${
-      resources[cost.resource].label
-    }. You have ${state.select.resource(cost.resource)} out of ${
-      cost.amount
-    } required`;
-    state.act.logMessage({ message });
-    return;
-  }
+  const {
+    cost,
+    takesTurn,
+    template,
+    validitySelector,
+    invalidMessage,
+  } = action.payload;
 
   const entityToPlace = createEntityFromTemplate(template, {
-    placing: { takesTurn, cost, validitySelector },
+    placing: { takesTurn, cost, validitySelector, invalidMessage },
   });
 
   const canPlace = (gameState: RawState, pos: Pos) => {
@@ -79,12 +74,6 @@ function activatePlacement(
         canPlace,
         false,
       );
-
-  if (!validPositions.length) {
-    const message = "No valid positions in range";
-    state.act.logMessage({ message });
-    return;
-  }
 
   const targetPos = action.payload.pos || player.pos;
   const targetPosIsValid = validPositions.some((p) =>

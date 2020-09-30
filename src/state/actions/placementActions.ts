@@ -7,6 +7,7 @@ export const activatePlacement = createStandardAction("ACTIVATE_PLACEMENT")<{
   takesTurn: boolean;
   cost?: { resource: ResourceCode; amount: number };
   validitySelector?: string;
+  invalidMessage?: string;
   pos?: Pos;
 }>();
 export const movePlacement = createStandardAction("MOVE_PLACEMENT")<{

@@ -96,9 +96,10 @@ export default function BuildMenu() {
     "font-normal border border-gray hover:border-white hover:z-10 px-2 py-1 flex flex-row items-center";
   return (
     <section className="border-t border-b border-gray flex flex-row">
-      {placingTarget && placingTarget.description ? (
+      {placingTarget ? (
         <h2 className="text-xl px-2">
-          Building {placingTarget.description.name}
+          Building{" "}
+          {createEntityFromTemplate(placingTarget.template).description?.name}
         </h2>
       ) : null}
       {category ? (

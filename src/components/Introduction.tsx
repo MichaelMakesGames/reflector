@@ -28,7 +28,7 @@ export default function Introduction() {
         Your assignment is simple: build a colony and survive 10 days.
       </p>
       <p className="my-2">
-        This is a hostile acquisition. The local lifeforms are nocturnal, so
+        Expect resistance from the local lifeforms. They are nocturnal, so
         they&apos;ll attack at night.
       </p>
       <p className="my-2">
@@ -39,6 +39,7 @@ export default function Introduction() {
         Colonists will work during the day, and we&apos;ll send more each
         morning. Keep them safe and fed to maintain morale.
       </p>
+      <p className="my-2">Good Luck</p>
       <h3 className="text-2xl my-2">Basic Controls</h3>
       <p className="my-2">
         <Kbd>wasd</Kbd> or arrow keys to move
@@ -50,6 +51,9 @@ export default function Introduction() {
       <p className="my-2">
         Number keys to select building category then select building, then click
         in map to place.
+      </p>
+      <p className="my-2">
+        <Kbd>ctrl+z</Kbd> to undo a turn.
       </p>
       <p className="my-2">
         You can see the full controls in the menu at the top right or by

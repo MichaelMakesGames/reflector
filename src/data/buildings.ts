@@ -9,6 +9,7 @@ const buildings: {
     amount: number;
   };
   validitySelector?: string;
+  invalidMessage?: string;
   category: BuildingCategoryCode;
 }[] = [
   {
@@ -19,6 +20,7 @@ const buildings: {
       amount: 10,
     },
     validitySelector: "canPlaceFarm",
+    invalidMessage: "Must place on fertile land without other buildings.",
     category: BuildingCategoryCode.Production,
   },
   {
@@ -29,6 +31,7 @@ const buildings: {
       amount: 0,
     },
     validitySelector: "canPlaceMine",
+    invalidMessage: "Must place on ore without other buildings.",
     category: BuildingCategoryCode.Production,
   },
   {
@@ -39,6 +42,7 @@ const buildings: {
       amount: 25,
     },
     validitySelector: "canPlaceMine",
+    invalidMessage: "Must place on ore without other buildings.",
     category: BuildingCategoryCode.Production,
   },
   {
@@ -58,6 +62,8 @@ const buildings: {
       amount: 20,
     },
     category: BuildingCategoryCode.Power,
+    invalidMessage:
+      "Must place in location without neighboring buildings or mountains.",
     validitySelector: "canPlaceWindmill",
   },
   {

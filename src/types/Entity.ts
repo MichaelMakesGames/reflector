@@ -80,6 +80,7 @@ export interface Placing {
     amount: number;
   };
   validitySelector?: string;
+  invalidMessage?: string;
 }
 export interface HasPlacing {
   placing: Placing;

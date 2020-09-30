@@ -2,6 +2,9 @@ import actions from "~/state/actions";
 import { registerHandler } from "~state/handleAction";
 import WrappedState from "~types/WrappedState";
 import { createEntityFromTemplate } from "~utils/entities";
+import resources from "~data/resources";
+import { getDistance } from "~utils/geometry";
+import { BUILDING_RANGE } from "~constants";
 
 function finishPlacement(
   state: WrappedState,
@@ -10,11 +13,22 @@ function finishPlacement(
   const placingTarget = state.select.placingTarget();
   if (!placingTarget) return;
 
+  const playerPos = state.select.playerPos();
+  if (!playerPos) return;
+
   const { pos } = placingTarget;
   const entitiesAtPosition = state.select.entitiesAtPosition(pos);
+
+  const isPositionInRange = getDistance(pos, playerPos) <= BUILDING_RANGE;
+  if (!isPositionInRange) {
+    state.act.logMessage({
+      message: `That is too far away. You cannot build more than ${BUILDING_RANGE} tiles away.`,
+    });
+    return;
+  }
   const isPosValid = entitiesAtPosition.some((entity) => entity.validMarker);
   if (!isPosValid) {
-    const message = "Invalid position";
+    const message = placingTarget.placing.invalidMessage || "Invalid position.";
     state.act.logMessage({ message });
     return;
   }
@@ -22,7 +36,11 @@ function finishPlacement(
   if (placingTarget.placing.cost) {
     const { cost } = placingTarget.placing;
     if (!state.select.canAffordToPay(cost.resource, cost.amount)) {
-      console.warn("Failed to place due to cost. This should be impossible");
+      state.act.logMessage({
+        message: `Cannot afford building. You need ${cost.amount} ${
+          resources[cost.resource].label
+        }.`,
+      });
       return;
     } else {
       state.act.modifyResource({
@@ -46,11 +64,6 @@ function finishPlacement(
       pos: placingTarget.pos,
     }),
   );
-  // state.act.updateEntity({
-  //   ...createEntityFromTemplate(placingTarget.template),
-  //   id: placingTarget.id,
-  //   pos: placingTarget.pos,
-  // });
 
   state.act.removeEntities(
     state.select.entitiesWithComps("validMarker").map((e) => e.id),
@@ -66,6 +79,7 @@ function finishPlacement(
       takesTurn: placingTarget.placing.takesTurn,
       cost: placingTarget.placing.cost,
       validitySelector: placingTarget.placing.validitySelector,
+      invalidMessage: placingTarget.placing.invalidMessage,
       pos: placingTarget.pos,
     });
   }
