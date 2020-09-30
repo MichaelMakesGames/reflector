@@ -36,7 +36,7 @@ export function day(state: RawState) {
 }
 
 export function isNight(state: RawState) {
-  return turnOfNight(state) > 0;
+  return turnOfNight(state) > 0 || turnOfDay(state) === 0;
 }
 
 export function turn(state: RawState) {
@@ -53,6 +53,7 @@ export function turnOfDay(state: RawState) {
 
 export function turnsUntilSunriseOrSunset(state: RawState) {
   if (isNight(state)) {
+    if (turnOfDay(state) === 0) return 1;
     return TURNS_PER_DAY - turnOfDay(state) + 1;
   } else {
     return TURNS_PER_DAY - TURNS_PER_NIGHT - turnOfDay(state) + 1;
