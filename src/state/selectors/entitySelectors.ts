@@ -138,36 +138,24 @@ export function jobDisablers(state: RawState) {
   return entitiesWithComps(state, "pos", "jobDisabler");
 }
 
+export function jobProviders(state: RawState, jobType?: JobTypeCode) {
+  return entitiesWithComps(state, "jobProvider", "pos").filter(
+    (e) => !jobType || e.jobProvider.jobType === jobType,
+  );
+}
+
 export function enabledJobProviders(state: RawState, jobType?: JobTypeCode) {
   const disablers = jobDisablers(state);
-  const jobProviders = entitiesWithComps(
-    state,
-    "jobProvider",
-    "pos",
-  ).filter((e) =>
+  return jobProviders(state, jobType).filter((e) =>
     disablers.map((d) => d.pos).every((pos) => !arePositionsEqual(pos, e.pos)),
   );
-  if (jobType) {
-    return jobProviders.filter((e) => e.jobProvider.jobType === jobType);
-  } else {
-    return jobProviders;
-  }
 }
 
 export function disabledJobProviders(state: RawState, jobType?: JobTypeCode) {
   const disablers = jobDisablers(state);
-  const jobProviders = entitiesWithComps(
-    state,
-    "jobProvider",
-    "pos",
-  ).filter((e) =>
+  return jobProviders(state, jobType).filter((e) =>
     disablers.map((d) => d.pos).some((pos) => arePositionsEqual(pos, e.pos)),
   );
-  if (jobType) {
-    return jobProviders.filter((e) => e.jobProvider.jobType === jobType);
-  } else {
-    return jobProviders;
-  }
 }
 
 export function numberOfDisabledJobs(state: RawState, jobType: JobTypeCode) {
@@ -187,7 +175,7 @@ export function maxNumberEmployed(state: RawState, jobType: JobTypeCode) {
 }
 
 export function numberEmployed(state: RawState, jobType: JobTypeCode) {
-  const providers = enabledJobProviders(state, jobType);
+  const providers = jobProviders(state, jobType);
   return providers.reduce(
     (acc, cur) => acc + cur.jobProvider.numberEmployed,
     0,
