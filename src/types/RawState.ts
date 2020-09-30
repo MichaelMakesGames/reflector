@@ -25,7 +25,6 @@ export interface RawState {
   cursorPos: Pos | null;
   events: Record<string, number>;
 
-  isStartOfTurn: boolean;
   startOfThisTurn: RawState | null;
   startOfLastTurn: RawState | null;
 }

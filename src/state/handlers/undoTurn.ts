@@ -7,32 +7,18 @@ function undoTurn(
   state: WrappedState,
   action: ReturnType<typeof actions.undoTurn>,
 ) {
-  if (state.raw.isStartOfTurn && state.raw.startOfLastTurn) {
+  if (state.raw.startOfLastTurn) {
     const stateToLoad: RawState = {
       ...state.raw.startOfLastTurn,
-      isStartOfTurn: true,
       startOfLastTurn: null,
       startOfThisTurn: state.raw.startOfLastTurn,
     };
+    console.warn("undoing to", stateToLoad);
     state.act.loadGame({
       state: stateToLoad,
     });
     state.act.logMessage({
       message: "Reset to start of last turn.",
-      type: "success",
-    });
-  } else if (!state.raw.isStartOfTurn && state.raw.startOfThisTurn) {
-    const stateToLoad: RawState = {
-      ...state.raw.startOfThisTurn,
-      isStartOfTurn: true,
-      startOfLastTurn: state.raw.startOfLastTurn,
-      startOfThisTurn: state.raw.startOfThisTurn,
-    };
-    state.act.loadGame({
-      state: stateToLoad,
-    });
-    state.act.logMessage({
-      message: "Reset to start of this turn.",
       type: "success",
     });
   } else {

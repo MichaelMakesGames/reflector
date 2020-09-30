@@ -47,7 +47,6 @@ const initialState: RawState = {
   events: {},
   lastAimingDirection: RIGHT,
   cursorPos: null,
-  isStartOfTurn: true,
   startOfThisTurn: null,
   startOfLastTurn: null,
 };

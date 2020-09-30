@@ -5,12 +5,6 @@ import "./handlers";
 import initialState from "./initialState";
 import wrapState from "./wrapState";
 
-const START_OF_TURN_ALLOW_LIST: string[] = [
-  getType(actions.undoTurn),
-  getType(actions.moveCursor),
-  getType(actions.setCursorPos),
-];
-
 const GAME_OVER_ALLOW_LIST: string[] = [
   getType(actions.newGame),
   getType(actions.undoTurn),
@@ -24,12 +18,6 @@ export default function reducer(
   const wrappedState = wrapState(state);
   if (state.gameOver && !GAME_OVER_ALLOW_LIST.includes(action.type)) {
     return state;
-  }
-  if (state.isStartOfTurn && !START_OF_TURN_ALLOW_LIST.includes(action.type)) {
-    wrappedState.setRaw({
-      ...wrappedState.raw,
-      isStartOfTurn: false,
-    });
   }
   wrappedState.handle(action);
   return wrappedState.raw;

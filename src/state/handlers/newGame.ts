@@ -13,6 +13,14 @@ function newGame(
   clearRenderer();
   makeLevel(state);
   state.act.loadGame({ state: state.raw });
+  state.setRaw({
+    ...state.raw,
+    startOfThisTurn: {
+      ...state.raw,
+      startOfThisTurn: null,
+      startOfLastTurn: null,
+    },
+  });
 }
 
 registerHandler(newGame, actions.newGame);

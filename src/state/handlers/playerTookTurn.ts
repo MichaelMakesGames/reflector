@@ -14,7 +14,6 @@ function playerTookTurn(
     ...state.raw,
     resourceChanges: state.raw.resourceChangesThisTurn,
     resourceChangesThisTurn: initialState.resourceChangesThisTurn,
-    isStartOfTurn: true,
   });
   state.setRaw({
     ...state.raw,
