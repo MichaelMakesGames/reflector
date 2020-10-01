@@ -16,7 +16,8 @@ export default function processWave(state: WrappedState): void {
   if (
     state.select.isNight() &&
     state.select.turnOfDay() <
-      TURNS_PER_DAY - END_OF_NIGHT_ENEMY_SPAWNING_BUFFER
+      TURNS_PER_DAY - END_OF_NIGHT_ENEMY_SPAWNING_BUFFER &&
+    state.select.turnOfDay() !== 0
   ) {
     let numberOfSpawns =
       ENEMIES_PER_TURN_POPULATION_MULTIPLIER * state.select.population() +
