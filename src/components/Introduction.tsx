@@ -24,41 +24,21 @@ export default function Introduction() {
   return (
     <Modal isOpen onRequestClose={close}>
       <h2 className="text-2xl">Welcome to Reflector: Laser Defense</h2>
+      <p className="my-2">Survive 10 days to win!</p>
       <p className="my-2">
-        Your assignment is simple: build a colony and survive 10 days.
+        Enemies attack at night, colonists work during the day.
       </p>
       <p className="my-2">
-        Expect resistance from the local lifeforms. They are nocturnal, so
-        they&apos;ll attack at night.
+        Press <Kbd>wasd</Kbd> or arrow keys to move.
       </p>
       <p className="my-2">
-        Defense is up to you alone. Use reflectors, splitters, and projectors to
-        get the most out of your Laser Defense system.
-      </p>
-      <p className="my-2">
-        Colonists will work during the day, and we&apos;ll send more each
-        morning. Keep them safe and fed to maintain morale.
-      </p>
-      <p className="my-2">Good Luck</p>
-      <h3 className="text-2xl my-2">Basic Controls</h3>
-      <p className="my-2">
-        <Kbd>wasd</Kbd> or arrow keys to move
-      </p>
-      <p className="my-2">
-        <Kbd>f</Kbd> to activate laser, <Kbd>wasd</Kbd> to aim, then{" "}
+        Press <Kbd>f</Kbd> to activate laser, <Kbd>wasd</Kbd> to aim, then{" "}
         <Kbd>f</Kbd> again to fire.
       </p>
       <p className="my-2">
-        Number keys to select building category then select building, then click
-        in map to place.
+        Press <Kbd>?</Kbd> to view full controls.
       </p>
-      <p className="my-2">
-        <Kbd>ctrl+z</Kbd> to undo a turn.
-      </p>
-      <p className="my-2">
-        You can see the full controls in the menu at the top right or by
-        pressing <Kbd>?</Kbd>.
-      </p>
+      <p className="my-2">Good luck!</p>
       <button type="button" className="btn mt-2" onClick={close}>
         Start Game
       </button>
