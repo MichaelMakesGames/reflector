@@ -7,6 +7,7 @@ import { Entity, HasDescription, RawState, HasColonist } from "~types";
 import { ActionControl, getActionsAvailableAtPos } from "~utils/controls";
 import colonistStatuses, { ColonistStatusCode } from "~data/colonistStatuses";
 import resources from "~data/resources";
+import { canPlaceReflector } from "~state/selectors/placementSelectors";
 
 export default function Inspector() {
   const entitiesAtCursor = useSelector(selectors.entitiesAtCursor);
@@ -23,6 +24,9 @@ export default function Inspector() {
   const actions = cursorPos ? getActionsAvailableAtPos(state, cursorPos) : [];
   const isCursorInProjectorRange = useSelector((s: RawState) =>
     selectors.isInProjectorRange(s, cursorPos),
+  );
+  const canPlaceReflectorAtCursor = useSelector(
+    cursorPos ? (s: RawState) => canPlaceReflector(s, cursorPos) : () => false,
   );
 
   return (
@@ -46,7 +50,7 @@ export default function Inspector() {
       {cursorPos && (
         <>
           <h2 className="text-xl mt-2">Available Actions</h2>
-          {isCursorInProjectorRange && (
+          {isCursorInProjectorRange && canPlaceReflectorAtCursor && (
             <div className="text-lightGray text-sm mb-2">
               Click or press space to cycle reflector
             </div>

@@ -36,8 +36,8 @@ export function canPlaceWindmill(state: RawState, pos: Pos) {
 }
 
 export function canPlaceReflector(state: RawState, pos: Pos) {
-  return entitiesAtPosition(state, pos).every((entity) =>
-    Boolean(!entity.reflector || entity.placing),
+  return entitiesAtPosition(state, pos).every(
+    (entity) => !entity.blocking || !entity.blocking.moving,
   );
 }
 
