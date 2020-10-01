@@ -1,6 +1,7 @@
 const colors = require("./src/data/colors.json");
 
 module.exports = {
+  purge: false,
   theme: {
     colors: {
       ...colors,
