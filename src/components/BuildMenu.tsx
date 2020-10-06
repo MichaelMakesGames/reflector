@@ -99,7 +99,10 @@ export default function BuildMenu() {
       {placingTarget ? (
         <h2 className="text-xl px-2">
           Building{" "}
-          {(createEntityFromTemplate(placingTarget.template).description || {}).name}
+          {
+            (createEntityFromTemplate(placingTarget.template).description || {})
+              .name
+          }
         </h2>
       ) : null}
       {category ? (

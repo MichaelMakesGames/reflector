@@ -1,18 +1,11 @@
-import { Required } from "Object/_api";
-import { Entity, Pos, RawState } from "~types";
-import { entitiesAtPosition, entitiesWithComps } from "./entitySelectors";
+import { Pos, RawState } from "~types";
 import { getAdjacentPositions } from "~utils/geometry";
+import { entitiesAtPosition, entitiesWithComps } from "./entitySelectors";
 
 export function placingTarget(state: RawState) {
   const entities = entitiesWithComps(state, "placing", "pos", "display");
   if (entities.length) return entities[0];
   return null;
-}
-
-export function placingMarker(
-  state: RawState,
-): Required<Entity, "placingMarker" | "pos" | "display"> | null {
-  return entitiesWithComps(state, "placingMarker", "pos", "display")[0] || null;
 }
 
 export function canPlaceMine(state: RawState, pos: Pos) {
@@ -39,12 +32,6 @@ export function canPlaceReflector(state: RawState, pos: Pos) {
   return entitiesAtPosition(state, pos).every(
     (entity) => !entity.blocking || !entity.blocking.moving,
   );
-}
-
-export function removingMarker(
-  state: RawState,
-): Required<Entity, "removingMarker" | "pos"> | null {
-  return entitiesWithComps(state, "removingMarker", "pos")[0] || null;
 }
 
 export function isPlacing(state: RawState): boolean {

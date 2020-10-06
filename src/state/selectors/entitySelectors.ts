@@ -196,9 +196,3 @@ export function numberOfUnemployedColonists(state: RawState) {
   return colonists(state).filter((entity) => !entity.colonist.employment)
     .length;
 }
-
-export function disableMarker(
-  state: RawState,
-): null | Required<Entity, "pos" | "disabledMarker"> {
-  return entitiesWithComps(state, "pos", "disableMarker")[0] || null;
-}

@@ -21,7 +21,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     destructible: {
       onDestroy: "player",
     },
-    conductive: {},
     projector: {
       condition: null,
       range: PROJECTOR_RANGE,
@@ -47,30 +46,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     validMarker: {},
   },
-  PLACING_MARKER: {
-    display: {
-      tile: "outline_solid",
-      color: colors.invalid,
-      priority: PRIORITY_MARKER,
-    },
-    placingMarker: {},
-  },
-  REMOVING_MARKER: {
-    display: {
-      tile: "outline_solid",
-      color: colors.invalid,
-      priority: PRIORITY_MARKER,
-    },
-    removingMarker: {},
-  },
-  DISABLE_MARKER: {
-    display: {
-      tile: "outline_solid",
-      color: colors.invalid,
-      priority: PRIORITY_MARKER,
-    },
-    disableMarker: {},
-  },
   JOB_DISABLER: {
     display: {
       tile: "disabled",
@@ -79,14 +54,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     jobDisabler: {},
     destructible: {},
-  },
-  INSPECTOR: {
-    display: {
-      tile: "outline_solid",
-      color: colors.secondary,
-      priority: PRIORITY_MARKER,
-    },
-    inspector: {},
   },
   CURSOR: {
     display: {

@@ -6,7 +6,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   ENEMY_BASE: {
     blocking: { moving: true, lasers: true, windmill: false },
     destructible: {},
-    conductive: {},
   },
   ENEMY_DRONE: {
     parentTemplate: "ENEMY_BASE",

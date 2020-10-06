@@ -122,16 +122,6 @@ export interface HasValidMarker {
   validMarker: ValidMarker;
 }
 
-export interface Stairs {}
-export interface HasStairs {
-  stairs: Stairs;
-}
-
-export interface Conductive {}
-export interface HasConductive {
-  conductive: Conductive;
-}
-
 export interface Housing {
   occupancy: number;
   capacity: number;
@@ -166,21 +156,6 @@ export interface Projector {
 }
 export interface HasProjector {
   projector: Projector;
-}
-
-export interface Inspector {}
-export interface HasInspector {
-  inspector: Inspector;
-}
-
-export interface PlacingMarker {}
-export interface HasPlacingMarker {
-  placingMarker: PlacingMarker;
-}
-
-export interface RemovingMarker {}
-export interface HasRemovingMarker {
-  removingMarker: RemovingMarker;
 }
 
 export interface Description {
@@ -223,11 +198,6 @@ export interface HasJobDisabler {
   jobDisabler: JobDisabler;
 }
 
-export interface DisableMarker {}
-export interface HasDisableMarker {
-  disableMarker: DisableMarker;
-}
-
 export interface SmokeEmitter {
   emitters: {
     offset: Pos;
@@ -267,31 +237,25 @@ export interface Entity
     Partial<HasColorToggle>,
     Partial<HasCursor>,
     Partial<HasAnimationToggle>,
-    Partial<HasConductive>,
     Partial<HasDescription>,
     Partial<HasDestructible>,
-    Partial<HasDisableMarker>,
     Partial<HasDisplay>,
     Partial<HasHighlight>,
     Partial<HasHousing>,
-    Partial<HasInspector>,
     Partial<HasJobDisabler>,
     Partial<HasJobProvider>,
     Partial<HasLaser>,
     Partial<HasMineable>,
     Partial<HasMissingResourceIndicator>,
     Partial<HasPlacing>,
-    Partial<HasPlacingMarker>,
     Partial<HasPos>,
     Partial<HasPowered>,
     Partial<HasProduction>,
     Partial<HasProjector>,
     Partial<HasReflector>,
-    Partial<HasRemovingMarker>,
     Partial<HasRotatable>,
     Partial<HasSmokeEmitter>,
     Partial<HasSplitter>,
-    Partial<HasStairs>,
     Partial<HasValidMarker> {
   id: string;
   parentTemplate?: TemplateName;
