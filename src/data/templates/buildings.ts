@@ -232,7 +232,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     description: {
       name: "Farm",
-      description: "Provided 1 job that produces 1 food per turn.",
+      description: "Provides 1 job that produces 1 food per turn.",
     },
   },
   REACTOR: {
