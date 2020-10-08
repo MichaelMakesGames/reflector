@@ -1,14 +1,7 @@
 import { Required } from "Object/_api";
 import { PLAYER_ID } from "~constants";
 import { JobTypeCode } from "~data/jobTypes";
-import {
-  Entity,
-  HasColonist,
-  HasJobProvider,
-  HasPos,
-  Pos,
-  RawState,
-} from "~types";
+import { Entity, Pos, RawState } from "~types";
 import { filterEntitiesWithComps } from "~utils/entities";
 import {
   arePositionsEqual,
@@ -81,7 +74,10 @@ export function colonists(state: RawState) {
   return entitiesWithComps(state, "pos", "colonist", "display");
 }
 
-export function residence(state: RawState, colonist: HasColonist) {
+export function residence(
+  state: RawState,
+  colonist: Required<Entity, "colonist">,
+) {
   return entitiesWithComps(state, "pos", "housing").find(
     (e) => e.id === colonist.colonist.residence,
   );
@@ -115,14 +111,18 @@ export function residencesUnderCapacity(state: RawState) {
   );
 }
 
-export function employment(state: RawState, colonist: HasColonist) {
+export function employment(
+  state: RawState,
+  colonist: Required<Entity, "colonist">,
+) {
   if (
     colonist.colonist.employment &&
     entityById(state, colonist.colonist.employment)
   ) {
-    return entityById(state, colonist.colonist.employment) as Entity &
-      HasJobProvider &
-      HasPos;
+    return entityById(state, colonist.colonist.employment) as Required<
+      Entity,
+      "pos" | "jobProvider"
+    >;
   } else {
     return null;
   }

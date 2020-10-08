@@ -1,9 +1,10 @@
-import actions from "~state/actions";
-import WrappedState from "~types/WrappedState";
-import { registerHandler } from "~state/handleAction";
+import { Required } from "Object/_api";
 import { CURSOR_ID } from "~constants";
+import actions from "~state/actions";
+import { registerHandler } from "~state/handleAction";
+import { Entity, Pos } from "~types";
+import WrappedState from "~types/WrappedState";
 import { createEntityFromTemplate } from "~utils/entities";
-import { HasColonist, Pos } from "~types";
 
 function setCursorPos(
   state: WrappedState,
@@ -35,8 +36,12 @@ function setCursorPos(
     const positionsToHighlight: Pos[] = [];
     state.select.entitiesAtPosition(newCursorPos).forEach((entity) => {
       if (entity.colonist) {
-        const residence = state.select.residence(entity as HasColonist);
-        const employment = state.select.employment(entity as HasColonist);
+        const residence = state.select.residence(
+          entity as Required<Entity, "colonist">,
+        );
+        const employment = state.select.employment(
+          entity as Required<Entity, "colonist">,
+        );
         if (residence) positionsToHighlight.push(residence.pos);
         if (employment) positionsToHighlight.push(employment.pos);
       }

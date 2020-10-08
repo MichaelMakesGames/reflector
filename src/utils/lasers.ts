@@ -1,9 +1,10 @@
-import { Pos, Direction, HasDisplay, Entity } from "~/types";
-import { RIGHT, DOWN, LEFT, UP } from "~/constants";
-import { createEntityFromTemplate } from "./entities";
-import { getConstDir } from "./geometry";
+import { Required } from "Object/_api";
+import { DOWN, LEFT, RIGHT, UP } from "~/constants";
+import { Direction, Entity, Pos } from "~/types";
 import colors from "~colors";
 import WrappedState from "~types/WrappedState";
+import { createEntityFromTemplate } from "./entities";
+import { getConstDir } from "./geometry";
 
 export function createLaser(
   direction: Direction,
@@ -20,7 +21,7 @@ export function createLaser(
 
   const template = createEntityFromTemplate(templateName as TemplateName, {
     pos,
-  }) as Entity & HasDisplay;
+  }) as Required<Entity, "display">;
   return {
     ...template,
     display: {

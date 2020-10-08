@@ -1,20 +1,23 @@
+import { Required } from "Object/_api";
 import React, { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { SettingsContext } from "~contexts";
-import { useControl } from "~hooks";
-import selectors from "~state/selectors";
-import { Entity, HasDescription, RawState, HasColonist } from "~types";
-import { ActionControl, getActionsAvailableAtPos } from "~utils/controls";
 import colonistStatuses, { ColonistStatusCode } from "~data/colonistStatuses";
 import resources from "~data/resources";
+import { useControl } from "~hooks";
+import selectors from "~state/selectors";
 import { canPlaceReflector } from "~state/selectors/placementSelectors";
+import { Entity, RawState } from "~types";
+import { ActionControl, getActionsAvailableAtPos } from "~utils/controls";
 
 export default function Inspector() {
   const entitiesAtCursor = useSelector(selectors.entitiesAtCursor);
   const entitiesWithDescription =
     entitiesAtCursor &&
-    (entitiesAtCursor.filter((e) => e.description) as (Entity &
-      HasDescription)[]).sort((a, b) => {
+    (entitiesAtCursor.filter((e) => e.description) as Required<
+      Entity,
+      "description"
+    >[]).sort((a, b) => {
       const aSortValue = a.display ? a.display.priority : Infinity;
       const bSortValue = b.display ? b.display.priority : Infinity;
       return bSortValue - aSortValue;
@@ -97,15 +100,21 @@ function InspectorAction({ action }: { action: ActionControl }) {
   );
 }
 
-function InspectorEntity({ entity }: { entity: Entity & HasDescription }) {
+function InspectorEntity({
+  entity,
+}: {
+  entity: Required<Entity, "description">;
+}) {
   const residence = useSelector(
     entity.colonist
-      ? (state: RawState) => selectors.residence(state, entity as HasColonist)
+      ? (state: RawState) =>
+          selectors.residence(state, entity as Required<Entity, "colonist">)
       : selectors.nothing,
   );
   const employment = useSelector(
     entity.colonist
-      ? (state: RawState) => selectors.employment(state, entity as HasColonist)
+      ? (state: RawState) =>
+          selectors.employment(state, entity as Required<Entity, "colonist">)
       : selectors.nothing,
   );
   return (

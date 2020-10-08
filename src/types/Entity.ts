@@ -7,9 +7,6 @@ export interface Pos {
   x: number;
   y: number;
 }
-export interface HasPos {
-  pos: Pos;
-}
 
 export interface Display {
   tile: string | string[];
@@ -19,15 +16,9 @@ export interface Display {
   priority: number;
   hasBackground?: boolean;
 }
-export interface HasDisplay {
-  display: Display;
-}
 
 export interface AnimationToggle {
   conditions: ConditionName[];
-}
-export interface HasAnimationToggle {
-  animationToggle: AnimationToggle;
 }
 
 export interface ColorToggle {
@@ -35,25 +26,16 @@ export interface ColorToggle {
   trueColor: string;
   falseColor: string;
 }
-export interface HasColorToggle {
-  colorToggle: ColorToggle;
-}
 
 export type AIType = "DRONE";
 export interface AI {
   type: AIType;
-}
-export interface HasAI {
-  ai: AI;
 }
 
 export interface Blocking {
   moving: boolean;
   lasers: boolean;
   windmill: boolean;
-}
-export interface HasBlocking {
-  blocking: Blocking;
 }
 
 export interface Laser {
@@ -62,15 +44,9 @@ export interface Laser {
   direction: Direction;
   hit: boolean;
 }
-export interface HasLaser {
-  laser: Laser;
-}
 
 export interface Destructible {
   onDestroy?: string;
-}
-export interface HasDestructible {
-  destructible: Destructible;
 }
 
 export interface Placing {
@@ -82,9 +58,6 @@ export interface Placing {
   validitySelector?: string;
   invalidMessage?: string;
 }
-export interface HasPlacing {
-  placing: Placing;
-}
 
 export interface Colonist {
   residence: string | null;
@@ -92,44 +65,26 @@ export interface Colonist {
   status: ColonistStatusCode;
   missingResources: ResourceCode[];
 }
-export interface HasColonist {
-  colonist: Colonist;
-}
 
 export interface Rotatable {
   rotatesTo: TemplateName;
-}
-export interface HasRotatable {
-  rotatable: Rotatable;
 }
 
 export interface Reflector {
   type: "\\" | "/";
 }
-export interface HasReflector {
-  reflector: Reflector;
-}
 
 export interface Splitter {
   type: "horizontal" | "vertical" | "advanced";
 }
-export interface HasSplitter {
-  splitter: Splitter;
-}
 
 export interface ValidMarker {}
-export interface HasValidMarker {
-  validMarker: ValidMarker;
-}
 
 export interface Housing {
   occupancy: number;
   capacity: number;
   desirability: number;
   removeOnVacancy?: boolean;
-}
-export interface HasHousing {
-  housing: Housing;
 }
 
 export interface Production {
@@ -139,31 +94,19 @@ export interface Production {
   conditions: ConditionName[];
   resourceChangeReason: string;
 }
-export interface HasProduction {
-  production: Production;
-}
 
 export interface Mineable {
   resource: ResourceCode;
-}
-export interface HasMineable {
-  mineable: Mineable;
 }
 
 export interface Projector {
   condition: ConditionName | null;
   range: number;
 }
-export interface HasProjector {
-  projector: Projector;
-}
 
 export interface Description {
   name: string;
   description: string;
-}
-export interface HasDescription {
-  description: Description;
 }
 
 export interface JobProvider {
@@ -174,9 +117,6 @@ export interface JobProvider {
   jobType: JobTypeCode;
   resourceChangeReason: string;
 }
-export interface HasJobProvider {
-  jobProvider: JobProvider;
-}
 
 export interface Powered {
   hasPower: boolean;
@@ -184,19 +124,9 @@ export interface Powered {
   resourceChangeReason: string;
 }
 
-export interface HasPowered {
-  powered: Powered;
-}
-
 export interface Building {}
-export interface HasBuilding {
-  building: Building;
-}
 
 export interface JobDisabler {}
-export interface HasJobDisabler {
-  jobDisabler: JobDisabler;
-}
 
 export interface SmokeEmitter {
   emitters: {
@@ -204,62 +134,46 @@ export interface SmokeEmitter {
     conditions: ConditionName[];
   }[];
 }
-export interface HasSmokeEmitter {
-  smokeEmitter: SmokeEmitter;
-}
 
 export interface Cursor {}
-export interface HasCursor {
-  cursor: Cursor;
-}
 
 export interface Highlight {}
-export interface HasHighlight {
-  highlight: Highlight;
-}
 
 export interface MissingResourceIndicator {}
-export interface HasMissingResourceIndicator {
-  missingResourceIndicator: MissingResourceIndicator;
-}
 
 export interface Border {}
-export interface HasBorder {
-  border: Border;
-}
 
-export interface Entity
-  extends Partial<HasAI>,
-    Partial<HasBlocking>,
-    Partial<HasBorder>,
-    Partial<HasBuilding>,
-    Partial<HasColonist>,
-    Partial<HasColorToggle>,
-    Partial<HasCursor>,
-    Partial<HasAnimationToggle>,
-    Partial<HasDescription>,
-    Partial<HasDestructible>,
-    Partial<HasDisplay>,
-    Partial<HasHighlight>,
-    Partial<HasHousing>,
-    Partial<HasJobDisabler>,
-    Partial<HasJobProvider>,
-    Partial<HasLaser>,
-    Partial<HasMineable>,
-    Partial<HasMissingResourceIndicator>,
-    Partial<HasPlacing>,
-    Partial<HasPos>,
-    Partial<HasPowered>,
-    Partial<HasProduction>,
-    Partial<HasProjector>,
-    Partial<HasReflector>,
-    Partial<HasRotatable>,
-    Partial<HasSmokeEmitter>,
-    Partial<HasSplitter>,
-    Partial<HasValidMarker> {
+export interface Entity {
   id: string;
   parentTemplate?: TemplateName;
   template: TemplateName;
-}
 
-export type EntityHasPos = Entity & HasPos;
+  ai?: AI;
+  animationToggle?: AnimationToggle;
+  blocking?: Blocking;
+  border?: Border;
+  building?: Building;
+  colonist?: Colonist;
+  colorToggle?: ColorToggle;
+  cursor?: Cursor;
+  description?: Description;
+  destructible?: Destructible;
+  display?: Display;
+  highlight?: Highlight;
+  housing?: Housing;
+  jobDisabler?: JobDisabler;
+  jobProvider?: JobProvider;
+  laser?: Laser;
+  mineable?: Mineable;
+  missingResourceIndicator?: MissingResourceIndicator;
+  placing?: Placing;
+  pos?: Pos;
+  powered?: Powered;
+  production?: Production;
+  projector?: Projector;
+  reflector?: Reflector;
+  rotatable?: Rotatable;
+  smokeEmitter?: SmokeEmitter;
+  splitter?: Splitter;
+  validMarker?: ValidMarker;
+}

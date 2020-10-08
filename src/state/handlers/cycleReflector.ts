@@ -1,12 +1,13 @@
-import WrappedState from "~types/WrappedState";
+import { Required } from "Object/_api";
 import actions from "~state/actions";
-import { Entity, HasReflector } from "~types";
-import { createEntityFromTemplate } from "~utils/entities";
-import { areConditionsMet } from "~utils/conditions";
-import { findValidPositions } from "~utils/building";
-import selectors from "~state/selectors";
-import { arePositionsEqual } from "~utils/geometry";
 import { registerHandler } from "~state/handleAction";
+import selectors from "~state/selectors";
+import { Entity } from "~types";
+import WrappedState from "~types/WrappedState";
+import { findValidPositions } from "~utils/building";
+import { areConditionsMet } from "~utils/conditions";
+import { createEntityFromTemplate } from "~utils/entities";
+import { arePositionsEqual } from "~utils/geometry";
 
 function cycleReflector(
   state: WrappedState,
@@ -16,7 +17,7 @@ function cycleReflector(
   const entitiesAtPos = state.select.entitiesAtPosition(pos);
   const reflectorAtPos = entitiesAtPos.find((e) =>
     Boolean(e.reflector),
-  ) as Entity & HasReflector;
+  ) as Required<Entity, "reflector">;
   if (reflectorAtPos) {
     if (reflectorAtPos.reflector.type === "/") {
       state.act.rotateEntity(reflectorAtPos);

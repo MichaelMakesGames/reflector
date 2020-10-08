@@ -6,7 +6,7 @@ import {
   PRIORITY_BUILDING_DETAIL,
 } from "~constants";
 import { ResourceCode } from "~data/resources";
-import { Entity, HasJobProvider, HasPos, Pos } from "~types";
+import { Entity, Pos } from "~types";
 import WrappedState from "~types/WrappedState";
 import { getDirectionTowardTarget } from "~utils/ai";
 import { createEntityFromTemplate } from "~utils/entities";
@@ -482,7 +482,7 @@ function findColonistsWithLowestPriorityJob(
 
 function assignColonistToWorkPlace(
   state: WrappedState,
-  workPlace: Entity & HasPos & HasJobProvider,
+  workPlace: Required<Entity, "pos" | "jobProvider">,
 ) {
   const workPlaceCopy = state.select.entityById(
     workPlace.id,

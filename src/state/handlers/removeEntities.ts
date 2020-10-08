@@ -1,8 +1,9 @@
+import { Required } from "Object/_api";
 import { removeRenderEntity, removeSmoke } from "~/renderer";
 import actions from "~/state/actions";
 import { registerHandler } from "~state/handleAction";
+import { Entity } from "~types";
 import WrappedState from "~types/WrappedState";
-import { HasSmokeEmitter, HasPos } from "~types";
 import { retargetLaserOnReflectorChange } from "~utils/lasers";
 
 function removeEntities(
@@ -27,10 +28,14 @@ function removeEntities(
       isRemovingReflector = true;
     }
     if (entities[id].pos && entities[id].smokeEmitter) {
-      (entities[
-        id
-      ] as HasSmokeEmitter).smokeEmitter.emitters.forEach((emitter) =>
-        removeSmoke((entities[id] as HasPos).pos, emitter.offset),
+      (entities[id] as Required<
+        Entity,
+        "smokeEmitter"
+      >).smokeEmitter.emitters.forEach((emitter) =>
+        removeSmoke(
+          (entities[id] as Required<Entity, "pos">).pos,
+          emitter.offset,
+        ),
       );
     }
 
