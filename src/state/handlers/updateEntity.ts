@@ -24,7 +24,7 @@ function updateEntity(
   }
   const entity = { ...prev, ...partial };
   let { entitiesByPosition } = state;
-  if (Object.hasOwnProperty.call(partial, "pos")) {
+  if (has(partial, "pos")) {
     if (prev && prev.pos) {
       const key = getPosKey(prev.pos);
       entitiesByPosition = {

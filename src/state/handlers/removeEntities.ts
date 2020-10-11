@@ -5,45 +5,58 @@ import { registerHandler } from "~state/handleAction";
 import { Entity } from "~types";
 import WrappedState from "~types/WrappedState";
 import { retargetLaserOnReflectorChange } from "~utils/lasers";
+import { getPosKey } from "~utils/geometry";
 
 function removeEntities(
   wrappedState: WrappedState,
   action: ReturnType<typeof actions.removeEntities>,
 ): void {
   const { raw: state } = wrappedState;
-  const { entitiesByPosition } = state;
-  const entityIds = action.payload;
-  for (const [key, ids] of Object.entries(entitiesByPosition)) {
-    entitiesByPosition[key] = ids.filter((id) => !entityIds.includes(id));
-  }
+  const entityIds = action.payload.filter((id) => state.entities[id]);
+  const entityIdsSet = new Set(action.payload);
+
   const entities = {
     ...state.entities,
   };
+
   let isRemovingReflector = false;
+  const impactedPosKeys = new Set<string>();
+
   for (const id of entityIds) {
-    if (entities[id].pos && entities[id].display) {
+    const entity = entities[id];
+    if (entity.pos) {
+      impactedPosKeys.add(getPosKey(entity.pos));
+    }
+    if (entity.pos && entity.display) {
       removeRenderEntity(id);
     }
-    if (entities[id].reflector) {
+    if (entity.reflector) {
       isRemovingReflector = true;
     }
-    if (entities[id].pos && entities[id].smokeEmitter) {
-      (entities[id] as Required<
+    if (entity.pos && entity.smokeEmitter) {
+      (entity as Required<
         Entity,
         "smokeEmitter"
       >).smokeEmitter.emitters.forEach((emitter) =>
-        removeSmoke(
-          (entities[id] as Required<Entity, "pos">).pos,
-          emitter.offset,
-        ),
+        removeSmoke((entity as Required<Entity, "pos">).pos, emitter.offset),
       );
     }
 
     delete entities[id];
   }
+
+  const entitiesByPosition = {
+    ...state.entitiesByPosition,
+  };
+  for (const key of impactedPosKeys) {
+    entitiesByPosition[key] = entitiesByPosition[key].filter(
+      (id) => !entityIdsSet.has(id),
+    );
+  }
+
   wrappedState.setRaw({
     ...state,
-    entitiesByPosition: { ...entitiesByPosition },
+    entitiesByPosition,
     entities,
   });
 

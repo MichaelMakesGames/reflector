@@ -13,7 +13,6 @@ function undoTurn(
       startOfLastTurn: null,
       startOfThisTurn: state.raw.startOfLastTurn,
     };
-    console.warn("undoing to", stateToLoad);
     state.act.loadGame({
       state: stateToLoad,
     });

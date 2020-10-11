@@ -23,7 +23,7 @@ function setCursorPos(
   if (newCursorPos) {
     if (cursor) {
       state.act.updateEntity({
-        ...cursor,
+        id: CURSOR_ID,
         pos: newCursorPos,
       });
     } else {

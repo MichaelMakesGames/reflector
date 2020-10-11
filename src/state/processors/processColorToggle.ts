@@ -16,7 +16,7 @@ export default function processColorToggle(state: WrappedState): void {
       : entity.colorToggle.falseColor;
     if (newColor !== entity.display.color) {
       state.act.updateEntity({
-        ...entity,
+        id: entity.id,
         display: {
           ...entity.display,
           color: newColor,

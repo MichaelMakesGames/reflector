@@ -130,7 +130,7 @@ function clearResidence(
     !state.select.entityById(colonist.colonist.residence)
   ) {
     state.act.updateEntity({
-      ...colonist,
+      id: colonist.id,
       colonist: {
         ...colonist.colonist,
         residence: null,
@@ -140,7 +140,7 @@ function clearResidence(
     const residence = state.select.entityById(colonist.colonist.residence);
     if (residence && residence.housing) {
       state.act.updateEntity({
-        ...residence,
+        id: residence.id,
         housing: {
           ...residence.housing,
           occupancy: residence.housing.occupancy - 1,
@@ -164,14 +164,14 @@ function cleanEmployment(
         )
       ) {
         state.act.updateEntity({
-          ...colonist,
+          id: colonist.id,
           colonist: {
             ...colonist.colonist,
             employment: null,
           },
         });
         state.act.updateEntity({
-          ...employment,
+          id: employment.id,
           jobProvider: {
             ...employment.jobProvider,
             numberEmployed: employment.jobProvider.numberEmployed - 1,
@@ -180,7 +180,7 @@ function cleanEmployment(
       }
     } else {
       state.act.updateEntity({
-        ...colonist,
+        id: colonist.id,
         colonist: {
           ...colonist.colonist,
           employment: null,
@@ -201,14 +201,14 @@ function assignResidence(
     if (availableResidences.length > 0) {
       const residence = getClosest(availableResidences, colonist.pos);
       state.act.updateEntity({
-        ...residence,
+        id: residence.id,
         housing: {
           ...residence.housing,
           occupancy: residence.housing.occupancy + 1,
         },
       });
       state.act.updateEntity({
-        ...colonist,
+        id: colonist.id,
         colonist: {
           ...colonist.colonist,
           residence: residence.id,
@@ -230,7 +230,7 @@ function goHomeOrSleep(
       )
     ) {
       state.act.updateEntity({
-        ...colonist,
+        id: colonist.id,
         colonist: { ...colonist.colonist, status: ColonistStatusCode.Sleeping },
       });
       return;
@@ -245,7 +245,7 @@ function goHomeOrSleep(
       if (direction) {
         state.act.move({ entityId: colonist.id, ...direction });
         state.act.updateEntity({
-          ...state.select.entityById(colonist.id),
+          id: colonist.id,
           colonist: {
             ...colonist.colonist,
             status: ColonistStatusCode.GoingHome,
@@ -256,7 +256,7 @@ function goHomeOrSleep(
     }
   }
   state.act.updateEntity({
-    ...colonist,
+    id: colonist.id,
     colonist: {
       ...colonist.colonist,
       status: ColonistStatusCode.CannotFindPathHome,
@@ -285,7 +285,7 @@ function goToWork(
       if (direction) {
         state.act.move({ entityId: colonist.id, ...direction });
         state.act.updateEntity({
-          ...state.select.entityById(colonist.id),
+          id: colonist.id,
           colonist: {
             ...colonist.colonist,
             status: ColonistStatusCode.GoingToWork,
@@ -296,7 +296,7 @@ function goToWork(
     }
   }
   state.act.updateEntity({
-    ...colonist,
+    id: colonist.id,
     colonist: {
       ...colonist.colonist,
       status: ColonistStatusCode.CannotFindPathToWork,
@@ -335,7 +335,7 @@ function doWork(
         }),
       );
     state.act.updateEntity({
-      ...colonist,
+      id: colonist.id,
       colonist: { ...colonist.colonist, status: ColonistStatusCode.Working },
     });
   } else {
@@ -348,7 +348,7 @@ function doWork(
       )
       .map(([resource, _]) => resource);
     state.act.updateEntity({
-      ...colonist,
+      id: colonist.id,
       colonist: {
         ...colonist.colonist,
         status: ColonistStatusCode.MissingResources,
@@ -368,12 +368,12 @@ function wander(
   if (newPosOptions.length >= 1) {
     const newPos = choose(newPosOptions);
     state.act.updateEntity({
-      ...colonist,
+      id: colonist.id,
       pos: newPos,
     });
   }
   state.act.updateEntity({
-    ...state.select.entityById(colonist.id),
+    id: colonist.id,
     colonist: {
       ...colonist.colonist,
       status: ColonistStatusCode.Wandering,
@@ -388,7 +388,7 @@ function pitchTent(
   const tent = createEntityFromTemplate("TENT", { pos: colonist.pos });
   state.act.addEntity(tent);
   state.act.updateEntity({
-    ...colonist,
+    id: colonist.id,
     colonist: {
       ...colonist.colonist,
       residence: tent.id,
@@ -409,7 +409,7 @@ function updateColonistTile(
   if (residence && arePositionsEqual(residence.pos, colonist.pos)) {
     const tile = `colonists_${numColonistsAtPos}_${residence.template.toLowerCase()}`;
     state.act.updateEntity({
-      ...colonist,
+      id: colonist.id,
       display: {
         ...colonist.display,
         tile,
@@ -418,7 +418,7 @@ function updateColonistTile(
     });
   } else if (numColonistsAtPos === 1) {
     state.act.updateEntity({
-      ...colonist,
+      id: colonist.id,
       display: {
         ...colonist.display,
         tile: "colonists1",
@@ -427,7 +427,7 @@ function updateColonistTile(
     });
   } else if (numColonistsAtPos === 2) {
     state.act.updateEntity({
-      ...colonist,
+      id: colonist.id,
       display: {
         ...colonist.display,
         tile: "colonists2",
@@ -436,7 +436,7 @@ function updateColonistTile(
     });
   } else {
     state.act.updateEntity({
-      ...colonist,
+      id: colonist.id,
       display: {
         ...colonist.display,
         tile: "colonists3",
@@ -497,7 +497,7 @@ function assignColonistToWorkPlace(
     const oldEmployment = state.select.employment(colonist);
     if (oldEmployment) {
       state.act.updateEntity({
-        ...oldEmployment,
+        id: oldEmployment.id,
         jobProvider: {
           ...oldEmployment.jobProvider,
           numberEmployed: oldEmployment.jobProvider.numberEmployed - 1,
@@ -505,14 +505,14 @@ function assignColonistToWorkPlace(
       });
     }
     state.act.updateEntity({
-      ...workPlaceCopy,
+      id: workPlaceCopy.id,
       jobProvider: {
         ...workPlaceCopy.jobProvider,
         numberEmployed: workPlaceCopy.jobProvider.numberEmployed + 1,
       },
     });
     state.act.updateEntity({
-      ...colonist,
+      id: colonist.id,
       colonist: {
         ...colonist.colonist,
         employment: workPlaceCopy.id,
@@ -528,7 +528,7 @@ function doResidenceSanityCheck(state: WrappedState) {
       const residence = state.select.residence(colonist);
       if (!residence) {
         state.act.updateEntity({
-          ...colonist,
+          id: colonist.id,
           colonist: {
             ...colonist.colonist,
             residence: null,
@@ -542,7 +542,7 @@ function doResidenceSanityCheck(state: WrappedState) {
     const residents = state.select.residents(residence);
     if (residence.housing.occupancy !== residents.length) {
       state.act.updateEntity({
-        ...residence,
+        id: residence.id,
         housing: {
           ...residence.housing,
           occupancy: residents.length,
@@ -581,14 +581,14 @@ function checkForEmptyHomesAndHomelessColonists(state: WrappedState) {
       state.act.removeEntity(colonistToAssign.colonist.residence);
     }
     state.act.updateEntity({
-      ...colonistToAssign,
+      id: colonistToAssign.id,
       colonist: {
         ...colonistToAssign.colonist,
         residence: residenceToAssign.id,
       },
     });
     state.act.updateEntity({
-      ...residenceToAssign,
+      id: residenceToAssign.id,
       housing: {
         ...residenceToAssign.housing,
         occupancy: residenceToAssign.housing.occupancy + 1,

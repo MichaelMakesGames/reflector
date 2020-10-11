@@ -19,7 +19,7 @@ function movePlacement(
     arePositionsEqual(validPos, newPos),
   );
   state.act.updateEntity({
-    ...placingTarget,
+    id: placingTarget.id,
     pos: newPos,
     display: {
       ...placingTarget.display,

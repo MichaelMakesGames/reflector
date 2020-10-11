@@ -6,7 +6,7 @@ export default function processProduction(state: WrappedState): void {
   producers.forEach((entity) => {
     if (areConditionsMet(state, entity, ...entity.production.conditions)) {
       state.act.updateEntity({
-        ...entity,
+        id: entity.id,
         production: {
           ...entity.production,
           producedLastTurn: true,
@@ -19,7 +19,7 @@ export default function processProduction(state: WrappedState): void {
       });
     } else {
       state.act.updateEntity({
-        ...entity,
+        id: entity.id,
         production: {
           ...entity.production,
           producedLastTurn: false,

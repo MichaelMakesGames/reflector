@@ -16,7 +16,7 @@ const onDestroyEffects: {
       if (residence && residence.housing) {
         results.push(
           actions.updateEntity({
-            ...residence,
+            id: residence.id,
             housing: {
               ...residence.housing,
               occupancy: residence.housing.occupancy - 1,
@@ -30,7 +30,7 @@ const onDestroyEffects: {
       if (employment && employment.jobProvider) {
         results.push(
           actions.updateEntity({
-            ...employment,
+            id: employment.id,
             jobProvider: {
               ...employment.jobProvider,
               numberEmployed: employment.jobProvider.numberEmployed - 1,

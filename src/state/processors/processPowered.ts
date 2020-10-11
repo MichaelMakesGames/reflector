@@ -17,7 +17,7 @@ export default function processPowered(state: WrappedState): void {
       });
       if (!entity.powered.hasPower) {
         state.act.updateEntity({
-          ...entity,
+          id: entity.id,
           powered: {
             ...entity.powered,
             hasPower: true,
@@ -26,7 +26,7 @@ export default function processPowered(state: WrappedState): void {
       }
     } else if (entity.powered.hasPower) {
       state.act.updateEntity({
-        ...entity,
+        id: entity.id,
         powered: {
           ...entity.powered,
           hasPower: false,

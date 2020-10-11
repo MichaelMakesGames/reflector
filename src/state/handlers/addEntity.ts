@@ -13,6 +13,7 @@ function addEntity(
 ): void {
   let state = wrappedState.raw;
   const entity = action.payload;
+
   let { entitiesByPosition } = state;
   if (entity.pos) {
     const key = getPosKey(entity.pos);
