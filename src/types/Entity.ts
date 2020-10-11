@@ -15,6 +15,7 @@ export interface Display {
   color: string;
   priority: number;
   hasBackground?: boolean;
+  flashWhenVisible?: boolean;
 }
 
 export interface AnimationToggle {

@@ -10,9 +10,11 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   ENEMY_DRONE: {
     parentTemplate: "ENEMY_BASE",
     display: {
-      tile: "enemy_drone",
+      tile: ["enemy_drone_1", "enemy_drone_2"],
+      speed: 0.03,
       color: colors.enemyUnit,
       priority: PRIORITY_UNIT,
+      flashWhenVisible: true,
     },
     ai: { type: "DRONE" },
     description: {

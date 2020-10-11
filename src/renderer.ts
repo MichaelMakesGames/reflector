@@ -22,6 +22,18 @@ export const loadPromise = new Promise((resolve) => {
 
 PIXI.autoDetectRenderer().destroy();
 
+PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
+
+const renderEntities: {
+  [id: string]: {
+    displayComp: Display;
+    pos: Pos;
+    sprite?: PIXI.Sprite;
+    background?: PIXI.Graphics;
+    isVisible?: boolean;
+  };
+} = {};
+
 export const app = new PIXI.Application({
   width: MAP_WIDTH * TILE_SIZE,
   height: MAP_HEIGHT * TILE_SIZE,
@@ -109,6 +121,61 @@ export function removeSmoke(pos: Pos, offset: Pos) {
   delete emitters[key];
 }
 
+export function flash(pos: Pos, color: string) {
+  loadPromise.then(() => {
+    const texture = PIXI.Texture.WHITE;
+    new particles.Emitter(app.stage, [texture], {
+      alpha: {
+        start: 1,
+        end: 0,
+      },
+      scale: {
+        start: 1 / 8,
+        end: 4,
+        minimumScaleMultiplier: 1,
+      },
+      color: {
+        start: color,
+        end: color,
+      },
+      speed: {
+        start: 5,
+        end: 3,
+        minimumSpeedMultiplier: 1,
+      },
+      acceleration: {
+        x: 0,
+        y: 0,
+      },
+      maxSpeed: 0,
+      startRotation: {
+        min: 0,
+        max: 0,
+      },
+      noRotation: true,
+      rotationSpeed: {
+        min: 0,
+        max: 0,
+      },
+      lifetime: {
+        min: 0.5,
+        max: 0.5,
+      },
+      blendMode: "normal",
+      frequency: 0.1,
+      emitterLifetime: 0.2,
+      maxParticles: 1000,
+      particlesPerWave: 1,
+      pos: {
+        x: pos.x * TILE_SIZE + TILE_SIZE / 2,
+        y: pos.y * TILE_SIZE + TILE_SIZE / 2,
+      },
+      addAtBack: false,
+      spawnType: "point",
+    }).playOnceAndDestroy();
+  });
+}
+
 loadPromise.then(() => {
   let lastTime = Date.now();
   const update = () => {
@@ -141,6 +208,7 @@ export function zoomOut() {
   zoomedIn = false;
   app.stage.scale = new PIXI.Point(1, 1);
   app.stage.position = new PIXI.Point(0, 0);
+  Object.values(renderEntities).forEach(updateVisibility);
 }
 
 export function zoomTo(pos: Pos) {
@@ -153,6 +221,7 @@ export function zoomTo(pos: Pos) {
   zoomedIn = true;
   app.stage.scale = new PIXI.Point(2, 2);
   app.stage.position = new PIXI.Point(-x * TILE_SIZE * 2, -y * TILE_SIZE * 2);
+  Object.values(renderEntities).forEach(updateVisibility);
 }
 
 export function getPosFromMouse(mouseX: number, mouseY: number): Pos {
@@ -178,16 +247,17 @@ export function getPosFromMouse(mouseX: number, mouseY: number): Pos {
   }
 }
 
-PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
-
-const renderEntities: {
-  [id: string]: {
-    displayComp: Display;
-    pos: Pos;
-    sprite?: PIXI.Sprite;
-    background?: PIXI.Graphics;
-  };
-} = {};
+function isPosVisible(pos: Pos) {
+  if (zoomedIn) {
+    const xMin = app.stage.position.x / (TILE_SIZE * -2);
+    const yMin = app.stage.position.y / (TILE_SIZE * -2);
+    const xMax = xMin + MAP_WIDTH / 2;
+    const yMax = yMin + MAP_HEIGHT / 2;
+    return pos.x >= xMin && pos.x < xMax && pos.y >= yMin && pos.y < yMax;
+  } else {
+    return pos.x >= 0 && pos.x < MAP_WIDTH && pos.y >= 0 && pos.y < MAP_HEIGHT;
+  }
+}
 
 const layers: {
   [priority: number]: PIXI.Container;
@@ -232,6 +302,8 @@ export function addRenderEntity(entity: Required<Entity, "display" | "pos">) {
     renderEntities[entity.id].sprite = sprite;
     getLayer(display.priority).addChild(sprite);
   }
+
+  updateVisibility(renderEntities[entity.id]);
 }
 
 function createSprite(pos: Pos, display: Display) {
@@ -366,6 +438,18 @@ export function updateRenderEntity(
     ) {
       reAddRenderEntity(entity);
     }
+
+    updateVisibility(renderEntity);
+  }
+}
+
+function updateVisibility(renderEntity: typeof renderEntities[string]) {
+  const wasVisible = renderEntity.isVisible;
+  const isVisible = isPosVisible(renderEntity.pos);
+  // eslint-disable-next-line no-param-reassign
+  renderEntity.isVisible = isVisible;
+  if (isVisible && !wasVisible && renderEntity.displayComp.flashWhenVisible) {
+    flash(renderEntity.pos, renderEntity.displayComp.color);
   }
 }
 
