@@ -58,10 +58,26 @@ export default function GameMap() {
   };
   const moveEnabled =
     !isWeaponActive && (!settings.unmodifiedBuilding || !isPlacing);
-  useControl(ControlCode.Up, moveUp, moveEnabled);
-  useControl(ControlCode.Down, moveDown, moveEnabled);
-  useControl(ControlCode.Left, moveLeft, moveEnabled);
-  useControl(ControlCode.Right, moveRight, moveEnabled);
+  useControl({
+    controlCode: ControlCode.Up,
+    callback: moveUp,
+    enabled: moveEnabled,
+  });
+  useControl({
+    controlCode: ControlCode.Down,
+    callback: moveDown,
+    enabled: moveEnabled,
+  });
+  useControl({
+    controlCode: ControlCode.Left,
+    callback: moveLeft,
+    enabled: moveEnabled,
+  });
+  useControl({
+    controlCode: ControlCode.Right,
+    callback: moveRight,
+    enabled: moveEnabled,
+  });
 
   const moveCursorUp = () => {
     if (!isDndFocused()) {
@@ -88,27 +104,48 @@ export default function GameMap() {
     settings.unmodifiedBuilding && isPlacing
       ? ["", settings.cursorModifierKey]
       : [settings.cursorModifierKey];
-  useControl(ControlCode.Up, moveCursorUp, true, cursorModifiers);
-  useControl(ControlCode.Down, moveCursorDown, true, cursorModifiers);
-  useControl(ControlCode.Left, moveCursorLeft, true, cursorModifiers);
-  useControl(ControlCode.Right, moveCursorRight, true, cursorModifiers);
-  useControl(ControlCode.Back, () => {
-    setContextMenuPos(null);
-    dispatch(actions.setCursorPos(null));
+  useControl({
+    controlCode: ControlCode.Up,
+    callback: moveCursorUp,
+    modifiers: cursorModifiers,
   });
-  useControl(ControlCode.Wait, () => {
-    dispatch(actions.playerTookTurn());
+  useControl({
+    controlCode: ControlCode.Down,
+    callback: moveCursorDown,
+    modifiers: cursorModifiers,
   });
-  useControl(
-    ControlCode.Undo,
-    () => dispatch(actions.undoTurn()),
-    true,
-    [""],
-    true,
-  );
-  useControl(ControlCode.ClearAllReflectors, () =>
-    dispatch(actions.clearReflectors()),
-  );
+  useControl({
+    controlCode: ControlCode.Left,
+    callback: moveCursorLeft,
+    modifiers: cursorModifiers,
+  });
+  useControl({
+    controlCode: ControlCode.Right,
+    callback: moveCursorRight,
+    modifiers: cursorModifiers,
+  });
+  useControl({
+    controlCode: ControlCode.Back,
+    callback: () => {
+      setContextMenuPos(null);
+      dispatch(actions.setCursorPos(null));
+    },
+  });
+  useControl({
+    controlCode: ControlCode.Wait,
+    callback: () => {
+      dispatch(actions.playerTookTurn());
+    },
+  });
+  useControl({
+    controlCode: ControlCode.Undo,
+    callback: () => dispatch(actions.undoTurn()),
+    allowOnGameOver: true,
+  });
+  useControl({
+    controlCode: ControlCode.ClearAllReflectors,
+    callback: () => dispatch(actions.clearReflectors()),
+  });
 
   const performDefaultAction = (pos: Pos | null) => {
     if (pos) {
@@ -119,7 +156,10 @@ export default function GameMap() {
       }
     }
   };
-  useControl(ControlCode.QuickAction, () => performDefaultAction(cursorPos));
+  useControl({
+    controlCode: ControlCode.QuickAction,
+    callback: () => performDefaultAction(cursorPos),
+  });
 
   return (
     <section

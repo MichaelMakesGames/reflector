@@ -80,16 +80,16 @@ export default function Inspector() {
 function InspectorAction({ action }: { action: ActionControl }) {
   const settings = useContext(SettingsContext);
   const dispatch = useDispatch();
-  useControl(
-    action.controlCode,
-    () => {
+  useControl({
+    controlCode: action.controlCode,
+    callback: () => {
       const actions = Array.isArray(action.action)
         ? action.action
         : [action.action];
       actions.forEach((a) => dispatch(a));
     },
-    !action.doNotRegisterShortcut,
-  );
+    enabled: !action.doNotRegisterShortcut,
+  });
   return (
     <button type="button" className="font-normal">
       <kbd className="font-mono bg-darkGray rounded p-1 mr-1">

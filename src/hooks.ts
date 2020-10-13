@@ -5,13 +5,21 @@ import { SettingsContext } from "~contexts";
 import selectors from "~state/selectors";
 import { ControlCode } from "~types/ControlCode";
 
-export function useControl(
-  controlCode: ControlCode,
-  callback: (e: KeyboardEvent) => void,
-  enabled: boolean = true,
-  modifiers: string[] = [""],
-  allowOnGameOver: boolean = false,
-): void {
+export interface UseControlOptions {
+  controlCode: ControlCode;
+  callback: (e: KeyboardEvent) => void;
+  enabled?: boolean;
+  modifiers?: string[];
+  allowOnGameOver?: boolean;
+}
+
+export function useControl({
+  controlCode,
+  callback,
+  enabled = true,
+  modifiers = [""],
+  allowOnGameOver = false,
+}: UseControlOptions): void {
   const gameOver = useSelector(selectors.gameOver);
   const settings = useContext(SettingsContext);
   let group = clack.group({});

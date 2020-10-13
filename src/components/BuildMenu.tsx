@@ -54,12 +54,12 @@ export default function BuildMenu() {
     }
   }, [isWeaponActive]);
 
-  useControl(ControlCode.Back, cancel);
-  useControl(
-    ControlCode.RotateBuilding,
-    rotate,
-    Boolean(placingTarget && placingTarget.rotatable),
-  );
+  useControl({ controlCode: ControlCode.Back, callback: cancel });
+  useControl({
+    controlCode: ControlCode.RotateBuilding,
+    callback: rotate,
+    enabled: Boolean(placingTarget && placingTarget.rotatable),
+  });
   const makeBuildingCallback = (n: number) => () => {
     if (isWeaponActive) {
       // cancel laser when initiating build
@@ -77,16 +77,56 @@ export default function BuildMenu() {
       setCategory(buildingCategories[n - 1]);
     }
   };
-  useControl(ControlCode.Building1, makeBuildingCallback(1), !placingTarget);
-  useControl(ControlCode.Building2, makeBuildingCallback(2), !placingTarget);
-  useControl(ControlCode.Building3, makeBuildingCallback(3), !placingTarget);
-  useControl(ControlCode.Building4, makeBuildingCallback(4), !placingTarget);
-  useControl(ControlCode.Building5, makeBuildingCallback(5), !placingTarget);
-  useControl(ControlCode.Building6, makeBuildingCallback(6), !placingTarget);
-  useControl(ControlCode.Building7, makeBuildingCallback(7), !placingTarget);
-  useControl(ControlCode.Building8, makeBuildingCallback(8), !placingTarget);
-  useControl(ControlCode.Building9, makeBuildingCallback(9), !placingTarget);
-  useControl(ControlCode.Building0, makeBuildingCallback(0), !placingTarget);
+  useControl({
+    controlCode: ControlCode.Building1,
+    callback: makeBuildingCallback(1),
+    enabled: !placingTarget,
+  });
+  useControl({
+    controlCode: ControlCode.Building2,
+    callback: makeBuildingCallback(2),
+    enabled: !placingTarget,
+  });
+  useControl({
+    controlCode: ControlCode.Building3,
+    callback: makeBuildingCallback(3),
+    enabled: !placingTarget,
+  });
+  useControl({
+    controlCode: ControlCode.Building4,
+    callback: makeBuildingCallback(4),
+    enabled: !placingTarget,
+  });
+  useControl({
+    controlCode: ControlCode.Building5,
+    callback: makeBuildingCallback(5),
+    enabled: !placingTarget,
+  });
+  useControl({
+    controlCode: ControlCode.Building6,
+    callback: makeBuildingCallback(6),
+    enabled: !placingTarget,
+  });
+  useControl({
+    controlCode: ControlCode.Building7,
+    callback: makeBuildingCallback(7),
+    enabled: !placingTarget,
+  });
+  useControl({
+    controlCode: ControlCode.Building8,
+    callback: makeBuildingCallback(8),
+    enabled: !placingTarget,
+  });
+  useControl({
+    controlCode: ControlCode.Building9,
+    callback: makeBuildingCallback(9),
+    enabled: !placingTarget,
+  });
+  useControl({
+    controlCode: ControlCode.Building0,
+    callback: makeBuildingCallback(0),
+    enabled: !placingTarget,
+  });
 
   const showCategory: boolean = !category;
   const showBuildings: boolean = Boolean(category && !placingTarget);

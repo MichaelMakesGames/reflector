@@ -8,7 +8,7 @@ import { useControl } from "~hooks";
 
 export default function KeyboardControls({ onClose }: { onClose: () => void }) {
   const settings = useContext(SettingsContext);
-  useControl(ControlCode.Back, onClose);
+  useControl({ controlCode: ControlCode.Back, callback: onClose });
 
   return (
     <Modal isOpen onRequestClose={onClose}>

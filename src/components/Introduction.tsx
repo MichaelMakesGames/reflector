@@ -16,8 +16,8 @@ export default function Introduction() {
     }
   }, [Boolean(player), turn]);
 
-  useControl(ControlCode.QuickAction, close);
-  useControl(ControlCode.Back, close);
+  useControl({ controlCode: ControlCode.QuickAction, callback: close });
+  useControl({ controlCode: ControlCode.Back, callback: close });
 
   if (!isOpen) return null;
 

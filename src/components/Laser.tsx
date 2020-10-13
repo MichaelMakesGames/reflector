@@ -29,13 +29,17 @@ export default function Laser() {
     }
   };
   const cancel = () => dispatch(actions.deactivateWeapon());
-  useControl(ControlCode.Back, cancel);
-  useControl(ControlCode.Fire, fire, isWeaponActive);
-  useControl(
-    ControlCode.Fire,
-    () => dispatch(actions.targetWeapon(aimingDirection)),
-    settings.fireKeyActivatesAiming && !isWeaponActive,
-  );
+  useControl({ controlCode: ControlCode.Back, callback: cancel });
+  useControl({
+    controlCode: ControlCode.Fire,
+    callback: fire,
+    enabled: isWeaponActive,
+  });
+  useControl({
+    controlCode: ControlCode.Fire,
+    callback: () => dispatch(actions.targetWeapon(aimingDirection)),
+    enabled: settings.fireKeyActivatesAiming && !isWeaponActive,
+  });
 
   const makeAimHandler = (
     direction: Direction,
@@ -51,30 +55,26 @@ export default function Laser() {
     settings.unmodifiedAiming && isWeaponActive
       ? ["", settings.aimingModifierKey]
       : [settings.aimingModifierKey];
-  useControl(
-    ControlCode.Up,
-    makeAimHandler(UP, settings.aimInSameDirectionToFire),
-    true,
+  useControl({
+    controlCode: ControlCode.Up,
+    callback: makeAimHandler(UP, settings.aimInSameDirectionToFire),
     modifiers,
-  );
-  useControl(
-    ControlCode.Down,
-    makeAimHandler(DOWN, settings.aimInSameDirectionToFire),
-    true,
+  });
+  useControl({
+    controlCode: ControlCode.Down,
+    callback: makeAimHandler(DOWN, settings.aimInSameDirectionToFire),
     modifiers,
-  );
-  useControl(
-    ControlCode.Left,
-    makeAimHandler(LEFT, settings.aimInSameDirectionToFire),
-    true,
+  });
+  useControl({
+    controlCode: ControlCode.Left,
+    callback: makeAimHandler(LEFT, settings.aimInSameDirectionToFire),
     modifiers,
-  );
-  useControl(
-    ControlCode.Right,
-    makeAimHandler(RIGHT, settings.aimInSameDirectionToFire),
-    true,
+  });
+  useControl({
+    controlCode: ControlCode.Right,
+    callback: makeAimHandler(RIGHT, settings.aimInSameDirectionToFire),
     modifiers,
-  );
+  });
 
   return (
     <Tippy
