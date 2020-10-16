@@ -23,21 +23,28 @@ function updateEntity(
     console.warn("tried to update nonexistant entity", partial);
   }
   const entity = { ...prev, ...partial };
-  let { entitiesByPosition } = state;
+  const { entitiesByPosition, entitiesByComp } = state;
+
+  for (const key in partial) {
+    if (key !== "id" && key !== "template" && key !== "parentTemplate") {
+      entitiesByComp[key] = entitiesByComp[key] || new Set();
+      if (partial[key as keyof Entity]) {
+        entitiesByComp[key].add(partial.id);
+      } else {
+        entitiesByComp[key].delete(partial.id);
+      }
+    }
+  }
+
   if (has(partial, "pos")) {
     if (prev && prev.pos) {
       const key = getPosKey(prev.pos);
-      entitiesByPosition = {
-        ...entitiesByPosition,
-        [key]: entitiesByPosition[key].filter((id) => id !== prev.id),
-      };
+      entitiesByPosition[key].delete(prev.id);
     }
     if (entity.pos) {
       const key = getPosKey(entity.pos);
-      entitiesByPosition = {
-        ...entitiesByPosition,
-        [key]: [...(entitiesByPosition[key] || []), entity.id],
-      };
+      entitiesByPosition[key] = entitiesByPosition[key] || new Set();
+      entitiesByPosition[key].add(entity.id);
     }
   }
 

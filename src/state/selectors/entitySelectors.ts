@@ -2,7 +2,6 @@ import { Required } from "Object/_api";
 import { PLAYER_ID } from "~constants";
 import { JobTypeCode } from "~data/jobTypes";
 import { Entity, Pos, RawState } from "~types";
-import { filterEntitiesWithComps } from "~utils/entities";
 import {
   arePositionsEqual,
   getAdjacentPositions,
@@ -18,7 +17,13 @@ export function entitiesWithComps<C extends keyof Entity>(
   state: RawState,
   ...comps: C[]
 ): Required<Entity, C>[] {
-  return filterEntitiesWithComps(entityList(state), ...comps);
+  const byComps = comps
+    .map((comp) => state.entitiesByComp[comp] || new Set())
+    .sort((a, b) => a.size - b.size);
+  const [smallest, ...rest] = byComps;
+  return Array.from(smallest)
+    .filter((id) => rest.every((idSet) => idSet.has(id)))
+    .map((id) => state.entities[id]) as Required<Entity, C>[];
 }
 
 export function entityById(state: RawState, entityId: string) {
@@ -39,7 +44,7 @@ export function playerPos(state: RawState) {
 
 export function entitiesAtPosition(state: RawState, position: Pos) {
   const key = getPosKey(position);
-  return (state.entitiesByPosition[key] || []).map(
+  return Array.from(state.entitiesByPosition[key] || []).map(
     (id) => state.entities[id],
   ) as Required<Entity, "pos">[];
 }

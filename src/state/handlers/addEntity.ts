@@ -14,13 +14,24 @@ function addEntity(
   let state = wrappedState.raw;
   const entity = action.payload;
 
-  let { entitiesByPosition } = state;
+  const { entitiesByPosition, entitiesByComp } = state;
+
+  for (const key in entity) {
+    if (
+      entity[key as keyof Entity] &&
+      key !== "id" &&
+      key !== "template" &&
+      key !== "parentTemplate"
+    ) {
+      entitiesByComp[key] = entitiesByComp[key] || new Set();
+      entitiesByComp[key].add(entity.id);
+    }
+  }
+
   if (entity.pos) {
     const key = getPosKey(entity.pos);
-    entitiesByPosition = {
-      ...entitiesByPosition,
-      [key]: [...(entitiesByPosition[key] || []), entity.id],
-    };
+    entitiesByPosition[key] = entitiesByPosition[key] || new Set();
+    entitiesByPosition[key].add(entity.id);
   }
 
   if (entity.pos && entity.display) {
@@ -30,6 +41,7 @@ function addEntity(
   state = {
     ...state,
     entitiesByPosition,
+    entitiesByComp,
     entities: {
       ...state.entities,
       [entity.id]: entity,

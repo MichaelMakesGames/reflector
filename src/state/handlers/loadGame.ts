@@ -11,6 +11,7 @@ import processEmitters from "~state/processors/processEmitters";
 import colors from "~colors";
 import processAnimationToggle from "~state/processors/processAnimationToggle";
 import processBorders from "~state/processors/processBorders";
+import { resetEntitiesByCompAndPos } from "~utils/entities";
 
 function loadGame(
   state: WrappedState,
@@ -21,6 +22,7 @@ function loadGame(
     ...loadedState,
     version: state.select.version(),
   });
+  resetEntitiesByCompAndPos(state);
   state.act.setCursorPos(null);
   clearRenderer();
   state.select

@@ -6,7 +6,8 @@ import { JobTypeCode } from "~data/jobTypes";
 export interface RawState {
   version: string;
   entities: Record<string, Entity>;
-  entitiesByPosition: Record<string, string[]>;
+  entitiesByPosition: Record<string, Set<string>>;
+  entitiesByComp: Record<string, Set<string>>;
   messageLog: Record<number, { type?: string; message: string }[]>;
   gameOver: boolean;
   victory: boolean;

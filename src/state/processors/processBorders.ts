@@ -27,24 +27,17 @@ export default function processBorders(state: WrappedState): void {
     }
   }
 
+  const posKeys = new Set(Object.keys(positionsInRange));
   for (const pos of Object.values(positionsInRange)) {
     const posToNorth = getPositionToDirection(pos, UP);
     const posToSouth = getPositionToDirection(pos, DOWN);
     const posToEast = getPositionToDirection(pos, RIGHT);
     const posToWest = getPositionToDirection(pos, LEFT);
 
-    const posToNorthIsInRange = Object.keys(positionsInRange).includes(
-      getPosKey(posToNorth),
-    );
-    const posToSouthIsInRange = Object.keys(positionsInRange).includes(
-      getPosKey(posToSouth),
-    );
-    const posToEastIsInRange = Object.keys(positionsInRange).includes(
-      getPosKey(posToEast),
-    );
-    const posToWestIsInRange = Object.keys(positionsInRange).includes(
-      getPosKey(posToWest),
-    );
+    const posToNorthIsInRange = posKeys.has(getPosKey(posToNorth));
+    const posToSouthIsInRange = posKeys.has(getPosKey(posToSouth));
+    const posToEastIsInRange = posKeys.has(getPosKey(posToEast));
+    const posToWestIsInRange = posKeys.has(getPosKey(posToWest));
 
     if (!posToNorthIsInRange) {
       state.act.addEntity(createEntityFromTemplate("BORDER_NORTH", { pos }));

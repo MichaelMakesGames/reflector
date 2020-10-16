@@ -3,7 +3,7 @@ import processors from "~/state/processors";
 import { registerHandler } from "~state/handleAction";
 import { save } from "~utils/gameSave";
 import WrappedState from "~types/WrappedState";
-import initialState from "~state/initialState";
+import { ResourceCode } from "~data/resources";
 
 function playerTookTurn(
   state: WrappedState,
@@ -13,7 +13,12 @@ function playerTookTurn(
   state.setRaw({
     ...state.raw,
     resourceChanges: state.raw.resourceChangesThisTurn,
-    resourceChangesThisTurn: initialState.resourceChangesThisTurn,
+    resourceChangesThisTurn: {
+      [ResourceCode.Food]: [],
+      [ResourceCode.Power]: [],
+      [ResourceCode.Metal]: [],
+      [ResourceCode.Machinery]: [],
+    },
   });
   state.setRaw({
     ...state.raw,

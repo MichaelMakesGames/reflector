@@ -2,7 +2,7 @@ import { getType } from "typesafe-actions";
 import { Action, RawState } from "~/types";
 import actions from "./actions";
 import "./handlers";
-import initialState from "./initialState";
+import { createInitialState } from "./initialState";
 import wrapState from "./wrapState";
 
 const GAME_OVER_ALLOW_LIST: string[] = [
@@ -12,7 +12,7 @@ const GAME_OVER_ALLOW_LIST: string[] = [
 ];
 
 export default function reducer(
-  state: RawState = initialState,
+  state: RawState = createInitialState(),
   action: Action,
 ): RawState {
   const wrappedState = wrapState(state);

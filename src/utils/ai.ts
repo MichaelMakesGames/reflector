@@ -61,13 +61,19 @@ export function getAIActions(entity: Entity, state: WrappedState): Action[] {
   if (!ai) return [];
 
   if (ai.type === "DRONE") {
+    console.warn("DRONE");
     if (!entity.pos) return [];
     const { pos } = entity;
     const targets = state.select
       .entitiesWithComps("destructible", "pos")
       .filter((e) => !e.ai);
     targets.sort((a, b) => getDistance(a.pos, pos) - getDistance(b.pos, pos));
+    console.warn(targets);
     const target = targets[0];
+    if (!target) {
+      console.warn("no valid target");
+      return [];
+    }
 
     if (getDistance(entity.pos, target.pos) <= 1) {
       return destroyAllAtPos(state, target.pos);

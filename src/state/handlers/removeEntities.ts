@@ -13,19 +13,24 @@ function removeEntities(
 ): void {
   const { raw: state } = wrappedState;
   const entityIds = action.payload.filter((id) => state.entities[id]);
-  const entityIdsSet = new Set(action.payload);
 
   const entities = {
     ...state.entities,
   };
 
   let isRemovingReflector = false;
-  const impactedPosKeys = new Set<string>();
+  const { entitiesByPosition, entitiesByComp } = state;
 
   for (const id of entityIds) {
     const entity = entities[id];
+    for (const key in entity) {
+      if (key !== "id" && key !== "template" && key !== "parentTemplate") {
+        entitiesByComp[key] = entitiesByComp[key] || new Set();
+        entitiesByComp[key].delete(id);
+      }
+    }
     if (entity.pos) {
-      impactedPosKeys.add(getPosKey(entity.pos));
+      entitiesByPosition[getPosKey(entity.pos)].delete(id);
     }
     if (entity.pos && entity.display) {
       removeRenderEntity(id);
@@ -43,15 +48,6 @@ function removeEntities(
     }
 
     delete entities[id];
-  }
-
-  const entitiesByPosition = {
-    ...state.entitiesByPosition,
-  };
-  for (const key of impactedPosKeys) {
-    entitiesByPosition[key] = entitiesByPosition[key].filter(
-      (id) => !entityIdsSet.has(id),
-    );
   }
 
   wrappedState.setRaw({
