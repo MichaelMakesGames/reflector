@@ -1,17 +1,17 @@
 /* global document */
+import Tippy from "@tippyjs/react";
 import React, { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
+import { HotkeyGroup, useControl } from "~components/HotkeysProvider";
 import { DOWN, LEFT, RIGHT, UP } from "~constants";
 import { SettingsContext } from "~contexts";
-import { useControl } from "~hooks";
 import actions from "~state/actions";
 import selectors from "~state/selectors";
 import { Direction } from "~types";
 import { ControlCode } from "~types/ControlCode";
 import { getConstDir } from "~utils/geometry";
-import Kbd from "./Kbd";
+import HotkeyButton from "./HotkeyButton";
 
 export default function Laser() {
   const dispatch = useDispatch();
@@ -29,16 +29,10 @@ export default function Laser() {
     }
   };
   const cancel = () => dispatch(actions.deactivateWeapon());
-  useControl({ controlCode: ControlCode.Back, callback: cancel });
   useControl({
-    controlCode: ControlCode.Fire,
-    callback: fire,
-    enabled: isWeaponActive,
-  });
-  useControl({
-    controlCode: ControlCode.Fire,
-    callback: () => dispatch(actions.targetWeapon(aimingDirection)),
-    enabled: settings.fireKeyActivatesAiming && !isWeaponActive,
+    code: ControlCode.Back,
+    group: HotkeyGroup.Main,
+    callback: cancel,
   });
 
   const makeAimHandler = (
@@ -51,29 +45,55 @@ export default function Laser() {
       dispatch(actions.targetWeapon(direction));
     }
   };
-  const modifiers =
-    settings.unmodifiedAiming && isWeaponActive
-      ? ["", settings.aimingModifierKey]
-      : [settings.aimingModifierKey];
+
   useControl({
-    controlCode: ControlCode.Up,
+    code: ControlCode.Up,
+    group: HotkeyGroup.Main,
     callback: makeAimHandler(UP, settings.aimInSameDirectionToFire),
-    modifiers,
+    [settings.aimingModifierKey]: true,
   });
   useControl({
-    controlCode: ControlCode.Down,
+    code: ControlCode.Down,
+    group: HotkeyGroup.Main,
     callback: makeAimHandler(DOWN, settings.aimInSameDirectionToFire),
-    modifiers,
+    [settings.aimingModifierKey]: true,
   });
   useControl({
-    controlCode: ControlCode.Left,
+    code: ControlCode.Left,
+    group: HotkeyGroup.Main,
     callback: makeAimHandler(LEFT, settings.aimInSameDirectionToFire),
-    modifiers,
+    [settings.aimingModifierKey]: true,
   });
   useControl({
-    controlCode: ControlCode.Right,
+    code: ControlCode.Right,
+    group: HotkeyGroup.Main,
     callback: makeAimHandler(RIGHT, settings.aimInSameDirectionToFire),
-    modifiers,
+    [settings.aimingModifierKey]: true,
+  });
+
+  useControl({
+    code: ControlCode.Up,
+    group: HotkeyGroup.Main,
+    callback: makeAimHandler(UP, settings.aimInSameDirectionToFire),
+    disabled: !(settings.unmodifiedAiming && isWeaponActive),
+  });
+  useControl({
+    code: ControlCode.Down,
+    group: HotkeyGroup.Main,
+    callback: makeAimHandler(DOWN, settings.aimInSameDirectionToFire),
+    disabled: !(settings.unmodifiedAiming && isWeaponActive),
+  });
+  useControl({
+    code: ControlCode.Left,
+    group: HotkeyGroup.Main,
+    callback: makeAimHandler(LEFT, settings.aimInSameDirectionToFire),
+    disabled: !(settings.unmodifiedAiming && isWeaponActive),
+  });
+  useControl({
+    code: ControlCode.Right,
+    group: HotkeyGroup.Main,
+    callback: makeAimHandler(RIGHT, settings.aimInSameDirectionToFire),
+    disabled: !(settings.unmodifiedAiming && isWeaponActive),
   });
 
   return (
@@ -164,38 +184,30 @@ export default function Laser() {
         </div>
 
         <div className="flex-column ml-2">
-          <button
-            className="btn text-sm mb-1 block text-left"
-            style={{ width: "5.5rem" }}
-            type="button"
+          <HotkeyButton
+            label={laserState === "ACTIVE" ? "Fire" : "Activate"}
+            className="text-sm mb-1 block text-left"
+            style={{ width: "5.625rem" }}
             disabled={!["READY", "ACTIVE"].includes(laserState)}
-            onClick={(e) => {
+            controlCode={ControlCode.Fire}
+            hotkeyGroup={HotkeyGroup.Main}
+            callback={() => {
               if (laserState === "READY") {
                 dispatch(actions.targetWeapon(aimingDirection));
               } else {
                 fire();
               }
-              (e.target as HTMLButtonElement).blur();
             }}
-          >
-            <Kbd>{settings.keyboardShortcuts[ControlCode.Fire][0]}</Kbd>
-            <span className="ml-1">
-              {laserState === "ACTIVE" ? "Fire" : "Activate"}
-            </span>
-          </button>
-          <button
-            className="btn text-sm block text-left"
-            style={{ width: "5.5rem" }}
-            type="button"
+          />
+          <HotkeyButton
+            label="Cancel"
+            className="text-sm block text-left"
+            style={{ width: "5.625rem" }}
             disabled={!isWeaponActive}
-            onClick={(e) => {
-              cancel();
-              (e.target as HTMLButtonElement).blur();
-            }}
-          >
-            <Kbd>{settings.keyboardShortcuts[ControlCode.Back][0]}</Kbd>
-            <span className="ml-1">Cancel</span>
-          </button>
+            controlCode={ControlCode.Back}
+            hotkeyGroup={HotkeyGroup.Main}
+            callback={cancel}
+          />
         </div>
       </section>
     </Tippy>

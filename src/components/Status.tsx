@@ -1,12 +1,12 @@
 import Tippy from "@tippyjs/react";
-import React, { useContext } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { MINUTES_PER_TURN, COLONISTS_PER_IMMIGRATION_WAVE } from "~constants";
+import { COLONISTS_PER_IMMIGRATION_WAVE, MINUTES_PER_TURN } from "~constants";
 import actions from "~state/actions";
 import selectors from "~state/selectors";
-import Kbd from "./Kbd";
-import { SettingsContext } from "~contexts";
 import { ControlCode } from "~types/ControlCode";
+import HotkeyButton from "./HotkeyButton";
+import { HotkeyGroup } from "./HotkeysProvider";
 
 export default function Status() {
   const dispatch = useDispatch();
@@ -19,7 +19,6 @@ export default function Status() {
   const population = useSelector(selectors.population);
   const housingCapacity = useSelector(selectors.housingCapacity);
   const morale = useSelector(selectors.morale);
-  const settings = useContext(SettingsContext);
   return (
     <section className="p-2 border-b border-gray">
       <div className="flex flex-row justify-between items-start mb-2">
@@ -62,16 +61,15 @@ export default function Status() {
           placement="right"
           content="Pass your turn without doing anything."
         >
-          <button
-            className="btn text-sm"
-            onClick={() => {
-              dispatch(actions.playerTookTurn());
-            }}
-            type="button"
-          >
-            <Kbd>{settings.keyboardShortcuts[ControlCode.Wait]}</Kbd>
-            <span className="ml-1">Wait</span>
-          </button>
+          <div>
+            <HotkeyButton
+              controlCode={ControlCode.Wait}
+              callback={() => dispatch(actions.playerTookTurn())}
+              hotkeyGroup={HotkeyGroup.Main}
+              className="text-sm"
+              label="Wait"
+            />
+          </div>
         </Tippy>
       </div>
       <div className="flex flex-row">

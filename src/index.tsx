@@ -6,7 +6,6 @@ import "@babel/polyfill";
 import Modal from "react-modal";
 import store from "./state/store";
 import Game from "./components/Game";
-import "rc-tooltip/assets/bootstrap.css";
 import "notyf/notyf.min.css";
 
 import "./assets/style.css";

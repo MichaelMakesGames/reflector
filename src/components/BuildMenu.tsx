@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { SettingsContext } from "~contexts";
 import buildingCategories, { BuildingCategory } from "~data/buildingCategories";
 import buildings from "~data/buildings";
-import { useControl } from "~hooks";
+import { useControl, HotkeyGroup } from "~components/HotkeysProvider";
 import actions from "~state/actions";
 import selectors from "~state/selectors";
 import { ControlCode } from "~types/ControlCode";
@@ -54,11 +54,16 @@ export default function BuildMenu() {
     }
   }, [isWeaponActive]);
 
-  useControl({ controlCode: ControlCode.Back, callback: cancel });
   useControl({
-    controlCode: ControlCode.RotateBuilding,
+    code: ControlCode.Back,
+    callback: cancel,
+    group: HotkeyGroup.Main,
+  });
+  useControl({
+    code: ControlCode.RotateBuilding,
+    group: HotkeyGroup.Main,
     callback: rotate,
-    enabled: Boolean(placingTarget && placingTarget.rotatable),
+    disabled: !(placingTarget && placingTarget.rotatable),
   });
   const makeBuildingCallback = (n: number) => () => {
     if (isWeaponActive) {
@@ -78,54 +83,64 @@ export default function BuildMenu() {
     }
   };
   useControl({
-    controlCode: ControlCode.Building1,
+    code: ControlCode.Menu1,
+    group: HotkeyGroup.Main,
     callback: makeBuildingCallback(1),
-    enabled: !placingTarget,
+    disabled: Boolean(placingTarget),
   });
   useControl({
-    controlCode: ControlCode.Building2,
+    code: ControlCode.Menu2,
+    group: HotkeyGroup.Main,
     callback: makeBuildingCallback(2),
-    enabled: !placingTarget,
+    disabled: Boolean(placingTarget),
   });
   useControl({
-    controlCode: ControlCode.Building3,
+    code: ControlCode.Menu3,
+    group: HotkeyGroup.Main,
     callback: makeBuildingCallback(3),
-    enabled: !placingTarget,
+    disabled: Boolean(placingTarget),
   });
   useControl({
-    controlCode: ControlCode.Building4,
+    code: ControlCode.Menu4,
+    group: HotkeyGroup.Main,
     callback: makeBuildingCallback(4),
-    enabled: !placingTarget,
+    disabled: Boolean(placingTarget),
   });
   useControl({
-    controlCode: ControlCode.Building5,
+    code: ControlCode.Menu5,
+    group: HotkeyGroup.Main,
     callback: makeBuildingCallback(5),
-    enabled: !placingTarget,
+    disabled: Boolean(placingTarget),
   });
   useControl({
-    controlCode: ControlCode.Building6,
+    code: ControlCode.Menu6,
+    group: HotkeyGroup.Main,
     callback: makeBuildingCallback(6),
-    enabled: !placingTarget,
+    disabled: Boolean(placingTarget),
   });
   useControl({
-    controlCode: ControlCode.Building7,
+    code: ControlCode.Menu7,
+    group: HotkeyGroup.Main,
     callback: makeBuildingCallback(7),
-    enabled: !placingTarget,
+    disabled: Boolean(placingTarget),
   });
   useControl({
-    controlCode: ControlCode.Building8,
+    code: ControlCode.Menu8,
+    group: HotkeyGroup.Main,
     callback: makeBuildingCallback(8),
-    enabled: !placingTarget,
+    disabled: Boolean(placingTarget),
   });
   useControl({
-    controlCode: ControlCode.Building9,
+    code: ControlCode.Menu9,
+    group: HotkeyGroup.Main,
     callback: makeBuildingCallback(9),
-    enabled: !placingTarget,
+    disabled: Boolean(placingTarget),
   });
   useControl({
-    controlCode: ControlCode.Building0,
+    code: ControlCode.Menu0,
+    group: HotkeyGroup.Main,
     callback: makeBuildingCallback(0),
-    enabled: !placingTarget,
+    disabled: Boolean(placingTarget),
   });
 
   const showCategory: boolean = !category;

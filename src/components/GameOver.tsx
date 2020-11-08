@@ -3,6 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import actions from "~state/actions";
 import selectors from "~state/selectors";
 import Modal from "./Modal";
+import HotkeyButton from "./HotkeyButton";
+import { ControlCode } from "~types/ControlCode";
+import { HotkeyGroup } from "./HotkeysProvider";
 
 export default function GameOver() {
   const dispatch = useDispatch();
@@ -25,32 +28,29 @@ export default function GameOver() {
         </p>
       )}
       <div className="mt-1">
-        <button
-          className="btn"
-          type="button"
-          onClick={() => dispatch(actions.newGame())}
-          // eslint-disable-next-line jsx-a11y/no-autofocus
-          autoFocus
-        >
-          New Game
-        </button>
+        <HotkeyButton
+          label="New Game"
+          controlCode={ControlCode.Menu1}
+          hotkeyGroup={HotkeyGroup.GameOver}
+          callback={() => dispatch(actions.newGame())}
+        />
         {!victory && (
-          <button
-            className="btn ml-2"
-            type="button"
-            onClick={() => dispatch(actions.undoTurn())}
-          >
-            Undo Last Turn
-          </button>
+          <HotkeyButton
+            label="Undo Last Turn"
+            className="ml-2"
+            controlCode={ControlCode.Menu2}
+            hotkeyGroup={HotkeyGroup.GameOver}
+            callback={() => dispatch(actions.undoTurn())}
+          />
         )}
         {victory && (
-          <button
-            className="btn ml-2"
-            type="button"
-            onClick={() => dispatch(actions.continueVictory())}
-          >
-            Continue Playing
-          </button>
+          <HotkeyButton
+            label="Continue Playing"
+            className="ml-2"
+            controlCode={ControlCode.Menu2}
+            hotkeyGroup={HotkeyGroup.GameOver}
+            callback={() => dispatch(actions.continueVictory())}
+          />
         )}
       </div>
     </Modal>

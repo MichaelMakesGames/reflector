@@ -4,7 +4,10 @@ import { loadPromise } from "~renderer";
 import actions from "~state/actions";
 import selectors from "~state/selectors";
 import { RawState } from "~types";
+import { ControlCode } from "~types/ControlCode";
 import { load } from "~utils/gameSave";
+import HotkeyButton from "./HotkeyButton";
+import { HotkeyGroup } from "./HotkeysProvider";
 import Modal from "./Modal";
 
 export default function LoadGame() {
@@ -49,28 +52,28 @@ export default function LoadGame() {
               not work with the current version, {version}.
             </p>
           )}
-          <button
-            type="button"
-            className="btn mt-3 mr-2"
-            onClick={() => {
+          <HotkeyButton
+            className="mt-3 mr-2"
+            label="Load Anyway"
+            controlCode={ControlCode.Menu1}
+            hotkeyGroup={HotkeyGroup.Loading}
+            callback={() => {
               setOldSave(null);
               dispatch(actions.loadGame({ state: oldSave }));
               setIsLoading(false);
             }}
-          >
-            Load Anyway
-          </button>
-          <button
-            type="button"
-            className="btn mt-3 mr-2"
-            onClick={() => {
+          />
+          <HotkeyButton
+            className="mt-3 mr-2"
+            label="New Game"
+            controlCode={ControlCode.Menu2}
+            hotkeyGroup={HotkeyGroup.Loading}
+            callback={() => {
               setOldSave(null);
               dispatch(actions.newGame());
               setIsLoading(false);
             }}
-          >
-            New Game
-          </button>
+          />
         </Modal>
       )}
     </div>

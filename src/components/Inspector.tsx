@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { SettingsContext } from "~contexts";
 import colonistStatuses, { ColonistStatusCode } from "~data/colonistStatuses";
 import resources from "~data/resources";
-import { useControl } from "~hooks";
+import { useControl, HotkeyGroup } from "~components/HotkeysProvider";
 import selectors from "~state/selectors";
 import { canPlaceReflector } from "~state/selectors/placementSelectors";
 import { Entity, RawState } from "~types";
@@ -81,19 +81,20 @@ function InspectorAction({ action }: { action: ActionControl }) {
   const settings = useContext(SettingsContext);
   const dispatch = useDispatch();
   useControl({
-    controlCode: action.controlCode,
+    code: action.code,
+    group: HotkeyGroup.Main,
     callback: () => {
       const actions = Array.isArray(action.action)
         ? action.action
         : [action.action];
       actions.forEach((a) => dispatch(a));
     },
-    enabled: !action.doNotRegisterShortcut,
+    disabled: action.doNotRegisterShortcut,
   });
   return (
     <button type="button" className="font-normal">
       <kbd className="font-mono bg-darkGray rounded p-1 mr-1">
-        {settings.keyboardShortcuts[action.controlCode][0]}
+        {settings.keyboardShortcuts[action.code][0]}
       </kbd>
       {action.label}
     </button>

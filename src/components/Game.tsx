@@ -14,6 +14,7 @@ import IconMasks from "./IconMasks";
 import GameOver from "./GameOver";
 import { TILE_SIZE, MAP_WIDTH, MAP_CSS_WIDTH } from "~constants";
 import Introduction from "./Introduction";
+import HotkeysProvider from "./HotkeysProvider";
 
 export default function Game() {
   useEffect(() => {
@@ -23,32 +24,34 @@ export default function Game() {
   }, []);
 
   return (
-    <main className="h-full flex flex-col">
-      <Header />
-      <LoadGame />
-      <div className="flex flex-row flex-1 w-full max-w-screen-xl mx-auto">
-        <div className="flex-none w-64 h-full flex flex-col border-l border-r border-gray z-10">
-          <Status />
-          <Laser />
-          <Resources />
-          <Jobs />
+    <HotkeysProvider>
+      <main className="h-full flex flex-col">
+        <Header />
+        <LoadGame />
+        <div className="flex flex-row flex-1 w-full max-w-screen-xl mx-auto">
+          <div className="flex-none w-64 h-full flex flex-col border-l border-r border-gray z-10">
+            <Status />
+            <Laser />
+            <Resources />
+            <Jobs />
+          </div>
+          <div
+            className="flex-none h-full border-gray"
+            style={{
+              width: MAP_CSS_WIDTH,
+            }}
+          >
+            <GameMap />
+            <BuildMenu />
+          </div>
+          <div className="flex-none w-64 h-full flex flex-col border-l border-r border-gray z-10">
+            <Inspector />
+          </div>
         </div>
-        <div
-          className="flex-none h-full border-gray"
-          style={{
-            width: MAP_CSS_WIDTH,
-          }}
-        >
-          <GameMap />
-          <BuildMenu />
-        </div>
-        <div className="flex-none w-64 h-full flex flex-col border-l border-r border-gray z-10">
-          <Inspector />
-        </div>
-      </div>
-      <IconMasks />
-      <GameOver />
-      <Introduction />
-    </main>
+        <IconMasks />
+        <GameOver />
+        <Introduction />
+      </main>
+    </HotkeysProvider>
   );
 }

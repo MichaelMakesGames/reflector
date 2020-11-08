@@ -12,7 +12,7 @@ import { areDirectionsEqual, arePositionsEqual } from "./geometry";
 
 export interface ActionControl {
   label: string;
-  controlCode: ControlCode;
+  code: ControlCode;
   doNotRegisterShortcut?: boolean;
   action: Action | Action[];
 }
@@ -39,20 +39,20 @@ function addMoveAction(state: RawState, pos: Pos, results: ActionControl[]) {
       !selectors.isPositionBlocked(state, pos)
     ) {
       const dir = { dx: pos.x - playerPos.x, dy: pos.y - playerPos.y };
-      let controlCode: ControlCode;
+      let code: ControlCode;
       if (areDirectionsEqual(dir, UP)) {
-        controlCode = ControlCode.Up;
+        code = ControlCode.Up;
       } else if (areDirectionsEqual(dir, DOWN)) {
-        controlCode = ControlCode.Down;
+        code = ControlCode.Down;
       } else if (areDirectionsEqual(dir, LEFT)) {
-        controlCode = ControlCode.Left;
+        code = ControlCode.Left;
       } else {
         // if (areDirectionsEqual(dir, RIGHT))
-        controlCode = ControlCode.Right;
+        code = ControlCode.Right;
       }
       results.push({
         label: "Move",
-        controlCode,
+        code,
         doNotRegisterShortcut: true,
         action: actions.move({
           entityId: PLAYER_ID,
@@ -74,7 +74,7 @@ function addDisableBuildingActions(
       label: entitiesAtPos.some((e) => e.jobDisabler)
         ? "Enable Jobs"
         : "Disable Jobs",
-      controlCode: ControlCode.ToggleJobs,
+      code: ControlCode.ToggleJobs,
       action: actions.toggleDisabled(pos),
     });
   }
@@ -89,7 +89,7 @@ function addRemoveBuildingAction(
   if (entitiesAtPos.some((e) => e.building)) {
     results.push({
       label: "Remove Building",
-      controlCode: ControlCode.RemoveBuilding,
+      code: ControlCode.RemoveBuilding,
       action: actions.executeRemoveBuilding(pos),
     });
   }
@@ -125,7 +125,7 @@ function addReflectorActions(
     results.push(
       {
         label: "Place \\ Reflector",
-        controlCode: ControlCode.PlaceReflectorA,
+        code: ControlCode.PlaceReflectorA,
         action: [
           actions.removeReflector(pos),
           actions.addEntity(
@@ -135,7 +135,7 @@ function addReflectorActions(
       },
       {
         label: "Place / Reflector",
-        controlCode: ControlCode.PlaceReflectorB,
+        code: ControlCode.PlaceReflectorB,
         action: [
           actions.removeReflector(pos),
           actions.addEntity(
@@ -151,20 +151,21 @@ function addReflectorActions(
   if (reflectorAtPos) {
     // results.push({
     //   label: "Rotate Reflector",
-    //   controlCode: ControlCode.RotateReflector,
+    //   code: ControlCode.RotateReflector,
     //   action: actions.rotateEntity(reflectorAtPos),
     // });
     results.push({
       label: "Remove Reflector",
-      controlCode: ControlCode.RemoveReflector,
+      code: ControlCode.RemoveReflector,
       action: actions.removeReflector(pos),
     });
   }
 
   results.push({
     label: "Clear All Reflectors",
-    controlCode: ControlCode.ClearAllReflectors,
+    code: ControlCode.ClearAllReflectors,
     action: actions.clearReflectors(),
+    doNotRegisterShortcut: true,
   });
 }
 

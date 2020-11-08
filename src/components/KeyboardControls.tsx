@@ -1,22 +1,29 @@
 import React, { useContext } from "react";
 import { SettingsContext } from "~contexts";
 import { ControlCode } from "~types/ControlCode";
-import { isMac } from "~utils/controls";
 import Kbd from "./Kbd";
 import Modal from "./Modal";
-import { useControl } from "~hooks";
+import { useControl, HotkeyGroup } from "~components/HotkeysProvider";
+import HotkeyButton from "./HotkeyButton";
 
 export default function KeyboardControls({ onClose }: { onClose: () => void }) {
   const settings = useContext(SettingsContext);
-  useControl({ controlCode: ControlCode.Back, callback: onClose });
+  useControl({
+    code: ControlCode.Back,
+    group: HotkeyGroup.Help,
+    callback: onClose,
+  });
 
   return (
     <Modal isOpen onRequestClose={onClose}>
       <div className="flex flex-row">
         <h2 className="text-2xl flex-grow">Mouse Controls</h2>
-        <button type="button" className="btn" onClick={onClose}>
-          Close
-        </button>
+        <HotkeyButton
+          controlCode={ControlCode.Back}
+          callback={onClose}
+          hotkeyGroup={HotkeyGroup.Help}
+          label="Close"
+        />
       </div>
       <section className="my-3 pl-3">
         <p>Click within the blue borders to place/rotate/remove reflector.</p>
@@ -91,12 +98,9 @@ export default function KeyboardControls({ onClose }: { onClose: () => void }) {
         </div>
         <Shortcut code={ControlCode.Wait} label="Wait" />
         <Shortcut code={ControlCode.Undo} label="Undo" />
-        <div className="ml-3">
-          Toggle Fullscreen: <Kbd>{isMac() ? "Ctrl+Command+F" : "F11"}</Kbd>
-        </div>
-        <div className="ml-3">
-          Open This Menu: <Kbd>?</Kbd>
-        </div>
+        <Shortcut code={ControlCode.ZoomIn} label="Zoom In" />
+        <Shortcut code={ControlCode.ZoomOut} label="Zoom Out" />
+        <Shortcut code={ControlCode.Help} label="Open This Menu" />
         <Shortcut code={ControlCode.Back} label="Close This Menu" />
       </section>
     </Modal>

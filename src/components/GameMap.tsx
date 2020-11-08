@@ -2,9 +2,17 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { app, getPosFromMouse, zoomOut, zoomTo } from "~/renderer";
-import { DOWN, LEFT, PLAYER_ID, RIGHT, UP } from "~constants";
+import {
+  DOWN,
+  LEFT,
+  PLAYER_ID,
+  RIGHT,
+  UP,
+  MAP_WIDTH,
+  MAP_HEIGHT,
+} from "~constants";
 import { SettingsContext } from "~contexts";
-import { useControl } from "~hooks";
+import { useControl, HotkeyGroup } from "~components/HotkeysProvider";
 import actions from "~state/actions";
 import selectors from "~state/selectors";
 import { Pos, RawState } from "~types";
@@ -59,24 +67,44 @@ export default function GameMap() {
   const moveEnabled =
     !isWeaponActive && (!settings.unmodifiedBuilding || !isPlacing);
   useControl({
-    controlCode: ControlCode.Up,
+    code: ControlCode.Up,
+    group: HotkeyGroup.Main,
     callback: moveUp,
-    enabled: moveEnabled,
+    disabled: !moveEnabled,
+    shift: false,
+    alt: false,
+    ctrl: false,
+    meta: false,
   });
   useControl({
-    controlCode: ControlCode.Down,
+    code: ControlCode.Down,
+    group: HotkeyGroup.Main,
     callback: moveDown,
-    enabled: moveEnabled,
+    disabled: !moveEnabled,
+    shift: false,
+    alt: false,
+    ctrl: false,
+    meta: false,
   });
   useControl({
-    controlCode: ControlCode.Left,
+    code: ControlCode.Left,
+    group: HotkeyGroup.Main,
     callback: moveLeft,
-    enabled: moveEnabled,
+    disabled: !moveEnabled,
+    shift: false,
+    alt: false,
+    ctrl: false,
+    meta: false,
   });
   useControl({
-    controlCode: ControlCode.Right,
+    code: ControlCode.Right,
+    group: HotkeyGroup.Main,
     callback: moveRight,
-    enabled: moveEnabled,
+    disabled: !moveEnabled,
+    shift: false,
+    alt: false,
+    ctrl: false,
+    meta: false,
   });
 
   const moveCursorUp = () => {
@@ -100,51 +128,85 @@ export default function GameMap() {
     }
   };
 
-  const cursorModifiers =
-    settings.unmodifiedBuilding && isPlacing
-      ? ["", settings.cursorModifierKey]
-      : [settings.cursorModifierKey];
   useControl({
-    controlCode: ControlCode.Up,
+    code: ControlCode.Up,
+    group: HotkeyGroup.Main,
     callback: moveCursorUp,
-    modifiers: cursorModifiers,
+    [settings.cursorModifierKey]: true,
   });
   useControl({
-    controlCode: ControlCode.Down,
+    code: ControlCode.Down,
+    group: HotkeyGroup.Main,
     callback: moveCursorDown,
-    modifiers: cursorModifiers,
+    [settings.cursorModifierKey]: true,
   });
   useControl({
-    controlCode: ControlCode.Left,
+    code: ControlCode.Left,
+    group: HotkeyGroup.Main,
     callback: moveCursorLeft,
-    modifiers: cursorModifiers,
+    [settings.cursorModifierKey]: true,
   });
   useControl({
-    controlCode: ControlCode.Right,
+    code: ControlCode.Right,
+    group: HotkeyGroup.Main,
     callback: moveCursorRight,
-    modifiers: cursorModifiers,
+    [settings.cursorModifierKey]: true,
+  });
+
+  useControl({
+    code: ControlCode.Up,
+    group: HotkeyGroup.Main,
+    callback: moveCursorUp,
+    disabled: !(isPlacing && settings.unmodifiedBuilding),
   });
   useControl({
-    controlCode: ControlCode.Back,
+    code: ControlCode.Down,
+    group: HotkeyGroup.Main,
+    callback: moveCursorDown,
+    disabled: !(isPlacing && settings.unmodifiedBuilding),
+  });
+  useControl({
+    code: ControlCode.Left,
+    group: HotkeyGroup.Main,
+    callback: moveCursorLeft,
+    disabled: !(isPlacing && settings.unmodifiedBuilding),
+  });
+  useControl({
+    code: ControlCode.Right,
+    group: HotkeyGroup.Main,
+    callback: moveCursorRight,
+    disabled: !(isPlacing && settings.unmodifiedBuilding),
+  });
+
+  useControl({
+    code: ControlCode.Back,
+    group: HotkeyGroup.Main,
     callback: () => {
       setContextMenuPos(null);
       dispatch(actions.setCursorPos(null));
     },
   });
   useControl({
-    controlCode: ControlCode.Wait,
-    callback: () => {
-      dispatch(actions.playerTookTurn());
-    },
-  });
-  useControl({
-    controlCode: ControlCode.Undo,
+    code: ControlCode.Undo,
+    group: HotkeyGroup.Main,
     callback: () => dispatch(actions.undoTurn()),
-    allowOnGameOver: true,
   });
   useControl({
-    controlCode: ControlCode.ClearAllReflectors,
+    code: ControlCode.ClearAllReflectors,
+    group: HotkeyGroup.Main,
     callback: () => dispatch(actions.clearReflectors()),
+  });
+
+  useControl({
+    code: ControlCode.ZoomIn,
+    group: HotkeyGroup.Main,
+    callback: () =>
+      zoomTo(playerPos || { x: MAP_WIDTH / 2, y: MAP_HEIGHT / 2 }),
+  });
+  useControl({
+    code: ControlCode.ZoomOut,
+    group: HotkeyGroup.Main,
+    callback: zoomOut,
   });
 
   const performDefaultAction = (pos: Pos | null) => {
@@ -157,7 +219,8 @@ export default function GameMap() {
     }
   };
   useControl({
-    controlCode: ControlCode.QuickAction,
+    code: ControlCode.QuickAction,
+    group: HotkeyGroup.Main,
     callback: () => performDefaultAction(cursorPos),
   });
 
