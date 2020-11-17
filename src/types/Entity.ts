@@ -51,7 +51,6 @@ export interface Destructible {
 }
 
 export interface Placing {
-  takesTurn: boolean;
   cost?: {
     resource: ResourceCode;
     amount: number;

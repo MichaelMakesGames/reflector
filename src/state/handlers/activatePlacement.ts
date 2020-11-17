@@ -22,16 +22,10 @@ function activatePlacement(
     state.act.cancelPlacement();
   }
 
-  const {
-    cost,
-    takesTurn,
-    template,
-    validitySelector,
-    invalidMessage,
-  } = action.payload;
+  const { cost, template, validitySelector, invalidMessage } = action.payload;
 
   const entityToPlace = createEntityFromTemplate(template, {
-    placing: { takesTurn, cost, validitySelector, invalidMessage },
+    placing: { cost, validitySelector, invalidMessage },
   });
 
   const canPlace = (gameState: RawState, pos: Pos) => {

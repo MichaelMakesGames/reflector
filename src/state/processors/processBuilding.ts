@@ -5,7 +5,6 @@ export default function processBuilding(state: WrappedState) {
   if (placingTarget) {
     state.act.activatePlacement({
       template: placingTarget.template,
-      takesTurn: placingTarget.placing.takesTurn,
       cost: placingTarget.placing.cost,
       validitySelector: placingTarget.placing.validitySelector,
       pos: placingTarget.pos,

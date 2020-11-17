@@ -20,7 +20,6 @@ function rotateEntity(
   if (isPlacingTarget && placingTarget) {
     state.act.activatePlacement({
       template: entity.rotatable.rotatesTo,
-      takesTurn: placingTarget.placing.takesTurn,
       cost: placingTarget.placing.cost,
       validitySelector: placingTarget.placing.validitySelector,
       pos: placingTarget.pos,

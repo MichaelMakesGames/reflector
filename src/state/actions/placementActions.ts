@@ -4,7 +4,6 @@ import { ResourceCode } from "~data/resources";
 
 export const activatePlacement = createStandardAction("ACTIVATE_PLACEMENT")<{
   template: TemplateName;
-  takesTurn: boolean;
   cost?: { resource: ResourceCode; amount: number };
   validitySelector?: string;
   invalidMessage?: string;

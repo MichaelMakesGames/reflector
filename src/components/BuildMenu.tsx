@@ -1,30 +1,30 @@
 /* global document */
 import Tippy from "@tippyjs/react";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { HotkeyGroup, useControl } from "~components/HotkeysProvider";
 import { SettingsContext } from "~contexts";
 import buildingCategories, { BuildingCategory } from "~data/buildingCategories";
 import buildings from "~data/buildings";
-import { useControl, HotkeyGroup } from "~components/HotkeysProvider";
+import { useBoolean } from "~hooks";
 import actions from "~state/actions";
 import selectors from "~state/selectors";
 import { ControlCode } from "~types/ControlCode";
-import ResourceAmount from "./ResourceAmount";
 import { createEntityFromTemplate } from "~utils/entities";
+import Kbd from "./Kbd";
+import ResourceAmount from "./ResourceAmount";
+
+const buttonStyle: React.CSSProperties = { margin: "-1px -1px -1px 0" };
+const buttonClassName =
+  "font-normal border border-gray hover:border-white hover:z-10 px-2 py-1 flex flex-row items-center";
 
 export default function BuildMenu() {
   const dispatch = useDispatch();
-  const settings = useContext(SettingsContext);
-  const cursorPos = useSelector(selectors.cursorPos);
-  const [category, setCategory] = useState<BuildingCategory | null>(null);
-  const categoryBuildings = category
-    ? buildings.filter((b) => b.category === category.code)
-    : [];
   const placingTarget = useSelector(selectors.placingTarget);
   const isWeaponActive = useSelector(selectors.isWeaponActive);
+  const settings = useContext(SettingsContext);
 
   const cancel = () => {
-    setCategory(null);
     dispatch(actions.cancelPlacement());
   };
   const rotate = () => {
@@ -69,17 +69,6 @@ export default function BuildMenu() {
     if (isWeaponActive) {
       // cancel laser when initiating build
       dispatch(actions.deactivateWeapon());
-    }
-    if (categoryBuildings.length) {
-      dispatch(
-        actions.activatePlacement({
-          ...categoryBuildings[n - 1],
-          pos: cursorPos || undefined,
-          takesTurn: true,
-        }),
-      );
-    } else {
-      setCategory(buildingCategories[n - 1]);
     }
   };
   useControl({
@@ -143,12 +132,6 @@ export default function BuildMenu() {
     disabled: Boolean(placingTarget),
   });
 
-  const showCategory: boolean = !category;
-  const showBuildings: boolean = Boolean(category && !placingTarget);
-
-  const buttonStyle: React.CSSProperties = { margin: "-1px -1px -1px 0" };
-  const buttonClassName =
-    "font-normal border border-gray hover:border-white hover:z-10 px-2 py-1 flex flex-row items-center";
   return (
     <section className="border-t border-b border-gray flex flex-row">
       {placingTarget ? (
@@ -160,7 +143,21 @@ export default function BuildMenu() {
           }
         </h2>
       ) : null}
-      {category ? (
+      {!placingTarget && <h2 className="text-xl px-2">Build</h2>}
+      {placingTarget && placingTarget.rotatable ? (
+        <button
+          type="button"
+          onClick={rotate}
+          style={buttonStyle}
+          className={buttonClassName}
+        >
+          <kbd className="bg-darkGray px-1 rounded mr-1">
+            {settings.keyboardShortcuts[ControlCode.RotateBuilding][0]}
+          </kbd>
+          Rotate
+        </button>
+      ) : null}
+      {placingTarget ? (
         <button
           type="button"
           onClick={cancel}
@@ -172,71 +169,162 @@ export default function BuildMenu() {
           </kbd>
           Cancel
         </button>
-      ) : (
-        <h2 className="text-xl px-2">Build</h2>
-      )}
-      {placingTarget && placingTarget.rotatable ? (
+      ) : null}
+      {!placingTarget &&
+        buildingCategories.map((c, i) => (
+          <BuildingCategoryMenu key={c.code} category={c} index={i} />
+        ))}
+    </section>
+  );
+}
+
+function BuildingCategoryMenu({
+  category,
+  index,
+}: {
+  category: BuildingCategory;
+  index: number;
+}) {
+  const settings = useContext(SettingsContext);
+  const dispatch = useDispatch();
+  const [isOpen, open, close] = useBoolean(false);
+  const cursorPos = useSelector(selectors.cursorPos);
+
+  const deactivateWeaponAndOpen = () => {
+    dispatch(actions.deactivateWeapon());
+    open();
+  };
+
+  const controlCode = [
+    ControlCode.Menu1,
+    ControlCode.Menu2,
+    ControlCode.Menu3,
+    ControlCode.Menu4,
+    ControlCode.Menu5,
+    ControlCode.Menu6,
+    ControlCode.Menu7,
+    ControlCode.Menu8,
+    ControlCode.Menu9,
+    ControlCode.Menu0,
+  ][index];
+
+  useControl({
+    code: controlCode,
+    callback: deactivateWeaponAndOpen,
+    group: HotkeyGroup.Main,
+  });
+
+  useControl({
+    code: ControlCode.Back,
+    callback: close,
+    group: HotkeyGroup.BuildingSelection,
+    disabled: !isOpen,
+  });
+
+  const buildingsInCategory = buildings.filter(
+    (b) => b.category === category.code,
+  );
+
+  return (
+    <Tippy
+      placement="top"
+      visible={isOpen}
+      onClickOutside={close}
+      arrow={false}
+      interactive
+      content={
+        isOpen ? (
+          <div>
+            {buildingsInCategory.map((building, i) => (
+              <BuildingButton
+                key={building.template}
+                building={building}
+                index={i}
+                onClick={() => {
+                  close();
+                  dispatch(
+                    actions.activatePlacement({
+                      ...building,
+                      pos: cursorPos || undefined,
+                    }),
+                  );
+                }}
+              />
+            ))}
+            <button style={{ marginTop: 1 }} type="button" onClick={close}>
+              <Kbd light>{settings.keyboardShortcuts[ControlCode.Back][0]}</Kbd>{" "}
+              Close
+            </button>
+          </div>
+        ) : null
+      }
+    >
+      <Tippy placement="top" content={category.description} disabled={isOpen}>
         <button
           type="button"
-          onClick={rotate}
+          onClick={deactivateWeaponAndOpen}
           style={buttonStyle}
           className={buttonClassName}
         >
-          <kbd className="bg-darkGray px-1 rounded mr-1">r</kbd>
-          Rotate
+          <Kbd className="text-xs mr-1 pt-0">
+            {settings.keyboardShortcuts[controlCode][0]}
+          </Kbd>
+          {category.label}
         </button>
-      ) : null}
-      {showBuildings &&
-        categoryBuildings.map((b, i) => (
-          <Tippy
-            key={b.template}
-            placement="top"
-            content={
-              (
-                createEntityFromTemplate(b.template).description || {
-                  description: "No description",
-                }
-              ).description
-            }
-          >
-            <button
-              type="button"
-              onClick={() =>
-                dispatch(
-                  actions.activatePlacement({
-                    ...b,
-                    pos: cursorPos || undefined,
-                    takesTurn: true,
-                  }),
-                )
-              }
-              style={buttonStyle}
-              className={buttonClassName}
-            >
-              <kbd className="bg-darkGray px-1 rounded mr-1">{i + 1}</kbd>
-              {b.label}
-              <ResourceAmount
-                className="ml-1"
-                resourceCode={b.cost.resource}
-                amount={b.cost.amount}
-              />
-            </button>
-          </Tippy>
-        ))}
-      {showCategory &&
-        buildingCategories.map((c, i) => (
-          <Tippy key={c.code} placement="top" content={c.description}>
-            <button
-              type="button"
-              onClick={() => setCategory(c)}
-              style={buttonStyle}
-              className={buttonClassName}
-            >
-              <kbd className="bg-darkGray px-1 rounded mr-1">{i + 1}</kbd>
-              {c.label}
-            </button>
-          </Tippy>
-        ))}
-    </section>
+      </Tippy>
+    </Tippy>
+  );
+}
+
+function BuildingButton({
+  building,
+  index,
+  onClick,
+}: {
+  building: typeof buildings[number];
+  index: number;
+  onClick: () => void;
+}) {
+  const settings = useContext(SettingsContext);
+  const controlCode = [
+    ControlCode.Menu1,
+    ControlCode.Menu2,
+    ControlCode.Menu3,
+    ControlCode.Menu4,
+    ControlCode.Menu5,
+    ControlCode.Menu6,
+    ControlCode.Menu7,
+    ControlCode.Menu8,
+    ControlCode.Menu9,
+    ControlCode.Menu0,
+  ][index];
+  useControl({
+    code: controlCode,
+    callback: onClick,
+    group: HotkeyGroup.BuildingSelection,
+  });
+
+  const buildingEntity = createEntityFromTemplate(building.template);
+  return (
+    <Tippy
+      placement="right"
+      offset={[0, 15]}
+      content={
+        buildingEntity.description ? buildingEntity.description.description : ""
+      }
+    >
+      <button
+        type="button"
+        className="flex flex-no-wrap items-baseline w-full text-left mb-1"
+        onClick={onClick}
+      >
+        <Kbd light>{settings.keyboardShortcuts[controlCode][0]}</Kbd>
+        <span className="flex-1 ml-1 mr-2 inline-block">{` ${building.label}`}</span>
+        <ResourceAmount
+          resourceCode={building.cost.resource}
+          amount={building.cost.amount}
+        />
+      </button>
+    </Tippy>
   );
 }

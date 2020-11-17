@@ -13,9 +13,9 @@ export default function ResourceAmount({
   className = "",
 }: Props) {
   return (
-    <span className={`flex flex-row ${className}`}>
-      <ResourceIcon resourceCode={resourceCode} />
+    <span className={`inline-block ${className}`}>
       {amount}
+      <ResourceIcon resourceCode={resourceCode} style={{ bottom: "6px" }} />
     </span>
   );
 }

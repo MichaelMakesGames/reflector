@@ -69,14 +69,11 @@ function finishPlacement(
     state.select.entitiesWithComps("validMarker").map((e) => e.id),
   );
 
-  if (placingTarget.placing.takesTurn) {
-    state.act.playerTookTurn();
-  }
+  state.act.playerTookTurn();
 
   if (action.payload.placeAnother) {
     state.act.activatePlacement({
       template: placingTarget.template,
-      takesTurn: placingTarget.placing.takesTurn,
       cost: placingTarget.placing.cost,
       validitySelector: placingTarget.placing.validitySelector,
       invalidMessage: placingTarget.placing.invalidMessage,

@@ -15,7 +15,7 @@ const buildingCategories: BuildingCategory[] = [
   {
     code: BuildingCategoryCode.Production,
     label: "Production",
-    description: "Buildings for that produce resources other than power.",
+    description: "Buildings that produce resources other than power.",
   },
   {
     code: BuildingCategoryCode.Power,
