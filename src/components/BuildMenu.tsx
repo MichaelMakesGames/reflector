@@ -187,8 +187,13 @@ function BuildingCategoryMenu({
 }) {
   const settings = useContext(SettingsContext);
   const dispatch = useDispatch();
-  const [isOpen, open, close] = useBoolean(false);
+  const [isOpen, open, close, toggle] = useBoolean(false);
   const cursorPos = useSelector(selectors.cursorPos);
+
+  const deactivateWeaponAndToggle = () => {
+    dispatch(actions.deactivateWeapon());
+    toggle();
+  };
 
   const deactivateWeaponAndOpen = () => {
     dispatch(actions.deactivateWeapon());
@@ -262,7 +267,7 @@ function BuildingCategoryMenu({
       <Tippy placement="top" content={category.description} disabled={isOpen}>
         <button
           type="button"
-          onClick={deactivateWeaponAndOpen}
+          onClick={deactivateWeaponAndToggle}
           style={buttonStyle}
           className={buttonClassName}
         >
