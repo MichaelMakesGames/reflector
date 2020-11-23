@@ -180,3 +180,13 @@ export function isDndFocused() {
 export function isMac() {
   return navigator.platform.toUpperCase().includes("MAC");
 }
+
+export function noFocusOnClick(
+  callback: (e: React.MouseEvent) => void,
+): (e: React.MouseEvent) => void {
+  return (e: React.MouseEvent) => {
+    const target = e.nativeEvent.target as HTMLElement | null;
+    if (target && target.blur) target.blur();
+    callback(e);
+  };
+}

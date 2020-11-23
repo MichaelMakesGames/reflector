@@ -6,6 +6,7 @@ import { SettingsContext } from "~contexts";
 import { useBoolean } from "~hooks";
 import actions from "~state/actions";
 import { ControlCode } from "~types/ControlCode";
+import { noFocusOnClick } from "~utils/controls";
 import { HotkeyGroup, useControl } from "./HotkeysProvider";
 import Kbd from "./Kbd";
 import KeyboardControls from "./KeyboardControls";
@@ -88,7 +89,7 @@ export default function Menu() {
         ) : null
       }
     >
-      <button onClick={toggle} type="button">
+      <button onClick={noFocusOnClick(toggle)} type="button">
         <Kbd light>{menuShortcuts[0]}</Kbd> Menu
         {controlsIsOpen && <KeyboardControls onClose={closeControls} />}
       </button>
@@ -136,10 +137,10 @@ function MenuOption({
     <li className="mb-1 last:mb-0">
       <button
         type="button"
-        onClick={() => {
+        onClick={noFocusOnClick(() => {
           closeMenu();
           callback();
-        }}
+        })}
       >
         <Kbd light>{shortcuts[0]}</Kbd> {label}
       </button>

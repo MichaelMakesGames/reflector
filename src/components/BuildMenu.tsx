@@ -10,6 +10,7 @@ import { useBoolean } from "~hooks";
 import actions from "~state/actions";
 import selectors from "~state/selectors";
 import { ControlCode } from "~types/ControlCode";
+import { noFocusOnClick } from "~utils/controls";
 import { createEntityFromTemplate } from "~utils/entities";
 import Kbd from "./Kbd";
 import ResourceAmount from "./ResourceAmount";
@@ -147,7 +148,7 @@ export default function BuildMenu() {
       {placingTarget && placingTarget.rotatable ? (
         <button
           type="button"
-          onClick={rotate}
+          onClick={noFocusOnClick(rotate)}
           style={buttonStyle}
           className={buttonClassName}
         >
@@ -160,7 +161,7 @@ export default function BuildMenu() {
       {placingTarget ? (
         <button
           type="button"
-          onClick={cancel}
+          onClick={noFocusOnClick(cancel)}
           style={buttonStyle}
           className={buttonClassName}
         >
@@ -245,7 +246,7 @@ function BuildingCategoryMenu({
                 key={building.template}
                 building={building}
                 index={i}
-                onClick={() => {
+                callback={() => {
                   close();
                   dispatch(
                     actions.activatePlacement({
@@ -256,7 +257,11 @@ function BuildingCategoryMenu({
                 }}
               />
             ))}
-            <button style={{ marginTop: 1 }} type="button" onClick={close}>
+            <button
+              style={{ marginTop: 1 }}
+              type="button"
+              onClick={noFocusOnClick(close)}
+            >
               <Kbd light>{settings.keyboardShortcuts[ControlCode.Back][0]}</Kbd>{" "}
               Close
             </button>
@@ -267,7 +272,7 @@ function BuildingCategoryMenu({
       <Tippy placement="top" content={category.description} disabled={isOpen}>
         <button
           type="button"
-          onClick={deactivateWeaponAndToggle}
+          onClick={noFocusOnClick(deactivateWeaponAndToggle)}
           style={buttonStyle}
           className={buttonClassName}
         >
@@ -284,11 +289,11 @@ function BuildingCategoryMenu({
 function BuildingButton({
   building,
   index,
-  onClick,
+  callback,
 }: {
   building: typeof buildings[number];
   index: number;
-  onClick: () => void;
+  callback: () => void;
 }) {
   const settings = useContext(SettingsContext);
   const controlCode = [
@@ -305,7 +310,7 @@ function BuildingButton({
   ][index];
   useControl({
     code: controlCode,
-    callback: onClick,
+    callback,
     group: HotkeyGroup.BuildingSelection,
   });
 
@@ -321,7 +326,7 @@ function BuildingButton({
       <button
         type="button"
         className="flex flex-no-wrap items-baseline w-full text-left mb-1"
-        onClick={onClick}
+        onClick={noFocusOnClick(callback)}
       >
         <Kbd light>{settings.keyboardShortcuts[controlCode][0]}</Kbd>
         <span className="flex-1 ml-1 mr-2 inline-block">{` ${building.label}`}</span>

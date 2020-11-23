@@ -3,6 +3,7 @@ import { ControlCode } from "~types/ControlCode";
 import { HotkeyGroup, useControl } from "./HotkeysProvider";
 import { SettingsContext } from "~contexts";
 import Kbd from "./Kbd";
+import { noFocusOnClick } from "~utils/controls";
 
 interface Props {
   label: string;
@@ -39,7 +40,7 @@ export default function HotkeyButton({
       className={`btn ${className || ""}`}
       type="button"
       style={style || {}}
-      onClick={callback}
+      onClick={noFocusOnClick(callback)}
       disabled={disabled}
     >
       <Kbd>{settings.keyboardShortcuts[controlCode][0]}</Kbd> {label}

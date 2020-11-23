@@ -1,4 +1,3 @@
-/* global document */
 import Tippy from "@tippyjs/react";
 import React, { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,6 +9,7 @@ import actions from "~state/actions";
 import selectors from "~state/selectors";
 import { Direction } from "~types";
 import { ControlCode } from "~types/ControlCode";
+import { noFocusOnClick } from "~utils/controls";
 import { getConstDir } from "~utils/geometry";
 import HotkeyButton from "./HotkeyButton";
 
@@ -24,9 +24,6 @@ export default function Laser() {
 
   const fire = () => {
     dispatch(actions.fireWeapon());
-    if (document.activeElement && (document.activeElement as any).blur) {
-      (document.activeElement as any).blur();
-    }
   };
   const cancel = () => dispatch(actions.deactivateWeapon());
   useControl({
@@ -138,7 +135,9 @@ export default function Laser() {
                 isAimingInDirection(LEFT) ? "text-red" : ""
               }`}
               type="button"
-              onClick={makeAimHandler(LEFT, settings.aimInSameDirectionToFire)}
+              onClick={noFocusOnClick(
+                makeAimHandler(LEFT, settings.aimInSameDirectionToFire),
+              )}
             >
               ◀
             </button>
@@ -151,7 +150,9 @@ export default function Laser() {
                 isAimingInDirection(UP) ? "text-red" : ""
               }`}
               type="button"
-              onClick={makeAimHandler(UP, settings.aimInSameDirectionToFire)}
+              onClick={noFocusOnClick(
+                makeAimHandler(UP, settings.aimInSameDirectionToFire),
+              )}
             >
               ▲
             </button>
@@ -162,7 +163,9 @@ export default function Laser() {
                 isAimingInDirection(DOWN) ? "text-red" : ""
               }`}
               type="button"
-              onClick={makeAimHandler(DOWN, settings.aimInSameDirectionToFire)}
+              onClick={noFocusOnClick(
+                makeAimHandler(DOWN, settings.aimInSameDirectionToFire),
+              )}
             >
               ▼
             </button>
@@ -175,7 +178,9 @@ export default function Laser() {
                 isAimingInDirection(RIGHT) ? "text-red" : ""
               }`}
               type="button"
-              onClick={makeAimHandler(RIGHT, settings.aimInSameDirectionToFire)}
+              onClick={noFocusOnClick(
+                makeAimHandler(RIGHT, settings.aimInSameDirectionToFire),
+              )}
             >
               ▶
             </button>

@@ -3,7 +3,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import selectors from "~state/selectors";
 import { Pos } from "~types";
-import { getActionsAvailableAtPos } from "~utils/controls";
+import { getActionsAvailableAtPos, noFocusOnClick } from "~utils/controls";
 
 interface Props {
   pos: Pos;
@@ -51,11 +51,11 @@ export default function ContextMenu({ pos, onClose }: Props) {
             <button
               className="border-b border-gray py-1 px-2 w-full text-left"
               type="button"
-              onClick={() => {
+              onClick={noFocusOnClick(() => {
                 const actions = Array.isArray(a.action) ? a.action : [a.action];
                 actions.forEach((action) => dispatch(action));
                 onClose();
-              }}
+              })}
             >
               {a.label}
             </button>

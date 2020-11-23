@@ -17,7 +17,7 @@ import actions from "~state/actions";
 import selectors from "~state/selectors";
 import { Pos, RawState } from "~types";
 import { ControlCode } from "~types/ControlCode";
-import { isDndFocused } from "~utils/controls";
+import { isDndFocused, noFocusOnClick } from "~utils/controls";
 import { arePositionsEqual } from "~utils/geometry";
 import ContextMenu from "./ContextMenu";
 
@@ -285,7 +285,7 @@ export default function GameMap() {
             setContextMenuPos(null);
           }
         }}
-        onClick={(e) => {
+        onClick={noFocusOnClick((e) => {
           const mousePos = {
             x: e.nativeEvent.offsetX,
             y: e.nativeEvent.offsetY,
@@ -296,7 +296,7 @@ export default function GameMap() {
             dispatch(actions.setCursorPos(gamePos));
           }
           performDefaultAction(gamePos);
-        }}
+        })}
       />
       {contextMenuPos ? (
         <ContextMenu
