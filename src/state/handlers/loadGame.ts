@@ -28,10 +28,6 @@ function loadGame(
   state.select
     .entitiesWithComps("pos", "display")
     .forEach((entity) => addRenderEntity(entity));
-  const player = state.select.player();
-  if (player) {
-    zoomTo(player.pos);
-  }
   processEmitters(state);
   processAnimationToggle(state);
   processBorders(state);
