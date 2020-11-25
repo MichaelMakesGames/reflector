@@ -15,7 +15,6 @@ export function createInitialState() {
     messageLog: [],
     gameOver: false,
     victory: false,
-    turnsUntilNextImmigrant: BASE_IMMIGRATION_RATE,
     morale: STARTING_MORALE,
     time: {
       turn: 1,

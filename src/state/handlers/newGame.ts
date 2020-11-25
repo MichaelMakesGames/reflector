@@ -3,6 +3,8 @@ import makeLevel from "~/utils/makeLevel";
 import { clearRenderer } from "~renderer";
 import { registerHandler } from "~state/handleAction";
 import { createInitialState } from "~state/initialState";
+import processColonists from "~state/processors/processColonists";
+import processImmigration from "~state/processors/processImmigration";
 import WrappedState from "~types/WrappedState";
 
 function newGame(
@@ -21,6 +23,8 @@ function newGame(
       startOfLastTurn: null,
     },
   });
+  processImmigration(state);
+  processColonists(state);
 }
 
 registerHandler(newGame, actions.newGame);

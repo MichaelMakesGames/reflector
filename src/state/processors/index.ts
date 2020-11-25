@@ -22,8 +22,8 @@ import processWave from "./processWave";
 const processors: ((state: WrappedState) => void)[] = [
   processAI,
   processProduction,
-  processColonists,
   processImmigration,
+  processColonists,
   processHunger,
   processWave,
   processPowered,

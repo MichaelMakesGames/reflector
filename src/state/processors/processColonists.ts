@@ -51,7 +51,7 @@ export default function processColonists(state: WrappedState): void {
     });
   }
 
-  if (state.select.isNight()) {
+  if (state.select.isNight() && state.select.turnOfDay() !== 0) {
     doResidenceSanityCheck(state);
     checkForEmptyHomesAndHomelessColonists(state);
     for (const colonist of state.select.colonists()) {

@@ -23,10 +23,6 @@ export function victory(state: RawState) {
   return state.victory;
 }
 
-export function turnsUntilNextImmigrant(state: RawState) {
-  return state.turnsUntilNextImmigrant;
-}
-
 export function morale(state: RawState) {
   return state.morale;
 }

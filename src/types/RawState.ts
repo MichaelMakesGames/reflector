@@ -11,7 +11,6 @@ export interface RawState {
   messageLog: Record<number, { type?: string; message: string }[]>;
   gameOver: boolean;
   victory: boolean;
-  turnsUntilNextImmigrant: number;
   morale: number;
   time: TimeState;
   laserState: "READY" | "ACTIVE" | "FIRING" | "RECHARGING";

@@ -1,7 +1,7 @@
 import { Pos } from "~/types";
 import {
   BASE_IMMIGRATION_RATE,
-  COLONISTS_PER_IMMIGRATION_WAVE,
+  NEW_COLONISTS_PER_DAY,
   MAP_HEIGHT,
   MAP_WIDTH,
 } from "~constants";
@@ -12,18 +12,13 @@ import { rangeTo } from "~utils/math";
 import { choose } from "~utils/rng";
 
 export default function processImmigration(state: WrappedState): void {
-  state.setRaw({
-    ...state.raw,
-    turnsUntilNextImmigrant: state.raw.turnsUntilNextImmigrant - 1,
-  });
-
-  if (state.raw.turnsUntilNextImmigrant <= 0) {
+  if (state.select.turnOfDay() === 0) {
     const player = state.select.player();
     if (!player) {
       console.warn("No player");
     } else {
       const sourcePositions = [player.pos];
-      for (const _ of rangeTo(COLONISTS_PER_IMMIGRATION_WAVE)) {
+      for (const _ of rangeTo(NEW_COLONISTS_PER_DAY)) {
         const pos = findNewColonistPosition(state, sourcePositions);
         if (!pos) {
           console.warn("no position for new immigrant found");
@@ -32,15 +27,10 @@ export default function processImmigration(state: WrappedState): void {
         }
       }
       state.act.logMessage({
-        message: `${COLONISTS_PER_IMMIGRATION_WAVE} new colonists have arrived!`,
+        message: `${NEW_COLONISTS_PER_DAY} new colonists have arrived!`,
         type: "success",
       });
     }
-
-    state.setRaw({
-      ...state.raw,
-      turnsUntilNextImmigrant: BASE_IMMIGRATION_RATE,
-    });
   }
 }
 

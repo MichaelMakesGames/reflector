@@ -1,6 +1,11 @@
 import { Required } from "Object/_api";
 import { Noise } from "rot-js";
-import { MAP_HEIGHT, MAP_WIDTH, PLAYER_ID } from "~/constants";
+import {
+  MAP_HEIGHT,
+  MAP_WIDTH,
+  NEW_COLONISTS_PER_DAY,
+  PLAYER_ID,
+} from "~/constants";
 import { Entity } from "~/types/Entity";
 import { createEntityFromTemplate } from "./entities";
 import { arePositionsEqual, getDistance } from "./geometry";
@@ -154,7 +159,7 @@ export default function generateMap(): Entity[] {
     }
   });
 
-  rangeTo(3).forEach((i) => {
+  rangeTo(NEW_COLONISTS_PER_DAY).forEach((i) => {
     results.push(
       createEntityFromTemplate("COLONIST", {
         pos: floorPositions[i],
