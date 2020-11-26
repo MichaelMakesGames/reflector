@@ -191,8 +191,9 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   MINING_SPOT: {
     building: {},
     display: {
-      tile: "outline_solid",
-      color: colors.activeBuilding,
+      tile: "mining_spot",
+      hasBackground: true,
+      color: colors.inactiveBuilding,
       priority: PRIORITY_BUILDING_LOW,
     },
     jobProvider: {
