@@ -1,17 +1,12 @@
-import {
-  addRenderEntity,
-  zoomTo,
-  setBackgroundColor,
-  clearRenderer,
-} from "~renderer";
-import { registerHandler } from "~state/handleAction";
-import WrappedState from "~types/WrappedState";
-import actions from "../actions";
-import processEmitters from "~state/processors/processEmitters";
 import colors from "~colors";
+import { addRenderEntity, clearRenderer, setBackgroundColor } from "~renderer";
+import { registerHandler } from "~state/handleAction";
 import processAnimationToggle from "~state/processors/processAnimationToggle";
 import processBorders from "~state/processors/processBorders";
+import processEmitters from "~state/processors/processEmitters";
+import WrappedState from "~types/WrappedState";
 import { resetEntitiesByCompAndPos } from "~utils/entities";
+import actions from "../actions";
 
 function loadGame(
   state: WrappedState,

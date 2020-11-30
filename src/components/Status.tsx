@@ -1,7 +1,7 @@
 import Tippy from "@tippyjs/react";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { COLONISTS_PER_IMMIGRATION_WAVE, MINUTES_PER_TURN } from "~constants";
+import { NEW_COLONISTS_PER_DAY, MINUTES_PER_TURN } from "~constants";
 import actions from "~state/actions";
 import selectors from "~state/selectors";
 import { ControlCode } from "~types/ControlCode";
@@ -40,8 +40,8 @@ export default function Status() {
                   At night, colonists go home and enemies attack.
                 </p>
                 <p className="mb-2">
-                  Each morning, {COLONISTS_PER_IMMIGRATION_WAVE} new colonists
-                  will arrive.
+                  Each morning, {NEW_COLONISTS_PER_DAY} new colonists will
+                  arrive.
                 </p>
                 <p>Survive 10 days to win!</p>
               </>
