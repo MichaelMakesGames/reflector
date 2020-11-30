@@ -225,85 +225,87 @@ export default function GameMap() {
   });
 
   return (
-    <section
-      className={`relative ${isCursorInProjectorRange ? "cursor-pointer" : ""}`}
-    >
-      {/* eslint-disable-next-line jsx-a11y/mouse-events-have-key-events, jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events */}
-      <div
-        className="w-full h-full"
-        id="map"
-        onMouseMove={(e) => {
-          const mousePos = {
-            x: e.nativeEvent.offsetX,
-            y: e.nativeEvent.offsetY,
-          };
-          mousePosRef.current = mousePos;
-          const pos = getPosFromMouse(mousePos.x, mousePos.y);
-          if (
-            !cursorPos ||
-            (!arePositionsEqual(cursorPos, pos) && !contextMenuPos)
-          ) {
-            dispatch(actions.setCursorPos(pos));
-          }
-        }}
-        onMouseOut={() => {
-          mousePosRef.current = null;
-          if (!contextMenuPos) {
-            dispatch(actions.setCursorPos(null));
-          }
-        }}
-        onWheel={(e) => {
-          if (e.nativeEvent.deltaY > 0) {
-            zoomOut();
-          } else if (e.nativeEvent.deltaY < 0 && playerPos) {
-            zoomTo(playerPos);
-          }
-          if (mousePosRef.current) {
-            const gamePos = getPosFromMouse(
-              mousePosRef.current.x,
-              mousePosRef.current.y,
-            );
+    <ContextMenu pos={contextMenuPos} onClose={() => setContextMenuPos(null)}>
+      <section
+        className={`relative ${
+          isCursorInProjectorRange ? "cursor-pointer" : ""
+        }`}
+      >
+        {/* eslint-disable-next-line jsx-a11y/mouse-events-have-key-events, jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events */}
+        <div
+          className="w-full h-full"
+          id="map"
+          onMouseMove={(e) => {
+            const mousePos = {
+              x: e.nativeEvent.offsetX,
+              y: e.nativeEvent.offsetY,
+            };
+            mousePosRef.current = mousePos;
+            const pos = getPosFromMouse(mousePos.x, mousePos.y);
+            if (
+              !cursorPos ||
+              (!arePositionsEqual(cursorPos, pos) && !contextMenuPos)
+            ) {
+              dispatch(actions.setCursorPos(pos));
+            }
+          }}
+          onMouseOut={() => {
+            mousePosRef.current = null;
+            if (!contextMenuPos) {
+              dispatch(actions.setCursorPos(null));
+            }
+          }}
+          onWheel={(e) => {
+            if (e.nativeEvent.deltaY > 0) {
+              zoomOut();
+            } else if (e.nativeEvent.deltaY < 0 && playerPos) {
+              zoomTo(playerPos);
+            }
+            if (mousePosRef.current) {
+              const gamePos = getPosFromMouse(
+                mousePosRef.current.x,
+                mousePosRef.current.y,
+              );
+              if (!cursorPos || !arePositionsEqual(cursorPos, gamePos)) {
+                dispatch(actions.setCursorPos(gamePos));
+              }
+            }
+          }}
+          onContextMenu={(e) => {
+            e.preventDefault();
+            const mousePos = {
+              x: e.nativeEvent.offsetX,
+              y: e.nativeEvent.offsetY,
+            };
+            mousePosRef.current = mousePos;
+            const gamePos = getPosFromMouse(mousePos.x, mousePos.y);
             if (!cursorPos || !arePositionsEqual(cursorPos, gamePos)) {
               dispatch(actions.setCursorPos(gamePos));
             }
-          }
-        }}
-        onContextMenu={(e) => {
-          e.preventDefault();
-          const mousePos = {
-            x: e.nativeEvent.offsetX,
-            y: e.nativeEvent.offsetY,
-          };
-          mousePosRef.current = mousePos;
-          const gamePos = getPosFromMouse(mousePos.x, mousePos.y);
-          if (!cursorPos || !arePositionsEqual(cursorPos, gamePos)) {
-            dispatch(actions.setCursorPos(gamePos));
-          }
-          if (!contextMenuPos) {
-            setContextMenuPos(mousePos);
-          } else {
-            setContextMenuPos(null);
-          }
-        }}
-        onClick={noFocusOnClick((e) => {
-          const mousePos = {
-            x: e.nativeEvent.offsetX,
-            y: e.nativeEvent.offsetY,
-          };
-          mousePosRef.current = mousePos;
-          const gamePos = getPosFromMouse(mousePos.x, mousePos.y);
-          if (!cursorPos || !arePositionsEqual(cursorPos, gamePos)) {
-            dispatch(actions.setCursorPos(gamePos));
-          }
-          performDefaultAction(gamePos);
-        })}
-      />
-      {contextMenuPos ? (
-        <ContextMenu
-          pos={contextMenuPos}
-          onClose={() => setContextMenuPos(null)}
+            if (!contextMenuPos) {
+              setContextMenuPos(gamePos);
+            } else {
+              setContextMenuPos(null);
+            }
+          }}
+          onClick={noFocusOnClick((e) => {
+            if (contextMenuPos) {
+              setContextMenuPos(null);
+              return;
+            }
+            const mousePos = {
+              x: e.nativeEvent.offsetX,
+              y: e.nativeEvent.offsetY,
+            };
+            mousePosRef.current = mousePos;
+            const gamePos = getPosFromMouse(mousePos.x, mousePos.y);
+            if (!cursorPos || !arePositionsEqual(cursorPos, gamePos)) {
+              dispatch(actions.setCursorPos(gamePos));
+            }
+            performDefaultAction(gamePos);
+          })}
         />
-      ) : null}
-    </section>
+      </section>
+    </ContextMenu>
   );
 }

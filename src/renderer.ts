@@ -247,6 +247,37 @@ export function getPosFromMouse(mouseX: number, mouseY: number): Pos {
   }
 }
 
+export function getClientRectFromPos(gamePos: Pos): ClientRect {
+  const canvas = document.getElementById("map") as HTMLCanvasElement;
+  const scaleX = (MAP_WIDTH * TILE_SIZE) / canvas.clientWidth;
+  const scaleY = (MAP_HEIGHT * TILE_SIZE) / canvas.clientHeight;
+  if (!zoomedIn) {
+    const width = TILE_SIZE / scaleX;
+    const height = TILE_SIZE / scaleY;
+    const left =
+      canvas.getBoundingClientRect().left + (gamePos.x * TILE_SIZE) / scaleX;
+    const right = left + width;
+    const top =
+      canvas.getBoundingClientRect().top + (gamePos.y * TILE_SIZE) / scaleY;
+    const bottom = top + height;
+    return { width, height, left, right, top, bottom };
+  } else {
+    const stageX = app.stage.position.x / TILE_SIZE / -2;
+    const stageY = app.stage.position.y / TILE_SIZE / -2;
+    const width = (TILE_SIZE * 2) / scaleX;
+    const height = (TILE_SIZE * 2) / scaleY;
+    const left =
+      canvas.getBoundingClientRect().left +
+      ((gamePos.x - stageX) * TILE_SIZE * 2) / scaleX;
+    const right = left + width;
+    const top =
+      canvas.getBoundingClientRect().top +
+      ((gamePos.y - stageY) * TILE_SIZE * 2) / scaleY;
+    const bottom = top + height;
+    return { width, height, left, right, top, bottom };
+  }
+}
+
 function isPosVisible(pos: Pos) {
   if (zoomedIn) {
     const xMin = app.stage.position.x / (TILE_SIZE * -2);

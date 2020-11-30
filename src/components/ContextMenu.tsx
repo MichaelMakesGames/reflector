@@ -1,67 +1,64 @@
-import useOutsideClickRef from "@rooks/use-outside-click-ref";
-import React from "react";
+import Tippy from "@tippyjs/react";
+import React, { ReactElement, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { getClientRectFromPos } from "~renderer";
 import selectors from "~state/selectors";
 import { Pos } from "~types";
 import { getActionsAvailableAtPos, noFocusOnClick } from "~utils/controls";
 
 interface Props {
-  pos: Pos;
+  pos: Pos | null;
   onClose: () => void;
+  children: ReactElement;
 }
 
-export default function ContextMenu({ pos, onClose }: Props) {
+export default function ContextMenu({ pos, onClose, children }: Props) {
   const dispatch = useDispatch();
-  const cursorPos = useSelector(selectors.cursorPos);
   const state = useSelector(selectors.state);
-  const [ref] = useOutsideClickRef<HTMLDivElement>(onClose);
-  const actionControls = cursorPos
-    ? getActionsAvailableAtPos(state, cursorPos)
+
+  const posRef = useRef<Pos | null>(pos);
+  if (pos) {
+    posRef.current = pos;
+  }
+  const actionControls = posRef.current
+    ? getActionsAvailableAtPos(state, posRef.current)
     : [];
   return (
-    <div
-      ref={ref}
-      className="absolute bg-black border border-b-0 border-gray"
-      style={{
-        left: `calc(${pos.x}px + 1rem)`,
-        top: `calc(${pos.y}px - 1rem)`,
-      }}
+    <Tippy
+      interactive
+      visible={Boolean(pos)}
+      onClickOutside={onClose}
+      placement="right-start"
+      getReferenceClientRect={() =>
+        getClientRectFromPos(posRef.current || { x: 0, y: 0 })
+      }
+      offset={[0, 0]}
+      content={
+        <div>
+          <ul className="flex flex-col">
+            {actionControls.length === 0 && <li>No actions available</li>}
+            {actionControls.map((a) => (
+              <li key={a.label}>
+                <button
+                  className="w-full text-left"
+                  type="button"
+                  onClick={noFocusOnClick(() => {
+                    const actions = Array.isArray(a.action)
+                      ? a.action
+                      : [a.action];
+                    actions.forEach((action) => dispatch(action));
+                    onClose();
+                  })}
+                >
+                  {a.label}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      }
     >
-      <div
-        className="absolute"
-        style={{
-          width: 0,
-          height: 0,
-          borderTop: "1rem solid transparent",
-          borderBottom: "1rem solid transparent",
-          borderRight: "1rem solid",
-          borderRightColor: "inherit",
-          top: 0,
-          left: "-1rem",
-        }}
-      />
-      <ul className="flex flex-col">
-        {actionControls.length === 0 && (
-          <li className="border-b border-gray py-1 px-2">
-            No actions available
-          </li>
-        )}
-        {actionControls.map((a) => (
-          <li key={a.label}>
-            <button
-              className="border-b border-gray py-1 px-2 w-full text-left"
-              type="button"
-              onClick={noFocusOnClick(() => {
-                const actions = Array.isArray(a.action) ? a.action : [a.action];
-                actions.forEach((action) => dispatch(action));
-                onClose();
-              })}
-            >
-              {a.label}
-            </button>
-          </li>
-        ))}
-      </ul>
-    </div>
+      {children}
+    </Tippy>
   );
 }
