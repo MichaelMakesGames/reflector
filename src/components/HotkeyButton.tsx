@@ -12,6 +12,7 @@ interface Props {
   controlCode: ControlCode;
   hotkeyGroup: HotkeyGroup;
   disabled?: boolean;
+  disabledIsCosmeticOnly?: boolean;
   style?: React.CSSProperties;
 }
 export default function HotkeyButton({
@@ -21,12 +22,13 @@ export default function HotkeyButton({
   controlCode,
   hotkeyGroup,
   disabled,
+  disabledIsCosmeticOnly,
   style,
 }: Props) {
   useControl({
     code: controlCode,
     group: hotkeyGroup,
-    disabled,
+    disabled: disabled && !disabledIsCosmeticOnly,
     callback,
 
     // set ctrl, alt, and meta to false, but leave shift undefined so hotkeys like "?" can still work
@@ -37,11 +39,11 @@ export default function HotkeyButton({
   const settings = useContext(SettingsContext);
   return (
     <button
-      className={`btn ${className || ""}`}
+      className={`btn ${disabled ? "disabled" : ""} ${className || ""}`}
       type="button"
       style={style || {}}
       onClick={noFocusOnClick(callback)}
-      disabled={disabled}
+      disabled={disabled && !disabledIsCosmeticOnly}
     >
       <Kbd>{settings.keyboardShortcuts[controlCode][0]}</Kbd> {label}
     </button>

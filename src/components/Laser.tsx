@@ -130,10 +130,11 @@ export default function Laser() {
           <div className="flex flex-col flex-1">
             <div className="flex-1" />
             <button
-              disabled={!["READY", "ACTIVE"].includes(laserState)}
-              className={`flex-1 font-serif disabled:text-lightGray disabled:cursor-not-allowed ${
-                isAimingInDirection(LEFT) ? "text-red" : ""
-              }`}
+              className={`flex-1 font-serif ${
+                !["READY", "ACTIVE"].includes(laserState)
+                  ? "text-lightGray cursor-not-allowed"
+                  : ""
+              } ${isAimingInDirection(LEFT) ? "text-red" : ""}`}
               type="button"
               onClick={noFocusOnClick(
                 makeAimHandler(LEFT, settings.aimInSameDirectionToFire),
@@ -145,10 +146,11 @@ export default function Laser() {
           </div>
           <div className="flex flex-col flex-1">
             <button
-              disabled={!["READY", "ACTIVE"].includes(laserState)}
-              className={`flex-1 font-serif disabled:text-lightGray disabled:cursor-not-allowed ${
-                isAimingInDirection(UP) ? "text-red" : ""
-              }`}
+              className={`flex-1 font-serif ${
+                !["READY", "ACTIVE"].includes(laserState)
+                  ? "text-lightGray cursor-not-allowed"
+                  : ""
+              } ${isAimingInDirection(UP) ? "text-red" : ""}`}
               type="button"
               onClick={noFocusOnClick(
                 makeAimHandler(UP, settings.aimInSameDirectionToFire),
@@ -158,10 +160,11 @@ export default function Laser() {
             </button>
             <div className="flex-1" />
             <button
-              disabled={!["READY", "ACTIVE"].includes(laserState)}
-              className={`flex-1 font-serif disabled:text-lightGray disabled:cursor-not-allowed ${
-                isAimingInDirection(DOWN) ? "text-red" : ""
-              }`}
+              className={`flex-1 font-serif ${
+                !["READY", "ACTIVE"].includes(laserState)
+                  ? "text-lightGray cursor-not-allowed"
+                  : ""
+              } ${isAimingInDirection(DOWN) ? "text-red" : ""}`}
               type="button"
               onClick={noFocusOnClick(
                 makeAimHandler(DOWN, settings.aimInSameDirectionToFire),
@@ -173,10 +176,11 @@ export default function Laser() {
           <div className="flex flex-col flex-1">
             <div className="flex-1" />
             <button
-              disabled={!["READY", "ACTIVE"].includes(laserState)}
-              className={`flex-1 font-serif disabled:text-lightGray disabled:cursor-not-allowed ${
-                isAimingInDirection(RIGHT) ? "text-red" : ""
-              }`}
+              className={`flex-1 font-serif ${
+                !["READY", "ACTIVE"].includes(laserState)
+                  ? "text-lightGray cursor-not-allowed"
+                  : ""
+              } ${isAimingInDirection(RIGHT) ? "text-red" : ""}`}
               type="button"
               onClick={noFocusOnClick(
                 makeAimHandler(RIGHT, settings.aimInSameDirectionToFire),
@@ -194,13 +198,14 @@ export default function Laser() {
             className="text-sm mb-1 block text-left"
             style={{ width: "5.625rem" }}
             disabled={!["READY", "ACTIVE"].includes(laserState)}
+            disabledIsCosmeticOnly
             controlCode={ControlCode.Fire}
             hotkeyGroup={HotkeyGroup.Main}
             callback={() => {
-              if (laserState === "READY") {
-                dispatch(actions.targetWeapon(aimingDirection));
-              } else {
+              if (laserState === "ACTIVE") {
                 fire();
+              } else {
+                dispatch(actions.targetWeapon(aimingDirection));
               }
             }}
           />

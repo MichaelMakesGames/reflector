@@ -12,7 +12,10 @@ function targetWeapon(
   state: WrappedState,
   action: ReturnType<typeof actions.targetWeapon>,
 ): void {
+  console.warn("target weapon");
+  console.warn(state.select.laserState());
   if (state.select.laserState() === "RECHARGING") {
+    console.warn("recharging");
     state.act.logMessage({
       message:
         "Your laser needs to recharge. It will be ready again next turn.",
