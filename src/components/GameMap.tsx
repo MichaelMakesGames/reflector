@@ -17,7 +17,7 @@ import actions from "~state/actions";
 import selectors from "~state/selectors";
 import { Pos, RawState } from "~types";
 import { ControlCode } from "~types/ControlCode";
-import { isDndFocused, noFocusOnClick } from "~utils/controls";
+import { getQuickAction, isDndFocused, noFocusOnClick } from "~utils/controls";
 import { arePositionsEqual } from "~utils/geometry";
 import ContextMenu from "./ContextMenu";
 
@@ -37,8 +37,9 @@ export default function GameMap() {
   const isWeaponActive = useSelector(selectors.isWeaponActive);
   const isPlacing = useSelector(selectors.isPlacing);
   const playerPos = useSelector(selectors.playerPos);
-  const isCursorInProjectorRange = useSelector((state: RawState) =>
-    selectors.isInProjectorRange(state, cursorPos),
+  const state = useSelector(selectors.state);
+  const isCursorInProjectorRange = useSelector((s: RawState) =>
+    selectors.isInProjectorRange(s, cursorPos),
   );
   const mousePosRef = useRef<Pos | null>(null);
 
@@ -210,12 +211,9 @@ export default function GameMap() {
   });
 
   const performDefaultAction = (pos: Pos | null) => {
-    if (pos) {
-      if (isPlacing) {
-        dispatch(actions.finishPlacement({ placeAnother: true }));
-      } else {
-        dispatch(actions.cycleReflector(pos));
-      }
+    const quickAction = getQuickAction(state, pos);
+    if (quickAction) {
+      dispatch(quickAction.action);
     }
   };
   useControl({

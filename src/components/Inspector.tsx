@@ -6,9 +6,12 @@ import colonistStatuses, { ColonistStatusCode } from "~data/colonistStatuses";
 import resources from "~data/resources";
 import { useControl, HotkeyGroup } from "~components/HotkeysProvider";
 import selectors from "~state/selectors";
-import { canPlaceReflector } from "~state/selectors/placementSelectors";
 import { Entity, RawState } from "~types";
-import { ActionControl, getActionsAvailableAtPos } from "~utils/controls";
+import {
+  ActionControl,
+  getActionsAvailableAtPos,
+  getQuickAction,
+} from "~utils/controls";
 
 export default function Inspector() {
   const entitiesAtCursor = useSelector(selectors.entitiesAtCursor);
@@ -25,12 +28,7 @@ export default function Inspector() {
   const cursorPos = useSelector(selectors.cursorPos);
   const state = useSelector(selectors.state);
   const actions = cursorPos ? getActionsAvailableAtPos(state, cursorPos) : [];
-  const isCursorInProjectorRange = useSelector((s: RawState) =>
-    selectors.isInProjectorRange(s, cursorPos),
-  );
-  const canPlaceReflectorAtCursor = useSelector(
-    cursorPos ? (s: RawState) => canPlaceReflector(s, cursorPos) : () => false,
-  );
+  const quickAction = getQuickAction(state, cursorPos);
 
   return (
     <section className="p-2">
@@ -50,14 +48,17 @@ export default function Inspector() {
           )}
         </ul>
       )}
+      {quickAction && (
+        <>
+          <h2 className="text-xl mt-2">Quick Action: {quickAction.label}</h2>
+          <div className="text-lightGray text-sm mb-2">
+            (Click or press space)
+          </div>
+        </>
+      )}
       {cursorPos && (
         <>
-          <h2 className="text-xl mt-2">Available Actions</h2>
-          {isCursorInProjectorRange && canPlaceReflectorAtCursor && (
-            <div className="text-lightGray text-sm mb-2">
-              Click or press space to cycle reflector
-            </div>
-          )}
+          <h2 className="text-xl mt-2">Other Actions</h2>
           {actions.length > 0 && (
             <div className="text-lightGray text-sm mb-2">
               Right click map or use shortcuts

@@ -1,14 +1,129 @@
 /* global document, navigator */
-import { DOWN, LEFT, PLAYER_ID, UP } from "~constants";
-import { ControlCode } from "~types/ControlCode";
+import { DOWN, LEFT, PLAYER_ID, RIGHT, UP } from "~constants";
 import actions from "~state/actions";
 import selectors from "~state/selectors";
 import wrapState from "~state/wrapState";
 import { Action, Pos, RawState } from "~types";
+import { ControlCode } from "~types/ControlCode";
 import { findValidPositions } from "./building";
 import { areConditionsMet } from "./conditions";
 import { createEntityFromTemplate } from "./entities";
-import { areDirectionsEqual, arePositionsEqual } from "./geometry";
+import {
+  areDirectionsEqual,
+  arePositionsEqual,
+  getPositionToDirection,
+} from "./geometry";
+
+export function getQuickAction(
+  state: RawState,
+  pos: Pos | null,
+): null | { action: Action; label: string } {
+  if (!pos) {
+    return null;
+  }
+
+  const wrappedState = wrapState(state);
+  const entitiesAtPos = wrappedState.select.entitiesAtPosition(pos);
+
+  if (wrappedState.select.isPlacing()) {
+    return {
+      action: actions.finishPlacement({ placeAnother: true }),
+      label: `Build ${
+        createEntityFromTemplate(
+          wrappedState.select.placingTarget()?.template || "NONE",
+        ).description?.name
+      }`,
+    };
+  }
+
+  const reflectorAtPos = entitiesAtPos.find((e) => e.reflector);
+  if (reflectorAtPos) {
+    return {
+      action: actions.rotateEntity(reflectorAtPos),
+      label: "Rotate Reflector",
+    };
+  }
+
+  const player = selectors.player(state);
+  const validPositions = player
+    ? findValidPositions(
+        wrappedState,
+        [
+          {
+            pos: player.pos,
+            range: player.projector ? player.projector.range : 0,
+          },
+          ...wrappedState.select
+            .entitiesWithComps("projector", "pos")
+            .filter((e) =>
+              areConditionsMet(wrappedState, e, e.projector.condition),
+            )
+            .map((e) => ({
+              pos: e.pos,
+              range: e.projector.range,
+            })),
+        ],
+        () => true, // selectors.canPlaceReflector,
+        true,
+      )
+    : [];
+  const canPlaceReflector = validPositions.some((validPos) =>
+    arePositionsEqual(validPos, pos),
+  );
+  if (canPlaceReflector) {
+    return {
+      action: actions.addEntity(
+        createEntityFromTemplate("REFLECTOR_UP_RIGHT", { pos }),
+      ),
+      label: "Place / Reflector",
+    };
+  }
+
+  const jobDisablerAtPos = entitiesAtPos.find((e) => e.jobDisabler);
+  if (jobDisablerAtPos) {
+    return {
+      action: actions.toggleDisabled(pos),
+      label: "Enable Jobs",
+    };
+  }
+
+  const jobProviderAtPos = entitiesAtPos.find((e) => e.jobProvider);
+  if (jobProviderAtPos) {
+    return {
+      action: actions.toggleDisabled(pos),
+      label: "Disable Jobs",
+    };
+  }
+
+  if (player) {
+    if (arePositionsEqual(pos, getPositionToDirection(player.pos, RIGHT))) {
+      return {
+        action: actions.move({ entityId: PLAYER_ID, ...RIGHT }),
+        label: "Move",
+      };
+    }
+    if (arePositionsEqual(pos, getPositionToDirection(player.pos, LEFT))) {
+      return {
+        action: actions.move({ entityId: PLAYER_ID, ...LEFT }),
+        label: "Move",
+      };
+    }
+    if (arePositionsEqual(pos, getPositionToDirection(player.pos, UP))) {
+      return {
+        action: actions.move({ entityId: PLAYER_ID, ...UP }),
+        label: "Move",
+      };
+    }
+    if (arePositionsEqual(pos, getPositionToDirection(player.pos, DOWN))) {
+      return {
+        action: actions.move({ entityId: PLAYER_ID, ...DOWN }),
+        label: "Move",
+      };
+    }
+  }
+
+  return null;
+}
 
 export interface ActionControl {
   label: string;
