@@ -110,6 +110,16 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       description: "",
     },
   },
+  PATH_PREVIEW: {
+    display: {
+      tile: "target",
+      color: colors.secondary,
+      priority: PRIORITY_MARKER,
+    },
+    pathPreview: {
+      index: 0,
+    },
+  },
   BORDER_NORTH: {
     display: {
       tile: "border",

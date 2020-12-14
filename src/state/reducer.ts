@@ -11,14 +11,26 @@ const GAME_OVER_ALLOW_LIST: string[] = [
   getType(actions.continueVictory),
 ];
 
+const AUTO_MOVE_ALLOW_LIST: string[] = [
+  getType(actions.autoMove),
+  getType(actions.setCursorPos),
+];
+
 export default function reducer(
   state: RawState = createInitialState(),
   action: Action,
 ): RawState {
   const wrappedState = wrapState(state);
+
   if (state.gameOver && !GAME_OVER_ALLOW_LIST.includes(action.type)) {
     return state;
   }
+
+  if (state.isAutoMoving && !AUTO_MOVE_ALLOW_LIST.includes(action.type)) {
+    wrappedState.act.cancelAutoMove();
+    return wrappedState.raw;
+  }
+
   wrappedState.handle(action);
   return wrappedState.raw;
 }

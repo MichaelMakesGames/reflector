@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export function useBoolean(
   initialValue: boolean,
@@ -8,4 +8,11 @@ export function useBoolean(
   const setFalse = useCallback(() => setValue(false), [setValue]);
   const toggle = useCallback(() => setValue(!value), [setValue, value]);
   return [value, setTrue, setFalse, toggle];
+}
+
+export function useInterval(callback: () => void, ms: number) {
+  useEffect(() => {
+    const handle = setInterval(callback, ms);
+    return () => clearInterval(handle);
+  }, [callback, ms]);
 }

@@ -36,6 +36,23 @@ export function getQuickAction(
     };
   }
 
+  if (state.isAutoMoving) {
+    return {
+      action: actions.cancelAutoMove(),
+      label: "Cancel Movement",
+    };
+  }
+
+  if (
+    wrappedState.select.entitiesWithComps("pathPreview", "pos").length &&
+    !wrappedState.select.isWeaponActive()
+  ) {
+    return {
+      action: actions.autoMove(),
+      label: "Move Here",
+    };
+  }
+
   const reflectorAtPos = entitiesAtPos.find((e) => e.reflector);
   if (reflectorAtPos) {
     return {

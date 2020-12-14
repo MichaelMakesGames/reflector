@@ -48,6 +48,7 @@ export function createInitialState() {
     events: {},
     lastAimingDirection: RIGHT,
     cursorPos: null,
+    isAutoMoving: false,
     startOfThisTurn: null,
     startOfLastTurn: null,
   };

@@ -10,6 +10,7 @@ function playerTookTurn(
   action: ReturnType<typeof actions.playerTookTurn>,
 ): void {
   processors.forEach((processor) => processor(state));
+  state.act.setAutoMovePathToCursor();
   state.setRaw({
     ...state.raw,
     resourceChanges: state.raw.resourceChangesThisTurn,

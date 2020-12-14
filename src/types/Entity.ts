@@ -143,6 +143,10 @@ export interface MissingResourceIndicator {}
 
 export interface Border {}
 
+export interface PathPreview {
+  index: number;
+}
+
 export interface Entity {
   id: string;
   parentTemplate?: TemplateName;
@@ -166,6 +170,7 @@ export interface Entity {
   laser?: Laser;
   mineable?: Mineable;
   missingResourceIndicator?: MissingResourceIndicator;
+  pathPreview?: PathPreview;
   placing?: Placing;
   pos?: Pos;
   powered?: Powered;

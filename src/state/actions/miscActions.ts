@@ -9,6 +9,15 @@ export const move = createStandardAction("MOVE")<{
   dy: number;
 }>();
 
+export const setAutoMovePath = createStandardAction("SET_AUTO_MOVE_PATH")<
+  Pos[]
+>();
+export const setAutoMovePathToCursor = createStandardAction(
+  "SET_AUTO_MOVE_PATH_TO_CURSOR",
+)();
+export const cancelAutoMove = createStandardAction("CANCEL_AUTO_MOVE")();
+export const autoMove = createStandardAction("AUTO_MOVE")();
+
 export const playerTookTurn = createStandardAction("PLAYER_TOOK_TURN")();
 
 export const newGame = createStandardAction("NEW_GAME")();

@@ -12,8 +12,6 @@ function targetWeapon(
   state: WrappedState,
   action: ReturnType<typeof actions.targetWeapon>,
 ): void {
-  console.warn("target weapon");
-  console.warn(state.select.laserState());
   if (state.select.laserState() === "RECHARGING") {
     console.warn("recharging");
     state.act.logMessage({
@@ -22,6 +20,7 @@ function targetWeapon(
     });
     return;
   }
+  state.act.setAutoMovePath([]);
   state.setRaw({
     ...state.raw,
     laserState: "ACTIVE",

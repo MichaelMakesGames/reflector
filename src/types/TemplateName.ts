@@ -35,6 +35,7 @@ type TemplateName =
   | "NO_METAL_INDICATOR"
   | "NO_POWER_INDICATOR"
   | "ORE"
+  | "PATH_PREVIEW"
   | "PLAYER_CORPSE"
   | "PLAYER"
   | "PROJECTOR"

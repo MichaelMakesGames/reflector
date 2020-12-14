@@ -56,6 +56,28 @@ export function getDirectionTowardTarget(
   return null;
 }
 
+export function getPath(
+  from: Pos,
+  to: Pos,
+  state: WrappedState,
+  passableFunc = isPassable,
+): Pos[] | null {
+  const passable = (x: number, y: number) =>
+    arePositionsEqual(from, { x, y }) || passableFunc(state.raw, { x, y });
+  const path: Pos[] = [];
+  const aStar = new ROT.Path.AStar(from.x, from.y, passable, { topology: 4 });
+  aStar.compute(to.x, to.y, (x, y) => {
+    const pos = { x, y };
+    if (!arePositionsEqual(pos, from)) {
+      path.unshift(pos);
+    }
+  });
+  if (path.length) {
+    return path;
+  }
+  return null;
+}
+
 export function getAIActions(entity: Entity, state: WrappedState): Action[] {
   const { ai } = entity;
   if (!ai) return [];

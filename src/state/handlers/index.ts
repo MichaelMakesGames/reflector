@@ -1,6 +1,8 @@
 import "./activatePlacement";
 import "./activateWeapon";
 import "./addEntity";
+import "./autoMove";
+import "./cancelAutoMove";
 import "./cancelPlacement";
 import "./clearReflectors";
 import "./continueVictory";
@@ -27,6 +29,8 @@ import "./removeEntities";
 import "./removeEntity";
 import "./removeReflector";
 import "./rotateEntity";
+import "./setAutoMovePath";
+import "./setAutoMovePathToCursor";
 import "./setCursorPos";
 import "./setJobPriority";
 import "./targetWeapon";

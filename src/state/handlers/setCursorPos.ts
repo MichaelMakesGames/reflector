@@ -19,6 +19,10 @@ function setCursorPos(
   const highlights = state.select.entitiesWithComps("highlight");
   state.act.removeEntities(highlights.map((e) => e.id));
 
+  if (!state.raw.isAutoMoving) {
+    state.act.setAutoMovePath([]);
+  }
+
   const cursor = state.select.entityById(CURSOR_ID);
   if (newCursorPos) {
     if (cursor) {
@@ -57,6 +61,8 @@ function setCursorPos(
     positionsToHighlight.forEach((pos) =>
       state.act.addEntity(createEntityFromTemplate("HIGHLIGHT", { pos })),
     );
+
+    state.act.setAutoMovePathToCursor();
 
     const placingTarget = state.select.placingTarget();
     if (placingTarget) {

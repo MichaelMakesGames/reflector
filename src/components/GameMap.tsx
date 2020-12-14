@@ -1,5 +1,11 @@
 /* global document */
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { app, getPosFromMouse, zoomOut, zoomTo } from "~/renderer";
 import {
@@ -20,6 +26,7 @@ import { ControlCode } from "~types/ControlCode";
 import { getQuickAction, isDndFocused, noFocusOnClick } from "~utils/controls";
 import { arePositionsEqual } from "~utils/geometry";
 import ContextMenu from "./ContextMenu";
+import { useInterval } from "~hooks";
 
 export default function GameMap() {
   useEffect(() => {
@@ -184,7 +191,7 @@ export default function GameMap() {
     group: HotkeyGroup.Main,
     callback: () => {
       setContextMenuPos(null);
-      dispatch(actions.setCursorPos(null));
+      if (cursorPos) dispatch(actions.setCursorPos(null));
     },
   });
   useControl({
@@ -222,6 +229,13 @@ export default function GameMap() {
     callback: () => performDefaultAction(cursorPos),
   });
 
+  const autoMove = useCallback(() => {
+    if (state.isAutoMoving) {
+      dispatch(actions.autoMove());
+    }
+  }, [state.isAutoMoving]);
+  useInterval(autoMove, 150);
+
   return (
     <ContextMenu pos={contextMenuPos} onClose={() => setContextMenuPos(null)}>
       <section
@@ -249,7 +263,7 @@ export default function GameMap() {
           }}
           onMouseOut={() => {
             mousePosRef.current = null;
-            if (!contextMenuPos) {
+            if (!contextMenuPos && cursorPos) {
               dispatch(actions.setCursorPos(null));
             }
           }}
@@ -271,6 +285,7 @@ export default function GameMap() {
           }}
           onContextMenu={(e) => {
             e.preventDefault();
+            if (state.isAutoMoving) dispatch(actions.cancelAutoMove());
             const mousePos = {
               x: e.nativeEvent.offsetX,
               y: e.nativeEvent.offsetY,
