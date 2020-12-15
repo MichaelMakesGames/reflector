@@ -51,6 +51,7 @@ type TemplateName =
   | "SPLITTER_VERTICAL"
   | "TENT"
   | "VALID_MARKER"
+  | "VALID_WITH_WARNING_MARKER"
   | "WALL_DAMAGED"
   | "WALL"
   | "WATER_0"

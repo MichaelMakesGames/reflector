@@ -147,6 +147,10 @@ export interface PathPreview {
   index: number;
 }
 
+export interface Warning {
+  text: string;
+}
+
 export interface Entity {
   id: string;
   parentTemplate?: TemplateName;
@@ -181,4 +185,5 @@ export interface Entity {
   smokeEmitter?: SmokeEmitter;
   splitter?: Splitter;
   validMarker?: ValidMarker;
+  warning?: Warning;
 }

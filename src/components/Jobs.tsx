@@ -177,7 +177,7 @@ function JobRow({ code, index }: { code: JobTypeCode; index: number }) {
                 className={isMissingResources ? "" : "invisible"}
                 aria-hidden={!isMissingResources}
               >
-                <Warning className="ml-1" />
+                <Warning className="bg-yellow ml-1" />
               </span>
             </span>
           </Tippy>

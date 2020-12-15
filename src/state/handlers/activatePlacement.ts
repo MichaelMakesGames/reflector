@@ -1,14 +1,15 @@
 import { BUILDING_RANGE } from "~/constants";
 import actions from "~/state/actions";
 import selectors from "~/state/selectors";
-import { RawState, Pos } from "~/types";
+import { RawState, Pos, Entity } from "~/types";
 import { createEntityFromTemplate } from "~/utils/entities";
 import { registerHandler } from "~state/handleAction";
 import { findValidPositions } from "~utils/building";
 import WrappedState from "~types/WrappedState";
 import { areConditionsMet } from "~utils/conditions";
-import { arePositionsEqual } from "~utils/geometry";
+import { arePositionsEqual, getAdjacentPositions } from "~utils/geometry";
 import colors from "~colors";
+import { ResourceCode } from "~data/resources";
 
 function activatePlacement(
   state: WrappedState,
@@ -86,8 +87,52 @@ function activatePlacement(
     },
   });
   for (const pos of validPositions) {
-    state.act.addEntity(createEntityFromTemplate("VALID_MARKER", { pos }));
+    const warning = checkForPlacementWarning(state, pos, entityToPlace);
+    if (warning) {
+      state.act.addEntity(
+        createEntityFromTemplate("VALID_WITH_WARNING_MARKER", { pos, warning }),
+      );
+    } else {
+      state.act.addEntity(createEntityFromTemplate("VALID_MARKER", { pos }));
+    }
   }
 }
 
 registerHandler(activatePlacement, actions.activatePlacement);
+
+function checkForPlacementWarning(
+  state: WrappedState,
+  pos: Pos,
+  entityToPlace: Entity,
+) {
+  return checkForWindmillWarning(state, pos, entityToPlace);
+}
+
+function checkForWindmillWarning(
+  state: WrappedState,
+  pos: Pos,
+  entityToPlace: Entity,
+) {
+  if (!entityToPlace.blocking || !entityToPlace.blocking.windmill) return null;
+
+  for (const adjacent of getAdjacentPositions(pos)) {
+    if (
+      state.select
+        .entitiesAtPosition(adjacent)
+        .some(
+          (e) =>
+            e.production &&
+            e.production.resource === ResourceCode.Power &&
+            e.production.conditions.some(
+              (c) => c === "doesNotHaveTallNeighbors",
+            ),
+        )
+    ) {
+      return {
+        text: "Building here will block a windmill from producing power.",
+      };
+    }
+  }
+
+  return null;
+}

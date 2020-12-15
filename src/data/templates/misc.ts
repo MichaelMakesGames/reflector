@@ -46,6 +46,14 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     validMarker: {},
   },
+  VALID_WITH_WARNING_MARKER: {
+    display: {
+      tile: "outline_exclamation",
+      color: colors.invalid,
+      priority: PRIORITY_MARKER,
+    },
+    validMarker: {},
+  },
   JOB_DISABLER: {
     display: {
       tile: "disabled",

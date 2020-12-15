@@ -1,10 +1,10 @@
 import { Required } from "Object/_api";
 import React, { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { HotkeyGroup, useControl } from "~components/HotkeysProvider";
 import { SettingsContext } from "~contexts";
 import colonistStatuses, { ColonistStatusCode } from "~data/colonistStatuses";
 import resources from "~data/resources";
-import { useControl, HotkeyGroup } from "~components/HotkeysProvider";
 import selectors from "~state/selectors";
 import { Entity, RawState } from "~types";
 import {
@@ -12,6 +12,7 @@ import {
   getActionsAvailableAtPos,
   getQuickAction,
 } from "~utils/controls";
+import Warning from "./Warning";
 
 export default function Inspector() {
   const entitiesAtCursor = useSelector(selectors.entitiesAtCursor);
@@ -29,9 +30,17 @@ export default function Inspector() {
   const state = useSelector(selectors.state);
   const actions = cursorPos ? getActionsAvailableAtPos(state, cursorPos) : [];
   const quickAction = getQuickAction(state, cursorPos);
+  const warnings = entitiesAtCursor
+    ? entitiesAtCursor.filter((e) => e.warning)
+    : [];
 
   return (
     <section className="p-2">
+      {warnings.map((e) => (
+        <p key={e.id} className="text-red">
+          <Warning className="bg-red" /> {e.warning?.text}
+        </p>
+      ))}
       <h2 className="text-xl">
         {cursorPos
           ? `Location ${cursorPos.x}, ${cursorPos.y}`
