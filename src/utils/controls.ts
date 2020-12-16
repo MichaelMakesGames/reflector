@@ -146,7 +146,7 @@ export interface ActionControl {
   label: string;
   code: ControlCode;
   doNotRegisterShortcut?: boolean;
-  action: Action | Action[];
+  action: Action;
 }
 
 export function getActionsAvailableAtPos(
@@ -254,26 +254,27 @@ function addReflectorActions(
     true,
   );
   if (validPositions.some((validPos) => arePositionsEqual(pos, validPos))) {
+    const reflectorAtPos = wrappedState.select
+      .entitiesAtPosition(pos)
+      .find((e) => e.reflector);
     results.push(
       {
         label: "Place \\ Reflector",
         code: ControlCode.PlaceReflectorA,
-        action: [
-          actions.removeReflector(pos),
-          actions.addEntity(
-            createEntityFromTemplate("REFLECTOR_DOWN_RIGHT", { pos }),
-          ),
-        ],
+        action: reflectorAtPos
+          ? actions.rotateEntity(reflectorAtPos)
+          : actions.addEntity(
+              createEntityFromTemplate("REFLECTOR_DOWN_RIGHT", { pos }),
+            ),
       },
       {
         label: "Place / Reflector",
         code: ControlCode.PlaceReflectorB,
-        action: [
-          actions.removeReflector(pos),
-          actions.addEntity(
-            createEntityFromTemplate("REFLECTOR_UP_RIGHT", { pos }),
-          ),
-        ],
+        action: reflectorAtPos
+          ? actions.rotateEntity(reflectorAtPos)
+          : actions.addEntity(
+              createEntityFromTemplate("REFLECTOR_UP_RIGHT", { pos }),
+            ),
       },
     );
   }

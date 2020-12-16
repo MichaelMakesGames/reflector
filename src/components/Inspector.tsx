@@ -1,5 +1,5 @@
 import { Required } from "Object/_api";
-import React, { useContext } from "react";
+import React, { useCallback, useContext, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { HotkeyGroup, useControl } from "~components/HotkeysProvider";
 import { SettingsContext } from "~contexts";
@@ -28,7 +28,10 @@ export default function Inspector() {
     });
   const cursorPos = useSelector(selectors.cursorPos);
   const state = useSelector(selectors.state);
-  const actions = cursorPos ? getActionsAvailableAtPos(state, cursorPos) : [];
+  const actions = useMemo(
+    () => (cursorPos ? getActionsAvailableAtPos(state, cursorPos) : []),
+    [state, cursorPos],
+  );
   const quickAction = getQuickAction(state, cursorPos);
   const warnings = entitiesAtCursor
     ? entitiesAtCursor.filter((e) => e.warning)
@@ -90,15 +93,11 @@ export default function Inspector() {
 function InspectorAction({ action }: { action: ActionControl }) {
   const settings = useContext(SettingsContext);
   const dispatch = useDispatch();
+  const callback = useCallback(() => dispatch(action.action), [action]);
   useControl({
     code: action.code,
     group: HotkeyGroup.Main,
-    callback: () => {
-      const actions = Array.isArray(action.action)
-        ? action.action
-        : [action.action];
-      actions.forEach((a) => dispatch(a));
-    },
+    callback,
     disabled: action.doNotRegisterShortcut,
   });
   return (

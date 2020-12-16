@@ -1,6 +1,6 @@
 /* global document */
 import Tippy from "@tippyjs/react";
-import React, { useContext, useEffect } from "react";
+import React, { useCallback, useContext, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { HotkeyGroup, useControl } from "~components/HotkeysProvider";
 import { SettingsContext } from "~contexts";
@@ -25,14 +25,14 @@ export default function BuildMenu() {
   const isWeaponActive = useSelector(selectors.isWeaponActive);
   const settings = useContext(SettingsContext);
 
-  const cancel = () => {
+  const cancel = useCallback(() => {
     dispatch(actions.cancelPlacement());
-  };
-  const rotate = () => {
+  }, []);
+  const rotate = useCallback(() => {
     if (placingTarget && placingTarget.rotatable) {
       dispatch(actions.rotateEntity(placingTarget));
     }
-  };
+  }, [placingTarget]);
 
   useEffect(() => {
     if (placingTarget) {
@@ -191,15 +191,15 @@ function BuildingCategoryMenu({
   const [isOpen, open, close, toggle] = useBoolean(false);
   const cursorPos = useSelector(selectors.cursorPos);
 
-  const deactivateWeaponAndToggle = () => {
+  const deactivateWeaponAndToggle = useCallback(() => {
     dispatch(actions.deactivateWeapon());
     toggle();
-  };
+  }, []);
 
-  const deactivateWeaponAndOpen = () => {
+  const deactivateWeaponAndOpen = useCallback(() => {
     dispatch(actions.deactivateWeapon());
     open();
-  };
+  }, []);
 
   const controlCode = [
     ControlCode.Menu1,
