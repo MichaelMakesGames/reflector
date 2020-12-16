@@ -22,6 +22,7 @@ export enum HotkeyGroup {
   GameOver = "GAME_OVER",
   Intro = "INTRO",
   Loading = "LOADING",
+  JobPriorities = "JOB_PRIORITIES",
   BuildingSelection = "BUILDING_SELECTION",
 }
 
@@ -32,6 +33,7 @@ const GROUP_PRIORITIES = [
   HotkeyGroup.Intro,
   HotkeyGroup.Loading,
   HotkeyGroup.BuildingSelection,
+  HotkeyGroup.JobPriorities,
   HotkeyGroup.Main,
 ];
 

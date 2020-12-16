@@ -34,4 +34,5 @@ export enum ControlCode {
   Help = "HELP",
   ZoomIn = "ZOOM_IN",
   ZoomOut = "ZOOM_OUT",
+  JobPriorities = "JOB_PRIORITIES",
 }

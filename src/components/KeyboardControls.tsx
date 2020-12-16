@@ -92,6 +92,26 @@ export default function KeyboardControls({ onClose }: { onClose: () => void }) {
         <Shortcut code={ControlCode.ToggleJobs} label="Toggle Jobs" />
       </section>
       <section className="my-3">
+        <h3 className="text-xl">Job Priorities</h3>
+        <Shortcut
+          code={ControlCode.JobPriorities}
+          label="Enter Job Priority Mode"
+        />
+        <Shortcut code={ControlCode.Back} label="Exit Job Priority Mode" />
+        <Shortcut
+          code={ControlCode.QuickAction}
+          label="Select or Unselect Job"
+        />
+        <Shortcut
+          code={ControlCode.Down}
+          label="Focus Next Job, or Decrease Selected Job Priority"
+        />
+        <Shortcut
+          code={ControlCode.Up}
+          label="Focus Previous Job, or Increase Selected Job Priority"
+        />
+      </section>
+      <section className="my-3">
         <h3 className="text-xl">Miscellaneous</h3>
         <div className="ml-3">
           Move Cursor: <Kbd>{settings.cursorModifierKey}</Kbd> + movement key

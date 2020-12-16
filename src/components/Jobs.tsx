@@ -10,6 +10,8 @@ import Warning from "./Warning";
 import colonistStatuses, { ColonistStatusCode } from "~data/colonistStatuses";
 import Icons from "./Icons";
 import colors from "~colors";
+import { HotkeyGroup, useControl } from "./HotkeysProvider";
+import { ControlCode } from "~types/ControlCode";
 
 export default function Jobs() {
   const dispatch = useDispatch();
@@ -18,6 +20,66 @@ export default function Jobs() {
     .sort((a, b) => a[1] - b[1])
     .map(([code]) => jobTypes[code as JobTypeCode]);
   const numberUnemployed = useSelector(selectors.numberOfUnemployedColonists);
+
+  const [focusedJob, setFocusedJob] = useState<JobTypeCode | null>(null);
+  const [selectedJob, setSelectedJob] = useState<JobTypeCode | null>(null);
+  useControl({
+    code: ControlCode.JobPriorities,
+    callback: () => setFocusedJob(orderedJobTypes[0].code),
+    group: HotkeyGroup.Main,
+  });
+  useControl({
+    code: ControlCode.QuickAction,
+    callback: () =>
+      selectedJob ? setSelectedJob(null) : setSelectedJob(focusedJob),
+    group: HotkeyGroup.JobPriorities,
+    disabled: !focusedJob,
+  });
+  useControl({
+    code: ControlCode.Back,
+    callback: () => {
+      setSelectedJob(null);
+      setFocusedJob(null);
+    },
+    group: HotkeyGroup.JobPriorities,
+    disabled: !focusedJob,
+  });
+  useControl({
+    code: ControlCode.Up,
+    callback: () => {
+      if (selectedJob) {
+        dispatch(actions.increaseJobPriority(selectedJob));
+      } else if (focusedJob) {
+        const focusedJobIndex = orderedJobTypes.findIndex(
+          (j) => j.code === focusedJob,
+        );
+        const newIndex = focusedJobIndex - 1;
+        if (orderedJobTypes[newIndex]) {
+          setFocusedJob(orderedJobTypes[newIndex].code);
+        }
+      }
+    },
+    group: HotkeyGroup.JobPriorities,
+    disabled: !focusedJob,
+  });
+  useControl({
+    code: ControlCode.Down,
+    callback: () => {
+      if (selectedJob) {
+        dispatch(actions.decreaseJobPriority(selectedJob));
+      } else if (focusedJob) {
+        const focusedJobIndex = orderedJobTypes.findIndex(
+          (j) => j.code === focusedJob,
+        );
+        const newIndex = focusedJobIndex + 1;
+        if (orderedJobTypes[newIndex]) {
+          setFocusedJob(orderedJobTypes[newIndex].code);
+        }
+      }
+    },
+    group: HotkeyGroup.JobPriorities,
+    disabled: !focusedJob,
+  });
 
   return (
     <section className="p-2 border-b border-gray">
@@ -41,7 +103,13 @@ export default function Jobs() {
           {(provided, snapshot) => (
             <ul ref={provided.innerRef} {...provided.droppableProps}>
               {orderedJobTypes.map((jobType, index) => (
-                <JobRow key={jobType.code} code={jobType.code} index={index} />
+                <JobRow
+                  key={jobType.code}
+                  code={jobType.code}
+                  isFocused={jobType.code === focusedJob}
+                  isSelected={jobType.code === selectedJob}
+                  index={index}
+                />
               ))}
               {provided.placeholder}
             </ul>
@@ -56,7 +124,17 @@ export default function Jobs() {
   );
 }
 
-function JobRow({ code, index }: { code: JobTypeCode; index: number }) {
+function JobRow({
+  code,
+  isFocused,
+  isSelected,
+  index,
+}: {
+  code: JobTypeCode;
+  isFocused: boolean;
+  isSelected: boolean;
+  index: number;
+}) {
   const jobType = jobTypes[code];
   const numEmployed = useSelector((state: RawState) =>
     selectors.numberEmployed(state, code),
@@ -88,6 +166,7 @@ function JobRow({ code, index }: { code: JobTypeCode; index: number }) {
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
+          tabIndex={-1}
           data-jobs-dnd-index={index}
           data-job-type-code={code}
           className={`flex border-t p-1 pl-0 border border-black
@@ -95,23 +174,33 @@ function JobRow({ code, index }: { code: JobTypeCode; index: number }) {
           style={{
             ...provided.draggableProps.style,
             borderColor:
-              snapshot.isDragging || isHovered ? colors.text : undefined,
+              snapshot.isDragging || isHovered || isFocused
+                ? colors.text
+                : undefined,
             borderTopColor:
-              snapshot.isDragging || isHovered ? colors.text : colors.ground,
+              snapshot.isDragging || isHovered || isFocused
+                ? colors.text
+                : colors.ground,
           }}
         >
           <span
             className={`h-6 w-6 mr-1 ${
-              snapshot.isDragging ? "text-white" : priorityColorClass
+              snapshot.isDragging || isSelected
+                ? "text-white"
+                : priorityColorClass
             }`}
           >
-            {snapshot.isDragging && <Icons.Dragging />}
-            {!snapshot.isDragging && priority === 1 && (
+            {(snapshot.isDragging || isSelected) && <Icons.Dragging />}
+            {!(snapshot.isDragging || isSelected) && priority === 1 && (
               <Icons.VeryHighPriority />
             )}
-            {!snapshot.isDragging && priority === 2 && <Icons.HighPriority />}
-            {!snapshot.isDragging && priority === 3 && <Icons.LowPriority />}
-            {!snapshot.isDragging && priority === 4 && (
+            {!(snapshot.isDragging || isSelected) && priority === 2 && (
+              <Icons.HighPriority />
+            )}
+            {!(snapshot.isDragging || isSelected) && priority === 3 && (
+              <Icons.LowPriority />
+            )}
+            {!(snapshot.isDragging || isSelected) && priority === 4 && (
               <Icons.VeryLowPriority />
             )}
           </span>

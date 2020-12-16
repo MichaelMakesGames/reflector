@@ -44,6 +44,7 @@ const defaultSettings: Settings = {
     [ControlCode.Help]: ["?"],
     [ControlCode.ZoomIn]: ["+", "="],
     [ControlCode.ZoomOut]: ["-", "_"],
+    [ControlCode.JobPriorities]: ["v"],
   },
 };
 
