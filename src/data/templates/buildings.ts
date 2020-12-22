@@ -40,7 +40,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     description: {
       name: "Splitter",
       description:
-        "Splits one laser beam into 2 more beams. Needs 1 power per turn.",
+        "Splits one laser beam into 2 more beams. Needs 2 power per turn.",
     },
     colorToggle: {
       conditions: ["isPowered"],
@@ -49,7 +49,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     powered: {
       hasPower: true,
-      powerNeeded: 1,
+      powerNeeded: 2,
       resourceChangeReason: "Splitters",
     },
   },
@@ -85,11 +85,11 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     description: {
       name: "Adv. Splitter",
       description:
-        "Splits one laser beam into 3 more beams. Needs 2 power per turn.",
+        "Splits one laser beam into 3 more beams. Needs 5 power per turn.",
     },
     powered: {
       hasPower: true,
-      powerNeeded: 2,
+      powerNeeded: 5,
       resourceChangeReason: "Adv. Splitters",
     },
   },
@@ -220,7 +220,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       priority: PRIORITY_BUILDING_LOW,
       hasBackground: true,
     },
-    destructible: {},
     jobProvider: {
       consumes: {},
       produces: {
@@ -260,7 +259,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     jobProvider: {
       consumes: {},
       produces: {
-        [ResourceCode.Power]: 1,
+        [ResourceCode.Power]: 3,
       },
       numberEmployed: 0,
       maxNumberEmployed: 2,
@@ -274,7 +273,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     description: {
       name: "Reactor",
-      description: "Provides 2 jobs that each produce 1 power per turn.",
+      description: "Provides 2 jobs that each produce 3 power per turn.",
     },
   },
   SOLAR_PANEL: {
@@ -328,14 +327,14 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     blocking: { moving: true, lasers: true, windmill: true },
     production: {
       resource: ResourceCode.Power,
-      amount: 1,
+      amount: 2,
       conditions: ["doesNotHaveTallNeighbors"],
       resourceChangeReason: "Windmills",
     },
     description: {
       name: "Windmill",
       description:
-        "Produces 1 power as long as neighboring tiles are not blocked. Does not require a colonist to work.",
+        "Produces 2 power as long as neighboring tiles are not blocked. Does not require a colonist to work.",
     },
   },
   FACTORY: {
@@ -365,8 +364,8 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     destructible: {},
     jobProvider: {
       consumes: {
-        POWER: 1,
-        METAL: 2,
+        POWER: 5,
+        METAL: 5,
       },
       produces: {
         [ResourceCode.Machinery]: 1,
@@ -384,7 +383,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     description: {
       name: "Factory",
       description:
-        "Provides 3 jobs that consume 1 power and 2 metal to produce 1 machinery per turn.",
+        "Provides 3 jobs that consume 5 power and 5 metal to produce 1 machinery per turn.",
     },
   },
   WALL: {
@@ -483,7 +482,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     destructible: {},
     powered: {
       hasPower: true,
-      powerNeeded: 2,
+      powerNeeded: 4,
       resourceChangeReason: "Adv. Projectors",
     },
     projector: {
@@ -493,7 +492,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     description: {
       name: "Adv. Projector",
       description:
-        "Lets you place reflectors within 2 spaces. Needs 2 power per turn.",
+        "Lets you place reflectors within 2 spaces. Needs 4 power per turn.",
     },
   },
 };

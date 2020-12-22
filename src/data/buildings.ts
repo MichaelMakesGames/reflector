@@ -17,7 +17,7 @@ const buildings: {
     label: "Farm",
     cost: {
       resource: ResourceCode.Metal,
-      amount: 10,
+      amount: 0,
     },
     validitySelector: "canPlaceFarm",
     invalidMessage: "Must place on fertile land without other buildings.",
@@ -39,7 +39,7 @@ const buildings: {
     label: "Mine",
     cost: {
       resource: ResourceCode.Metal,
-      amount: 25,
+      amount: 30,
     },
     validitySelector: "canPlaceMine",
     invalidMessage: "Must place on ore without other buildings.",
@@ -50,7 +50,7 @@ const buildings: {
     label: "Factory",
     cost: {
       resource: ResourceCode.Metal,
-      amount: 25,
+      amount: 50,
     },
     category: BuildingCategoryCode.Production,
   },
@@ -61,7 +61,7 @@ const buildings: {
       resource: ResourceCode.Metal,
       amount: 20,
     },
-    category: BuildingCategoryCode.Power,
+    category: BuildingCategoryCode.Production,
     invalidMessage:
       "Must place in location without neighboring buildings or mountains.",
     validitySelector: "canPlaceWindmill",
@@ -71,25 +71,25 @@ const buildings: {
     label: "Solar Panel",
     cost: {
       resource: ResourceCode.Machinery,
-      amount: 5,
+      amount: 20,
     },
-    category: BuildingCategoryCode.Power,
+    category: BuildingCategoryCode.Production,
   },
   {
     template: "REACTOR",
     label: "Reactor",
     cost: {
       resource: ResourceCode.Machinery,
-      amount: 25,
+      amount: 80,
     },
-    category: BuildingCategoryCode.Power,
+    category: BuildingCategoryCode.Production,
   },
   {
     template: "BASIC_PROJECTOR",
     label: "Projector",
     cost: {
       resource: ResourceCode.Metal,
-      amount: 20,
+      amount: 50,
     },
     category: BuildingCategoryCode.Laser,
   },
@@ -98,7 +98,7 @@ const buildings: {
     label: "Splitter",
     cost: {
       resource: ResourceCode.Metal,
-      amount: 25,
+      amount: 80,
     },
     category: BuildingCategoryCode.Laser,
   },
@@ -107,7 +107,7 @@ const buildings: {
     label: "Adv Projector",
     cost: {
       resource: ResourceCode.Machinery,
-      amount: 15,
+      amount: 50,
     },
     category: BuildingCategoryCode.Laser,
   },
@@ -116,7 +116,7 @@ const buildings: {
     label: "Adv Splitter",
     cost: {
       resource: ResourceCode.Machinery,
-      amount: 30,
+      amount: 80,
     },
     category: BuildingCategoryCode.Laser,
   },
@@ -125,7 +125,7 @@ const buildings: {
     label: "Residence",
     cost: {
       resource: ResourceCode.Metal,
-      amount: 25,
+      amount: 30,
     },
     category: BuildingCategoryCode.Misc,
   },
@@ -134,7 +134,7 @@ const buildings: {
     label: "Wall",
     cost: {
       resource: ResourceCode.Metal,
-      amount: 10,
+      amount: 20,
     },
     category: BuildingCategoryCode.Misc,
   },

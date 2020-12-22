@@ -26,9 +26,9 @@ export default function generateMap(): Entity[] {
 
   const flatNoise = noise.flat().sort((a, b) => a - b);
   const waterFertileThreshold = calcPercentile(flatNoise, 15);
-  const fertileFloorThreshold = calcPercentile(flatNoise, 35);
+  const fertileFloorThreshold = calcPercentile(flatNoise, 25);
   const floorOreThreshold = calcPercentile(flatNoise, 85);
-  const oreMountainThreshold = calcPercentile(flatNoise, 90);
+  const oreMountainThreshold = calcPercentile(flatNoise, 86.5);
 
   for (let y = -1; y < MAP_HEIGHT + 1; y++) {
     for (let x = -1; x < MAP_WIDTH + 1; x++) {
@@ -64,11 +64,7 @@ export default function generateMap(): Entity[] {
           (x === MAP_WIDTH - 2 && y === 1) ||
           (x === MAP_WIDTH - 2 && y === MAP_HEIGHT - 2)
         ) {
-          if (template === "WATER_BASE") {
-            template = "FERTILE";
-          } else if (template === "MOUNTAIN") {
-            template = "ORE";
-          }
+          template = "FLOOR";
         }
         let entity = createEntityFromTemplate(template, {
           pos: { x, y },

@@ -12,6 +12,7 @@ import selectors from "~state/selectors";
 import { ControlCode } from "~types/ControlCode";
 import { noFocusOnClick } from "~utils/controls";
 import { createEntityFromTemplate } from "~utils/entities";
+import EntityPreview from "./EntityPreview";
 import Kbd from "./Kbd";
 import ResourceAmount from "./ResourceAmount";
 
@@ -329,11 +330,18 @@ function BuildingButton({
         onClick={noFocusOnClick(callback)}
       >
         <Kbd light>{settings.keyboardShortcuts[controlCode][0]}</Kbd>
-        <span className="flex-1 ml-1 mr-2 inline-block">{` ${building.label}`}</span>
-        <ResourceAmount
-          resourceCode={building.cost.resource}
-          amount={building.cost.amount}
-        />
+        <span className="flex-1 ml-1 mr-3 inline-block">
+          <EntityPreview templateName={building.template} />{" "}
+          {` ${building.label}`}
+        </span>
+        {building.cost.amount ? (
+          <ResourceAmount
+            resourceCode={building.cost.resource}
+            amount={building.cost.amount}
+          />
+        ) : (
+          <span className="text-lightGray">Free</span>
+        )}
       </button>
     </Tippy>
   );

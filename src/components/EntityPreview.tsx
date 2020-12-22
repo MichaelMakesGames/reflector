@@ -1,0 +1,35 @@
+import React from "react";
+import { createEntityFromTemplate } from "~utils/entities";
+// @ts-ignore
+import tiles from "../assets/tiles/*.png";
+
+interface Props {
+  templateName: TemplateName;
+  style?: React.CSSProperties;
+}
+export default function EntityPreview({ templateName, style = {} }: Props) {
+  const entity = createEntityFromTemplate(templateName);
+  if (!entity.display) return null;
+  return (
+    <div
+      style={{
+        display: "inline-block",
+        position: "relative",
+        bottom: "8px",
+        margin: "-12px 0",
+        background: entity.display.color,
+        height: 24,
+        width: 24,
+        mask: `url(#${templateName}_MASK)`,
+        WebkitMaskImage: `url(${
+          tiles[
+            Array.isArray(entity.display.tile)
+              ? entity.display.tile[0]
+              : entity.display.tile
+          ]
+        })`,
+        ...style,
+      }}
+    />
+  );
+}

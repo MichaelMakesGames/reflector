@@ -1,6 +1,5 @@
 export enum BuildingCategoryCode {
   Production = "PRODUCTION",
-  Power = "POWER",
   Laser = "LASER",
   Misc = "MISC",
 }
@@ -15,12 +14,7 @@ const buildingCategories: BuildingCategory[] = [
   {
     code: BuildingCategoryCode.Production,
     label: "Production",
-    description: "Buildings that produce resources other than power.",
-  },
-  {
-    code: BuildingCategoryCode.Power,
-    label: "Power",
-    description: "Buildings that produce power.",
+    description: "Buildings that produce resources.",
   },
   {
     code: BuildingCategoryCode.Laser,
