@@ -4,7 +4,7 @@ import { registerHandler } from "~state/handleAction";
 import WrappedState from "~types/WrappedState";
 
 const notyf = new Notyf({
-  position: { x: "right", y: "top" },
+  position: { x: "right", y: "bottom" },
   duration: 10000,
   dismissible: true,
 });

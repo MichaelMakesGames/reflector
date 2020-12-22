@@ -201,3 +201,7 @@ export function numberOfUnemployedColonists(state: RawState) {
   return colonists(state).filter((entity) => !entity.colonist.employment)
     .length;
 }
+
+export function areEnemiesPresent(state: RawState) {
+  return entitiesWithComps(state, "ai").length > 0;
+}

@@ -11,8 +11,12 @@ function setAutoMovePath(
   state.act.removeEntities(pathPreviews.map((e) => e.id));
 
   action.payload.forEach((pos, index) => {
+    const template: TemplateName =
+      index === 0 || !state.select.areEnemiesPresent()
+        ? "PATH_PREVIEW"
+        : "PATH_PREVIEW_DEEMPHASIZED";
     state.act.addEntity(
-      createEntityFromTemplate("PATH_PREVIEW", { pos, pathPreview: { index } }),
+      createEntityFromTemplate(template, { pos, pathPreview: { index } }),
     );
   });
 }

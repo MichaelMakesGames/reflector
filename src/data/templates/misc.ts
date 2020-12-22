@@ -128,6 +128,16 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       index: 0,
     },
   },
+  PATH_PREVIEW_DEEMPHASIZED: {
+    display: {
+      tile: "target",
+      color: colors.inactiveBuilding,
+      priority: PRIORITY_MARKER,
+    },
+    pathPreview: {
+      index: 0,
+    },
+  },
   BORDER_NORTH: {
     display: {
       tile: "border",

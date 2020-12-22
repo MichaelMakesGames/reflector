@@ -96,6 +96,9 @@ function activatePlacement(
       state.act.addEntity(createEntityFromTemplate("VALID_MARKER", { pos }));
     }
   }
+
+  // clear automove path
+  state.act.setAutoMovePath([]);
 }
 
 registerHandler(activatePlacement, actions.activatePlacement);

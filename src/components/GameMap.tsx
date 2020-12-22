@@ -236,6 +236,18 @@ export default function GameMap() {
   }, [state.isAutoMoving]);
   useInterval(autoMove, 150);
 
+  const onMouseMoveOrEnter = (e: React.MouseEvent) => {
+    const mousePos = {
+      x: e.nativeEvent.offsetX,
+      y: e.nativeEvent.offsetY,
+    };
+    mousePosRef.current = mousePos;
+    const pos = getPosFromMouse(mousePos.x, mousePos.y);
+    if (!cursorPos || (!arePositionsEqual(cursorPos, pos) && !contextMenuPos)) {
+      dispatch(actions.setCursorPos(pos));
+    }
+  };
+
   return (
     <ContextMenu pos={contextMenuPos} onClose={() => setContextMenuPos(null)}>
       <section
@@ -247,20 +259,8 @@ export default function GameMap() {
         <div
           className="w-full h-full"
           id="map"
-          onMouseMove={(e) => {
-            const mousePos = {
-              x: e.nativeEvent.offsetX,
-              y: e.nativeEvent.offsetY,
-            };
-            mousePosRef.current = mousePos;
-            const pos = getPosFromMouse(mousePos.x, mousePos.y);
-            if (
-              !cursorPos ||
-              (!arePositionsEqual(cursorPos, pos) && !contextMenuPos)
-            ) {
-              dispatch(actions.setCursorPos(pos));
-            }
-          }}
+          onMouseMove={onMouseMoveOrEnter}
+          onMouseEnter={onMouseMoveOrEnter}
           onMouseOut={() => {
             mousePosRef.current = null;
             if (!contextMenuPos && cursorPos) {

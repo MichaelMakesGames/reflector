@@ -39,6 +39,9 @@ function autoMove(state: WrappedState): void {
   state.act.removeEntity(next.id);
   if (rest.length === 0) {
     state.act.cancelAutoMove();
+  } else if (state.select.areEnemiesPresent()) {
+    state.act.cancelAutoMove();
+    state.act.logMessage({ message: "Enemies present, movement canceled" });
   }
 }
 
