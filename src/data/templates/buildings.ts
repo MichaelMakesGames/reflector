@@ -335,7 +335,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     description: {
       name: "Windmill",
       description:
-        "Produces 2 power as long as neighboring tiles are not blocked. Does not require a colonist to work.",
+        "Produces 2 power as long as neighboring tiles are not blocked (only LOW and VERY LOW buildings allowed). Does not require a colonist to work.",
     },
   },
   FACTORY: {
