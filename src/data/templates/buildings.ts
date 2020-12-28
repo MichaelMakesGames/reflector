@@ -209,7 +209,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     description: {
       name: "Mining Spot",
       description:
-        "Provides 1 job that produces 1 metal per turn. Less efficient than a Mine, but is free to build and doesn't need power.",
+        "Provides 1 job that produces 1 metal per turn. Less efficient than a Mine, but is free to build and doesn't need power. This building is VERY LOW (you can shoot and walk over it).",
     },
   },
   FARM: {
@@ -232,7 +232,8 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     description: {
       name: "Farm",
-      description: "Provides 1 job that produces 1 food per turn.",
+      description:
+        "Provides 1 job that produces 1 food per turn. This building is VERY LOW (you can shoot and walk over it).",
     },
   },
   REACTOR: {
@@ -304,7 +305,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     description: {
       name: "Solar Panel",
       description:
-        "Produces 1 power per turn during day. Does not require a colonist to work.",
+        "Produces 1 power per turn during day. Does not require a colonist to work. This building is LOW (you can shoot over it).",
     },
   },
   WINDMILL: {

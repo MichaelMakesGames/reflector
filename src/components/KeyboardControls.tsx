@@ -26,11 +26,15 @@ export default function KeyboardControls({ onClose }: { onClose: () => void }) {
         />
       </div>
       <section className="my-3 pl-3">
-        <p>Click within the blue borders to place/rotate/remove reflector.</p>
         <p>Hover over a location to see contents and contextual actions.</p>
+        <p>Click on map to move.</p>
+        <p>
+          While aiming laser, click within the blue borders to
+          place/rotate/remove reflectors.
+        </p>
+        <p>While building, click to place, right click to cancel.</p>
         <p>Right click location for contextual actions.</p>
         <p>Scroll to zoom in or zoom out.</p>
-        <p>While building, click to place, right click to cancel.</p>
         <p>Click and drag jobs to change priority.</p>
       </section>
       <div className="flex flex-row">

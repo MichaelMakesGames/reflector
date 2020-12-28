@@ -102,9 +102,14 @@ function InspectorAction({ action }: { action: ActionControl }) {
   });
   return (
     <button type="button" className="font-normal">
-      <kbd className="font-mono bg-darkGray rounded p-1 mr-1">
-        {settings.keyboardShortcuts[action.code][0]}
-      </kbd>
+      {settings.keyboardShortcuts[action.code].map((key, index) => (
+        <React.Fragment key={key}>
+          {index !== 0 ? (
+            <span className="text-lightGray text-xs mr-1">or</span>
+          ) : null}
+          <kbd className="font-mono bg-darkGray rounded p-1 mr-1">{key}</kbd>
+        </React.Fragment>
+      ))}
       {action.label}
     </button>
   );

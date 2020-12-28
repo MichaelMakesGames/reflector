@@ -8,11 +8,7 @@ import { ControlCode } from "~types/ControlCode";
 import { findValidPositions } from "./building";
 import { areConditionsMet } from "./conditions";
 import { createEntityFromTemplate } from "./entities";
-import {
-  areDirectionsEqual,
-  arePositionsEqual,
-  getPositionToDirection,
-} from "./geometry";
+import { arePositionsEqual, getPositionToDirection } from "./geometry";
 
 export function getQuickAction(
   state: RawState,
@@ -54,7 +50,16 @@ export function getQuickAction(
   }
 
   const reflectorAtPos = entitiesAtPos.find((e) => e.reflector);
-  if (reflectorAtPos) {
+  if (
+    reflectorAtPos &&
+    reflectorAtPos.reflector &&
+    reflectorAtPos?.reflector.type === "\\"
+  ) {
+    return {
+      action: actions.removeReflector(pos),
+      label: "Remove Reflector",
+    };
+  } else if (reflectorAtPos) {
     return {
       action: actions.rotateEntity(reflectorAtPos),
       label: "Rotate Reflector",
@@ -158,41 +163,7 @@ export function getActionsAvailableAtPos(
   addReflectorActions(state, pos, results);
   addRemoveBuildingAction(state, pos, results);
   addDisableBuildingActions(state, pos, results);
-  addMoveAction(state, pos, results);
   return results;
-}
-
-function addMoveAction(state: RawState, pos: Pos, results: ActionControl[]) {
-  const player = selectors.player(state);
-  if (player) {
-    const playerPos = player.pos;
-    if (
-      Math.abs(playerPos.x - pos.x) + Math.abs(playerPos.y - pos.y) === 1 &&
-      !selectors.isPositionBlocked(state, pos)
-    ) {
-      const dir = { dx: pos.x - playerPos.x, dy: pos.y - playerPos.y };
-      let code: ControlCode;
-      if (areDirectionsEqual(dir, UP)) {
-        code = ControlCode.Up;
-      } else if (areDirectionsEqual(dir, DOWN)) {
-        code = ControlCode.Down;
-      } else if (areDirectionsEqual(dir, LEFT)) {
-        code = ControlCode.Left;
-      } else {
-        // if (areDirectionsEqual(dir, RIGHT))
-        code = ControlCode.Right;
-      }
-      results.push({
-        label: "Move",
-        code,
-        doNotRegisterShortcut: true,
-        action: actions.move({
-          entityId: PLAYER_ID,
-          ...dir,
-        }),
-      });
-    }
-  }
 }
 
 function addDisableBuildingActions(
@@ -259,21 +230,21 @@ function addReflectorActions(
       .find((e) => e.reflector);
     results.push(
       {
-        label: "Place \\ Reflector",
+        label: "Place / Reflector",
         code: ControlCode.PlaceReflectorA,
         action: reflectorAtPos
           ? actions.rotateEntity(reflectorAtPos)
           : actions.addEntity(
-              createEntityFromTemplate("REFLECTOR_DOWN_RIGHT", { pos }),
+              createEntityFromTemplate("REFLECTOR_UP_RIGHT", { pos }),
             ),
       },
       {
-        label: "Place / Reflector",
+        label: "Place \\ Reflector",
         code: ControlCode.PlaceReflectorB,
         action: reflectorAtPos
           ? actions.rotateEntity(reflectorAtPos)
           : actions.addEntity(
-              createEntityFromTemplate("REFLECTOR_UP_RIGHT", { pos }),
+              createEntityFromTemplate("REFLECTOR_DOWN_RIGHT", { pos }),
             ),
       },
     );

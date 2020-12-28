@@ -30,8 +30,8 @@ const defaultSettings: Settings = {
     [ControlCode.RotateBuilding]: ["r"],
 
     [ControlCode.QuickAction]: ["space"],
-    [ControlCode.PlaceReflectorA]: ["e"],
-    [ControlCode.PlaceReflectorB]: ["r"],
+    [ControlCode.PlaceReflectorA]: ["/", "e"],
+    [ControlCode.PlaceReflectorB]: ["\\", "r"],
     [ControlCode.RotateReflector]: ["shift+r"],
     [ControlCode.RemoveReflector]: ["t"],
     [ControlCode.ClearAllReflectors]: ["c"],

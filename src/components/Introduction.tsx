@@ -42,7 +42,7 @@ export default function Introduction() {
         Enemies attack at night, colonists work during the day.
       </p>
       <p className="my-2">
-        Press <Kbd>wasd</Kbd> or arrow keys to move.
+        Click to move, or use <Kbd>wasd</Kbd> or arrow keys.
       </p>
       <p className="my-2">
         Press <Kbd>f</Kbd> to activate laser, <Kbd>wasd</Kbd> to aim, then{" "}
