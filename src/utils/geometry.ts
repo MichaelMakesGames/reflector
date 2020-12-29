@@ -80,3 +80,15 @@ export function getClosest<T extends { pos: Pos }>(
     (a, b) => getDistance(a.pos, position) - getDistance(b.pos, position),
   )[0];
 }
+
+export function getHumanReadablePosition(pos: Pos) {
+  const northSouth =
+    pos.y < MAP_HEIGHT / 2
+      ? `${Math.abs(pos.y - MAP_HEIGHT / 2)}N`
+      : `${pos.y - MAP_HEIGHT / 2 + 1}S`;
+  const eastWest =
+    pos.x < MAP_WIDTH / 2
+      ? `${Math.abs(pos.x - MAP_WIDTH / 2)}W`
+      : `${pos.x - MAP_WIDTH / 2 + 1}E`;
+  return `${northSouth}, ${eastWest}`;
+}

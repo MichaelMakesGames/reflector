@@ -56,27 +56,8 @@ export function turnsUntilSunriseOrSunset(state: RawState) {
   }
 }
 
-export function time(state: RawState) {
-  const timeInMinutes =
-    ((turnOfDay(state) - 1) * MINUTES_PER_TURN + DAY_START_MINUTES) % (24 * 60);
-  const hours = Math.floor(timeInMinutes / 60);
-  const minutes = timeInMinutes % 60;
-  return Intl.DateTimeFormat(undefined, {
-    hour: "numeric",
-    minute: "2-digit",
-  }).format(new Date(0, 0, 0, hours, minutes));
-}
-
 export function turnsUntilVictory(state: RawState) {
   return VICTORY_ON_TURN - state.time.turn;
-}
-
-export function timeUntilVictory(state: RawState) {
-  const minutesUntilVictory = turnsUntilVictory(state) * MINUTES_PER_TURN;
-  const days = Math.floor(minutesUntilVictory / (24 * 60));
-  const hours = Math.floor((minutesUntilVictory - days * 24 * 60) / 60);
-  const minutes = minutesUntilVictory - days * 24 * 60 - hours * 60;
-  return `${days ? `${days}d ` : ""}${hours}h ${minutes}m`;
 }
 
 export function version(state: RawState) {

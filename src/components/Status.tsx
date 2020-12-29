@@ -5,9 +5,10 @@ import { MINUTES_PER_TURN, NEW_COLONISTS_PER_DAY } from "~constants";
 import selectors from "~state/selectors";
 
 export default function Status() {
-  const time = useSelector(selectors.time);
   const day = useSelector(selectors.day);
   const isNight = useSelector(selectors.isNight);
+  const turnOfDay = useSelector(selectors.turnOfDay);
+  const turnOfNight = useSelector(selectors.turnOfNight);
   const turnsUntilSunriseOrSunset = useSelector(
     selectors.turnsUntilSunriseOrSunset,
   );
@@ -21,15 +22,14 @@ export default function Status() {
           <Tippy
             content={
               <>
-                <p className="mb-2">This is the current time.</p>
+                <p className="mb-2">This is the current time/turn.</p>
                 <p className="mb-2">
-                  Each turn is {MINUTES_PER_TURN} minutes. Moving, building,
-                  shooting, and waiting all take a turn. Everything else happens
-                  instantly.
+                  Moving, building, shooting, and waiting all take a turn.
+                  Everything else happens instantly.
                 </p>
                 <p className="mb-2">
-                  During the day (6:00am - 6:00pm), colonists go to work to
-                  produce various resources.
+                  During the day, colonists go to work to produce various
+                  resources.
                 </p>
                 <p className="mb-2">
                   At night, colonists go home and enemies attack.
@@ -43,7 +43,8 @@ export default function Status() {
             }
           >
             <p className="text-xl">
-              {isNight ? "Night" : "Day"} {day + 1}, {time}
+              {isNight ? "Night" : "Day"} {day + 1},{" Turn "}
+              {isNight ? turnOfNight : turnOfDay}
             </p>
           </Tippy>
           <p className="text-lightGray">

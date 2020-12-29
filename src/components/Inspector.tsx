@@ -12,6 +12,7 @@ import {
   getActionsAvailableAtPos,
   getQuickAction,
 } from "~utils/controls";
+import { getHumanReadablePosition } from "~utils/geometry";
 import Warning from "./Warning";
 
 export default function Inspector() {
@@ -46,7 +47,7 @@ export default function Inspector() {
       ))}
       <h2 className="text-xl">
         {cursorPos
-          ? `Location ${cursorPos.x}, ${cursorPos.y}`
+          ? `Location ${getHumanReadablePosition(cursorPos)}`
           : "Move cursor over a location to see details"}
       </h2>
       {cursorPos && (
@@ -171,7 +172,7 @@ function InspectorEntity({
         <div className="ml-3 text-lightGray text-sm">
           Works at{" "}
           {employment.description ? `${employment.description.name} at` : ""}{" "}
-          {employment.pos.x}, {employment.pos.y}
+          {getHumanReadablePosition(employment.pos)}
         </div>
       )}
       {entity.colonist && !employment && (
@@ -179,7 +180,7 @@ function InspectorEntity({
       )}
       {residence && (
         <div className="ml-3 text-lightGray text-sm">
-          Lives at {residence.pos.x}, {residence.pos.y}
+          Lives at {getHumanReadablePosition(residence.pos)}
         </div>
       )}
       {entity.colonist && !residence && (
