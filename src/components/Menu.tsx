@@ -57,18 +57,12 @@ export default function Menu() {
           <ul>
             <MenuOption
               index={0}
-              label="Undo Turn"
-              callback={() => dispatch(actions.undoTurn())}
-              closeMenu={close}
-            />
-            <MenuOption
-              index={1}
               label="New Game"
               callback={() => dispatch(actions.newGame())}
               closeMenu={close}
             />
             <MenuOption
-              index={2}
+              index={1}
               label="Toggle Fullscreen"
               callback={() => {
                 if (document.fullscreen) {
@@ -80,7 +74,7 @@ export default function Menu() {
               closeMenu={close}
             />
             <MenuOption
-              index={3}
+              index={2}
               label="Controls"
               callback={openControls}
               closeMenu={close}

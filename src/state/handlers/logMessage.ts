@@ -1,13 +1,7 @@
-import { Notyf } from "notyf";
 import actions from "~state/actions";
 import { registerHandler } from "~state/handleAction";
 import WrappedState from "~types/WrappedState";
-
-const notyf = new Notyf({
-  position: { x: "right", y: "bottom" },
-  duration: 10000,
-  dismissible: true,
-});
+import notifications from "~utils/notifications";
 
 function logMessage(
   state: WrappedState,
@@ -31,7 +25,7 @@ function logMessage(
 
   // should probably find a better solution to this
   // perhaps the same subscription system I'm planning for rendering
-  notyf.open({
+  notifications.open({
     type: type || "error",
     message,
   });

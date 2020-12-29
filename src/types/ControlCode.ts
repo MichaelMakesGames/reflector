@@ -35,4 +35,5 @@ export enum ControlCode {
   ZoomIn = "ZOOM_IN",
   ZoomOut = "ZOOM_OUT",
   JobPriorities = "JOB_PRIORITIES",
+  DismissNotifications = "DISMISS_NOTIFICATIONS",
 }

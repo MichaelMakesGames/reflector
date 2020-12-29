@@ -1,4 +1,4 @@
-/* global document, navigator */
+/* global navigator */
 import { DOWN, LEFT, PLAYER_ID, RIGHT, UP } from "~constants";
 import actions from "~state/actions";
 import selectors from "~state/selectors";
@@ -253,32 +253,12 @@ function addReflectorActions(
   const entitiesAtPos = wrappedState.select.entitiesAtPosition(pos);
   const reflectorAtPos = entitiesAtPos.find((e) => e.reflector);
   if (reflectorAtPos) {
-    // results.push({
-    //   label: "Rotate Reflector",
-    //   code: ControlCode.RotateReflector,
-    //   action: actions.rotateEntity(reflectorAtPos),
-    // });
     results.push({
       label: "Remove Reflector",
       code: ControlCode.RemoveReflector,
       action: actions.removeReflector(pos),
     });
   }
-
-  results.push({
-    label: "Clear All Reflectors",
-    code: ControlCode.ClearAllReflectors,
-    action: actions.clearReflectors(),
-    doNotRegisterShortcut: true,
-  });
-}
-
-export function isDndFocused() {
-  if (document.activeElement) {
-    const activeElement = document.activeElement as HTMLElement;
-    return Boolean(activeElement.dataset.jobsDndIndex);
-  }
-  return false;
 }
 
 export function isMac() {

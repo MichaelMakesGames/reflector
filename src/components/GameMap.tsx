@@ -23,7 +23,7 @@ import actions from "~state/actions";
 import selectors from "~state/selectors";
 import { Pos, RawState } from "~types";
 import { ControlCode } from "~types/ControlCode";
-import { getQuickAction, isDndFocused, noFocusOnClick } from "~utils/controls";
+import { getQuickAction, noFocusOnClick } from "~utils/controls";
 import { arePositionsEqual } from "~utils/geometry";
 import ContextMenu from "./ContextMenu";
 import { useInterval } from "~hooks";
@@ -53,24 +53,16 @@ export default function GameMap() {
   useEffect(() => setContextMenuPos(null), [playerPos]);
 
   const moveUp = () => {
-    if (!isDndFocused()) {
-      dispatch(actions.move({ entityId: PLAYER_ID, ...UP }));
-    }
+    dispatch(actions.move({ entityId: PLAYER_ID, ...UP }));
   };
   const moveRight = () => {
-    if (!isDndFocused()) {
-      dispatch(actions.move({ entityId: PLAYER_ID, ...RIGHT }));
-    }
+    dispatch(actions.move({ entityId: PLAYER_ID, ...RIGHT }));
   };
   const moveDown = () => {
-    if (!isDndFocused()) {
-      dispatch(actions.move({ entityId: PLAYER_ID, ...DOWN }));
-    }
+    dispatch(actions.move({ entityId: PLAYER_ID, ...DOWN }));
   };
   const moveLeft = () => {
-    if (!isDndFocused()) {
-      dispatch(actions.move({ entityId: PLAYER_ID, ...LEFT }));
-    }
+    dispatch(actions.move({ entityId: PLAYER_ID, ...LEFT }));
   };
   const moveEnabled =
     !isWeaponActive && (!settings.unmodifiedBuilding || !isPlacing);
@@ -116,24 +108,16 @@ export default function GameMap() {
   });
 
   const moveCursorUp = () => {
-    if (!isDndFocused()) {
-      dispatch(actions.moveCursor({ ...UP }));
-    }
+    dispatch(actions.moveCursor({ ...UP }));
   };
   const moveCursorRight = () => {
-    if (!isDndFocused()) {
-      dispatch(actions.moveCursor({ ...RIGHT }));
-    }
+    dispatch(actions.moveCursor({ ...RIGHT }));
   };
   const moveCursorDown = () => {
-    if (!isDndFocused()) {
-      dispatch(actions.moveCursor({ ...DOWN }));
-    }
+    dispatch(actions.moveCursor({ ...DOWN }));
   };
   const moveCursorLeft = () => {
-    if (!isDndFocused()) {
-      dispatch(actions.moveCursor({ ...LEFT }));
-    }
+    dispatch(actions.moveCursor({ ...LEFT }));
   };
 
   useControl({
@@ -193,16 +177,6 @@ export default function GameMap() {
       setContextMenuPos(null);
       if (cursorPos) dispatch(actions.setCursorPos(null));
     },
-  });
-  useControl({
-    code: ControlCode.Undo,
-    group: HotkeyGroup.Main,
-    callback: () => dispatch(actions.undoTurn()),
-  });
-  useControl({
-    code: ControlCode.ClearAllReflectors,
-    group: HotkeyGroup.Main,
-    callback: () => dispatch(actions.clearReflectors()),
   });
 
   useControl({

@@ -1,15 +1,10 @@
 import Tippy from "@tippyjs/react";
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { NEW_COLONISTS_PER_DAY, MINUTES_PER_TURN } from "~constants";
-import actions from "~state/actions";
+import { useSelector } from "react-redux";
+import { MINUTES_PER_TURN, NEW_COLONISTS_PER_DAY } from "~constants";
 import selectors from "~state/selectors";
-import { ControlCode } from "~types/ControlCode";
-import HotkeyButton from "./HotkeyButton";
-import { HotkeyGroup } from "./HotkeysProvider";
 
 export default function Status() {
-  const dispatch = useDispatch();
   const time = useSelector(selectors.time);
   const day = useSelector(selectors.day);
   const isNight = useSelector(selectors.isNight);
@@ -57,20 +52,6 @@ export default function Status() {
             {isNight ? "sunrise" : "sunset"}
           </p>
         </div>
-        <Tippy
-          placement="right"
-          content="Pass your turn without doing anything."
-        >
-          <div>
-            <HotkeyButton
-              controlCode={ControlCode.Wait}
-              callback={() => dispatch(actions.playerTookTurn())}
-              hotkeyGroup={HotkeyGroup.Main}
-              className="text-sm"
-              label="Wait"
-            />
-          </div>
-        </Tippy>
       </div>
       <div className="flex flex-row">
         <Tippy content="This represents the confidence and discipline of your colony. You lose morale every time a colonist dies, or if you don't have enough food at night. If you ever reach 0 morale, you lose!">

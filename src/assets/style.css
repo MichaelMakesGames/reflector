@@ -48,6 +48,15 @@ body {
   bottom: -1px;
 }
 
+.notyf__toast {
+  @apply text-sm;
+  max-width: 220px;
+}
+
+.notyf__icon {
+  display: none;
+}
+
 /* purgecss end ignore */
 
 @tailwind components;

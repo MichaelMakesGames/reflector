@@ -12,7 +12,9 @@ import selectors from "~state/selectors";
 import { ControlCode } from "~types/ControlCode";
 import { noFocusOnClick } from "~utils/controls";
 import { createEntityFromTemplate } from "~utils/entities";
+import notifications from "~utils/notifications";
 import EntityPreview from "./EntityPreview";
+import Icons from "./Icons";
 import Kbd from "./Kbd";
 import ResourceAmount from "./ResourceAmount";
 
@@ -20,7 +22,7 @@ const buttonStyle: React.CSSProperties = { margin: "-1px -1px -1px 0" };
 const buttonClassName =
   "font-normal border border-gray hover:border-white hover:z-10 px-2 py-1 flex flex-row items-center";
 
-export default function BuildMenu() {
+export default function BottomMenu() {
   const dispatch = useDispatch();
   const placingTarget = useSelector(selectors.placingTarget);
   const isWeaponActive = useSelector(selectors.isWeaponActive);
@@ -176,7 +178,62 @@ export default function BuildMenu() {
         buildingCategories.map((c, i) => (
           <BuildingCategoryMenu key={c.code} category={c} index={i} />
         ))}
+      <div className="flex-1" />
+      <IconButton
+        label="Clear All Reflectors"
+        controlCode={ControlCode.ClearAllReflectors}
+        callback={() => dispatch(actions.clearReflectors())}
+        icon={<Icons.ClearReflectors />}
+      />
+      <IconButton
+        label="Wait/Skip Turn"
+        controlCode={ControlCode.Wait}
+        callback={() => dispatch(actions.playerTookTurn())}
+        icon={<Icons.Wait />}
+      />
+      <IconButton
+        label="Undo Turn"
+        controlCode={ControlCode.Undo}
+        callback={() => dispatch(actions.undoTurn())}
+        icon={<Icons.Undo />}
+      />
+      <IconButton
+        label="Dismiss Notifications"
+        controlCode={ControlCode.DismissNotifications}
+        callback={() => notifications.dismissAll()}
+        icon={<Icons.DismissNotifications />}
+      />
     </section>
+  );
+}
+
+function IconButton({
+  label,
+  controlCode,
+  callback,
+  icon,
+}: {
+  label: string;
+  controlCode: ControlCode;
+  callback: () => void;
+  icon: React.ReactElement;
+}) {
+  const settings = useContext(SettingsContext);
+  useControl({
+    code: controlCode,
+    callback,
+    group: HotkeyGroup.Main,
+  });
+  return (
+    <Tippy content={`${label} (${settings.keyboardShortcuts[controlCode][0]})`}>
+      <button
+        type="button"
+        className="w-6 p-0.5"
+        onClick={noFocusOnClick(callback)}
+      >
+        {icon}
+      </button>
+    </Tippy>
   );
 }
 

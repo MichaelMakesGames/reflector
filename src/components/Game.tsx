@@ -1,7 +1,7 @@
 /* global document */
 import React, { useEffect } from "react";
 import colors from "~colors";
-import BuildMenu from "./BuildMenu";
+import BottomMenu from "./BottomMenu";
 import GameMap from "./GameMap";
 import Header from "./Header";
 import Inspector from "./Inspector";
@@ -42,7 +42,7 @@ export default function Game() {
             }}
           >
             <GameMap />
-            <BuildMenu />
+            <BottomMenu />
           </div>
           <div className="flex-none w-64 h-full flex flex-col border-l border-r border-gray z-10">
             <Inspector />
