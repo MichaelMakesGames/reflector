@@ -33,6 +33,24 @@ function targetWeapon(
   if (!player) return;
   const playerPosition = player.pos;
 
+  if (getConstDir(action.payload) === UP) {
+    state.act.addEntity(
+      createEntityFromTemplate("LASER_PLAYER_UP", { pos: playerPosition }),
+    );
+  } else if (getConstDir(action.payload) === DOWN) {
+    state.act.addEntity(
+      createEntityFromTemplate("LASER_PLAYER_DOWN", { pos: playerPosition }),
+    );
+  } else if (getConstDir(action.payload) === LEFT) {
+    state.act.addEntity(
+      createEntityFromTemplate("LASER_PLAYER_LEFT", { pos: playerPosition }),
+    );
+  } else if (getConstDir(action.payload) === RIGHT) {
+    state.act.addEntity(
+      createEntityFromTemplate("LASER_PLAYER_RIGHT", { pos: playerPosition }),
+    );
+  }
+
   const beams = [
     {
       strength: BASE_LASER_STRENGTH,

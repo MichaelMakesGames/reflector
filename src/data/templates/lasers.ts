@@ -19,6 +19,38 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       direction: UP,
     },
   },
+  LASER_PLAYER_UP: {
+    parentTemplate: "LASER_COSMETIC_BASE",
+    display: {
+      tile: "laser_player_up",
+      color: colors.laser,
+      priority: PRIORITY_LASER,
+    },
+  },
+  LASER_PLAYER_DOWN: {
+    parentTemplate: "LASER_COSMETIC_BASE",
+    display: {
+      tile: "laser_player_down",
+      color: colors.laser,
+      priority: PRIORITY_LASER,
+    },
+  },
+  LASER_PLAYER_LEFT: {
+    parentTemplate: "LASER_COSMETIC_BASE",
+    display: {
+      tile: "laser_player_left",
+      color: colors.laser,
+      priority: PRIORITY_LASER,
+    },
+  },
+  LASER_PLAYER_RIGHT: {
+    parentTemplate: "LASER_COSMETIC_BASE",
+    display: {
+      tile: "laser_player_right",
+      color: colors.laser,
+      priority: PRIORITY_LASER,
+    },
+  },
   LASER_BURST: {
     parentTemplate: "LASER_BASE",
     display: {
