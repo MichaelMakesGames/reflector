@@ -12,6 +12,7 @@ import {
   getActionsAvailableAtPos,
   getQuickAction,
 } from "~utils/controls";
+import { createEntityFromTemplate } from "~utils/entities";
 import { getHumanReadablePosition } from "~utils/geometry";
 import Warning from "./Warning";
 
@@ -38,40 +39,54 @@ export default function Inspector() {
     ? entitiesAtCursor.filter((e) => e.warning)
     : [];
 
+  const blueprint = useSelector(selectors.placingTarget);
+  const blueprintDescription = createEntityFromTemplate(
+    blueprint ? blueprint.template : "NONE",
+  ).description;
+
   return (
     <section className="p-2">
+      {cursorPos ? (
+        <h2 className="text-sm text-lightGray">
+          {getHumanReadablePosition(cursorPos)}
+          {quickAction ? " - Click or press space to" : " - No quick action"}
+        </h2>
+      ) : (
+        <h2 className="text-xl">Move cursor over a location to see details</h2>
+      )}
+
+      {quickAction && <div className="text-2xl">{quickAction.label}</div>}
+
+      {cursorPos && blueprintDescription && (
+        <div className="text-sm text-lightGray">
+          {blueprintDescription.description}
+        </div>
+      )}
+
       {warnings.map((e) => (
         <p key={e.id} className="text-red">
           <Warning className="bg-red" /> {e.warning?.text}
         </p>
       ))}
-      <h2 className="text-xl">
-        {cursorPos
-          ? `Location ${getHumanReadablePosition(cursorPos)}`
-          : "Move cursor over a location to see details"}
-      </h2>
+
       {cursorPos && (
-        <ul className="ml-3">
-          {entitiesWithDescription && entitiesWithDescription.length ? (
-            entitiesWithDescription.map((e) => (
-              <InspectorEntity entity={e} key={e.id} />
-            ))
-          ) : (
-            <li>Nothing here</li>
-          )}
-        </ul>
+        <div className="mt-3">
+          <h3 className="text-lg">Contents</h3>
+          <ul className="ml-3">
+            {entitiesWithDescription && entitiesWithDescription.length ? (
+              entitiesWithDescription.map((e) => (
+                <InspectorEntity entity={e} key={e.id} />
+              ))
+            ) : (
+              <li>Nothing here</li>
+            )}
+          </ul>
+        </div>
       )}
-      {quickAction && (
-        <>
-          <h2 className="text-xl mt-2">Quick Action: {quickAction.label}</h2>
-          <div className="text-lightGray text-sm mb-2">
-            (Click or press space)
-          </div>
-        </>
-      )}
+
       {cursorPos && (
-        <>
-          <h2 className="text-xl mt-2">Other Actions</h2>
+        <div className="mt-3">
+          <h3 className="text-lg">Other Actions</h3>
           {actions.length > 0 && (
             <div className="text-lightGray text-sm mb-2">
               Right click map or use shortcuts
@@ -85,7 +100,7 @@ export default function Inspector() {
               </li>
             ))}
           </ul>
-        </>
+        </div>
       )}
     </section>
   );
@@ -165,6 +180,12 @@ function InspectorEntity({
         {entity.production && (
           <span className="text-lightGray text-sm">
             {entity.production.producedLastTurn ? " - Active" : " - Inactive"}
+          </span>
+        )}
+        {entity.description && entity.description.shortDescription && (
+          <span className="text-lightGray text-sm">
+            {" - "}
+            {entity.description.shortDescription}
           </span>
         )}
       </div>

@@ -2,7 +2,11 @@
 import Tippy from "@tippyjs/react";
 import React, { useCallback, useContext, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { HotkeyGroup, useControl } from "~components/HotkeysProvider";
+import {
+  HotkeyGroup,
+  useControl,
+  ControlConfig,
+} from "~components/HotkeysProvider";
 import { SettingsContext } from "~contexts";
 import buildingCategories, { BuildingCategory } from "~data/buildingCategories";
 import buildings from "~data/buildings";
@@ -139,7 +143,7 @@ export default function BottomMenu() {
   return (
     <section className="border-t border-b border-gray flex flex-row">
       {placingTarget ? (
-        <h2 className="text-xl px-2">
+        <h2 className="text-xl px-2 self-center">
           Building{" "}
           {
             (createEntityFromTemplate(placingTarget.template).description || {})
@@ -147,7 +151,7 @@ export default function BottomMenu() {
           }
         </h2>
       ) : null}
-      {!placingTarget && <h2 className="text-xl px-2">Build</h2>}
+      {!placingTarget && <h2 className="text-xl px-2 self-center">Build</h2>}
       {placingTarget && placingTarget.rotatable ? (
         <button
           type="button"
@@ -190,6 +194,7 @@ export default function BottomMenu() {
         controlCode={ControlCode.Wait}
         callback={() => dispatch(actions.playerTookTurn())}
         icon={<Icons.Wait />}
+        controlConfig={{ ctrl: false }}
       />
       <IconButton
         label="Undo Turn"
@@ -212,17 +217,20 @@ function IconButton({
   controlCode,
   callback,
   icon,
+  controlConfig = {},
 }: {
   label: string;
   controlCode: ControlCode;
   callback: () => void;
   icon: React.ReactElement;
+  controlConfig?: Partial<ControlConfig>;
 }) {
   const settings = useContext(SettingsContext);
   useControl({
     code: controlCode,
     callback,
     group: HotkeyGroup.Main,
+    ...controlConfig,
   });
   return (
     <Tippy content={`${label} (${settings.keyboardShortcuts[controlCode][0]})`}>

@@ -1,5 +1,4 @@
 /* global navigator */
-import { DOWN, LEFT, PLAYER_ID, RIGHT, UP } from "~constants";
 import actions from "~state/actions";
 import selectors from "~state/selectors";
 import wrapState from "~state/wrapState";
@@ -8,7 +7,7 @@ import { ControlCode } from "~types/ControlCode";
 import { findValidPositions } from "./building";
 import { areConditionsMet } from "./conditions";
 import { createEntityFromTemplate } from "./entities";
-import { arePositionsEqual, getPositionToDirection } from "./geometry";
+import { arePositionsEqual } from "./geometry";
 
 export function getQuickAction(
   state: RawState,
@@ -115,33 +114,6 @@ export function getQuickAction(
       action: actions.toggleDisabled(pos),
       label: "Disable Jobs",
     };
-  }
-
-  if (player) {
-    if (arePositionsEqual(pos, getPositionToDirection(player.pos, RIGHT))) {
-      return {
-        action: actions.move({ entityId: PLAYER_ID, ...RIGHT }),
-        label: "Move",
-      };
-    }
-    if (arePositionsEqual(pos, getPositionToDirection(player.pos, LEFT))) {
-      return {
-        action: actions.move({ entityId: PLAYER_ID, ...LEFT }),
-        label: "Move",
-      };
-    }
-    if (arePositionsEqual(pos, getPositionToDirection(player.pos, UP))) {
-      return {
-        action: actions.move({ entityId: PLAYER_ID, ...UP }),
-        label: "Move",
-      };
-    }
-    if (arePositionsEqual(pos, getPositionToDirection(player.pos, DOWN))) {
-      return {
-        action: actions.move({ entityId: PLAYER_ID, ...DOWN }),
-        label: "Move",
-      };
-    }
   }
 
   return null;
@@ -269,7 +241,7 @@ export function noFocusOnClick(
   callback: (e: React.MouseEvent) => void,
 ): (e: React.MouseEvent) => void {
   return (e: React.MouseEvent) => {
-    const target = e.nativeEvent.target as HTMLElement | null;
+    const target = e.currentTarget as HTMLElement | null;
     if (target && target.blur) target.blur();
     callback(e);
   };

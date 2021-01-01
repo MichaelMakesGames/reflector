@@ -107,6 +107,7 @@ export interface Projector {
 export interface Description {
   name: string;
   description: string;
+  shortDescription?: string;
 }
 
 export interface JobProvider {

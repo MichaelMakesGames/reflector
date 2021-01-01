@@ -21,6 +21,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       name: "Water",
       description:
         "Neither you nor enemies can move over water, but your lasers can shoot over it.",
+      shortDescription: "blocks movement",
     },
   },
   WATER_0: {
@@ -206,6 +207,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     description: {
       name: "Mountain",
       description: "Indestructible. Blocks all movement and lasers.",
+      shortDescription: "indestructible",
     },
   },
   ORE: {
@@ -221,6 +223,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       name: "Ore",
       description:
         "Can be mined either manually or by building on mine on top.",
+      shortDescription: "can be mined",
     },
   },
   FERTILE: {
@@ -235,6 +238,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     description: {
       name: "Fertile Land",
       description: "Can be farmed for food by building a farm on top.",
+      shortDescription: "can be farmed",
     },
   },
 };

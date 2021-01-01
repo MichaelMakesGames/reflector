@@ -122,7 +122,7 @@ export default function HotkeysProvider({
   );
 }
 
-interface ControlConfig {
+export interface ControlConfig {
   code: ControlCode;
   group: HotkeyGroup;
   allowedGroups?: HotkeyGroup[];

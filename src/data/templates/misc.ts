@@ -174,6 +174,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     border: {},
   },
+  NONE: {},
 };
 
 export default templates;
