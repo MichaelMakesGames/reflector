@@ -21,7 +21,7 @@ const jobTypes: Record<JobTypeCode, JobType> = {
   [JobTypeCode.Power]: {
     code: JobTypeCode.Power,
     label: "Power",
-    description: "Jobs at generators to produce power.",
+    description: "Jobs at reactors to produce power.",
   },
   [JobTypeCode.Farming]: {
     code: JobTypeCode.Farming,
