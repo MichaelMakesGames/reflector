@@ -16,7 +16,7 @@ export default function Status() {
   const housingCapacity = useSelector(selectors.housingCapacity);
   const morale = useSelector(selectors.morale);
   return (
-    <section className="p-2 border-b border-gray">
+    <section className="p-2 border-b border-gray" data-section="STATUS">
       <div className="flex flex-row justify-between items-start mb-2">
         <div className="flex flex-col">
           <Tippy
@@ -56,13 +56,13 @@ export default function Status() {
       </div>
       <div className="flex flex-row">
         <Tippy content="This represents the confidence and discipline of your colony. You lose morale every time a colonist dies, or if you don't have enough food at night. If you ever reach 0 morale, you lose!">
-          <p>
+          <p data-status="MORALE">
             <span className="text-lightGray">Morale: </span>
             {morale}
           </p>
         </Tippy>
         <Tippy content="This is your current population / your housing capacity. At night, colonists will return to their residences. If you don't have enough, they will build temporary tents wherever they are.">
-          <p>
+          <p data-status="HOUSING">
             <span className="text-lightGray ml-3">Population: </span>
             {population}
             <span className="text-lightGray"> / {housingCapacity}</span>

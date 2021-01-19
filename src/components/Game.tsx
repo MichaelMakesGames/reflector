@@ -15,6 +15,7 @@ import GameOver from "./GameOver";
 import { TILE_SIZE, MAP_WIDTH, MAP_CSS_WIDTH } from "~constants";
 import Introduction from "./Introduction";
 import HotkeysProvider from "./HotkeysProvider";
+import Tutorials from "./Tutorials";
 
 export default function Game() {
   useEffect(() => {
@@ -45,6 +46,7 @@ export default function Game() {
             <BottomMenu />
           </div>
           <div className="flex-none w-64 h-full flex flex-col border-l border-r border-gray z-10">
+            <Tutorials />
             <Inspector />
           </div>
         </div>

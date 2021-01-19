@@ -22,6 +22,11 @@ export default function Menu() {
     code: ControlCode.Menu,
     callback: open,
     group: HotkeyGroup.Main,
+    allowedGroups: [
+      HotkeyGroup.Tutorial,
+      HotkeyGroup.BuildingSelection,
+      HotkeyGroup.JobPriorities,
+    ],
   });
 
   useControl({
@@ -42,7 +47,14 @@ export default function Menu() {
     code: ControlCode.Help,
     callback: openControls,
     group: HotkeyGroup.Main,
-    allowedGroups: [HotkeyGroup.Intro, HotkeyGroup.GameOver, HotkeyGroup.Menu],
+    allowedGroups: [
+      HotkeyGroup.Intro,
+      HotkeyGroup.GameOver,
+      HotkeyGroup.Menu,
+      HotkeyGroup.Tutorial,
+      HotkeyGroup.JobPriorities,
+      HotkeyGroup.BuildingSelection,
+    ],
   });
 
   return (
@@ -63,6 +75,12 @@ export default function Menu() {
             />
             <MenuOption
               index={1}
+              label="New Game (Reset Tutorial)"
+              callback={() => dispatch(actions.resetTutorials())}
+              closeMenu={close}
+            />
+            <MenuOption
+              index={2}
               label="Toggle Fullscreen"
               callback={() => {
                 if (document.fullscreen) {
@@ -74,7 +92,7 @@ export default function Menu() {
               closeMenu={close}
             />
             <MenuOption
-              index={2}
+              index={3}
               label="Controls"
               callback={openControls}
               closeMenu={close}

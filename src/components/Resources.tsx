@@ -8,7 +8,7 @@ import ResourceIcon from "./ResourceIcon";
 
 export default function Resources() {
   return (
-    <section className="p-2 border-b border-gray">
+    <section className="p-2 border-b border-gray" data-section="RESOURCES">
       <h2 className="text-xl">Resources</h2>
       <table className="w-full">
         <thead className="hidden">
@@ -45,7 +45,10 @@ function ResourceRow({ resource }: { resource: Resource }) {
   };
 
   return (
-    <tr className="flex flex-row items-center h-8 box-content border-t border-darkGray">
+    <tr
+      className="flex flex-row items-center h-8 box-content border-t border-darkGray"
+      data-resource={resource.code}
+    >
       <Tippy content={resource.description}>
         <td className="flex-initial h-6">
           <ResourceIcon resourceCode={resource.code} />

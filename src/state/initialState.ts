@@ -5,8 +5,13 @@ import {
   VERSION,
 } from "~constants";
 import { RawState } from "~types";
+import { TutorialId } from "~types/TutorialId";
 
-export function createInitialState() {
+export function createInitialState({
+  completedTutorials,
+}: {
+  completedTutorials: TutorialId[];
+}) {
   const initialState: RawState = {
     version: VERSION,
     entities: {},
@@ -51,6 +56,17 @@ export function createInitialState() {
     isAutoMoving: false,
     startOfThisTurn: null,
     startOfLastTurn: null,
+    tutorials: {
+      completed: completedTutorials,
+      active: completedTutorials.includes(TutorialId.Basics)
+        ? []
+        : [
+            {
+              id: TutorialId.Basics,
+              step: 0,
+            },
+          ],
+    },
   };
 
   initialState.startOfThisTurn = {

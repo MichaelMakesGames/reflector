@@ -4,6 +4,7 @@ import * as loadingActions from "./loadingActions";
 import * as miscActions from "./miscActions";
 import * as placementActions from "./placementActions";
 import * as removeBuildingActions from "./removeBuildingActions";
+import * as tutorialActions from "./tutorialActions";
 import * as weaponActions from "./weaponActions";
 
 export default {
@@ -13,5 +14,6 @@ export default {
   ...miscActions,
   ...placementActions,
   ...removeBuildingActions,
+  ...tutorialActions,
   ...weaponActions,
 };

@@ -100,6 +100,7 @@
     "react": "^16.9.0",
     "react-beautiful-dnd": "^13.0.0",
     "react-dom": "^16.9.0",
+    "react-draggable": "^4.4.3",
     "react-modal": "^3.11.1",
     "react-redux": "^7.1.1",
     "redux": "^4.0.4",

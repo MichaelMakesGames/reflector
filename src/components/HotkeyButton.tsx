@@ -44,6 +44,7 @@ export default function HotkeyButton({
       style={style || {}}
       onClick={noFocusOnClick(callback)}
       disabled={disabled && !disabledIsCosmeticOnly}
+      data-control-code={controlCode}
     >
       <Kbd>{settings.keyboardShortcuts[controlCode][0]}</Kbd> {label}
     </button>

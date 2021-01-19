@@ -1,6 +1,7 @@
 import {
   DAY_START_MINUTES,
   MINUTES_PER_TURN,
+  STARTING_MORALE,
   TURNS_PER_DAY,
   TURNS_PER_NIGHT,
   VICTORY_ON_TURN,
@@ -25,6 +26,10 @@ export function victory(state: RawState) {
 
 export function morale(state: RawState) {
   return state.morale;
+}
+
+export function hasLostMorale(state: RawState) {
+  return state.morale < STARTING_MORALE;
 }
 
 export function day(state: RawState) {

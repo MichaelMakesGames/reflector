@@ -1,4 +1,5 @@
 import React from "react";
+import templates from "~data/templates";
 import { createEntityFromTemplate } from "~utils/entities";
 // @ts-ignore
 import tiles from "../assets/tiles/*.png";
@@ -8,6 +9,7 @@ interface Props {
   style?: React.CSSProperties;
 }
 export default function EntityPreview({ templateName, style = {} }: Props) {
+  if (!Object.keys(templates).includes(templateName)) return null;
   const entity = createEntityFromTemplate(templateName);
   if (!entity.display) return null;
   return (

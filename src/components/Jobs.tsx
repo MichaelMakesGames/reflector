@@ -1,5 +1,5 @@
 import Tippy from "@tippyjs/react";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { useDispatch, useSelector } from "react-redux";
 import jobTypes, { JobTypeCode } from "~data/jobTypes";
@@ -12,9 +12,12 @@ import Icons from "./Icons";
 import colors from "~colors";
 import { HotkeyGroup, useControl } from "./HotkeysProvider";
 import { ControlCode } from "~types/ControlCode";
+import Kbd from "./Kbd";
+import { SettingsContext } from "~contexts";
 
 export default function Jobs() {
   const dispatch = useDispatch();
+  const settings = useContext(SettingsContext);
   const jobPriorities = useSelector(selectors.jobPriorities);
   const orderedJobTypes = Object.entries(jobPriorities)
     .sort((a, b) => a[1] - b[1])
@@ -24,7 +27,7 @@ export default function Jobs() {
   const [focusedJob, setFocusedJob] = useState<JobTypeCode | null>(null);
   const [selectedJob, setSelectedJob] = useState<JobTypeCode | null>(null);
   useControl({
-    code: ControlCode.JobPriorities,
+    code: ControlCode.FocusJobPriorities,
     callback: () => setFocusedJob(orderedJobTypes[0].code),
     group: HotkeyGroup.Main,
   });
@@ -37,6 +40,15 @@ export default function Jobs() {
   });
   useControl({
     code: ControlCode.Back,
+    callback: () => {
+      setSelectedJob(null);
+      setFocusedJob(null);
+    },
+    group: HotkeyGroup.JobPriorities,
+    disabled: !focusedJob,
+  });
+  useControl({
+    code: ControlCode.FocusJobPriorities,
     callback: () => {
       setSelectedJob(null);
       setFocusedJob(null);
@@ -82,11 +94,33 @@ export default function Jobs() {
   });
 
   return (
-    <section className="p-2 border-b border-gray">
+    <section className="p-2 border-b border-gray" data-section="JOBS">
       <div className="flex items-baseline">
-        <h2 className="text-xl flex-1">Jobs</h2>
+        <h2 className="text-xl flex-1">
+          Jobs{" "}
+          <Kbd className="text-sm">
+            {settings.keyboardShortcuts[ControlCode.FocusJobPriorities][0]}
+          </Kbd>
+        </h2>
         <span className="text-sm">Employed / Max</span>
       </div>
+      {focusedJob && (
+        <div className="text-sm my-1">
+          Use arrows to select job,{" "}
+          <Kbd noPad>
+            {settings.keyboardShortcuts[ControlCode.QuickAction][0]}
+          </Kbd>{" "}
+          to pick up, arrows to move, then{" "}
+          <Kbd noPad>
+            {settings.keyboardShortcuts[ControlCode.QuickAction][0]}
+          </Kbd>{" "}
+          gain to drop. Exit with{" "}
+          <Kbd noPad>
+            {settings.keyboardShortcuts[ControlCode.FocusJobPriorities][0]}
+          </Kbd>{" "}
+          or <Kbd noPad>{settings.keyboardShortcuts[ControlCode.Back][0]}</Kbd>.
+        </div>
+      )}
       <DragDropContext
         onDragEnd={(e) => {
           if (e.destination) {

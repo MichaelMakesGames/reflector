@@ -27,6 +27,10 @@ export default function processWave(state: WrappedState): void {
         Math.floor(numberOfSpawns) +
         (Math.random() < numberOfSpawns % 1 ? 1 : 0);
     }
+    // always spawn at least 1 enemy on the first turn of night
+    if (state.select.turnOfNight() === 1 && numberOfSpawns < 1) {
+      numberOfSpawns = 1;
+    }
     for (const _ of rangeTo(numberOfSpawns)) {
       spawnEnemy(state);
     }

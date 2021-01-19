@@ -91,14 +91,6 @@ export default function generateMap(): Entity[] {
     .filter((entity) => entity.template === "FLOOR")
     .map((entity) => entity.pos)
     .sort((a, b) => getDistance(a, centerPos) - getDistance(b, centerPos));
-  const orePositions = (results as Required<Entity, "pos">[])
-    .filter((entity) => entity.template === "ORE")
-    .map((entity) => entity.pos)
-    .sort((a, b) => getDistance(a, centerPos) - getDistance(b, centerPos));
-  const fertilePositions = (results as Required<Entity, "pos">[])
-    .filter((entity) => entity.template === "FERTILE")
-    .map((entity) => entity.pos)
-    .sort((a, b) => getDistance(a, centerPos) - getDistance(b, centerPos));
 
   const waterEntities = (results as Required<Entity, "pos">[]).filter(
     (entity) => entity.template === "WATER_BASE",
@@ -163,23 +155,11 @@ export default function generateMap(): Entity[] {
     );
   });
 
-  results.push(
-    createEntityFromTemplate("RESIDENCE", { pos: floorPositions[3] }),
-  );
-
   results.push({
     ...createEntityFromTemplate("PLAYER"),
     pos: floorPositions[4],
     id: PLAYER_ID,
   });
-
-  results.push(
-    createEntityFromTemplate("MINING_SPOT", {
-      pos: orePositions[0],
-    }),
-  );
-
-  results.push(createEntityFromTemplate("FARM", { pos: fertilePositions[0] }));
 
   return results;
 }

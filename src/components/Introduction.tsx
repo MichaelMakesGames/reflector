@@ -37,21 +37,14 @@ export default function Introduction() {
   return (
     <Modal isOpen onRequestClose={close}>
       <h2 className="text-2xl">Welcome to Reflector: Laser Defense</h2>
-      <p className="my-2">Survive 10 days to win!</p>
       <p className="my-2">
-        Enemies attack at night, colonists work during the day.
-      </p>
-      <p className="my-2">
-        Click to move, or use <Kbd>wasd</Kbd> or arrow keys.
-      </p>
-      <p className="my-2">
-        Press <Kbd>f</Kbd> to activate laser, <Kbd>wasd</Kbd> to aim, then{" "}
-        <Kbd>f</Kbd> again to fire.
-      </p>
-      <p className="my-2">
-        Press <Kbd>?</Kbd> to view full controls.
+        You have been tasked with establishing a colony on an alien planet.
+        Build your base, protect your colonists, and survive 10 days to win!
       </p>
       <p className="my-2">Good luck!</p>
+      <p className="my-2 text-sm text-lightGray">
+        Press <Kbd>?</Kbd> to view full keyboard controls.
+      </p>
       <HotkeyButton
         label="Start Game"
         className="mt-2"

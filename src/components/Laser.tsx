@@ -116,8 +116,11 @@ export default function Laser() {
         </div>
       }
     >
-      <section className="p-2 border-b border-gray flex flex-row items-center">
-        <div className="mr-2 flex-grow flex-col">
+      <section
+        className="p-2 border-b border-gray flex flex-row items-center"
+        data-section="LASER"
+      >
+        <div className="mr-2 flex-grow flex-col" data-status="LASER">
           <div className="text-lightGray">Laser: </div>
           <div>
             {laserState === "READY" && "Ready"}
@@ -126,7 +129,7 @@ export default function Laser() {
           </div>
         </div>
 
-        <div className="flex flex-row">
+        <div className="flex flex-row" id="AIMING_ARROWS">
           <div className="flex flex-col flex-1">
             <div className="flex-1" />
             <button

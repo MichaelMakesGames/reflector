@@ -3,6 +3,7 @@ import { Action, RawState } from "~/types";
 import actions from "./actions";
 import "./handlers";
 import { createInitialState } from "./initialState";
+import processTutorials from "./processors/processTutorials";
 import wrapState from "./wrapState";
 
 const GAME_OVER_ALLOW_LIST: string[] = [
@@ -17,7 +18,7 @@ const AUTO_MOVE_ALLOW_LIST: string[] = [
 ];
 
 export default function reducer(
-  state: RawState = createInitialState(),
+  state: RawState = createInitialState({ completedTutorials: [] }),
   action: Action,
 ): RawState {
   const wrappedState = wrapState(state);
@@ -32,5 +33,8 @@ export default function reducer(
   }
 
   wrappedState.handle(action);
+
+  processTutorials(wrapState(state), wrappedState, action);
+
   return wrappedState.raw;
 }

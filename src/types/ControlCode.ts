@@ -20,7 +20,6 @@ export enum ControlCode {
 
   PlaceReflectorA = "PLACE_REFLECTOR_A",
   PlaceReflectorB = "PLACE_REFLECTOR_B",
-  RotateReflector = "ROTATE_REFLECTOR",
   RemoveReflector = "REMOVE_REFLECTOR",
   ClearAllReflectors = "CLEAR_ALL_REFLECTORS",
 
@@ -34,6 +33,10 @@ export enum ControlCode {
   Help = "HELP",
   ZoomIn = "ZOOM_IN",
   ZoomOut = "ZOOM_OUT",
-  JobPriorities = "JOB_PRIORITIES",
+  FocusJobPriorities = "FOCUS_JOB_PRIORITIES",
   DismissNotifications = "DISMISS_NOTIFICATIONS",
+
+  FocusTutorials = "FOCUS_TUTORIALS",
+  ToggleTutorials = "TOGGLE_TUTORIALS",
+  DismissTutorial = "DISMISS_TUTORIAL",
 }

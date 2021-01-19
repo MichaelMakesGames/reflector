@@ -24,7 +24,7 @@ import ResourceAmount from "./ResourceAmount";
 
 const buttonStyle: React.CSSProperties = { margin: "-1px -1px -1px 0" };
 const buttonClassName =
-  "font-normal border border-gray hover:border-white hover:z-10 px-2 py-1 flex flex-row items-center";
+  "font-normal border border-gray hover:border-white z-10 hover:z-20 px-2 py-1 flex flex-row items-center";
 
 export default function BottomMenu() {
   const dispatch = useDispatch();
@@ -141,7 +141,10 @@ export default function BottomMenu() {
   });
 
   return (
-    <section className="border-t border-b border-gray flex flex-row">
+    <section
+      className="border-t border-b border-gray flex flex-row"
+      data-section="BOTTOM_MENU"
+    >
       {placingTarget ? (
         <h2 className="text-xl px-2 self-center">
           Building{" "}
@@ -171,6 +174,7 @@ export default function BottomMenu() {
           onClick={noFocusOnClick(cancel)}
           style={buttonStyle}
           className={buttonClassName}
+          data-control-code={ControlCode.Back}
         >
           <kbd className="bg-darkGray px-1 rounded mr-1">
             {settings.keyboardShortcuts[ControlCode.Back][0]}
@@ -238,6 +242,7 @@ function IconButton({
         type="button"
         className="w-6 p-0.5"
         onClick={noFocusOnClick(callback)}
+        data-control-code={controlCode}
       >
         {icon}
       </button>
@@ -337,6 +342,7 @@ function BuildingCategoryMenu({
     >
       <Tippy placement="top" content={category.description} disabled={isOpen}>
         <button
+          data-building-category={category.code}
           type="button"
           onClick={noFocusOnClick(deactivateWeaponAndToggle)}
           style={buttonStyle}
@@ -390,6 +396,7 @@ function BuildingButton({
       }
     >
       <button
+        data-building={building.template}
         type="button"
         className="flex flex-no-wrap items-baseline w-full text-left mb-1"
         onClick={noFocusOnClick(callback)}

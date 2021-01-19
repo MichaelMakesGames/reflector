@@ -45,7 +45,7 @@ export default function Inspector() {
   ).description;
 
   return (
-    <section className="p-2">
+    <section className="p-2" data-section="INSPECTOR">
       {cursorPos ? (
         <h2 className="text-sm text-lightGray">
           {getHumanReadablePosition(cursorPos)}

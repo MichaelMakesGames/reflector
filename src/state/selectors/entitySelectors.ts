@@ -26,6 +26,10 @@ export function entitiesWithComps<C extends keyof Entity>(
     .map((id) => state.entities[id]) as Required<Entity, C>[];
 }
 
+export function entitiesWithTemplate(state: RawState, template: TemplateName) {
+  return entityList(state).filter((e) => e.template === template);
+}
+
 export function entityById(state: RawState, entityId: string) {
   return state.entities[entityId];
 }
@@ -171,7 +175,7 @@ export function numberOfDisabledJobs(state: RawState, jobType: JobTypeCode) {
   );
 }
 
-export function maxNumberEmployed(state: RawState, jobType: JobTypeCode) {
+export function maxNumberEmployed(state: RawState, jobType?: JobTypeCode) {
   const providers = enabledJobProviders(state, jobType);
   return providers.reduce(
     (acc, cur) => acc + cur.jobProvider.maxNumberEmployed,
@@ -200,6 +204,12 @@ export function colonistsEmployedInJobType(
 export function numberOfUnemployedColonists(state: RawState) {
   return colonists(state).filter((entity) => !entity.colonist.employment)
     .length;
+}
+
+export function areThereMoreJobsThanColonists(state: RawState) {
+  const numColonists = entitiesWithComps(state, "colonist").length;
+  const numJobs = maxNumberEmployed(state);
+  return numJobs > numColonists;
 }
 
 export function areEnemiesPresent(state: RawState) {

@@ -1,7 +1,8 @@
-import { Entity, Pos } from "./Entity";
-import { Direction } from "./Direction";
-import { ResourceCode } from "~data/resources";
 import { JobTypeCode } from "~data/jobTypes";
+import { ResourceCode } from "~data/resources";
+import { Direction } from "./Direction";
+import { Entity, Pos } from "./Entity";
+import { TutorialId } from "./TutorialId";
 
 export interface RawState {
   version: string;
@@ -25,6 +26,7 @@ export interface RawState {
   cursorPos: Pos | null;
   isAutoMoving: boolean;
   events: Record<string, number>;
+  tutorials: TutorialsState;
 
   startOfThisTurn: RawState | null;
   startOfLastTurn: RawState | null;
@@ -38,4 +40,12 @@ export interface TimeState {
     e: number;
     w: number;
   };
+}
+
+export interface TutorialsState {
+  completed: TutorialId[];
+  active: {
+    id: TutorialId;
+    step: number;
+  }[];
 }

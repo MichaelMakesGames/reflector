@@ -98,7 +98,7 @@ export default function KeyboardControls({ onClose }: { onClose: () => void }) {
       <section className="my-3">
         <h3 className="text-xl">Job Priorities</h3>
         <Shortcut
-          code={ControlCode.JobPriorities}
+          code={ControlCode.FocusJobPriorities}
           label="Enter Job Priority Mode"
         />
         <Shortcut code={ControlCode.Back} label="Exit Job Priority Mode" />
@@ -114,6 +114,29 @@ export default function KeyboardControls({ onClose }: { onClose: () => void }) {
           code={ControlCode.Up}
           label="Focus Previous Job, or Increase Selected Job Priority"
         />
+      </section>
+      <section className="my-3">
+        <h3 className="text-xl">Tutorial</h3>
+        <Shortcut
+          code={ControlCode.ToggleTutorials}
+          label="Minimize/Expand Tutorial Window"
+        />
+        <Shortcut
+          code={ControlCode.FocusTutorials}
+          label="Focus Tutorial Controls"
+        />
+        <Shortcut
+          code={ControlCode.DismissTutorial}
+          label="Dismiss Selected Tutorial"
+        />
+        <Shortcut
+          code={ControlCode.QuickAction}
+          label="Complete Selected Tutorial Step (if able)"
+        />
+        <Shortcut code={ControlCode.Up} label="Select Previous Tutorial" />
+        <Shortcut code={ControlCode.Down} label="Select Next Tutorial" />
+        <Shortcut code={ControlCode.Left} label="View Previous Step" />
+        <Shortcut code={ControlCode.Right} label="View Next Step" />
       </section>
       <section className="my-3">
         <h3 className="text-xl">Miscellaneous</h3>

@@ -11,7 +11,11 @@ function newGame(
   state: WrappedState,
   action: ReturnType<typeof actions.newGame>,
 ): void {
-  state.setRaw(createInitialState());
+  state.setRaw(
+    createInitialState({
+      completedTutorials: state.select.completedTutorials(),
+    }),
+  );
   clearRenderer();
   makeLevel(state);
   state.act.loadGame({ state: state.raw });

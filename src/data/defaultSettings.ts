@@ -9,7 +9,7 @@ const defaultSettings: Settings = {
   unmodifiedAiming: true,
   unmodifiedBuilding: false,
   keyboardShortcuts: {
-    [ControlCode.Fire]: ["f", "shift+f"],
+    [ControlCode.Fire]: ["f"],
 
     [ControlCode.Up]: ["w", "up"],
     [ControlCode.Down]: ["s", "down"],
@@ -30,13 +30,12 @@ const defaultSettings: Settings = {
     [ControlCode.RotateBuilding]: ["r"],
 
     [ControlCode.QuickAction]: ["space"],
-    [ControlCode.PlaceReflectorA]: ["/", "e"],
-    [ControlCode.PlaceReflectorB]: ["\\", "r"],
-    [ControlCode.RotateReflector]: ["shift+r"],
-    [ControlCode.RemoveReflector]: ["t"],
+    [ControlCode.PlaceReflectorA]: ["/"],
+    [ControlCode.PlaceReflectorB]: ["\\"],
+    [ControlCode.RemoveReflector]: ["x"],
     [ControlCode.ClearAllReflectors]: ["c"],
-    [ControlCode.RemoveBuilding]: ["x"],
-    [ControlCode.ToggleJobs]: ["j"],
+    [ControlCode.RemoveBuilding]: ["backspace"],
+    [ControlCode.ToggleJobs]: ["e"],
 
     [ControlCode.Wait]: ["z"],
     [ControlCode.Back]: ["q", "esc"],
@@ -44,8 +43,12 @@ const defaultSettings: Settings = {
     [ControlCode.Help]: ["?"],
     [ControlCode.ZoomIn]: ["+", "="],
     [ControlCode.ZoomOut]: ["-", "_"],
-    [ControlCode.JobPriorities]: ["v"],
+    [ControlCode.FocusJobPriorities]: ["j"],
     [ControlCode.DismissNotifications]: ["`"],
+
+    [ControlCode.FocusTutorials]: ["t"],
+    [ControlCode.ToggleTutorials]: ["shift+t"],
+    [ControlCode.DismissTutorial]: ["backspace"],
   },
 };
 
