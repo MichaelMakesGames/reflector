@@ -14,7 +14,7 @@ const tutorials: Record<TutorialId, Tutorial> = {
     steps: [
       {
         text:
-          "Reflector is a turn-based game. Colonists ENTITY:COLONIST and enemies ENTITY:ENEMY_DRONE move when you move. Try moving my clicking the map, or using the wasd or arrow keys.",
+          "Reflector is a turn-based game. Colonists ENTITY:COLONIST and enemies ENTITY:ENEMY_DRONE move when you move. Try moving by clicking the map, or using the wasd or arrow keys.",
         checkForCompletion: (prevState, nextState, action) => {
           return ([
             getType(actions.move),
@@ -60,6 +60,21 @@ const tutorials: Record<TutorialId, Tutorial> = {
       {
         text:
           'Unlike farms, most buildings require resources to build, so let\'s place a couple mining spots on ore for your other colonists to work at.\n\nSelect "Production", then "Mining Spot", then place two of them on ore ENTITY:ORE.',
+        checkForCompletion: (prevState, nextState, action) => {
+          return (
+            nextState.select
+              .entitiesWithTemplate("MINING_SPOT")
+              .filter((e) => e.jobProvider).length >= 1
+          );
+        },
+        elementHighlightSelectors: [
+          `[data-building-category="${BuildingCategoryCode.Production}"]`,
+          `[data-building="MINING_SPOT"]`,
+        ],
+      },
+      {
+        text:
+          "That's one down, but one colonist still needs a job. Place another mining spot on ore ENTITY:ORE.",
         checkForCompletion: (prevState, nextState, action) => {
           return (
             nextState.select
