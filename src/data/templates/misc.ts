@@ -118,6 +118,13 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       description: "",
     },
   },
+  COLONISTS: {
+    display: {
+      tile: "colonists3",
+      color: colors.payer,
+      priority: PRIORITY_UNIT,
+    },
+  },
   PATH_PREVIEW: {
     display: {
       tile: "target",

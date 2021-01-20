@@ -2,6 +2,7 @@
 import Tippy from "@tippyjs/react";
 import React, { useContext, useEffect, useState } from "react";
 import Draggable from "react-draggable";
+import { useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { SettingsContext } from "~contexts";
 import tutorials from "~data/tutorials";
@@ -203,6 +204,15 @@ export default function Tutorials() {
   }
 }
 
+const tutorialRichTextFormatters = {
+  entity: ([templateName]: string[]) => (
+    <EntityPreview templateName={templateName as TemplateName} />
+  ),
+  kbd: (text: string) => <Kbd>{text}</Kbd>,
+  b: (text: string) => <b className="font-bold text-lighterBlue">{text}</b>,
+  br: () => <div className="h-2" />,
+};
+
 function Tutorial({
   tutorialId,
   stepIndex,
@@ -214,6 +224,7 @@ function Tutorial({
   isLast?: boolean;
   isFocused?: boolean;
 }) {
+  const { formatMessage } = useIntl();
   const dispatch = useDispatch();
   const tutorial = tutorials[tutorialId];
   const step = tutorial.steps[stepIndex];
@@ -300,7 +311,7 @@ function Tutorial({
         <ElementHighlighter selectors={step.elementHighlightSelectors} />
       )}
       <div className="text-sm">
-        <TutorialStepText text={selectedStep.text} />
+        {formatMessage({ id: selectedStep.text }, tutorialRichTextFormatters)}
       </div>
       <div className="flex flex-row-reverse">
         {step.isDismissible && (
@@ -361,23 +372,4 @@ function ElementHighlighter({
     return cleanup;
   }, elementSelectors);
   return null;
-}
-
-function TutorialStepText({ text }: { text: string }) {
-  const matches = Array.from(text.matchAll(/ENTITY:(\w+)/g));
-  const parsed: React.ReactNode[] = [];
-  let index = 0;
-  matches.forEach((match, i) => {
-    parsed.push(text.substring(index, match.index));
-    parsed.push(
-      <EntityPreview
-        // eslint-disable-next-line react/no-array-index-key
-        key={`${match[0]}_${i}`}
-        templateName={match[1] as TemplateName}
-      />,
-    );
-    index = (match.index || 0) + match[0].length;
-  });
-  parsed.push(text.substring(index));
-  return <React.Fragment>{parsed}</React.Fragment>;
 }

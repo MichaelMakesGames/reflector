@@ -49,7 +49,7 @@ export default function LoadGame() {
               </p>
               <p>
                 <a
-                  className="text-lightBlue underline"
+                  className="text-lighterBlue underline"
                   href="https://mscottmoore.itch.io/reflector"
                 >
                   The stable version is available at itch.io.

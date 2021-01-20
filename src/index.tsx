@@ -1,19 +1,22 @@
 /* global document */
+import "@babel/polyfill";
+import "notyf/notyf.min.css";
 import React from "react";
 import ReactDOM from "react-dom";
-import { Provider } from "react-redux";
-import "@babel/polyfill";
+import { IntlProvider } from "react-intl";
 import Modal from "react-modal";
-import store from "./state/store";
-import Game from "./components/Game";
-import "notyf/notyf.min.css";
-
+import { Provider } from "react-redux";
 import "./assets/style.css";
+import Game from "./components/Game";
+import store from "./state/store";
+import messages from "./messages";
 
 const app = (
-  <Provider store={store}>
-    <Game />
-  </Provider>
+  <IntlProvider messages={messages} locale="en" defaultLocale="en">
+    <Provider store={store}>
+      <Game />
+    </Provider>
+  </IntlProvider>
 );
 
 const target = document.getElementById("root");

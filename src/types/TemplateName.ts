@@ -5,6 +5,7 @@ type TemplateName =
   | "BORDER_SOUTH"
   | "BORDER_WEST"
   | "COLONIST"
+  | "COLONISTS"
   | "CURSOR"
   | "ENEMY_BASE"
   | "ENEMY_DRONE"
