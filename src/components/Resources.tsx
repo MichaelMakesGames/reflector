@@ -36,7 +36,9 @@ function ResourceRow({ resource }: { resource: Resource }) {
   const changes = useSelector((state: RawState) =>
     selectors.resourceChange(state, resource.code),
   );
-  const totalChange = changes.reduce((acc, cur) => acc + cur.amount, 0);
+  const totalChange = changes
+    .filter((change) => change.reason !== "Building")
+    .reduce((acc, cur) => acc + cur.amount, 0);
   const formatNumber = Intl.NumberFormat().format;
   const getChangeColorClass = (change: number) => {
     if (change > 0) return "text-green";
