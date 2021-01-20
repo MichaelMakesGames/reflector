@@ -42,10 +42,20 @@ export default function LoadGame() {
       {oldSave && (
         <Modal isOpen>
           {selectors.version(oldSave).includes("unstable") ? (
-            <p>
-              Your save is from an unstable version of the game. Loading the
-              game may not work.
-            </p>
+            <>
+              <p>
+                Your save is from an unstable version of the game. Loading the
+                game may not work.
+              </p>
+              <p>
+                <a
+                  className="text-lightBlue underline"
+                  href="https://mscottmoore.itch.io/reflector"
+                >
+                  The stable version is available at itch.io.
+                </a>
+              </p>
+            </>
           ) : (
             <p>
               Your save is from version {selectors.version(oldSave)}, and may
