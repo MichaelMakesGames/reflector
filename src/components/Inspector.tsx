@@ -65,7 +65,7 @@ export default function Inspector() {
 
       {warnings.map((e) => (
         <p key={e.id} className="text-red">
-          <Warning className="bg-red" /> {e.warning?.text}
+          <Warning className="bg-red" /> {e.warning && e.warning.text}
         </p>
       ))}
 

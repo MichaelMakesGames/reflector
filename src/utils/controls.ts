@@ -21,12 +21,14 @@ export function getQuickAction(
   const entitiesAtPos = wrappedState.select.entitiesAtPosition(pos);
 
   if (wrappedState.select.isPlacing()) {
+    const placingTarget = wrappedState.select.placingTarget();
+    const entityToPlace = createEntityFromTemplate(
+      placingTarget ? placingTarget.template : "NONE",
+    );
     return {
       action: actions.finishPlacement({ placeAnother: true }),
       label: `Build ${
-        createEntityFromTemplate(
-          wrappedState.select.placingTarget()?.template || "NONE",
-        ).description?.name
+        entityToPlace.description ? entityToPlace.description.name : ""
       }`,
     };
   }
@@ -52,7 +54,7 @@ export function getQuickAction(
   if (
     reflectorAtPos &&
     reflectorAtPos.reflector &&
-    reflectorAtPos?.reflector.type === "\\"
+    reflectorAtPos.reflector.type === "\\"
   ) {
     return {
       action: actions.removeReflector(pos),

@@ -66,14 +66,20 @@ export default function Tutorials() {
 
   useControl({
     code: ControlCode.Up,
-    callback: () => setFocusedTutorialIndex((focusedTutorialIndex ?? 1) - 1),
+    callback: () =>
+      setFocusedTutorialIndex(
+        (focusedTutorialIndex !== null ? focusedTutorialIndex : 1) - 1,
+      ),
     group: HotkeyGroup.Tutorial,
     disabled: !isSomeTutorialFocused || focusedTutorialIndex === 0,
   });
 
   useControl({
     code: ControlCode.Down,
-    callback: () => setFocusedTutorialIndex((focusedTutorialIndex ?? -1) + 1),
+    callback: () =>
+      setFocusedTutorialIndex(
+        (focusedTutorialIndex !== null ? focusedTutorialIndex : -1) + 1,
+      ),
     group: HotkeyGroup.Tutorial,
     disabled:
       !isSomeTutorialFocused ||
