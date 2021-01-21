@@ -2,8 +2,7 @@ import Settings from "~types/Settings";
 import { ControlCode } from "../types/ControlCode";
 
 const defaultSettings: Settings = {
-  aimingModifierKey: "shift",
-  cursorModifierKey: "alt",
+  cursorModifierKey: "shift",
   fireKeyActivatesAiming: true,
   aimInSameDirectionToFire: false,
   unmodifiedAiming: true,

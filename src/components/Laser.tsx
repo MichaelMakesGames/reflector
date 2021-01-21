@@ -47,47 +47,6 @@ export default function Laser() {
     code: ControlCode.Up,
     group: HotkeyGroup.Main,
     callback: makeAimHandler(UP, settings.aimInSameDirectionToFire),
-    alt: false,
-    ctrl: false,
-    meta: false,
-    shift: false,
-    [settings.aimingModifierKey]: true,
-  });
-  useControl({
-    code: ControlCode.Down,
-    group: HotkeyGroup.Main,
-    callback: makeAimHandler(DOWN, settings.aimInSameDirectionToFire),
-    alt: false,
-    ctrl: false,
-    meta: false,
-    shift: false,
-    [settings.aimingModifierKey]: true,
-  });
-  useControl({
-    code: ControlCode.Left,
-    group: HotkeyGroup.Main,
-    callback: makeAimHandler(LEFT, settings.aimInSameDirectionToFire),
-    alt: false,
-    ctrl: false,
-    meta: false,
-    shift: false,
-    [settings.aimingModifierKey]: true,
-  });
-  useControl({
-    code: ControlCode.Right,
-    group: HotkeyGroup.Main,
-    callback: makeAimHandler(RIGHT, settings.aimInSameDirectionToFire),
-    alt: false,
-    ctrl: false,
-    meta: false,
-    shift: false,
-    [settings.aimingModifierKey]: true,
-  });
-
-  useControl({
-    code: ControlCode.Up,
-    group: HotkeyGroup.Main,
-    callback: makeAimHandler(UP, settings.aimInSameDirectionToFire),
     disabled: !(settings.unmodifiedAiming && isWeaponActive),
     alt: false,
     ctrl: false,

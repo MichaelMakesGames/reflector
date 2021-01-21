@@ -5,7 +5,6 @@ export default interface Settings {
   fireKeyActivatesAiming: boolean;
   unmodifiedAiming: boolean;
   unmodifiedBuilding: boolean;
-  aimingModifierKey: "alt" | "ctrl" | "meta" | "shift";
   cursorModifierKey: "alt" | "ctrl" | "meta" | "shift";
   keyboardShortcuts: Record<ControlCode, string[]>;
 }

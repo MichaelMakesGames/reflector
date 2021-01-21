@@ -6,6 +6,7 @@ import { Tutorial } from "~types/Tutorial";
 import { TutorialId } from "~types/TutorialId";
 import { BuildingCategoryCode } from "./buildingCategories";
 import { ResourceCode } from "./resources";
+import { RawState } from "~types";
 
 const tutorials: Record<TutorialId, Tutorial> = {
   [TutorialId.Basics]: {
@@ -148,19 +149,30 @@ const tutorials: Record<TutorialId, Tutorial> = {
         text: "tutorials.combat.3",
         checkForCompletion: (prevState, nextState, action) => {
           return Boolean(
-            action.type === getType(actions.rotateEntity) &&
-              action.payload.reflector,
+            action.type === getType(actions.addEntity) &&
+              action.payload.reflector &&
+              action.payload.pos &&
+              nextState.select.entitiesWithComps("reflector").length >= 2,
           );
         },
       },
       {
         text: "tutorials.combat.4",
         checkForCompletion: (prevState, nextState, action) => {
-          return action.type === getType(actions.removeReflector);
+          return Boolean(
+            action.type === getType(actions.rotateEntity) &&
+              action.payload.reflector,
+          );
         },
       },
       {
         text: "tutorials.combat.5",
+        checkForCompletion: (prevState, nextState, action) => {
+          return action.type === getType(actions.removeReflector);
+        },
+      },
+      {
+        text: "tutorials.combat.6",
         checkForCompletion: (prevState, nextState, action) => {
           return action.type === getType(actions.fireWeapon);
         },
@@ -169,14 +181,14 @@ const tutorials: Record<TutorialId, Tutorial> = {
         ],
       },
       {
-        text: "tutorials.combat.6",
+        text: "tutorials.combat.7",
         checkForCompletion: (prevState, nextState, action) => {
           return prevState.select.turn() < nextState.select.turn();
         },
         elementHighlightSelectors: [`[data-status="LASER"]`],
       },
       {
-        text: "tutorials.combat.7",
+        text: "tutorials.combat.8",
         checkForCompletion: () => false,
         isDismissible: true,
       },
@@ -230,7 +242,50 @@ const tutorials: Record<TutorialId, Tutorial> = {
         isDismissible: true,
       },
     ],
-    triggerSelector: selectors.areThereMoreJobsThanColonists,
+    triggerSelector: (state: RawState) =>
+      selectors.areThereMoreJobsThanColonists(state) &&
+      !selectors.isNight(state),
+  },
+  [TutorialId.Deconstruct]: {
+    id: TutorialId.Deconstruct,
+    label: "Deconstruction",
+    steps: [
+      {
+        text: "tutorials.deconstruct.0",
+        checkForCompletion: (prevState, nextState, action) =>
+          action.type === getType(actions.executeRemoveBuilding),
+        isDismissible: true,
+      },
+      {
+        text: "tutorials.deconstruct.1",
+        checkForCompletion: () => false,
+        isDismissible: true,
+        elementHighlightSelectors: [`[data-section="INSPECTOR"]`],
+      },
+    ],
+    triggerSelector: (state: RawState) => {
+      const placingTarget = selectors.placingTarget(state);
+      if (!placingTarget || !placingTarget.pos) return false;
+      const { pos } = placingTarget;
+      const entitiesAtPos = selectors.entitiesAtPosition(state, pos);
+      return (
+        placingTarget.template === "MINE" &&
+        entitiesAtPos.some((e) => e.template === "MINING_SPOT")
+      );
+    },
+  },
+  [TutorialId.Residence]: {
+    id: TutorialId.Residence,
+    label: "Residences and Tents",
+    steps: [
+      {
+        text: "tutorials.residence.0",
+        checkForCompletion: () => false,
+        isDismissible: true,
+      },
+    ],
+    triggerSelector: (state: RawState) =>
+      selectors.homelessColonists(state).length > 0 && selectors.isNight(state),
   },
 };
 

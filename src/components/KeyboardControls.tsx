@@ -51,8 +51,7 @@ export default function KeyboardControls({ onClose }: { onClose: () => void }) {
         <h3 className="text-xl">Lasers</h3>
         <Shortcut code={ControlCode.Fire} label="Activate/Fire Laser" />
         <div className="ml-3">
-          Aim Laser: <Kbd>{settings.aimingModifierKey}</Kbd> + movement key. If
-          laser is active, <Kbd>{settings.aimingModifierKey}</Kbd> is optional
+          Aim Laser: movement keys while laser is active
         </div>
         <Shortcut code={ControlCode.Back} label="Cancel/Deactivate" />
       </section>
