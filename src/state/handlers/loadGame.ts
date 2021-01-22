@@ -7,6 +7,7 @@ import processEmitters from "~state/processors/processEmitters";
 import WrappedState from "~types/WrappedState";
 import { resetEntitiesByCompAndPos } from "~utils/entities";
 import actions from "../actions";
+import { VERSION } from "~constants";
 
 function loadGame(
   state: WrappedState,
@@ -15,7 +16,7 @@ function loadGame(
   const { state: loadedState } = action.payload;
   state.setRaw({
     ...loadedState,
-    version: state.select.version(),
+    version: VERSION,
   });
   resetEntitiesByCompAndPos(state);
   state.act.setCursorPos(null);
