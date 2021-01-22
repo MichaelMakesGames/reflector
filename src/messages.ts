@@ -12,7 +12,7 @@ const messages = {
   "tutorials.basics.5":
     "That's one down, but one colonist still needs a job. Place another mining spot on ore <entity>ORE</entity>.",
   "tutorials.basics.6":
-    "Your colonists will automatically move to your farms and mining spots to work, but remember, they only move when you move.<br></br>You can skip your turn without moving by <b>clicking the wait button</b> at the bottom or pressing <kbd>z</kbd>.<br></br>Move or wait until you have 20 metal.",
+    "Your colonists will automatically move to your farms and mining spots to work, but remember, they only move when you move.<br></br>You can skip your turn without moving by <b>clicking the wait button</b> at the bottom or pressing <kbd>z</kbd>.<br></br>Move or wait until you have 20 metal. It might take a few turns for your colonists to reach their work places.",
   "tutorials.basics.7":
     "Many buildings and jobs require power to function. To start producing power, let's build a windmill, under the <b>Production</b> category.",
   "tutorials.basics.8":

@@ -45,6 +45,7 @@ export function turn(state: RawState) {
 }
 
 export function turnOfNight(state: RawState) {
+  if (turnOfDay(state) === 0) return 48;
   return turnOfDay(state) - (TURNS_PER_DAY - TURNS_PER_NIGHT);
 }
 

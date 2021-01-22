@@ -56,9 +56,13 @@ export default function Status() {
       </div>
       <div className="flex flex-row">
         <Tippy content="This represents the confidence and discipline of your colony. You lose morale every time a colonist dies, or if you don't have enough food at night. If you ever reach 0 morale, you lose!">
-          <p data-status="MORALE">
-            <span className="text-lightGray">Morale: </span>
-            {morale}
+          <p data-status="MORALE" className={morale < 4 ? "animate-pulse" : ""}>
+            <span className={morale < 4 ? "text-red" : "text-lightGray"}>
+              Morale:{" "}
+            </span>
+            <span className={morale < 4 ? "text-red font-bold" : ""}>
+              {morale}
+            </span>
           </p>
         </Tippy>
         <Tippy content="This is your current population / your housing capacity. At night, colonists will return to their residences. If you don't have enough, they will build temporary tents wherever they are.">

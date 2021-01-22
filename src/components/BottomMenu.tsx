@@ -152,6 +152,18 @@ export default function BottomMenu() {
             (createEntityFromTemplate(placingTarget.template).description || {})
               .name
           }
+          <span className="text-base ml-2">
+            {placingTarget.placing &&
+            placingTarget.placing.cost &&
+            placingTarget.placing.cost.amount ? (
+              <ResourceAmount
+                resourceCode={placingTarget.placing.cost.resource}
+                amount={placingTarget.placing.cost.amount}
+              />
+            ) : (
+              <span className="text-lightGray">Free</span>
+            )}
+          </span>
         </h2>
       ) : null}
       {!placingTarget && <h2 className="text-xl px-2 self-center">Build</h2>}

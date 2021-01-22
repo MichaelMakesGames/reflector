@@ -15,6 +15,7 @@ import {
 import { createEntityFromTemplate } from "~utils/entities";
 import { getHumanReadablePosition } from "~utils/geometry";
 import Warning from "./Warning";
+import ResourceAmount from "./ResourceAmount";
 
 export default function Inspector() {
   const entitiesAtCursor = useSelector(selectors.entitiesAtCursor);
@@ -60,6 +61,18 @@ export default function Inspector() {
       {cursorPos && blueprintDescription && (
         <div className="text-sm text-lightGray">
           {blueprintDescription.description}
+          {blueprint &&
+            blueprint.placing &&
+            blueprint.placing.cost &&
+            blueprint.placing.cost.amount && (
+              <div className="mt-1">
+                Costs{" "}
+                <ResourceAmount
+                  resourceCode={blueprint.placing.cost.resource}
+                  amount={blueprint.placing.cost.amount}
+                />
+              </div>
+            )}
         </div>
       )}
 
