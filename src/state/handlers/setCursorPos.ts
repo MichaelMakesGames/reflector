@@ -64,9 +64,9 @@ function setCursorPos(
 
     state.act.setAutoMovePathToCursor();
 
-    const placingTarget = state.select.placingTarget();
-    if (placingTarget) {
-      state.act.movePlacement({ to: newCursorPos });
+    const blueprint = state.select.blueprint();
+    if (blueprint) {
+      state.act.blueprintMove({ to: newCursorPos });
     }
   } else if (cursor) {
     state.act.removeEntity(CURSOR_ID);

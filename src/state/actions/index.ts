@@ -2,7 +2,7 @@ import * as disableActions from "./disableActions";
 import * as entityActions from "./entityActions";
 import * as loadingActions from "./loadingActions";
 import * as miscActions from "./miscActions";
-import * as placementActions from "./placementActions";
+import * as blueprintActions from "./blueprintActions";
 import * as removeBuildingActions from "./removeBuildingActions";
 import * as tutorialActions from "./tutorialActions";
 import * as weaponActions from "./weaponActions";
@@ -12,7 +12,7 @@ export default {
   ...entityActions,
   ...loadingActions,
   ...miscActions,
-  ...placementActions,
+  ...blueprintActions,
   ...removeBuildingActions,
   ...tutorialActions,
   ...weaponActions,

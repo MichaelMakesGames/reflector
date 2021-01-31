@@ -1,13 +1,10 @@
 import { Required } from "Object/_api";
 import actions from "~state/actions";
 import { registerHandler } from "~state/handleAction";
-import selectors from "~state/selectors";
 import { Entity } from "~types";
 import WrappedState from "~types/WrappedState";
-import { findValidPositions } from "~utils/building";
-import { areConditionsMet } from "~utils/conditions";
+import { canPlaceReflector } from "~utils/building";
 import { createEntityFromTemplate } from "~utils/entities";
-import { arePositionsEqual } from "~utils/geometry";
 
 function cycleReflector(
   state: WrappedState,
@@ -27,25 +24,7 @@ function cycleReflector(
   } else {
     const player = state.select.player();
     if (!player) return;
-    const validPositions = findValidPositions(
-      state,
-      [
-        {
-          pos: player.pos,
-          range: player.projector ? player.projector.range : 0,
-        },
-        ...state.select
-          .entitiesWithComps("projector", "pos")
-          .filter((e) => areConditionsMet(state, e, e.projector.condition))
-          .map((e) => ({
-            pos: e.pos,
-            range: e.projector.range,
-          })),
-      ],
-      selectors.canPlaceReflector,
-      true,
-    );
-    if (validPositions.some((validPos) => arePositionsEqual(pos, validPos))) {
+    if (canPlaceReflector(state, pos)) {
       state.act.addEntity(
         createEntityFromTemplate("REFLECTOR_UP_RIGHT", { pos }),
       );

@@ -2,9 +2,9 @@ import actions from "~/state/actions";
 import { registerHandler } from "~state/handleAction";
 import WrappedState from "~types/WrappedState";
 
-function cancelPlacement(
+function blueprintCancel(
   state: WrappedState,
-  action: ReturnType<typeof actions.cancelPlacement>,
+  action: ReturnType<typeof actions.blueprintCancel>,
 ): void {
   state.act.removeEntities(
     state.select
@@ -12,9 +12,9 @@ function cancelPlacement(
       .filter((e) => e.validMarker)
       .map((e) => e.id),
   );
-  const entity = state.select.placingTarget();
+  const entity = state.select.blueprint();
   if (!entity) return;
   state.act.removeEntities([entity.id]);
 }
 
-registerHandler(cancelPlacement, actions.cancelPlacement);
+registerHandler(blueprintCancel, actions.blueprintCancel);

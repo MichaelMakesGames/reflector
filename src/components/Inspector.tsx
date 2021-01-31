@@ -6,16 +6,17 @@ import { SettingsContext } from "~contexts";
 import colonistStatuses, { ColonistStatusCode } from "~data/colonistStatuses";
 import resources from "~data/resources";
 import selectors from "~state/selectors";
+import wrapState from "~state/wrapState";
 import { Entity, RawState } from "~types";
+import { areConditionsMet } from "~utils/conditions";
 import {
   ActionControl,
   getActionsAvailableAtPos,
   getQuickAction,
 } from "~utils/controls";
-import { createEntityFromTemplate } from "~utils/entities";
 import { getHumanReadablePosition } from "~utils/geometry";
-import Warning from "./Warning";
 import ResourceAmount from "./ResourceAmount";
+import Warning from "./Warning";
 
 export default function Inspector() {
   const entitiesAtCursor = useSelector(selectors.entitiesAtCursor);
@@ -40,10 +41,14 @@ export default function Inspector() {
     ? entitiesAtCursor.filter((e) => e.warning)
     : [];
 
-  const blueprint = useSelector(selectors.placingTarget);
-  const blueprintDescription = createEntityFromTemplate(
-    blueprint ? blueprint.template : "NONE",
-  ).description;
+  const blueprint = useSelector(selectors.blueprint);
+  const blueprintDescription = blueprint ? blueprint.description : null;
+  const blueprintFailedConditions =
+    blueprint && blueprint.blueprint
+      ? blueprint.blueprint.validityConditions.filter(
+          (vc) => !areConditionsMet(wrapState(state), blueprint, vc.condition),
+        )
+      : [];
 
   return (
     <section className="p-2" data-section="INSPECTOR">
@@ -62,14 +67,14 @@ export default function Inspector() {
         <div className="text-sm text-lightGray">
           {blueprintDescription.description}
           {blueprint &&
-            blueprint.placing &&
-            blueprint.placing.cost &&
-            blueprint.placing.cost.amount && (
+            blueprint.blueprint &&
+            blueprint.blueprint.cost &&
+            blueprint.blueprint.cost.amount && (
               <div className="mt-1">
                 Costs{" "}
                 <ResourceAmount
-                  resourceCode={blueprint.placing.cost.resource}
-                  amount={blueprint.placing.cost.amount}
+                  resourceCode={blueprint.blueprint.cost.resource}
+                  amount={blueprint.blueprint.cost.amount}
                 />
               </div>
             )}
@@ -77,10 +82,17 @@ export default function Inspector() {
       )}
 
       {warnings.map((e) => (
-        <p key={e.id} className="text-red">
-          <Warning className="bg-red" /> {e.warning && e.warning.text}
+        <p key={e.id} className="text-yellow text-sm">
+          <Warning className="bg-yellow" /> {e.warning && e.warning.text}
         </p>
       ))}
+
+      {blueprintFailedConditions.length > 0 && (
+        <p className="text-red text-sm">
+          <Warning className="bg-red" />{" "}
+          {blueprintFailedConditions[0].invalidMessage}
+        </p>
+      )}
 
       {cursorPos && (
         <div className="mt-3">

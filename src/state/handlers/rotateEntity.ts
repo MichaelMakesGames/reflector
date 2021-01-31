@@ -10,25 +10,14 @@ function rotateEntity(
 ): void {
   const entity = action.payload;
   if (!entity.rotatable) return;
-  const placingTarget = state.select.placingTarget();
-  const isPlacingTarget = entity === placingTarget;
   state.act.removeEntity(entity.id);
   const newEntity = {
     ...entity,
     ...createEntityFromTemplate(entity.rotatable.rotatesTo),
   };
-  if (isPlacingTarget && placingTarget) {
-    state.act.activatePlacement({
-      template: entity.rotatable.rotatesTo,
-      cost: placingTarget.placing.cost,
-      validitySelector: placingTarget.placing.validitySelector,
-      pos: placingTarget.pos,
-    });
-  } else {
-    state.act.addEntity(newEntity);
-    if (entity.reflector && entity.pos) {
-      retargetLaserOnReflectorChange(state, entity.pos);
-    }
+  state.act.addEntity(newEntity);
+  if (entity.reflector && entity.pos) {
+    retargetLaserOnReflectorChange(state, entity.pos);
   }
 }
 

@@ -4,12 +4,12 @@ import WrappedState from "~types/WrappedState";
 import { arePositionsEqual } from "~utils/geometry";
 import actions from "../actions";
 
-function movePlacement(
+function blueprintMove(
   state: WrappedState,
-  action: ReturnType<typeof actions.movePlacement>,
+  action: ReturnType<typeof actions.blueprintMove>,
 ): void {
-  const placingTarget = state.select.placingTarget();
-  if (!placingTarget || !placingTarget.pos) return;
+  const blueprint = state.select.blueprint();
+  if (!blueprint || !blueprint.pos) return;
   const validPositions = state.select
     .entitiesWithComps("validMarker", "pos")
     .map((e) => e.pos);
@@ -19,13 +19,13 @@ function movePlacement(
     arePositionsEqual(validPos, newPos),
   );
   state.act.updateEntity({
-    id: placingTarget.id,
+    id: blueprint.id,
     pos: newPos,
     display: {
-      ...placingTarget.display,
-      color: isValid ? colors.secondary : colors.invalid,
+      ...blueprint.display,
+      color: isValid ? colors.blueprint : colors.invalid,
     },
   });
 }
 
-registerHandler(movePlacement, actions.movePlacement);
+registerHandler(blueprintMove, actions.blueprintMove);

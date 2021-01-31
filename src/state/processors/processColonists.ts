@@ -385,7 +385,7 @@ function pitchTent(
   state: WrappedState,
   colonist: Required<Entity, "colonist" | "pos">,
 ) {
-  const tent = createEntityFromTemplate("TENT", { pos: colonist.pos });
+  const tent = createEntityFromTemplate("BUILDING_TENT", { pos: colonist.pos });
   state.act.addEntity(tent);
   state.act.updateEntity({
     id: colonist.id,

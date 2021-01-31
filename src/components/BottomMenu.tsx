@@ -9,7 +9,6 @@ import {
 } from "~components/HotkeysProvider";
 import { SettingsContext } from "~contexts";
 import buildingCategories, { BuildingCategory } from "~data/buildingCategories";
-import buildings from "~data/buildings";
 import { useBoolean } from "~hooks";
 import actions from "~state/actions";
 import selectors from "~state/selectors";
@@ -28,21 +27,21 @@ const buttonClassName =
 
 export default function BottomMenu() {
   const dispatch = useDispatch();
-  const placingTarget = useSelector(selectors.placingTarget);
+  const blueprint = useSelector(selectors.blueprint);
   const isWeaponActive = useSelector(selectors.isWeaponActive);
   const settings = useContext(SettingsContext);
 
   const cancel = useCallback(() => {
-    dispatch(actions.cancelPlacement());
+    dispatch(actions.blueprintCancel());
   }, []);
   const rotate = useCallback(() => {
-    if (placingTarget && placingTarget.rotatable) {
-      dispatch(actions.rotateEntity(placingTarget));
+    if (blueprint && blueprint.rotatable) {
+      dispatch(actions.rotateEntity(blueprint));
     }
-  }, [placingTarget]);
+  }, [blueprint]);
 
   useEffect(() => {
-    if (placingTarget) {
+    if (blueprint) {
       const listener = (e: MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
@@ -71,7 +70,7 @@ export default function BottomMenu() {
     code: ControlCode.RotateBuilding,
     group: HotkeyGroup.Main,
     callback: rotate,
-    disabled: !(placingTarget && placingTarget.rotatable),
+    disabled: !(blueprint && blueprint.rotatable),
   });
   const makeBuildingCallback = (n: number) => () => {
     if (isWeaponActive) {
@@ -83,61 +82,61 @@ export default function BottomMenu() {
     code: ControlCode.Menu1,
     group: HotkeyGroup.Main,
     callback: makeBuildingCallback(1),
-    disabled: Boolean(placingTarget),
+    disabled: Boolean(blueprint),
   });
   useControl({
     code: ControlCode.Menu2,
     group: HotkeyGroup.Main,
     callback: makeBuildingCallback(2),
-    disabled: Boolean(placingTarget),
+    disabled: Boolean(blueprint),
   });
   useControl({
     code: ControlCode.Menu3,
     group: HotkeyGroup.Main,
     callback: makeBuildingCallback(3),
-    disabled: Boolean(placingTarget),
+    disabled: Boolean(blueprint),
   });
   useControl({
     code: ControlCode.Menu4,
     group: HotkeyGroup.Main,
     callback: makeBuildingCallback(4),
-    disabled: Boolean(placingTarget),
+    disabled: Boolean(blueprint),
   });
   useControl({
     code: ControlCode.Menu5,
     group: HotkeyGroup.Main,
     callback: makeBuildingCallback(5),
-    disabled: Boolean(placingTarget),
+    disabled: Boolean(blueprint),
   });
   useControl({
     code: ControlCode.Menu6,
     group: HotkeyGroup.Main,
     callback: makeBuildingCallback(6),
-    disabled: Boolean(placingTarget),
+    disabled: Boolean(blueprint),
   });
   useControl({
     code: ControlCode.Menu7,
     group: HotkeyGroup.Main,
     callback: makeBuildingCallback(7),
-    disabled: Boolean(placingTarget),
+    disabled: Boolean(blueprint),
   });
   useControl({
     code: ControlCode.Menu8,
     group: HotkeyGroup.Main,
     callback: makeBuildingCallback(8),
-    disabled: Boolean(placingTarget),
+    disabled: Boolean(blueprint),
   });
   useControl({
     code: ControlCode.Menu9,
     group: HotkeyGroup.Main,
     callback: makeBuildingCallback(9),
-    disabled: Boolean(placingTarget),
+    disabled: Boolean(blueprint),
   });
   useControl({
     code: ControlCode.Menu0,
     group: HotkeyGroup.Main,
     callback: makeBuildingCallback(0),
-    disabled: Boolean(placingTarget),
+    disabled: Boolean(blueprint),
   });
 
   return (
@@ -145,20 +144,20 @@ export default function BottomMenu() {
       className="border-t border-b border-gray flex flex-row"
       data-section="BOTTOM_MENU"
     >
-      {placingTarget ? (
+      {blueprint ? (
         <h2 className="text-xl px-2 self-center">
           Building{" "}
           {
-            (createEntityFromTemplate(placingTarget.template).description || {})
+            (createEntityFromTemplate(blueprint.template).description || {})
               .name
           }
           <span className="text-base ml-2">
-            {placingTarget.placing &&
-            placingTarget.placing.cost &&
-            placingTarget.placing.cost.amount ? (
+            {blueprint.blueprint &&
+            blueprint.blueprint.cost &&
+            blueprint.blueprint.cost.amount ? (
               <ResourceAmount
-                resourceCode={placingTarget.placing.cost.resource}
-                amount={placingTarget.placing.cost.amount}
+                resourceCode={blueprint.blueprint.cost.resource}
+                amount={blueprint.blueprint.cost.amount}
               />
             ) : (
               <span className="text-lightGray">Free</span>
@@ -166,8 +165,8 @@ export default function BottomMenu() {
           </span>
         </h2>
       ) : null}
-      {!placingTarget && <h2 className="text-xl px-2 self-center">Build</h2>}
-      {placingTarget && placingTarget.rotatable ? (
+      {!blueprint && <h2 className="text-xl px-2 self-center">Build</h2>}
+      {blueprint && blueprint.rotatable ? (
         <button
           type="button"
           onClick={noFocusOnClick(rotate)}
@@ -180,7 +179,7 @@ export default function BottomMenu() {
           Rotate
         </button>
       ) : null}
-      {placingTarget ? (
+      {blueprint ? (
         <button
           type="button"
           onClick={noFocusOnClick(cancel)}
@@ -194,7 +193,7 @@ export default function BottomMenu() {
           Cancel
         </button>
       ) : null}
-      {!placingTarget &&
+      {!blueprint &&
         buildingCategories.map((c, i) => (
           <BuildingCategoryMenu key={c.code} category={c} index={i} />
         ))}
@@ -272,7 +271,6 @@ function BuildingCategoryMenu({
   const settings = useContext(SettingsContext);
   const dispatch = useDispatch();
   const [isOpen, open, close, toggle] = useBoolean(false);
-  const cursorPos = useSelector(selectors.cursorPos);
 
   const deactivateWeaponAndToggle = useCallback(() => {
     dispatch(actions.deactivateWeapon());
@@ -310,10 +308,6 @@ function BuildingCategoryMenu({
     disabled: !isOpen,
   });
 
-  const buildingsInCategory = buildings.filter(
-    (b) => b.category === category.code,
-  );
-
   return (
     <Tippy
       placement="top"
@@ -324,22 +318,19 @@ function BuildingCategoryMenu({
       content={
         isOpen ? (
           <div>
-            {buildingsInCategory.map((building, i) => (
-              <BuildingButton
-                key={building.template}
-                building={building}
-                index={i}
-                callback={() => {
-                  close();
-                  dispatch(
-                    actions.activatePlacement({
-                      ...building,
-                      pos: cursorPos || undefined,
-                    }),
-                  );
-                }}
-              />
-            ))}
+            {category.blueprints.map((blueprintTemplate, i) => {
+              return (
+                <BuildingButton
+                  key={blueprintTemplate}
+                  template={blueprintTemplate}
+                  index={i}
+                  callback={() => {
+                    close();
+                    dispatch(actions.blueprintSelect(blueprintTemplate));
+                  }}
+                />
+              );
+            })}
             <button
               style={{ marginTop: 1 }}
               type="button"
@@ -371,11 +362,11 @@ function BuildingCategoryMenu({
 }
 
 function BuildingButton({
-  building,
+  template,
   index,
   callback,
 }: {
-  building: typeof buildings[number];
+  template: TemplateName;
   index: number;
   callback: () => void;
 }) {
@@ -398,30 +389,31 @@ function BuildingButton({
     group: HotkeyGroup.BuildingSelection,
   });
 
-  const buildingEntity = createEntityFromTemplate(building.template);
+  const blueprint = createEntityFromTemplate(template);
+  const blueprintBuilds = blueprint.blueprint
+    ? blueprint.blueprint.builds
+    : "NONE";
   return (
     <Tippy
       placement="right"
       offset={[0, 15]}
-      content={
-        buildingEntity.description ? buildingEntity.description.description : ""
-      }
+      content={blueprint.description ? blueprint.description.description : ""}
     >
       <button
-        data-building={building.template}
+        data-building={blueprintBuilds}
         type="button"
         className="flex flex-no-wrap items-baseline w-full text-left mb-1"
         onClick={noFocusOnClick(callback)}
       >
         <Kbd light>{settings.keyboardShortcuts[controlCode][0]}</Kbd>
         <span className="flex-1 ml-1 mr-3 inline-block">
-          <EntityPreview templateName={building.template} />{" "}
-          {` ${building.label}`}
+          <EntityPreview templateName={blueprintBuilds} />{" "}
+          {` ${blueprint.description ? blueprint.description.name : template}`}
         </span>
-        {building.cost.amount ? (
+        {blueprint.blueprint && blueprint.blueprint.cost.amount ? (
           <ResourceAmount
-            resourceCode={building.cost.resource}
-            amount={building.cost.amount}
+            resourceCode={blueprint.blueprint.cost.resource}
+            amount={blueprint.blueprint.cost.amount}
           />
         ) : (
           <span className="text-lightGray">Free</span>

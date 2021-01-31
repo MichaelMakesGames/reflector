@@ -4,14 +4,14 @@ import { Entity } from "~types";
 import { ResourceCode } from "~data/resources";
 
 const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
-  FLOOR: {
+  TERRAIN_GROUND: {
     display: {
       tile: "floor",
       color: colors.ground,
       priority: PRIORITY_TERRAIN,
     },
   },
-  WATER_BASE: {
+  TERRAIN_WATER_BASE: {
     blocking: {
       moving: true,
       lasers: false,
@@ -24,16 +24,16 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       shortDescription: "blocks movement",
     },
   },
-  WATER_0: {
-    parentTemplate: "WATER_BASE",
+  TERRAIN_WATER_0: {
+    parentTemplate: "TERRAIN_WATER_BASE",
     display: {
       tile: "water_0",
       color: colors.water,
       priority: PRIORITY_TERRAIN,
     },
   },
-  WATER_1: {
-    parentTemplate: "WATER_BASE",
+  TERRAIN_WATER_1: {
+    parentTemplate: "TERRAIN_WATER_BASE",
     display: {
       tile: "water_4",
       rotation: 180,
@@ -41,8 +41,8 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       priority: PRIORITY_TERRAIN,
     },
   },
-  WATER_2: {
-    parentTemplate: "WATER_BASE",
+  TERRAIN_WATER_2: {
+    parentTemplate: "TERRAIN_WATER_BASE",
     display: {
       tile: "water_4",
       rotation: 270,
@@ -50,8 +50,8 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       priority: PRIORITY_TERRAIN,
     },
   },
-  WATER_3: {
-    parentTemplate: "WATER_BASE",
+  TERRAIN_WATER_3: {
+    parentTemplate: "TERRAIN_WATER_BASE",
     display: {
       tile: "water_6",
       rotation: 270,
@@ -59,40 +59,40 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       priority: PRIORITY_TERRAIN,
     },
   },
-  WATER_4: {
-    parentTemplate: "WATER_BASE",
+  TERRAIN_WATER_4: {
+    parentTemplate: "TERRAIN_WATER_BASE",
     display: {
       tile: "water_4",
       color: colors.water,
       priority: PRIORITY_TERRAIN,
     },
   },
-  WATER_5: {
-    parentTemplate: "WATER_BASE",
+  TERRAIN_WATER_5: {
+    parentTemplate: "TERRAIN_WATER_BASE",
     display: {
       tile: "water_5",
       color: colors.water,
       priority: PRIORITY_TERRAIN,
     },
   },
-  WATER_6: {
-    parentTemplate: "WATER_BASE",
+  TERRAIN_WATER_6: {
+    parentTemplate: "TERRAIN_WATER_BASE",
     display: {
       tile: "water_6",
       color: colors.water,
       priority: PRIORITY_TERRAIN,
     },
   },
-  WATER_7: {
-    parentTemplate: "WATER_BASE",
+  TERRAIN_WATER_7: {
+    parentTemplate: "TERRAIN_WATER_BASE",
     display: {
       tile: "water_7",
       color: colors.water,
       priority: PRIORITY_TERRAIN,
     },
   },
-  WATER_8: {
-    parentTemplate: "WATER_BASE",
+  TERRAIN_WATER_8: {
+    parentTemplate: "TERRAIN_WATER_BASE",
     display: {
       tile: "water_4",
       rotation: 90,
@@ -100,8 +100,8 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       priority: PRIORITY_TERRAIN,
     },
   },
-  WATER_9: {
-    parentTemplate: "WATER_BASE",
+  TERRAIN_WATER_9: {
+    parentTemplate: "TERRAIN_WATER_BASE",
     display: {
       tile: "water_6",
       rotation: 180,
@@ -109,8 +109,8 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       priority: PRIORITY_TERRAIN,
     },
   },
-  WATER_10: {
-    parentTemplate: "WATER_BASE",
+  TERRAIN_WATER_10: {
+    parentTemplate: "TERRAIN_WATER_BASE",
     display: {
       tile: "water_5",
       rotation: 90,
@@ -118,8 +118,8 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       priority: PRIORITY_TERRAIN,
     },
   },
-  WATER_11: {
-    parentTemplate: "WATER_BASE",
+  TERRAIN_WATER_11: {
+    parentTemplate: "TERRAIN_WATER_BASE",
     display: {
       tile: "water_7",
       rotation: 270,
@@ -127,8 +127,8 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       priority: PRIORITY_TERRAIN,
     },
   },
-  WATER_12: {
-    parentTemplate: "WATER_BASE",
+  TERRAIN_WATER_12: {
+    parentTemplate: "TERRAIN_WATER_BASE",
     display: {
       tile: "water_6",
       rotation: 90,
@@ -136,8 +136,8 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       priority: PRIORITY_TERRAIN,
     },
   },
-  WATER_13: {
-    parentTemplate: "WATER_BASE",
+  TERRAIN_WATER_13: {
+    parentTemplate: "TERRAIN_WATER_BASE",
     display: {
       tile: "water_7",
       rotation: 180,
@@ -145,8 +145,8 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       priority: PRIORITY_TERRAIN,
     },
   },
-  WATER_14: {
-    parentTemplate: "WATER_BASE",
+  TERRAIN_WATER_14: {
+    parentTemplate: "TERRAIN_WATER_BASE",
     display: {
       tile: "water_7",
       rotation: 90,
@@ -154,22 +154,22 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       priority: PRIORITY_TERRAIN,
     },
   },
-  WATER_15: {
-    parentTemplate: "WATER_BASE",
+  TERRAIN_WATER_15: {
+    parentTemplate: "TERRAIN_WATER_BASE",
     display: {
       tile: "water_15",
       color: colors.water,
       priority: PRIORITY_TERRAIN,
     },
   },
-  WATER_CORNER_NE: {
+  TERRAIN_WATER_CORNER_NE: {
     display: {
       tile: "water_corner",
       color: colors.water,
       priority: PRIORITY_TERRAIN,
     },
   },
-  WATER_CORNER_SE: {
+  TERRAIN_WATER_CORNER_SE: {
     display: {
       tile: "water_corner",
       rotation: 90,
@@ -177,7 +177,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       priority: PRIORITY_TERRAIN,
     },
   },
-  WATER_CORNER_SW: {
+  TERRAIN_WATER_CORNER_SW: {
     display: {
       tile: "water_corner",
       rotation: 180,
@@ -185,7 +185,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       priority: PRIORITY_TERRAIN,
     },
   },
-  WATER_CORNER_NW: {
+  TERRAIN_WATER_CORNER_NW: {
     display: {
       tile: "water_corner",
       rotation: 270,
@@ -193,7 +193,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       priority: PRIORITY_TERRAIN,
     },
   },
-  MOUNTAIN: {
+  TERRAIN_MOUNTAIN: {
     display: {
       tile: "mountain",
       color: colors.mountain,
@@ -210,7 +210,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       shortDescription: "indestructible",
     },
   },
-  ORE: {
+  TERRAIN_ORE: {
     display: {
       tile: "ore",
       color: colors.mineral,
@@ -226,7 +226,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       shortDescription: "can be mined",
     },
   },
-  FERTILE: {
+  TERRAIN_FERTILE: {
     display: {
       tile: "fertile",
       color: colors.food,

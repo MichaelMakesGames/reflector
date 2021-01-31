@@ -20,7 +20,6 @@ function move(
   const entitiesAtNewPosition = state.select.entitiesAtPosition(newPosition);
   if (
     entity.blocking &&
-    !entity.placing &&
     entitiesAtNewPosition.some((other) => Boolean(other.blocking))
   ) {
     return;

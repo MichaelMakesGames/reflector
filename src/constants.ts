@@ -1,4 +1,4 @@
-export const VERSION = "alpha-2.1.0";
+export const VERSION = "alpha-3.0.0-unstable";
 export const PLAYER_ID = "PLAYER";
 export const CURSOR_ID = "CURSOR";
 

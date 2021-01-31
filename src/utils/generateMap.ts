@@ -34,24 +34,24 @@ export default function generateMap(): Entity[] {
     for (let x = -1; x < MAP_WIDTH + 1; x++) {
       if (y === -1 || x === -1 || y === MAP_HEIGHT || x === MAP_WIDTH) {
         results.push(
-          createEntityFromTemplate("WALL", {
+          createEntityFromTemplate("BUILDING_WALL", {
             pos: { x, y },
             destructible: undefined,
           }),
         );
       } else {
         const localNoise = noise[x][y];
-        let template: TemplateName = "FLOOR";
+        let template: TemplateName = "TERRAIN_GROUND";
         if (localNoise < waterFertileThreshold) {
-          template = "WATER_BASE";
+          template = "TERRAIN_WATER_BASE";
         } else if (localNoise < fertileFloorThreshold) {
-          template = "FERTILE";
+          template = "TERRAIN_FERTILE";
         } else if (localNoise < floorOreThreshold) {
-          template = "FLOOR";
+          template = "TERRAIN_GROUND";
         } else if (localNoise < oreMountainThreshold) {
-          template = "ORE";
+          template = "TERRAIN_ORE";
         } else {
-          template = "MOUNTAIN";
+          template = "TERRAIN_MOUNTAIN";
         }
 
         if (
@@ -64,12 +64,15 @@ export default function generateMap(): Entity[] {
           (x === MAP_WIDTH - 2 && y === 1) ||
           (x === MAP_WIDTH - 2 && y === MAP_HEIGHT - 2)
         ) {
-          template = "FLOOR";
+          template = "TERRAIN_GROUND";
         }
         let entity = createEntityFromTemplate(template, {
           pos: { x, y },
         });
-        if (["FERTILE", "ORE"].includes(template) && entity.display) {
+        if (
+          ["TERRAIN_FERTILE", "TERRAIN_ORE"].includes(template) &&
+          entity.display
+        ) {
           entity = {
             ...entity,
             display: {
@@ -88,12 +91,12 @@ export default function generateMap(): Entity[] {
     y: Math.floor(MAP_HEIGHT / 2),
   };
   const floorPositions = (results as Required<Entity, "pos">[])
-    .filter((entity) => entity.template === "FLOOR")
+    .filter((entity) => entity.template === "TERRAIN_GROUND")
     .map((entity) => entity.pos)
     .sort((a, b) => getDistance(a, centerPos) - getDistance(b, centerPos));
 
   const waterEntities = (results as Required<Entity, "pos">[]).filter(
-    (entity) => entity.template === "WATER_BASE",
+    (entity) => entity.template === "TERRAIN_WATER_BASE",
   );
   results = results.filter(
     (e) => !waterEntities.includes(e as Required<Entity, "pos">),
@@ -131,19 +134,29 @@ export default function generateMap(): Entity[] {
       (sIsWater ? 4 : 0) +
       (wIsWater ? 8 : 0);
     results.push(
-      createEntityFromTemplate(`WATER_${waterNumber}` as TemplateName, { pos }),
+      createEntityFromTemplate(`TERRAIN_WATER_${waterNumber}` as TemplateName, {
+        pos,
+      }),
     );
     if (nIsWater && eIsWater && neIsWater) {
-      results.push(createEntityFromTemplate("WATER_CORNER_NE", { pos }));
+      results.push(
+        createEntityFromTemplate("TERRAIN_WATER_CORNER_NE", { pos }),
+      );
     }
     if (sIsWater && eIsWater && seIsWater) {
-      results.push(createEntityFromTemplate("WATER_CORNER_SE", { pos }));
+      results.push(
+        createEntityFromTemplate("TERRAIN_WATER_CORNER_SE", { pos }),
+      );
     }
     if (sIsWater && wIsWater && swIsWater) {
-      results.push(createEntityFromTemplate("WATER_CORNER_SW", { pos }));
+      results.push(
+        createEntityFromTemplate("TERRAIN_WATER_CORNER_SW", { pos }),
+      );
     }
     if (nIsWater && wIsWater && nwIsWater) {
-      results.push(createEntityFromTemplate("WATER_CORNER_NW", { pos }));
+      results.push(
+        createEntityFromTemplate("TERRAIN_WATER_CORNER_NW", { pos }),
+      );
     }
   });
 

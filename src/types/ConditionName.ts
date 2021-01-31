@@ -1,7 +1,13 @@
 type ConditionName =
-  | "isPowered"
-  | "isDay"
   | "doesNotHaveTallNeighbors"
   | "hasOneActiveWorker"
+  | "hasThreeActiveWorkers"
   | "hasTwoActiveWorkers"
-  | "hasThreeActiveWorkers";
+  | "isDay"
+  | "isInBuildRange"
+  | "isNotBlocked"
+  | "isNotOnEdgeOfMap"
+  | "isNotOnOtherBuilding"
+  | "isOnFertile"
+  | "isOnOre"
+  | "isPowered";

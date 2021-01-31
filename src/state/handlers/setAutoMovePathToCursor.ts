@@ -10,7 +10,7 @@ function setAutoMovePathToCursor(state: WrappedState) {
     playerPos &&
     cursorPos &&
     !state.raw.isAutoMoving &&
-    !state.select.isPlacing() &&
+    !state.select.hasActiveBlueprint() &&
     !state.select.isWeaponActive()
   ) {
     const pathPreviews = state.select.entitiesWithComps("pathPreview", "pos");

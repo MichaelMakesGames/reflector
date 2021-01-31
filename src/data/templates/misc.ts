@@ -14,7 +14,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     pos: { x: 1, y: 1 },
     display: {
       tile: "player",
-      color: colors.payer,
+      color: colors.player,
       priority: PRIORITY_UNIT,
     },
     blocking: { moving: true, lasers: true, windmill: false },
@@ -33,7 +33,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   PLAYER_CORPSE: {
     display: {
       tile: "skull",
-      color: colors.payer,
+      color: colors.player,
       priority: PRIORITY_UNIT,
     },
     blocking: { moving: true, lasers: true, windmill: false },
@@ -49,7 +49,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   VALID_WITH_WARNING_MARKER: {
     display: {
       tile: "outline_exclamation",
-      color: colors.invalid,
+      color: colors.warning,
       priority: PRIORITY_MARKER,
     },
     validMarker: {},
@@ -101,7 +101,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   COLONIST: {
     display: {
       tile: "colonists1",
-      color: colors.payer,
+      color: colors.player,
       priority: PRIORITY_UNIT,
     },
     destructible: {
@@ -121,7 +121,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   COLONISTS: {
     display: {
       tile: "colonists3",
-      color: colors.payer,
+      color: colors.player,
       priority: PRIORITY_UNIT,
     },
   },

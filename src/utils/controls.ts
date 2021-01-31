@@ -4,10 +4,8 @@ import selectors from "~state/selectors";
 import wrapState from "~state/wrapState";
 import { Action, Pos, RawState } from "~types";
 import { ControlCode } from "~types/ControlCode";
-import { findValidPositions } from "./building";
-import { areConditionsMet } from "./conditions";
+import { canPlaceReflector } from "./building";
 import { createEntityFromTemplate } from "./entities";
-import { arePositionsEqual } from "./geometry";
 
 export function getQuickAction(
   state: RawState,
@@ -20,13 +18,13 @@ export function getQuickAction(
   const wrappedState = wrapState(state);
   const entitiesAtPos = wrappedState.select.entitiesAtPosition(pos);
 
-  if (wrappedState.select.isPlacing()) {
-    const placingTarget = wrappedState.select.placingTarget();
+  if (wrappedState.select.hasActiveBlueprint()) {
+    const blueprint = wrappedState.select.blueprint();
     const entityToPlace = createEntityFromTemplate(
-      placingTarget ? placingTarget.template : "NONE",
+      blueprint ? blueprint.template : "NONE",
     );
     return {
-      action: actions.finishPlacement({ placeAnother: true }),
+      action: actions.blueprintBuild(),
       label: `Build ${
         entityToPlace.description ? entityToPlace.description.name : ""
       }`,
@@ -67,33 +65,7 @@ export function getQuickAction(
     };
   }
 
-  const player = selectors.player(state);
-  const validPositions = player
-    ? findValidPositions(
-        wrappedState,
-        [
-          {
-            pos: player.pos,
-            range: player.projector ? player.projector.range : 0,
-          },
-          ...wrappedState.select
-            .entitiesWithComps("projector", "pos")
-            .filter((e) =>
-              areConditionsMet(wrappedState, e, e.projector.condition),
-            )
-            .map((e) => ({
-              pos: e.pos,
-              range: e.projector.range,
-            })),
-        ],
-        () => true, // selectors.canPlaceReflector,
-        true,
-      )
-    : [];
-  const canPlaceReflector = validPositions.some((validPos) =>
-    arePositionsEqual(validPos, pos),
-  );
-  if (canPlaceReflector) {
+  if (canPlaceReflector(wrappedState, pos)) {
     return {
       action: actions.addEntity(
         createEntityFromTemplate("REFLECTOR_UP_RIGHT", { pos }),
@@ -132,7 +104,7 @@ export function getActionsAvailableAtPos(
   state: RawState,
   pos: Pos,
 ): ActionControl[] {
-  if (selectors.isPlacing(state)) return [];
+  if (selectors.hasActiveBlueprint(state)) return [];
   const results: ActionControl[] = [];
   addReflectorActions(state, pos, results);
   addRemoveBuildingAction(state, pos, results);
@@ -180,25 +152,7 @@ function addReflectorActions(
   const wrappedState = wrapState(state);
   const player = selectors.player(state);
   if (!player) return;
-  const validPositions = findValidPositions(
-    wrappedState,
-    [
-      {
-        pos: player.pos,
-        range: player.projector ? player.projector.range : 0,
-      },
-      ...wrappedState.select
-        .entitiesWithComps("projector", "pos")
-        .filter((e) => areConditionsMet(wrappedState, e, e.projector.condition))
-        .map((e) => ({
-          pos: e.pos,
-          range: e.projector.range,
-        })),
-    ],
-    () => true, // selectors.canPlaceReflector,
-    true,
-  );
-  if (validPositions.some((validPos) => arePositionsEqual(pos, validPos))) {
+  if (canPlaceReflector(wrappedState, pos)) {
     const reflectorAtPos = wrappedState.select
       .entitiesAtPosition(pos)
       .find((e) => e.reflector);

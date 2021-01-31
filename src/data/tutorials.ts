@@ -26,13 +26,13 @@ const tutorials: Record<TutorialId, Tutorial> = {
         text: "tutorials.basics.1",
         checkForCompletion: (prevState, nextState, action) => {
           return (
-            action.type === getType(actions.activatePlacement) &&
-            action.payload.template === "FARM"
+            action.type === getType(actions.blueprintSelect) &&
+            action.payload === "BLUEPRINT_FARM"
           );
         },
         elementHighlightSelectors: [
           `[data-building-category="${BuildingCategoryCode.Production}"]`,
-          `[data-building="FARM"]`,
+          `[data-building="BUILDING_FARM"]`,
         ],
       },
       {
@@ -40,7 +40,7 @@ const tutorials: Record<TutorialId, Tutorial> = {
         checkForCompletion: (prevState, nextState, action) => {
           return (
             nextState.select
-              .entitiesWithTemplate("FARM")
+              .entitiesWithTemplate("BUILDING_FARM")
               .filter((e) => e.jobProvider).length >= 1
           );
         },
@@ -48,7 +48,7 @@ const tutorials: Record<TutorialId, Tutorial> = {
       {
         text: "tutorials.basics.3",
         checkForCompletion: (prevState, nextState, action) => {
-          return !nextState.select.placingTarget();
+          return !nextState.select.blueprint();
         },
         elementHighlightSelectors: [
           `[data-section="BOTTOM_MENU"] [data-control-code="${ControlCode.Back}"]`,
@@ -59,13 +59,13 @@ const tutorials: Record<TutorialId, Tutorial> = {
         checkForCompletion: (prevState, nextState, action) => {
           return (
             nextState.select
-              .entitiesWithTemplate("MINING_SPOT")
+              .entitiesWithTemplate("BUILDING_MINING_SPOT")
               .filter((e) => e.jobProvider).length >= 1
           );
         },
         elementHighlightSelectors: [
           `[data-building-category="${BuildingCategoryCode.Production}"]`,
-          `[data-building="MINING_SPOT"]`,
+          `[data-building="BUILDING_MINING_SPOT"]`,
         ],
       },
       {
@@ -73,13 +73,13 @@ const tutorials: Record<TutorialId, Tutorial> = {
         checkForCompletion: (prevState, nextState, action) => {
           return (
             nextState.select
-              .entitiesWithTemplate("MINING_SPOT")
+              .entitiesWithTemplate("BUILDING_MINING_SPOT")
               .filter((e) => e.jobProvider).length >= 2
           );
         },
         elementHighlightSelectors: [
           `[data-building-category="${BuildingCategoryCode.Production}"]`,
-          `[data-building="MINING_SPOT"]`,
+          `[data-building="BUILDING_MINING_SPOT"]`,
         ],
       },
       {
@@ -97,13 +97,13 @@ const tutorials: Record<TutorialId, Tutorial> = {
         checkForCompletion: (prevState, nextState, action) => {
           return (
             nextState.select
-              .entitiesWithTemplate("WINDMILL")
+              .entitiesWithTemplate("BUILDING_WINDMILL")
               .filter((e) => e.production).length >= 1
           );
         },
         elementHighlightSelectors: [
           `[data-building-category="${BuildingCategoryCode.Production}"]`,
-          `[data-building="WINDMILL"]`,
+          `[data-building="BUILDING_WINDMILL"]`,
         ],
       },
       {
@@ -264,13 +264,13 @@ const tutorials: Record<TutorialId, Tutorial> = {
       },
     ],
     triggerSelector: (state: RawState) => {
-      const placingTarget = selectors.placingTarget(state);
-      if (!placingTarget || !placingTarget.pos) return false;
-      const { pos } = placingTarget;
+      const blueprint = selectors.blueprint(state);
+      if (!blueprint || !blueprint.pos) return false;
+      const { pos } = blueprint;
       const entitiesAtPos = selectors.entitiesAtPosition(state, pos);
       return (
-        placingTarget.template === "MINE" &&
-        entitiesAtPos.some((e) => e.template === "MINING_SPOT")
+        blueprint.blueprint.builds === "BUILDING_MINE" &&
+        entitiesAtPos.some((e) => e.template === "BUILDING_MINING_SPOT")
       );
     },
   },

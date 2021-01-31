@@ -1,8 +1,8 @@
 import colors from "~colors";
-import { Entity } from "~types";
 import { PRIORITY_BUILDING_HIGH, PRIORITY_BUILDING_LOW } from "~constants";
-import { ResourceCode } from "~data/resources";
 import { JobTypeCode } from "~data/jobTypes";
+import { ResourceCode } from "~data/resources";
+import { Entity } from "~types";
 
 const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   REFLECTOR_BASE: {
@@ -33,7 +33,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     reflector: { type: "\\" },
     rotatable: { rotatesTo: "REFLECTOR_UP_RIGHT" },
   },
-  SPLITTER_BASE: {
+  BUILDING_SPLITTER_BASE: {
     building: {},
     blocking: { moving: true, lasers: true, windmill: true },
     destructible: {},
@@ -53,18 +53,17 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       resourceChangeReason: "Splitters",
     },
   },
-  SPLITTER_HORIZONTAL: {
-    parentTemplate: "SPLITTER_BASE",
+  BUILDING_SPLITTER_HORIZONTAL: {
+    parentTemplate: "BUILDING_SPLITTER_BASE",
     display: {
       tile: "splitter",
       color: colors.activeBuilding,
       priority: PRIORITY_BUILDING_HIGH,
     },
     splitter: { type: "horizontal" },
-    rotatable: { rotatesTo: "SPLITTER_VERTICAL" },
   },
-  SPLITTER_VERTICAL: {
-    parentTemplate: "SPLITTER_BASE",
+  BUILDING_SPLITTER_VERTICAL: {
+    parentTemplate: "BUILDING_SPLITTER_BASE",
     display: {
       tile: "splitter",
       rotation: 90,
@@ -72,10 +71,9 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       priority: PRIORITY_BUILDING_HIGH,
     },
     splitter: { type: "vertical" },
-    rotatable: { rotatesTo: "SPLITTER_HORIZONTAL" },
   },
-  SPLITTER_ADVANCED: {
-    parentTemplate: "SPLITTER_BASE",
+  BUILDING_SPLITTER_ADVANCED: {
+    parentTemplate: "BUILDING_SPLITTER_BASE",
     display: {
       tile: "splitter_advanced",
       color: colors.activeBuilding,
@@ -93,7 +91,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       resourceChangeReason: "Adv. Splitters",
     },
   },
-  TENT: {
+  BUILDING_TENT: {
     building: {},
     display: {
       tile: "tent",
@@ -119,7 +117,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
         "Temporary housing for 1 colonist. Colonists will move to residences if able.",
     },
   },
-  RESIDENCE: {
+  BUILDING_RESIDENCE: {
     building: {},
     display: {
       tile: "residence",
@@ -144,7 +142,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
         "Provides housing for up to 3 colonists. Colonists will otherwise pitch tents wherever they are at sunset.",
     },
   },
-  MINE: {
+  BUILDING_MINE: {
     building: {},
     display: {
       tile: "mine",
@@ -188,7 +186,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
         "Provides 2 jobs, that each consume 1 power to produce 2 metal per turn.",
     },
   },
-  MINING_SPOT: {
+  BUILDING_MINING_SPOT: {
     building: {},
     display: {
       tile: "mining_spot",
@@ -211,7 +209,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
         "Provides 1 job that produces 1 metal per turn. Less efficient than a Mine, but is free to build and doesn't need power. This building is VERY LOW (you can shoot and walk over it).",
     },
   },
-  FARM: {
+  BUILDING_FARM: {
     building: {},
     display: {
       tile: "farm",
@@ -235,7 +233,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
         "Provides 1 job that produces 1 food per turn. This building is VERY LOW (you can shoot and walk over it).",
     },
   },
-  REACTOR: {
+  BUILDING_REACTOR: {
     building: {},
     display: {
       tile: "powerplant",
@@ -276,7 +274,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       description: "Provides 2 jobs that each produce 3 power per turn.",
     },
   },
-  SOLAR_PANEL: {
+  BUILDING_SOLAR_PANEL: {
     building: {},
     display: {
       tile: "solarpanel",
@@ -307,7 +305,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
         "Produces 1 power per turn during day. Does not require a colonist to work. This building is LOW (you can shoot over it).",
     },
   },
-  WINDMILL: {
+  BUILDING_WINDMILL: {
     building: {},
     display: {
       tile: ["windmill-1", "windmill-2", "windmill-3", "windmill-4"],
@@ -337,7 +335,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
         "Produces 2 power as long as neighboring tiles are not blocked (only LOW and VERY LOW buildings allowed). Does not require a colonist to work.",
     },
   },
-  FACTORY: {
+  BUILDING_FACTORY: {
     building: {},
     display: {
       tile: "furnace",
@@ -386,7 +384,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
         "Provides 3 jobs that consume 5 power and 5 metal to produce 1 machinery per turn.",
     },
   },
-  WALL: {
+  BUILDING_WALL: {
     building: {},
     display: {
       tile: "wall",
@@ -408,7 +406,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
         "The most basic defense. Can take 2 hits, unlike other buildings which are destroyed in one hit.",
     },
   },
-  WALL_DAMAGED: {
+  BUILDING_WALL_DAMAGED: {
     building: {},
     display: {
       tile: "wall_damaged",
@@ -427,7 +425,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       description: "This wall will be destroyed if hit again.",
     },
   },
-  BASIC_PROJECTOR: {
+  BUILDING_PROJECTOR_BASIC: {
     building: {},
     display: {
       tile: "basic_projector",
@@ -461,7 +459,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
         "Lets you place reflectors in neighboring tiles. Needs 1 power per turn.",
     },
   },
-  PROJECTOR: {
+  BUILDING_PROJECTOR_ADVANCED: {
     building: {},
     display: {
       tile: "projector",

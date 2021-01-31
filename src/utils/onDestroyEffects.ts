@@ -45,7 +45,7 @@ const onDestroyEffects: {
   wall(state: WrappedState, entity: Entity) {
     return [
       actions.addEntity(
-        createEntityFromTemplate("WALL_DAMAGED", { pos: entity.pos }),
+        createEntityFromTemplate("BUILDING_WALL_DAMAGED", { pos: entity.pos }),
       ),
     ];
   },

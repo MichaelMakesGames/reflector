@@ -42,7 +42,7 @@ export default function GameMap() {
   const cursorPos = useSelector(selectors.cursorPos);
   const [contextMenuPos, setContextMenuPos] = useState<Pos | null>(null);
   const isWeaponActive = useSelector(selectors.isWeaponActive);
-  const isPlacing = useSelector(selectors.isPlacing);
+  const hasActiveBlueprint = useSelector(selectors.hasActiveBlueprint);
   const playerPos = useSelector(selectors.playerPos);
   const state = useSelector(selectors.state);
   const isCursorInProjectorRange = useSelector((s: RawState) =>
@@ -65,7 +65,7 @@ export default function GameMap() {
     dispatch(actions.move({ entityId: PLAYER_ID, ...LEFT }));
   };
   const moveEnabled =
-    !isWeaponActive && (!settings.unmodifiedBuilding || !isPlacing);
+    !isWeaponActive && (!settings.unmodifiedBuilding || !hasActiveBlueprint);
   useControl({
     code: ControlCode.Up,
     group: HotkeyGroup.Main,
@@ -149,25 +149,25 @@ export default function GameMap() {
     code: ControlCode.Up,
     group: HotkeyGroup.Main,
     callback: moveCursorUp,
-    disabled: !(isPlacing && settings.unmodifiedBuilding),
+    disabled: !(hasActiveBlueprint && settings.unmodifiedBuilding),
   });
   useControl({
     code: ControlCode.Down,
     group: HotkeyGroup.Main,
     callback: moveCursorDown,
-    disabled: !(isPlacing && settings.unmodifiedBuilding),
+    disabled: !(hasActiveBlueprint && settings.unmodifiedBuilding),
   });
   useControl({
     code: ControlCode.Left,
     group: HotkeyGroup.Main,
     callback: moveCursorLeft,
-    disabled: !(isPlacing && settings.unmodifiedBuilding),
+    disabled: !(hasActiveBlueprint && settings.unmodifiedBuilding),
   });
   useControl({
     code: ControlCode.Right,
     group: HotkeyGroup.Main,
     callback: moveCursorRight,
-    disabled: !(isPlacing && settings.unmodifiedBuilding),
+    disabled: !(hasActiveBlueprint && settings.unmodifiedBuilding),
   });
 
   useControl({

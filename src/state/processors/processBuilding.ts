@@ -1,13 +1,8 @@
 import WrappedState from "~types/WrappedState";
 
 export default function processBuilding(state: WrappedState) {
-  const placingTarget = state.select.placingTarget();
-  if (placingTarget) {
-    state.act.activatePlacement({
-      template: placingTarget.template,
-      cost: placingTarget.placing.cost,
-      validitySelector: placingTarget.placing.validitySelector,
-      pos: placingTarget.pos,
-    });
+  const blueprint = state.select.blueprint();
+  if (blueprint) {
+    state.act.blueprintSelect(blueprint.template);
   }
 }

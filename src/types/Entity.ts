@@ -50,15 +50,6 @@ export interface Destructible {
   onDestroy?: string;
 }
 
-export interface Placing {
-  cost?: {
-    resource: ResourceCode;
-    amount: number;
-  };
-  validitySelector?: string;
-  invalidMessage?: string;
-}
-
 export interface Colonist {
   residence: string | null;
   employment: string | null;
@@ -127,6 +118,12 @@ export interface Powered {
 
 export interface Building {}
 
+export interface Blueprint {
+  builds: TemplateName;
+  cost: { resource: ResourceCode; amount: number };
+  validityConditions: { condition: ConditionName; invalidMessage: string }[];
+}
+
 export interface JobDisabler {}
 
 export interface SmokeEmitter {
@@ -160,6 +157,7 @@ export interface Entity {
   ai?: AI;
   animationToggle?: AnimationToggle;
   blocking?: Blocking;
+  blueprint?: Blueprint;
   border?: Border;
   building?: Building;
   colonist?: Colonist;
@@ -176,7 +174,6 @@ export interface Entity {
   mineable?: Mineable;
   missingResourceIndicator?: MissingResourceIndicator;
   pathPreview?: PathPreview;
-  placing?: Placing;
   pos?: Pos;
   powered?: Powered;
   production?: Production;
