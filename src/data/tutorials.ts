@@ -264,14 +264,7 @@ const tutorials: Record<TutorialId, Tutorial> = {
       },
     ],
     triggerSelector: (state: RawState) => {
-      const blueprint = selectors.blueprint(state);
-      if (!blueprint || !blueprint.pos) return false;
-      const { pos } = blueprint;
-      const entitiesAtPos = selectors.entitiesAtPosition(state, pos);
-      return (
-        blueprint.blueprint.builds === "BUILDING_MINE" &&
-        entitiesAtPos.some((e) => e.template === "BUILDING_MINING_SPOT")
-      );
+      return false; // disable for now
     },
   },
   [TutorialId.Residence]: {
