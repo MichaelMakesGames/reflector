@@ -1,8 +1,8 @@
-import { ResourceCode } from "~data/resources";
 import colors from "~colors";
-import { Rotatable, Entity, Description } from "~types";
+import { BUILDING_RANGE, PRIORITY_BUILDING_HIGH } from "~constants";
+import { ResourceCode } from "~data/resources";
+import { Description, Entity } from "~types";
 import buildings from "./buildings";
-import { PRIORITY_BUILDING_HIGH, BUILDING_RANGE } from "~constants";
 
 const DEFAULT_VALIDITY_CONDITIONS: {
   condition: ConditionName;
@@ -26,12 +26,21 @@ const DEFAULT_VALIDITY_CONDITIONS: {
   },
 ];
 
-function makeBlueprint(
-  builds: TemplateName,
-  cost: { resource: ResourceCode; amount: number },
-  validityConditions: { condition: ConditionName; invalidMessage: string }[],
-  rotatable?: Rotatable,
-): Partial<Entity> {
+interface MakeBlueprintConfig {
+  builds: TemplateName;
+  cost?: { resource: ResourceCode; amount: number };
+  validityConditions?: { condition: ConditionName; invalidMessage: string }[];
+  rotatesTo?: TemplateName;
+  canReplace?: TemplateName[];
+}
+
+function makeBlueprint({
+  builds,
+  cost = { resource: ResourceCode.Metal, amount: 0 },
+  validityConditions = DEFAULT_VALIDITY_CONDITIONS,
+  rotatesTo,
+  canReplace,
+}: MakeBlueprintConfig): Partial<Entity> {
   const buildsTemplate = buildings[builds];
   const buildsTemplateParent =
     buildings[
@@ -50,6 +59,7 @@ function makeBlueprint(
       builds,
       cost,
       validityConditions,
+      canReplace,
     },
     display:
       buildsTemplate && buildsTemplate.display
@@ -63,98 +73,90 @@ function makeBlueprint(
             priority: PRIORITY_BUILDING_HIGH,
           },
     description,
-    rotatable,
+    ...(rotatesTo ? { rotatable: { rotatesTo } } : {}),
   };
 }
 
 const templates: Partial<Record<TemplateName, Partial<Entity>>> = {};
 
-templates.BLUEPRINT_FARM = makeBlueprint(
-  "BUILDING_FARM",
-  { resource: ResourceCode.Metal, amount: 0 },
-  [
+templates.BLUEPRINT_FARM = makeBlueprint({
+  builds: "BUILDING_FARM",
+  validityConditions: [
     ...DEFAULT_VALIDITY_CONDITIONS,
     { condition: "isOnFertile", invalidMessage: "Must build on fertile land." },
   ],
-);
-templates.BLUEPRINT_MINING_SPOT = makeBlueprint(
-  "BUILDING_MINING_SPOT",
-  { resource: ResourceCode.Metal, amount: 0 },
-  [
+});
+templates.BLUEPRINT_MINING_SPOT = makeBlueprint({
+  builds: "BUILDING_MINING_SPOT",
+  validityConditions: [
     ...DEFAULT_VALIDITY_CONDITIONS,
     { condition: "isOnOre", invalidMessage: "Must build on ore." },
   ],
-);
-templates.BLUEPRINT_MINE = makeBlueprint(
-  "BUILDING_MINE",
-  { resource: ResourceCode.Metal, amount: 30 },
-  [
+});
+templates.BLUEPRINT_MINE = makeBlueprint({
+  builds: "BUILDING_MINE",
+  cost: { resource: ResourceCode.Metal, amount: 30 },
+  validityConditions: [
     ...DEFAULT_VALIDITY_CONDITIONS,
     { condition: "isOnOre", invalidMessage: "Must build on ore." },
   ],
-);
-templates.BLUEPRINT_FACTORY = makeBlueprint(
-  "BUILDING_FACTORY",
-  { resource: ResourceCode.Metal, amount: 50 },
-  DEFAULT_VALIDITY_CONDITIONS,
-);
-templates.BLUEPRINT_WINDMILL = makeBlueprint(
-  "BUILDING_WINDMILL",
-  { resource: ResourceCode.Metal, amount: 20 },
-  [
+  canReplace: ["BUILDING_MINING_SPOT"],
+});
+templates.BLUEPRINT_FACTORY = makeBlueprint({
+  builds: "BUILDING_FACTORY",
+  cost: { resource: ResourceCode.Metal, amount: 50 },
+});
+templates.BLUEPRINT_WINDMILL = makeBlueprint({
+  builds: "BUILDING_WINDMILL",
+  cost: { resource: ResourceCode.Metal, amount: 20 },
+  validityConditions: [
     ...DEFAULT_VALIDITY_CONDITIONS,
     {
       condition: "doesNotHaveTallNeighbors",
       invalidMessage: "Windmills cannot be next to tall buildings or terrain.",
     },
   ],
-);
-templates.BLUEPRINT_SOLAR_PANEL = makeBlueprint(
-  "BUILDING_SOLAR_PANEL",
-  { resource: ResourceCode.Machinery, amount: 20 },
-  DEFAULT_VALIDITY_CONDITIONS,
-);
-templates.BLUEPRINT_REACTOR = makeBlueprint(
-  "BUILDING_REACTOR",
-  { resource: ResourceCode.Machinery, amount: 80 },
-  DEFAULT_VALIDITY_CONDITIONS,
-);
-templates.BLUEPRINT_PROJECTOR_BASIC = makeBlueprint(
-  "BUILDING_PROJECTOR_BASIC",
-  { resource: ResourceCode.Metal, amount: 50 },
-  DEFAULT_VALIDITY_CONDITIONS,
-);
-templates.BLUEPRINT_SPLITTER_HORIZONTAL = makeBlueprint(
-  "BUILDING_SPLITTER_HORIZONTAL",
-  { resource: ResourceCode.Metal, amount: 80 },
-  DEFAULT_VALIDITY_CONDITIONS,
-  { rotatesTo: "BLUEPRINT_SPLITTER_VERTICAL" },
-);
-templates.BLUEPRINT_SPLITTER_VERTICAL = makeBlueprint(
-  "BUILDING_SPLITTER_VERTICAL",
-  { resource: ResourceCode.Metal, amount: 80 },
-  DEFAULT_VALIDITY_CONDITIONS,
-  { rotatesTo: "BLUEPRINT_SPLITTER_HORIZONTAL" },
-);
-templates.BLUEPRINT_PROJECTOR_ADVANCED = makeBlueprint(
-  "BUILDING_PROJECTOR_ADVANCED",
-  { resource: ResourceCode.Machinery, amount: 50 },
-  DEFAULT_VALIDITY_CONDITIONS,
-);
-templates.BLUEPRINT_SPLITTER_ADVANCED = makeBlueprint(
-  "BUILDING_SPLITTER_ADVANCED",
-  { resource: ResourceCode.Machinery, amount: 80 },
-  DEFAULT_VALIDITY_CONDITIONS,
-);
-templates.BLUEPRINT_RESIDENCE = makeBlueprint(
-  "BUILDING_RESIDENCE",
-  { resource: ResourceCode.Metal, amount: 30 },
-  DEFAULT_VALIDITY_CONDITIONS,
-);
-templates.BLUEPRINT_WALL = makeBlueprint(
-  "BUILDING_WALL",
-  { resource: ResourceCode.Metal, amount: 20 },
-  DEFAULT_VALIDITY_CONDITIONS,
-);
+});
+templates.BLUEPRINT_SOLAR_PANEL = makeBlueprint({
+  builds: "BUILDING_SOLAR_PANEL",
+  cost: { resource: ResourceCode.Machinery, amount: 20 },
+});
+templates.BLUEPRINT_REACTOR = makeBlueprint({
+  builds: "BUILDING_REACTOR",
+  cost: { resource: ResourceCode.Machinery, amount: 80 },
+});
+templates.BLUEPRINT_PROJECTOR_BASIC = makeBlueprint({
+  builds: "BUILDING_PROJECTOR_BASIC",
+  cost: { resource: ResourceCode.Metal, amount: 50 },
+});
+templates.BLUEPRINT_SPLITTER_HORIZONTAL = makeBlueprint({
+  builds: "BUILDING_SPLITTER_HORIZONTAL",
+  cost: { resource: ResourceCode.Metal, amount: 80 },
+  rotatesTo: "BLUEPRINT_SPLITTER_VERTICAL",
+});
+templates.BLUEPRINT_SPLITTER_VERTICAL = makeBlueprint({
+  builds: "BUILDING_SPLITTER_VERTICAL",
+  cost: { resource: ResourceCode.Metal, amount: 80 },
+  rotatesTo: "BLUEPRINT_SPLITTER_HORIZONTAL",
+});
+templates.BLUEPRINT_PROJECTOR_ADVANCED = makeBlueprint({
+  builds: "BUILDING_PROJECTOR_ADVANCED",
+  cost: { resource: ResourceCode.Machinery, amount: 50 },
+  canReplace: ["BUILDING_PROJECTOR_BASIC"],
+});
+templates.BLUEPRINT_SPLITTER_ADVANCED = makeBlueprint({
+  builds: "BUILDING_SPLITTER_ADVANCED",
+  cost: { resource: ResourceCode.Machinery, amount: 80 },
+  canReplace: ["BUILDING_SPLITTER_HORIZONTAL", "BUILDING_SPLITTER_VERTICAL"],
+});
+templates.BLUEPRINT_RESIDENCE = makeBlueprint({
+  builds: "BUILDING_RESIDENCE",
+  cost: { resource: ResourceCode.Metal, amount: 30 },
+});
+templates.BLUEPRINT_WALL = makeBlueprint({
+  builds: "BUILDING_WALL",
+  cost: { resource: ResourceCode.Metal, amount: 20 },
+  canReplace: ["BUILDING_WALL_DAMAGED"],
+});
 
 export default templates;

@@ -20,7 +20,18 @@ const conditions: Record<
 
   isNotBlocked(state, entity) {
     if (!entity.pos) return true;
-    return !state.select.isPositionBlocked(entity.pos, [entity]);
+    const replaceableEntities = state.select
+      .entitiesAtPosition(entity.pos)
+      .filter(
+        (e) =>
+          entity.blueprint &&
+          entity.blueprint.canReplace &&
+          entity.blueprint.canReplace.includes(e.template),
+      );
+    return !state.select.isPositionBlocked(entity.pos, [
+      entity,
+      ...replaceableEntities,
+    ]);
   },
 
   isInBuildRange(state, entity) {
@@ -61,7 +72,14 @@ const conditions: Record<
     if (!pos) return true;
     return state.select
       .entitiesAtPosition(pos)
-      .every((e) => !e.building || e === entity);
+      .every(
+        (e) =>
+          !e.building ||
+          e === entity ||
+          (entity.blueprint ? entity.blueprint.canReplace || [] : []).includes(
+            e.template,
+          ),
+      );
   },
 
   isDay(state, entity) {

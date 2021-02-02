@@ -120,6 +120,7 @@ export interface Building {}
 
 export interface Blueprint {
   builds: TemplateName;
+  canReplace?: TemplateName[];
   cost: { resource: ResourceCode; amount: number };
   validityConditions: { condition: ConditionName; invalidMessage: string }[];
 }

@@ -49,6 +49,10 @@ function blueprintBuild(
     }
   }
 
+  const entitiesToReplace = entitiesAtPosition.filter((e) =>
+    (blueprint.blueprint.canReplace || []).includes(e.template),
+  );
+
   state.act.removeEntity(blueprint.id);
   state.act.addEntity(
     createEntityFromTemplate(blueprint.blueprint.builds, {
@@ -56,9 +60,10 @@ function blueprintBuild(
     }),
   );
 
-  state.act.removeEntities(
-    state.select.entitiesWithComps("validMarker").map((e) => e.id),
-  );
+  state.act.removeEntities([
+    ...state.select.entitiesWithComps("validMarker").map((e) => e.id),
+    ...entitiesToReplace.map((e) => e.id),
+  ]);
 
   state.act.playerTookTurn();
 
