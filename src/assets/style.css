@@ -9,7 +9,7 @@ body {
   @apply h-screen;
 }
 
-#map {
+#map > canvas {
   @apply w-full;
   @apply h-full;
 }

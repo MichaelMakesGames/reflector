@@ -4,7 +4,8 @@
     "disablers",
     "gifshot",
     "keyval",
-    "notyf"
+    "notyf",
+    "pixi"
   ],
   "typescript.tsdk": "node_modules/typescript/lib"
 }

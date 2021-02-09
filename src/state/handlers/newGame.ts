@@ -1,6 +1,6 @@
 import actions from "~/state/actions";
 import makeLevel from "~/utils/makeLevel";
-import { clearRenderer } from "~renderer";
+import renderer from "~renderer";
 import { registerHandler } from "~state/handleAction";
 import { createInitialState } from "~state/initialState";
 import processColonists from "~state/processors/processColonists";
@@ -16,7 +16,7 @@ function newGame(
       completedTutorials: state.select.completedTutorials(),
     }),
   );
-  clearRenderer();
+  renderer.clear();
   makeLevel(state);
   state.act.loadGame({ state: state.raw });
   state.setRaw({

@@ -1,5 +1,5 @@
 import { Required } from "Object/_api";
-import { removeRenderEntity, removeSmoke } from "~/renderer";
+import renderer from "~/renderer";
 import actions from "~/state/actions";
 import { registerHandler } from "~state/handleAction";
 import { Entity } from "~types";
@@ -33,7 +33,7 @@ function removeEntities(
       entitiesByPosition[getPosKey(entity.pos)].delete(id);
     }
     if (entity.pos && entity.display) {
-      removeRenderEntity(id);
+      renderer.removeEntity(id);
     }
     if (entity.reflector) {
       isRemovingReflector = true;
@@ -43,7 +43,10 @@ function removeEntities(
         Entity,
         "smokeEmitter"
       >).smokeEmitter.emitters.forEach((emitter) =>
-        removeSmoke((entity as Required<Entity, "pos">).pos, emitter.offset),
+        renderer.removeSmoke(
+          (entity as Required<Entity, "pos">).pos,
+          emitter.offset,
+        ),
       );
     }
 

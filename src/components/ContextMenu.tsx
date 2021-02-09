@@ -1,7 +1,7 @@
 import Tippy from "@tippyjs/react";
 import React, { ReactElement, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getClientRectFromPos } from "~renderer";
+import renderer from "~renderer";
 import selectors from "~state/selectors";
 import { Pos } from "~types";
 import { getActionsAvailableAtPos, noFocusOnClick } from "~utils/controls";
@@ -30,7 +30,7 @@ export default function ContextMenu({ pos, onClose, children }: Props) {
       onClickOutside={onClose}
       placement="right-start"
       getReferenceClientRect={() =>
-        getClientRectFromPos(posRef.current || { x: 0, y: 0 })
+        renderer.getClientRectFromPos(posRef.current || { x: 0, y: 0 })
       }
       offset={[0, 0]}
       content={

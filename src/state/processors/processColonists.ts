@@ -407,7 +407,9 @@ function updateColonistTile(
 
   const residence = state.select.residence(colonist);
   if (residence && arePositionsEqual(residence.pos, colonist.pos)) {
-    const tile = `colonists_${numColonistsAtPos}_${residence.template.toLowerCase()}`;
+    const tile = `colonists_${numColonistsAtPos}_${residence.template
+      .substring("BUILDING_".length)
+      .toLowerCase()}`;
     state.act.updateEntity({
       id: colonist.id,
       display: {

@@ -1,10 +1,6 @@
 import has from "has";
 import { Required } from "Object/_api";
-import {
-  addRenderEntity,
-  removeRenderEntity,
-  updateRenderEntity,
-} from "~/renderer";
+import renderer from "~/renderer";
 import actions from "~/state/actions";
 import selectors from "~/state/selectors";
 import { Entity } from "~/types";
@@ -51,12 +47,12 @@ function updateEntity(
   if (has(partial, "pos") || has(partial, "display")) {
     if (entity.pos && entity.display) {
       if (!prev.pos || !prev.display) {
-        addRenderEntity(entity as Required<Entity, "pos" | "display">);
+        renderer.addEntity(entity as Required<Entity, "pos" | "display">);
       } else {
-        updateRenderEntity(entity as Required<Entity, "pos" | "display">);
+        renderer.updateEntity(entity as Required<Entity, "pos" | "display">);
       }
     } else {
-      removeRenderEntity(entity.id);
+      renderer.removeEntity(entity.id);
     }
   }
 

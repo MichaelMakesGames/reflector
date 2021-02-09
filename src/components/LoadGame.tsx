@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { loadPromise } from "~renderer";
+import renderer from "~renderer";
 import actions from "~state/actions";
 import selectors from "~state/selectors";
 import { RawState } from "~types";
@@ -16,20 +16,23 @@ export default function LoadGame() {
   const dispatch = useDispatch();
   const version = useSelector(selectors.version);
   useEffect(() => {
-    loadPromise.then(load).then((savedGame) => {
-      if (!savedGame) {
-        setIsLoading(false);
-        dispatch(actions.newGame());
-      } else if (
-        selectors.version(savedGame) === version &&
-        !selectors.version(savedGame).includes("unstable")
-      ) {
-        setIsLoading(false);
-        dispatch(actions.loadGame({ state: savedGame }));
-      } else {
-        setOldSave(savedGame);
-      }
-    });
+    renderer
+      .getLoadPromise()
+      .then(load)
+      .then((savedGame) => {
+        if (!savedGame) {
+          setIsLoading(false);
+          dispatch(actions.newGame());
+        } else if (
+          selectors.version(savedGame) === version &&
+          !selectors.version(savedGame).includes("unstable")
+        ) {
+          setIsLoading(false);
+          dispatch(actions.loadGame({ state: savedGame }));
+        } else {
+          setOldSave(savedGame);
+        }
+      });
   }, []);
 
   if (!isLoading) {

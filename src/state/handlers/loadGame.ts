@@ -1,5 +1,5 @@
 import colors from "~colors";
-import { addRenderEntity, clearRenderer, setBackgroundColor } from "~renderer";
+import renderer from "~renderer";
 import { registerHandler } from "~state/handleAction";
 import processAnimationToggle from "~state/processors/processAnimationToggle";
 import processBorders from "~state/processors/processBorders";
@@ -20,17 +20,17 @@ function loadGame(
   });
   resetEntitiesByCompAndPos(state);
   state.act.setCursorPos(null);
-  clearRenderer();
+  renderer.clear();
   state.select
     .entitiesWithComps("pos", "display")
-    .forEach((entity) => addRenderEntity(entity));
+    .forEach((entity) => renderer.addEntity(entity));
   processEmitters(state);
   processAnimationToggle(state);
   processBorders(state);
   if (state.select.isNight()) {
-    setBackgroundColor(colors.backgroundNight);
+    renderer.setBackgroundColor(colors.backgroundNight);
   } else {
-    setBackgroundColor(colors.backgroundDay);
+    renderer.setBackgroundColor(colors.backgroundDay);
   }
 }
 

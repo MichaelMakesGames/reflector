@@ -7,7 +7,7 @@ import React, {
   useState,
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { app, getPosFromMouse, zoomOut, zoomTo } from "~/renderer";
+import renderer from "~/renderer";
 import {
   DOWN,
   LEFT,
@@ -32,8 +32,7 @@ export default function GameMap() {
   useEffect(() => {
     const map = document.getElementById("map");
     if (map) {
-      map.appendChild(app.view);
-      app.view.id = "map";
+      renderer.appendView(map);
     }
   }, []);
 
@@ -183,12 +182,12 @@ export default function GameMap() {
     code: ControlCode.ZoomIn,
     group: HotkeyGroup.Main,
     callback: () =>
-      zoomTo(playerPos || { x: MAP_WIDTH / 2, y: MAP_HEIGHT / 2 }),
+      renderer.zoomTo(playerPos || { x: MAP_WIDTH / 2, y: MAP_HEIGHT / 2 }),
   });
   useControl({
     code: ControlCode.ZoomOut,
     group: HotkeyGroup.Main,
-    callback: zoomOut,
+    callback: () => renderer.zoomOut(),
   });
 
   const performDefaultAction = (pos: Pos | null) => {
@@ -216,7 +215,7 @@ export default function GameMap() {
       y: e.nativeEvent.offsetY,
     };
     mousePosRef.current = mousePos;
-    const pos = getPosFromMouse(mousePos.x, mousePos.y);
+    const pos = renderer.getPosFromMouse(mousePos.x, mousePos.y);
     if (!cursorPos || (!arePositionsEqual(cursorPos, pos) && !contextMenuPos)) {
       dispatch(actions.setCursorPos(pos));
     }
@@ -243,12 +242,12 @@ export default function GameMap() {
           }}
           onWheel={(e) => {
             if (e.nativeEvent.deltaY > 0) {
-              zoomOut();
+              renderer.zoomOut();
             } else if (e.nativeEvent.deltaY < 0 && playerPos) {
-              zoomTo(playerPos);
+              renderer.zoomTo(playerPos);
             }
             if (mousePosRef.current) {
-              const gamePos = getPosFromMouse(
+              const gamePos = renderer.getPosFromMouse(
                 mousePosRef.current.x,
                 mousePosRef.current.y,
               );
@@ -265,7 +264,7 @@ export default function GameMap() {
               y: e.nativeEvent.offsetY,
             };
             mousePosRef.current = mousePos;
-            const gamePos = getPosFromMouse(mousePos.x, mousePos.y);
+            const gamePos = renderer.getPosFromMouse(mousePos.x, mousePos.y);
             if (!cursorPos || !arePositionsEqual(cursorPos, gamePos)) {
               dispatch(actions.setCursorPos(gamePos));
             }
@@ -285,7 +284,7 @@ export default function GameMap() {
               y: e.nativeEvent.offsetY,
             };
             mousePosRef.current = mousePos;
-            const gamePos = getPosFromMouse(mousePos.x, mousePos.y);
+            const gamePos = renderer.getPosFromMouse(mousePos.x, mousePos.y);
             if (!cursorPos || !arePositionsEqual(cursorPos, gamePos)) {
               dispatch(actions.setCursorPos(gamePos));
             }
