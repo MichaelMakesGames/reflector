@@ -32,6 +32,20 @@ export default function EntityPreview({ templateName, style = {} }: Props) {
         })`,
         ...style,
       }}
-    />
+    >
+      <img
+        width={24}
+        height={24}
+        alt={entity.description ? entity.description.name : templateName}
+        style={{ mixBlendMode: "multiply" }}
+        src={
+          tiles[
+            Array.isArray(entity.display.tile)
+              ? entity.display.tile[0]
+              : entity.display.tile
+          ]
+        }
+      />
+    </div>
   );
 }
