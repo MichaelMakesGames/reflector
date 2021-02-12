@@ -12,6 +12,13 @@ export default function EntityPreview({ templateName, style = {} }: Props) {
   if (!Object.keys(templates).includes(templateName)) return null;
   const entity = createEntityFromTemplate(templateName);
   if (!entity.display) return null;
+  const maskImage = `url(${
+    tiles[
+      Array.isArray(entity.display.tile)
+        ? entity.display.tile[0]
+        : entity.display.tile
+    ]
+  })`;
   return (
     <div
       style={{
@@ -22,14 +29,8 @@ export default function EntityPreview({ templateName, style = {} }: Props) {
         background: entity.display.color,
         height: 24,
         width: 24,
-        mask: `url(#${templateName}_MASK)`,
-        WebkitMaskImage: `url(${
-          tiles[
-            Array.isArray(entity.display.tile)
-              ? entity.display.tile[0]
-              : entity.display.tile
-          ]
-        })`,
+        WebkitMaskImage: maskImage,
+        maskImage,
         ...style,
       }}
     >

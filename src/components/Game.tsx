@@ -10,7 +10,6 @@ import Laser from "./Laser";
 import LoadGame from "./LoadGame";
 import Resources from "./Resources";
 import Status from "./Status";
-import IconMasks from "./IconMasks";
 import GameOver from "./GameOver";
 import { TILE_SIZE, MAP_WIDTH, MAP_CSS_WIDTH } from "~constants";
 import Introduction from "./Introduction";
@@ -50,7 +49,6 @@ export default function Game() {
             <Inspector />
           </div>
         </div>
-        <IconMasks />
         <GameOver />
         <Introduction />
       </main>

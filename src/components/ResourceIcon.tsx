@@ -9,6 +9,7 @@ interface Props {
 }
 export default function ResourceIcon({ resourceCode, style = {} }: Props) {
   const resource = resources[resourceCode];
+  const maskImage = `url(${tiles[resource.icon]})`;
   return (
     <div
       style={{
@@ -19,8 +20,8 @@ export default function ResourceIcon({ resourceCode, style = {} }: Props) {
         background: resource.color,
         height: 24,
         width: 24,
-        mask: `url(#${resourceCode}_MASK)`,
-        WebkitMaskImage: `url(${tiles[resource.icon]})`,
+        WebkitMaskImage: maskImage,
+        maskImage,
         ...style,
       }}
     />
