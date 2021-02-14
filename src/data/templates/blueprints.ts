@@ -66,11 +66,13 @@ function makeBlueprint({
         ? {
             ...buildsTemplate.display,
             color: colors.blueprint,
+            discreteMovement: true,
           }
         : {
             tile: "outline_solid",
             color: colors.blueprint,
             priority: PRIORITY_BUILDING_HIGH,
+            discreteMovement: true,
           },
     description,
     ...(rotatesTo ? { rotatable: { rotatesTo } } : {}),

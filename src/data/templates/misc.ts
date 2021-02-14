@@ -68,6 +68,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       tile: "outline_solid",
       color: colors.secondary,
       priority: PRIORITY_MARKER,
+      discreteMovement: true,
     },
     cursor: {},
   },

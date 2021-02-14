@@ -16,6 +16,7 @@ export interface Display {
   priority: number;
   hasBackground?: boolean;
   flashWhenVisible?: boolean;
+  discreteMovement?: boolean;
 }
 
 export interface AnimationToggle {

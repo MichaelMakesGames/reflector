@@ -1,4 +1,3 @@
-/* global requestAnimationFrame */
 import { Required } from "Object/_api";
 import * as particles from "pixi-particles";
 import * as PIXI from "pixi.js";
@@ -6,6 +5,8 @@ import colors from "~colors";
 import { PLAYER_ID } from "~constants";
 import { Display, Entity, Pos } from "~types";
 import { arePositionsEqual } from "~utils/geometry";
+
+const BASE_SPEED = 4;
 
 export interface RendererConfig {
   gridWidth: number;
@@ -18,7 +19,7 @@ export interface RendererConfig {
 interface RenderEntity {
   displayComp: Display;
   pos: Pos;
-  sprite?: PIXI.Sprite;
+  sprite: PIXI.Sprite;
   background?: PIXI.Graphics;
   isVisible?: boolean;
 }
@@ -47,6 +48,8 @@ export default class Renderer {
   private zoomedIn: boolean = false;
 
   private layers: Record<number, PIXI.Container> = {};
+
+  private movementPaths: Map<string, Pos[]> = new Map();
 
   public constructor({
     gridWidth,
@@ -130,9 +133,12 @@ export default class Renderer {
 
   public addEntity(entity: Required<Entity, "pos" | "display">): void {
     const { pos, display } = entity;
+    const sprite = this.createSprite(pos, display);
+
     this.renderEntities[entity.id] = {
       displayComp: { ...display },
       pos: { ...pos },
+      sprite,
     };
 
     if (display.hasBackground) {
@@ -149,9 +155,6 @@ export default class Renderer {
       this.renderEntities[entity.id].background = background;
       this.getLayer(display.priority).addChild(background);
     }
-
-    const sprite = this.createSprite(pos, display);
-    this.renderEntities[entity.id].sprite = sprite;
     this.getLayer(display.priority).addChild(sprite);
 
     this.updateVisibility(this.renderEntities[entity.id]);
@@ -162,13 +165,18 @@ export default class Renderer {
     if (renderEntity) {
       if (!arePositionsEqual(renderEntity.pos, entity.pos)) {
         renderEntity.pos = entity.pos;
-        if (renderEntity.sprite) {
+        if (renderEntity.displayComp.discreteMovement) {
           this.setSpritePosition(
             renderEntity.sprite,
             renderEntity.pos,
             renderEntity.displayComp,
           );
+        } else if (this.movementPaths.has(entity.id)) {
+          (this.movementPaths.get(entity.id) || []).push(entity.pos);
+        } else {
+          this.movementPaths.set(entity.id, [entity.pos]);
         }
+
         if (renderEntity.background) {
           renderEntity.background.position.set(
             entity.pos.x * this.tileWidth,
@@ -203,6 +211,9 @@ export default class Renderer {
       }
       if (renderEntity.sprite) {
         renderEntity.sprite.parent.removeChild(renderEntity.sprite);
+      }
+      if (this.movementPaths.has(entityId)) {
+        this.movementPaths.delete(entityId);
       }
     }
   }
@@ -259,6 +270,7 @@ export default class Renderer {
       (sprite as PIXI.AnimatedSprite).animationSpeed = display.speed || 0.2;
       (sprite as PIXI.AnimatedSprite).play();
     }
+    sprite.pivot.set(this.tileWidth / 2, this.tileHeight / 2);
     sprite.angle = display.rotation || 0;
     this.setSpritePosition(sprite, pos, display);
     sprite.width = this.tileWidth;
@@ -269,22 +281,16 @@ export default class Renderer {
   }
 
   private setSpritePosition(sprite: PIXI.Sprite, pos: Pos, display: Display) {
-    let { x, y } = pos;
-    switch (display.rotation) {
-      case 90:
-        x += 1;
-        break;
-      case 180:
-        x += 1;
-        y += 1;
-        break;
-      case 270:
-        y += 1;
-        break;
-      default:
-        break;
-    }
-    sprite.position.set(x * this.tileWidth, y * this.tileHeight);
+    const { x, y } = this.calcAppPos(pos, display);
+    sprite.position.set(x, y);
+  }
+
+  private calcAppPos(pos: Pos, display: Display): Pos {
+    const { x, y } = pos;
+    return {
+      x: x * this.tileWidth + this.tileWidth / 2,
+      y: y * this.tileHeight + this.tileHeight / 2,
+    };
   }
 
   private getLayer(priority: number) {
@@ -482,17 +488,54 @@ export default class Renderer {
   public start(): void {
     if (!this.loadPromise) return;
     this.loadPromise.then(() => {
-      let lastTime = Date.now();
-      const update = () => {
-        requestAnimationFrame(update);
-        const now = Date.now();
-        Object.values(this.emitters).forEach((emitter) => {
-          emitter.update((now - lastTime) / 1000);
-        });
-        lastTime = now;
-      };
-      update();
+      this.app.ticker.add((delta: number) =>
+        Object.values(this.emitters).forEach((emitter) =>
+          emitter.update(delta / 60),
+        ),
+      );
+      this.app.ticker.add((delta: number) => this.handleMovement(delta));
     });
+  }
+
+  private handleMovement(delta: number) {
+    for (const [entityId, path] of this.movementPaths.entries()) {
+      const entity = this.renderEntities[entityId];
+      if (!entity || !path.length) {
+        this.movementPaths.delete(entityId);
+      } else {
+        const speed = BASE_SPEED * path.length;
+        const oldX = entity.sprite.x;
+        const oldY = entity.sprite.y;
+        const { x: destX, y: destY } = this.calcAppPos(
+          path[0],
+          entity.displayComp,
+        );
+        const deltaX = destX - oldX;
+        const deltaY = destY - oldY;
+        let newX = oldX;
+        let newY = oldY;
+        if (Math.abs(deltaX) <= speed * delta) {
+          newX = destX;
+        } else if (deltaX > 0) {
+          newX = oldX + speed * delta;
+        } else {
+          newX = oldX - speed * delta;
+        }
+        if (Math.abs(deltaY) <= speed * delta) {
+          newY = destY;
+        } else if (deltaY > 0) {
+          newY = oldY + speed * delta;
+        } else {
+          newY = oldY - speed * delta;
+        }
+
+        if (newY === destY && newX === destX) {
+          path.shift();
+        }
+
+        entity.sprite.position.set(newX, newY);
+      }
+    }
   }
 
   public getClientRectFromPos(gamePos: Pos): ClientRect {
