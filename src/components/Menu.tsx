@@ -6,7 +6,7 @@ import { SettingsContext } from "~contexts";
 import { useBoolean } from "~hooks";
 import actions from "~state/actions";
 import { ControlCode } from "~types/ControlCode";
-import { noFocusOnClick } from "~utils/controls";
+import { noFocusOnClick } from "~lib/controls";
 import { HotkeyGroup, useControl } from "./HotkeysProvider";
 import Kbd from "./Kbd";
 import KeyboardControls from "./KeyboardControls";

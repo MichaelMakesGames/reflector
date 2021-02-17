@@ -9,8 +9,8 @@ import actions from "~state/actions";
 import selectors from "~state/selectors";
 import { Direction } from "~types";
 import { ControlCode } from "~types/ControlCode";
-import { noFocusOnClick } from "~utils/controls";
-import { getConstDir } from "~utils/geometry";
+import { noFocusOnClick } from "~lib/controls";
+import { getConstDir } from "~lib/geometry";
 import HotkeyButton from "./HotkeyButton";
 
 export default function Laser() {

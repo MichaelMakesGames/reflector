@@ -61,7 +61,6 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       priority: PRIORITY_MARKER,
     },
     jobDisabler: {},
-    destructible: {},
   },
   CURSOR: {
     display: {

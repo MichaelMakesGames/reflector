@@ -11,7 +11,7 @@ import actions from "~state/actions";
 import selectors from "~state/selectors";
 import { ControlCode } from "~types/ControlCode";
 import { TutorialId } from "~types/TutorialId";
-import { noFocusOnClick } from "~utils/controls";
+import { noFocusOnClick } from "~lib/controls";
 import EntityPreview from "./EntityPreview";
 import { HotkeyGroup, useControl } from "./HotkeysProvider";
 import Icons from "./Icons";

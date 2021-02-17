@@ -6,8 +6,8 @@ import {
   arePositionsEqual,
   getAdjacentPositions,
   getPosKey,
-} from "~utils/geometry";
-import { sum } from "~utils/math";
+} from "~lib/geometry";
+import { sum } from "~lib/math";
 
 export function entityList(state: RawState) {
   return Object.values(state.entities);

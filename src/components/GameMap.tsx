@@ -23,8 +23,8 @@ import actions from "~state/actions";
 import selectors from "~state/selectors";
 import { Pos, RawState } from "~types";
 import { ControlCode } from "~types/ControlCode";
-import { getQuickAction, noFocusOnClick } from "~utils/controls";
-import { arePositionsEqual } from "~utils/geometry";
+import { getQuickAction, noFocusOnClick } from "~lib/controls";
+import { arePositionsEqual } from "~lib/geometry";
 import ContextMenu from "./ContextMenu";
 import { useInterval } from "~hooks";
 

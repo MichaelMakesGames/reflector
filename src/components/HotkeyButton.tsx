@@ -3,7 +3,7 @@ import { ControlCode } from "~types/ControlCode";
 import { HotkeyGroup, useControl } from "./HotkeysProvider";
 import { SettingsContext } from "~contexts";
 import Kbd from "./Kbd";
-import { noFocusOnClick } from "~utils/controls";
+import { noFocusOnClick } from "~lib/controls";
 
 interface Props {
   label: string;

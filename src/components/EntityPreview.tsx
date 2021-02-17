@@ -1,6 +1,6 @@
 import React from "react";
 import templates from "~data/templates";
-import { createEntityFromTemplate } from "~utils/entities";
+import { createEntityFromTemplate } from "~lib/entities";
 // @ts-ignore
 import tiles from "../assets/tiles/*.png";
 

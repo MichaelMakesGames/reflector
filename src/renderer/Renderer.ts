@@ -4,7 +4,7 @@ import * as PIXI from "pixi.js";
 import colors from "~colors";
 import { PLAYER_ID } from "~constants";
 import { Display, Entity, Pos } from "~types";
-import { arePositionsEqual } from "~utils/geometry";
+import { arePositionsEqual } from "~lib/geometry";
 
 const BASE_SPEED = 4;
 

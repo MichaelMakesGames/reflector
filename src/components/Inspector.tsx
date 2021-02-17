@@ -8,13 +8,13 @@ import resources from "~data/resources";
 import selectors from "~state/selectors";
 import wrapState from "~state/wrapState";
 import { Entity, RawState } from "~types";
-import { areConditionsMet } from "~utils/conditions";
+import { areConditionsMet } from "~lib/conditions";
 import {
   ActionControl,
   getActionsAvailableAtPos,
   getQuickAction,
-} from "~utils/controls";
-import { getHumanReadablePosition } from "~utils/geometry";
+} from "~lib/controls";
+import { getHumanReadablePosition } from "~lib/geometry";
 import ResourceAmount from "./ResourceAmount";
 import Warning from "./Warning";
 

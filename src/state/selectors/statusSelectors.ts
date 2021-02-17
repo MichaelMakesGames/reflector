@@ -9,7 +9,7 @@ import {
 import { JobTypeCode } from "~data/jobTypes";
 import { ResourceCode } from "~data/resources";
 import { Pos, RawState } from "~types";
-import { getDistance } from "~utils/geometry";
+import { getDistance } from "~lib/geometry";
 import { entitiesWithComps } from "./entitySelectors";
 
 export function population(state: RawState): number {

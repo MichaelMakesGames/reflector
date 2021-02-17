@@ -1,9 +1,8 @@
 import { getType } from "typesafe-actions";
 import { Action, RawState } from "~/types";
 import actions from "./actions";
-import "./handlers";
 import { createInitialState } from "./initialState";
-import processTutorials from "./processors/processTutorials";
+import { processTutorials } from "../lib/tutorials";
 import wrapState from "./wrapState";
 
 const GAME_OVER_ALLOW_LIST: string[] = [

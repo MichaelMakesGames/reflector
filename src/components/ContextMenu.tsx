@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import renderer from "~renderer";
 import selectors from "~state/selectors";
 import { Pos } from "~types";
-import { getActionsAvailableAtPos, noFocusOnClick } from "~utils/controls";
+import { getActionsAvailableAtPos, noFocusOnClick } from "~lib/controls";
 
 interface Props {
   pos: Pos | null;

@@ -5,7 +5,7 @@ import actions from "~state/actions";
 import selectors from "~state/selectors";
 import { RawState } from "~types";
 import { ControlCode } from "~types/ControlCode";
-import { load } from "~utils/gameSave";
+import { load } from "~lib/gameSave";
 import HotkeyButton from "./HotkeyButton";
 import { HotkeyGroup } from "./HotkeysProvider";
 import Modal from "./Modal";
