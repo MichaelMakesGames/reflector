@@ -22,7 +22,7 @@ export function createInitialState({
     victory: false,
     morale: STARTING_MORALE,
     time: {
-      turn: 1,
+      turn: 0,
       directionWeights: { n: 0, s: 0, e: 0, w: 0 },
     },
     laserState: "READY",

@@ -13,7 +13,7 @@ export default function Introduction() {
   const turn = useSelector(selectors.turn);
   const player = useSelector(selectors.player);
   useEffect(() => {
-    if (player && turn === 1) {
+    if (player && turn === 0) {
       open();
     }
   }, [Boolean(player), turn]);

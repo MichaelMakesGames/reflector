@@ -1,5 +1,9 @@
 import { Required } from "Object/_api";
-import { PRIORITY_BUILDING_DETAIL, PRIORITY_UNIT } from "~constants";
+import {
+  PRIORITY_BUILDING_DETAIL,
+  PRIORITY_UNIT,
+  TURNS_PER_NIGHT,
+} from "~constants";
 import { ColonistStatusCode } from "~data/colonistStatuses";
 import { ResourceCode } from "~data/resources";
 import { getDirectionTowardTarget } from "~lib/ai";
@@ -16,7 +20,7 @@ import { Entity, Pos } from "~types";
 import WrappedState from "~types/WrappedState";
 
 export default function colonistsSystem(state: WrappedState): void {
-  if (!state.select.isNight() || state.select.turnOfNight() === 1) {
+  if (!state.select.isNight() || state.select.isFirstTurnOfNight()) {
     for (const colonist of state.select.colonists()) {
       clearResidence(state, colonist);
     }
@@ -46,7 +50,7 @@ export default function colonistsSystem(state: WrappedState): void {
     });
   }
 
-  if (state.select.isNight() && state.select.turnOfDay() !== 0) {
+  if (state.select.isNight() && !state.select.isLastTurnOfNight()) {
     doResidenceSanityCheck(state);
     checkForEmptyHomesAndHomelessColonists(state);
     for (const colonist of state.select.colonists()) {

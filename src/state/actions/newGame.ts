@@ -4,7 +4,6 @@ import renderer from "~renderer";
 import { registerHandler } from "~state/handleAction";
 import { createInitialState } from "~state/initialState";
 import colonistsSystem from "~state/systems/colonistsSystem";
-import immigrationSystem from "~state/systems/immigrationSystem";
 import WrappedState from "~types/WrappedState";
 
 const newGame = createStandardAction("NEW_GAME")();
@@ -30,7 +29,6 @@ function newGameHandler(
       startOfLastTurn: null,
     },
   });
-  immigrationSystem(state);
   colonistsSystem(state);
 }
 

@@ -12,7 +12,7 @@ import { rangeTo } from "~lib/math";
 import { choose } from "~lib/rng";
 
 export default function immigrationSystem(state: WrappedState): void {
-  if (state.select.turnOfDay() === 0) {
+  if (state.select.isLastTurnOfNight()) {
     const player = state.select.player();
     if (!player) {
       console.warn("No player");

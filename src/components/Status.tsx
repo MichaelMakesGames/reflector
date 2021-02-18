@@ -44,7 +44,7 @@ export default function Status() {
           >
             <p className="text-xl">
               {isNight ? "Night" : "Day"} {day + 1},{" Turn "}
-              {isNight ? turnOfNight : turnOfDay}
+              {isNight ? turnOfNight + 1 : turnOfDay + 1}
             </p>
           </Tippy>
           <p className="text-lightGray">

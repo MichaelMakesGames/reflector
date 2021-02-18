@@ -12,7 +12,7 @@ export default function timeSystem(state: WrappedState): void {
       turn: state.raw.time.turn + 1,
     },
   });
-  if (state.select.turnOfDay() === 1) {
+  if (state.select.turnOfDay() === 0) {
     state.setRaw({
       ...state.raw,
       time: {
@@ -23,7 +23,7 @@ export default function timeSystem(state: WrappedState): void {
     renderer.setBackgroundColor(colors.backgroundDay);
   }
 
-  if (state.select.turnOfNight() === 1) {
+  if (state.select.turnOfNight() === 0) {
     renderer.setBackgroundColor(colors.backgroundNight);
   }
 }
