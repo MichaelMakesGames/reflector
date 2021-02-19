@@ -6,7 +6,7 @@ import { PLAYER_ID } from "~constants";
 import { Display, Entity, Pos } from "~types";
 import { arePositionsEqual } from "~lib/geometry";
 
-const BASE_SPEED = 4;
+const BASE_SPEED = 3;
 
 export interface RendererConfig {
   gridWidth: number;
@@ -485,6 +485,69 @@ export default class Renderer {
     });
   }
 
+  public explode(pos: Pos): void {
+    if (!this.loadPromise) return;
+    this.loadPromise.then(() => {
+      const texture = PIXI.Texture.WHITE;
+      const config: particles.EmitterConfig = {
+        alpha: {
+          list: [
+            { value: 1, time: 0 },
+            { value: 0.5, time: 1 },
+          ],
+        },
+        scale: {
+          list: [
+            { value: 1 / 2, time: 0 },
+            { value: 1 / 2, time: 1 },
+          ],
+        },
+        color: {
+          list: [
+            { value: colors.power, time: 0 },
+            { value: colors.laser, time: 0.5 },
+            { value: colors.ground, time: 1 },
+          ],
+        },
+        speed: {
+          list: [
+            { value: 100, time: 0 },
+            { value: 50, time: 1 },
+          ],
+        },
+        acceleration: {
+          x: 0,
+          y: 0,
+        },
+        maxSpeed: 0,
+        startRotation: {
+          min: 0,
+          max: 360,
+        },
+        noRotation: true,
+        lifetime: {
+          min: 0.1,
+          max: 0.3,
+        },
+        frequency: 0.02,
+        emitterLifetime: 0.1,
+        maxParticles: 1000,
+        particlesPerWave: 10,
+        pos: {
+          x: pos.x * this.tileWidth + this.tileWidth / 2,
+          y: pos.y * this.tileHeight + this.tileHeight / 2,
+        },
+        addAtBack: false,
+        spawnType: "point",
+      };
+      new particles.Emitter(
+        this.app.stage,
+        [texture],
+        config,
+      ).playOnceAndDestroy();
+    });
+  }
+
   public start(): void {
     if (!this.loadPromise) return;
     this.loadPromise.then(() => {
@@ -495,6 +558,21 @@ export default class Renderer {
       );
       this.app.ticker.add((delta: number) => this.handleMovement(delta));
     });
+  }
+
+  public bump(entityId: string, towardsPos: Pos): void {
+    let path = this.movementPaths.get(entityId);
+    if (!path) {
+      path = [];
+      this.movementPaths.set(entityId, path);
+    }
+    const renderEntity = this.renderEntities[entityId];
+    if (!renderEntity) return;
+    const { pos } = renderEntity;
+    path.push(
+      { x: (pos.x + towardsPos.x) / 2, y: (pos.y + towardsPos.y) / 2 },
+      pos,
+    );
   }
 
   private handleMovement(delta: number) {

@@ -5,6 +5,7 @@ import selectors from "~/state/selectors";
 import { Direction, Entity, RawState, Pos, Action } from "~/types";
 import { getDistance, arePositionsEqual } from "./geometry";
 import WrappedState from "~types/WrappedState";
+import renderer from "~renderer";
 
 function isPassable(gameState: RawState, position: Pos) {
   return selectors
@@ -96,6 +97,7 @@ export function getAIActions(entity: Entity, state: WrappedState): Action[] {
     }
 
     if (getDistance(entity.pos, target.pos) <= 1) {
+      renderer.bump(entity.id, target.pos);
       return destroyAllAtPos(state, target.pos);
     }
     const direction = getDirectionTowardTarget(
