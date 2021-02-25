@@ -69,6 +69,7 @@
   "devDependencies": {
     "@babel/core": "^7.8.4",
     "@fullhuman/postcss-purgecss": "^2.0.6",
+    "@types/howler": "^2.2.1",
     "@types/nanoid": "^2.0.0",
     "@types/react": "^16.9.2",
     "@types/react-beautiful-dnd": "^13.0.0",
@@ -93,6 +94,7 @@
     "@types/classnames": "^2.2.9",
     "classnames": "^2.2.6",
     "has": "^1.0.3",
+    "howler": "^2.2.1",
     "idb-keyval": "^3.2.0",
     "nanoid": "^2.1.1",
     "notyf": "^3.7.0",

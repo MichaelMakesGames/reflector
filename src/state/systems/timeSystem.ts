@@ -3,6 +3,7 @@ import WrappedState from "~types/WrappedState";
 import { choose } from "~lib/rng";
 import renderer from "~renderer";
 import colors from "~colors";
+import audio from "~lib/audio";
 
 export default function timeSystem(state: WrappedState): void {
   state.setRaw({
@@ -21,10 +22,12 @@ export default function timeSystem(state: WrappedState): void {
       },
     });
     renderer.setBackgroundColor(colors.backgroundDay);
+    audio.playMusic("day");
   }
 
   if (state.select.turnOfNight() === 0) {
     renderer.setBackgroundColor(colors.backgroundNight);
+    audio.playMusic("night");
   }
 }
 

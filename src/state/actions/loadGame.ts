@@ -9,6 +9,7 @@ import emitterSystem from "~state/systems/emitterSystem";
 import { RawState } from "~types";
 import WrappedState from "~types/WrappedState";
 import { resetEntitiesByCompAndPos } from "~lib/entities";
+import audio from "~lib/audio";
 
 const loadGame = createStandardAction("LOAD_GAME")<{
   state: RawState;
@@ -38,6 +39,8 @@ function loadGameHandler(
   } else {
     renderer.setBackgroundColor(colors.backgroundDay);
   }
+
+  audio.playMusic(state.select.isNight() ? "night" : "day");
 }
 
 registerHandler(loadGameHandler, loadGame);

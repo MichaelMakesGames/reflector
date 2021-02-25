@@ -1,6 +1,7 @@
 import { createStandardAction } from "typesafe-actions";
 import { registerHandler } from "~state/handleAction";
 import WrappedState from "~types/WrappedState";
+import audio from "~lib/audio";
 
 const fireWeapon = createStandardAction("FIRE_WEAPON")();
 export default fireWeapon;
@@ -38,6 +39,8 @@ function fireWeaponHandler(
     laserState: "FIRING",
   });
   state.act.playerTookTurn();
+
+  audio.stop("aiming");
 }
 
 registerHandler(fireWeaponHandler, fireWeapon);

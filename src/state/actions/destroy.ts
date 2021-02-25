@@ -3,6 +3,7 @@ import { registerHandler } from "~state/handleAction";
 import WrappedState from "~types/WrappedState";
 import onDestroyEffects from "~lib/onDestroyEffects";
 import renderer from "~renderer";
+import audio from "~lib/audio";
 
 const destroy = createStandardAction("DESTROY")<string>();
 export default destroy;
@@ -14,7 +15,6 @@ function destroyHandler(
   const entityId = action.payload;
   const entity = state.select.entityById(entityId);
   if (entity.destructible) {
-    if (entity.pos) renderer.explode(entity.pos);
     if (entity.destructible.onDestroy) {
       const effect = onDestroyEffects[entity.destructible.onDestroy];
       if (effect) {
@@ -22,7 +22,11 @@ function destroyHandler(
         effectActions.forEach((effectAction) => state.handle(effectAction));
       }
     }
+
     state.act.removeEntity(entityId);
+
+    if (entity.pos) renderer.explode(entity.pos);
+    audio.play("explosion");
   }
 }
 

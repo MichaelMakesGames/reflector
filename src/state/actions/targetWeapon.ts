@@ -7,6 +7,7 @@ import WrappedState from "~types/WrappedState";
 import { areConditionsMet } from "~lib/conditions";
 import { createEntityFromTemplate } from "~lib/entities";
 import { areDirectionsEqual, getConstDir } from "~lib/geometry";
+import audio from "~lib/audio";
 
 const targetWeapon = createStandardAction("TARGET_WEAPON")<Direction>();
 export default targetWeapon;
@@ -159,6 +160,8 @@ function targetWeaponHandler(
       beam.lastPos = nextPos;
     }
   }
+
+  audio.loop("aiming");
 }
 
 registerHandler(targetWeaponHandler, targetWeapon);
