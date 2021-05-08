@@ -18,9 +18,9 @@ function deactivateWeaponHandler(
     state.act.removeEntities(
       state.select.entitiesWithComps("laser").map((e) => e.id),
     );
+    audio.stop("laser_active");
+    audio.play("laser_cancel");
   }
-
-  audio.stop("aiming");
 }
 
 registerHandler(deactivateWeaponHandler, deactivateWeapon);

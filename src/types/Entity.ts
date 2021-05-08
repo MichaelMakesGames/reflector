@@ -29,6 +29,11 @@ export interface ColorToggle {
   falseColor: string;
 }
 
+export interface AudioToggle {
+  soundName: string;
+  conditions: ConditionName[];
+}
+
 export type AIType = "DRONE";
 export interface AI {
   type: AIType;
@@ -158,6 +163,7 @@ export interface Entity {
 
   ai?: AI;
   animationToggle?: AnimationToggle;
+  audioToggle?: AudioToggle;
   blocking?: Blocking;
   blueprint?: Blueprint;
   border?: Border;

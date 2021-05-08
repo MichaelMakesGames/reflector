@@ -1,11 +1,20 @@
-import { Howl } from "howler";
+import { Howl, Howler } from "howler";
+import { getPosKey } from "~lib/geometry";
+import { Pos } from "~types";
 // @ts-ignore
 import audio from "../../assets/audio/*.webm"; // eslint-disable-line import/no-unresolved
 
+const ROLLOFF_FACTOR = 0.5;
 export default class Audio {
   private sounds: Record<string, Howl> = {};
 
   private currentMusic: null | Howl = null;
+
+  private howler = Howler;
+
+  private positionalLoops: Record<string, number> = {};
+
+  private listenerPos: Pos = { x: 0, y: 0 };
 
   load() {
     Object.entries(audio as Record<string, string>).forEach(([file, url]) => {
@@ -19,10 +28,67 @@ export default class Audio {
     this.sounds[sound].play();
   }
 
+  playAtPos(soundName: string, pos: Pos) {
+    const sound = this.sounds[soundName];
+    const id = sound.play();
+
+    sound.pos(pos.x, pos.y, 0, id);
+    sound.pannerAttr(
+      {
+        rolloffFactor: ROLLOFF_FACTOR,
+        refDistance: 1,
+        maxDistance: 9999,
+        distanceModel: "inverse",
+        panningModel: "HRTF",
+      },
+      id,
+    );
+  }
+
+  setListenerPos(pos: Pos) {
+    this.listenerPos = pos;
+    this.howler.pos(pos.x, pos.y, 0);
+  }
+
   loop(sound: string) {
     this.sounds[sound].loop(true);
     if (!this.sounds[sound].playing()) {
       this.play(sound);
+    }
+  }
+
+  static makePositionalLoopKey(soundName: string, pos: Pos) {
+    return `${soundName}_${getPosKey(pos)}`;
+  }
+
+  loopAtPos(soundName: string, pos: Pos) {
+    const key = Audio.makePositionalLoopKey(soundName, pos);
+    if (!this.positionalLoops[key]) {
+      const sound = this.sounds[soundName];
+      const id = sound.play();
+      this.positionalLoops[key] = id;
+      sound.loop(true, id);
+      sound.pos(pos.x, pos.y, 0, id);
+      sound.pannerAttr(
+        {
+          rolloffFactor: ROLLOFF_FACTOR,
+          refDistance: 1,
+          maxDistance: 9999,
+          distanceModel: "inverse",
+          panningModel: "HRTF",
+        },
+        id,
+      );
+    }
+  }
+
+  stopAtPos(soundName: string, pos: Pos) {
+    const key = Audio.makePositionalLoopKey(soundName, pos);
+    if (this.positionalLoops[key]) {
+      const sound = this.sounds[soundName];
+      const id = this.positionalLoops[key];
+      sound.stop(id);
+      delete this.positionalLoops[key];
     }
   }
 
@@ -31,8 +97,9 @@ export default class Audio {
   }
 
   playMusic(song: "night" | "day") {
+    const MUSIC_VOLUME = 0.25;
     if (this.currentMusic) {
-      this.currentMusic.fade(1, 0, 1000);
+      this.currentMusic.fade(MUSIC_VOLUME, 0, 1000);
       this.currentMusic.off();
       this.currentMusic.on("fade", () => {
         if (this.currentMusic) {
@@ -43,9 +110,9 @@ export default class Audio {
       });
     } else {
       const intro = this.sounds[`${song}_intro`];
-      intro.volume(1);
+      intro.volume(MUSIC_VOLUME);
       const loop = this.sounds[`${song}_loop`];
-      loop.volume(1);
+      loop.volume(MUSIC_VOLUME);
       intro.play();
       this.currentMusic = intro;
       intro.once("end", () => {

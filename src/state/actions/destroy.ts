@@ -1,9 +1,10 @@
+import { RNG } from "rot-js";
 import { createStandardAction } from "typesafe-actions";
-import { registerHandler } from "~state/handleAction";
-import WrappedState from "~types/WrappedState";
+import audio from "~lib/audio";
 import onDestroyEffects from "~lib/onDestroyEffects";
 import renderer from "~renderer";
-import audio from "~lib/audio";
+import { registerHandler } from "~state/handleAction";
+import WrappedState from "~types/WrappedState";
 
 const destroy = createStandardAction("DESTROY")<string>();
 export default destroy;
@@ -25,8 +26,32 @@ function destroyHandler(
 
     state.act.removeEntity(entityId);
 
-    if (entity.pos) renderer.explode(entity.pos);
-    audio.play("explosion");
+    if (entity.pos) {
+      renderer.explode(entity.pos);
+      if (entity.building) {
+        audio.playAtPos(
+          RNG.getItem([
+            "building_destroyed_1",
+            "building_destroyed_2",
+            "building_destroyed_3",
+          ]) || "",
+          entity.pos,
+        );
+      } else {
+        audio.playAtPos(
+          RNG.getItem([
+            "explosion_1",
+            "explosion_2",
+            "explosion_3",
+            "explosion_4",
+            "explosion_5",
+            "explosion_6",
+            "explosion_7",
+          ]) || "",
+          entity.pos,
+        );
+      }
+    }
   }
 }
 

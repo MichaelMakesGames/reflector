@@ -1,5 +1,7 @@
+import { RNG } from "rot-js";
 import { createStandardAction } from "typesafe-actions";
 import { PLAYER_ID } from "~/constants";
+import audio from "~lib/audio";
 import renderer from "~renderer";
 import { registerHandler } from "~state/handleAction";
 import WrappedState from "~types/WrappedState";
@@ -40,6 +42,39 @@ function moveHandler(
       state.act.moveCursor({ dx: action.payload.dx, dy: action.payload.dy });
     }
     state.act.playerTookTurn();
+  }
+
+  if (entity.colonist) {
+    audio.playAtPos(
+      RNG.getItem([
+        "colonist_move_1",
+        "colonist_move_2",
+        "colonist_move_3",
+        "colonist_move_4",
+      ]) || "",
+      newPosition,
+    );
+  } else if (entity.id === PLAYER_ID) {
+    audio.setListenerPos(newPosition);
+    audio.playAtPos(
+      RNG.getItem([
+        "player_move_1",
+        "player_move_2",
+        "player_move_3",
+        "player_move_4",
+      ]) || "",
+      newPosition,
+    );
+  } else if (entity.ai) {
+    audio.playAtPos(
+      RNG.getItem([
+        "alien_move_1",
+        "alien_move_2",
+        "alien_move_3",
+        "alien_move_4",
+      ]) || "",
+      newPosition,
+    );
   }
 }
 

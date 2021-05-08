@@ -27,6 +27,7 @@ import { getQuickAction, noFocusOnClick } from "~lib/controls";
 import { arePositionsEqual } from "~lib/geometry";
 import ContextMenu from "./ContextMenu";
 import { useInterval } from "~hooks";
+import audio from "~lib/audio";
 
 export default function GameMap() {
   useEffect(() => {
@@ -191,6 +192,9 @@ export default function GameMap() {
   });
 
   const performDefaultAction = (pos: Pos | null) => {
+    // if (playerPos) audio.setListenerPos(playerPos);
+    // if (pos) audio.playAtPos("explosion", pos);
+    // return;
     const quickAction = getQuickAction(state, pos);
     if (quickAction) {
       dispatch(quickAction.action);

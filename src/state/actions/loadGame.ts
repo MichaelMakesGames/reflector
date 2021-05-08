@@ -10,6 +10,7 @@ import { RawState } from "~types";
 import WrappedState from "~types/WrappedState";
 import { resetEntitiesByCompAndPos } from "~lib/entities";
 import audio from "~lib/audio";
+import audioToggleSystem from "~state/systems/audioToggleSystem";
 
 const loadGame = createStandardAction("LOAD_GAME")<{
   state: RawState;
@@ -33,6 +34,7 @@ function loadGameHandler(
     .forEach((entity) => renderer.addEntity(entity));
   emitterSystem(state);
   animationToggleSystem(state);
+  audioToggleSystem(state);
   bordersSystem(state);
   if (state.select.isNight()) {
     renderer.setBackgroundColor(colors.backgroundNight);

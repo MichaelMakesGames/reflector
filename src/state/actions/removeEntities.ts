@@ -6,6 +6,7 @@ import { Entity } from "~types";
 import WrappedState from "~types/WrappedState";
 import { getPosKey } from "~lib/geometry";
 import { retargetLaserOnReflectorChange } from "~lib/lasers";
+import audio from "~lib/audio";
 
 const removeEntities = createStandardAction("REMOVE_ENTITIES")<string[]>();
 export default removeEntities;
@@ -51,6 +52,9 @@ function removeEntitiesHandler(
           emitter.offset,
         ),
       );
+    }
+    if (entity.pos && entity.audioToggle) {
+      audio.stopAtPos(entity.audioToggle.soundName, entity.pos);
     }
 
     delete entities[id];

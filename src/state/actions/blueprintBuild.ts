@@ -4,6 +4,7 @@ import { registerHandler } from "~state/handleAction";
 import WrappedState from "~types/WrappedState";
 import { areConditionsMet } from "~lib/conditions";
 import { createEntityFromTemplate } from "~lib/entities";
+import audio from "~lib/audio";
 
 const blueprintBuild = createStandardAction("BLUEPRINT_BUILD")();
 export default blueprintBuild;
@@ -71,6 +72,8 @@ function blueprintBuildHandler(
   state.act.playerTookTurn();
 
   state.act.blueprintSelect(blueprint.template);
+
+  audio.playAtPos("building_built", blueprint.pos);
 }
 
 registerHandler(blueprintBuildHandler, blueprintBuild);

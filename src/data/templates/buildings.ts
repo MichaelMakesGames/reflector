@@ -35,6 +35,10 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   },
   BUILDING_SPLITTER_BASE: {
     building: {},
+    audioToggle: {
+      soundName: "buzz",
+      conditions: ["isPowered"],
+    },
     blocking: { moving: true, lasers: true, windmill: true },
     destructible: {},
     description: {
@@ -144,6 +148,10 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   },
   BUILDING_MINE: {
     building: {},
+    audioToggle: {
+      soundName: "mine_1",
+      conditions: ["hasOneActiveWorker"],
+    },
     display: {
       tile: "mine",
       color: colors.activeBuilding,
@@ -188,6 +196,10 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   },
   BUILDING_MINING_SPOT: {
     building: {},
+    audioToggle: {
+      soundName: "pickaxe_loop",
+      conditions: ["hasOneActiveWorker"],
+    },
     display: {
       tile: "mining_spot",
       color: colors.inactiveBuilding,
@@ -211,6 +223,10 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   },
   BUILDING_FARM: {
     building: {},
+    audioToggle: {
+      soundName: "farm",
+      conditions: ["hasOneActiveWorker"],
+    },
     display: {
       tile: "farm",
       color: colors.food,
@@ -235,6 +251,10 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   },
   BUILDING_REACTOR: {
     building: {},
+    audioToggle: {
+      soundName: "buzz",
+      conditions: ["hasOneActiveWorker"],
+    },
     display: {
       tile: "powerplant",
       color: colors.activeBuilding,
@@ -276,6 +296,10 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   },
   BUILDING_SOLAR_PANEL: {
     building: {},
+    audioToggle: {
+      soundName: "buzz",
+      conditions: ["isDay"],
+    },
     display: {
       tile: "solarpanel",
       color: colors.activeBuilding,
@@ -307,6 +331,10 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   },
   BUILDING_WINDMILL: {
     building: {},
+    audioToggle: {
+      soundName: "buzz",
+      conditions: ["doesNotHaveTallNeighbors"],
+    },
     display: {
       tile: ["windmill-1", "windmill-2", "windmill-3", "windmill-4"],
       color: colors.activeBuilding,
@@ -337,6 +365,10 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   },
   BUILDING_FACTORY: {
     building: {},
+    audioToggle: {
+      soundName: "factory_1",
+      conditions: ["hasOneActiveWorker"],
+    },
     display: {
       tile: "furnace",
       color: colors.activeBuilding,
@@ -427,6 +459,10 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   },
   BUILDING_PROJECTOR_BASIC: {
     building: {},
+    audioToggle: {
+      soundName: "buzz",
+      conditions: ["isPowered"],
+    },
     display: {
       tile: "basic_projector",
       color: colors.activeBuilding,
@@ -461,6 +497,10 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   },
   BUILDING_PROJECTOR_ADVANCED: {
     building: {},
+    audioToggle: {
+      soundName: "buzz",
+      conditions: ["isPowered"],
+    },
     display: {
       tile: "projector",
       color: colors.activeBuilding,

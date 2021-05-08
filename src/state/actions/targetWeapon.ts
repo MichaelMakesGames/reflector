@@ -24,11 +24,17 @@ function targetWeaponHandler(
     return;
   }
   state.act.setAutoMovePath([]);
+
+  if (state.select.laserState() !== "ACTIVE") {
+    audio.loop("laser_active");
+    audio.play("laser_activate");
+  }
   state.setRaw({
     ...state.raw,
     laserState: "ACTIVE",
     lastAimingDirection: action.payload,
   });
+
   const lasers = state.select.entitiesWithComps("laser", "pos");
   state.act.removeEntities(lasers.map((e) => e.id));
 
@@ -160,8 +166,6 @@ function targetWeaponHandler(
       beam.lastPos = nextPos;
     }
   }
-
-  audio.loop("aiming");
 }
 
 registerHandler(targetWeaponHandler, targetWeapon);

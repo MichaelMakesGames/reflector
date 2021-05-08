@@ -2,6 +2,7 @@ import WrappedState from "~types/WrappedState";
 import aimingSystem from "./aimingSystem";
 import aiSystem from "./aiSystem";
 import animationToggleSystem from "./animationToggleSystem";
+import audioToggleSystem from "./audioToggleSystem";
 import bordersSystem from "./bordersSystem";
 import buildingSystem from "./buildingSystem";
 import colonistsSystem from "./colonistsSystem";
@@ -39,6 +40,7 @@ const systems: ((state: WrappedState) => void)[] = [
   missingResourceIndicatorSystem,
   colorToggleSystem,
   animationToggleSystem,
+  audioToggleSystem,
 ];
 
 export default systems;

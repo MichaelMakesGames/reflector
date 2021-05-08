@@ -1,5 +1,6 @@
 import WrappedState from "~types/WrappedState";
 import { ResourceCode } from "~data/resources";
+import audio from "~lib/audio";
 
 export default function poweredSystem(state: WrappedState): void {
   const poweredEntities = state.select.entitiesWithComps("powered");
@@ -23,6 +24,9 @@ export default function poweredSystem(state: WrappedState): void {
             hasPower: true,
           },
         });
+        if (entity.pos) {
+          audio.playAtPos("power_on", entity.pos);
+        }
       }
     } else if (entity.powered.hasPower) {
       state.act.updateEntity({
@@ -32,6 +36,9 @@ export default function poweredSystem(state: WrappedState): void {
           hasPower: false,
         },
       });
+      if (entity.pos) {
+        audio.playAtPos("power_off", entity.pos);
+      }
     }
   });
 }

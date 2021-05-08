@@ -366,9 +366,10 @@ function wander(
   );
   if (newPosOptions.length >= 1) {
     const newPos = choose(newPosOptions);
-    state.act.updateEntity({
-      id: colonist.id,
-      pos: newPos,
+    state.act.move({
+      entityId: colonist.id,
+      dx: newPos.x - colonist.pos.x,
+      dy: newPos.y - colonist.pos.y,
     });
   }
   state.act.updateEntity({

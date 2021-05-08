@@ -4,6 +4,7 @@ import { HotkeyGroup, useControl } from "./HotkeysProvider";
 import { SettingsContext } from "~contexts";
 import Kbd from "./Kbd";
 import { noFocusOnClick } from "~lib/controls";
+import audio from "~lib/audio";
 
 interface Props {
   label: string;
@@ -25,11 +26,19 @@ export default function HotkeyButton({
   disabledIsCosmeticOnly,
   style,
 }: Props) {
+  const wrappedCallback = () => {
+    if (disabled) {
+      audio.play("ui_unsuccessful_invalid");
+    } else {
+      callback();
+    }
+  };
+
   useControl({
     code: controlCode,
     group: hotkeyGroup,
     disabled: disabled && !disabledIsCosmeticOnly,
-    callback,
+    callback: wrappedCallback,
 
     // set ctrl, alt, and meta to false, but leave shift undefined so hotkeys like "?" can still work
     ctrl: false,
@@ -42,8 +51,8 @@ export default function HotkeyButton({
       className={`btn ${disabled ? "disabled" : ""} ${className || ""}`}
       type="button"
       style={style || {}}
-      onClick={noFocusOnClick(callback)}
-      disabled={disabled && !disabledIsCosmeticOnly}
+      onClick={noFocusOnClick(wrappedCallback)}
+      // disabled={disabled && !disabledIsCosmeticOnly}
       data-control-code={controlCode}
     >
       <Kbd>{settings.keyboardShortcuts[controlCode][0]}</Kbd> {label}

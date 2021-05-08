@@ -1,7 +1,8 @@
+import { RNG } from "rot-js";
 import { createStandardAction } from "typesafe-actions";
+import audio from "~lib/audio";
 import { registerHandler } from "~state/handleAction";
 import WrappedState from "~types/WrappedState";
-import audio from "~lib/audio";
 
 const fireWeapon = createStandardAction("FIRE_WEAPON")();
 export default fireWeapon;
@@ -38,9 +39,23 @@ function fireWeaponHandler(
     ...state.raw,
     laserState: "FIRING",
   });
-  state.act.playerTookTurn();
 
-  audio.stop("aiming");
+  audio.stop("laser_active");
+  audio.play(
+    RNG.getItem([
+      "laser_shot_1",
+      "laser_shot_2",
+      "laser_shot_3",
+      "laser_shot_4",
+      "laser_shot_5",
+      "laser_shot_6",
+      "laser_shot_7",
+      "laser_shot_8",
+      "laser_shot_9",
+    ]) || "",
+  );
+
+  state.act.playerTookTurn();
 }
 
 registerHandler(fireWeaponHandler, fireWeapon);
