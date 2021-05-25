@@ -123,6 +123,10 @@ export default class Audio {
     this.sounds[sound].stop();
   }
 
+  stopAll() {
+    Object.values(this.sounds).forEach((sound) => sound.stop());
+  }
+
   playMusic(song: "night" | "day") {
     const MUSIC_VOLUME = 0.25;
     if (this.currentMusic) {

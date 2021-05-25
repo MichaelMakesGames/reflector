@@ -42,6 +42,7 @@ function loadGameHandler(
     renderer.setBackgroundColor(colors.backgroundDay);
   }
 
+  audio.stopAll();
   audio.playMusic(state.select.isNight() ? "night" : "day");
 }
 
