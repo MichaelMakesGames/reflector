@@ -49,6 +49,7 @@ function destroyHandler(
             "explosion_7",
           ]) || "",
           entity.pos,
+          { rollOff: 0.1, volume: 3 },
         );
       }
     }
