@@ -26,7 +26,7 @@ function targetWeaponHandler(
   state.act.setAutoMovePath([]);
 
   if (state.select.laserState() !== "ACTIVE") {
-    audio.loop("laser_active");
+    audio.loop("laser_active", { volume: 0.5 });
     audio.play("laser_activate");
   }
   state.setRaw({

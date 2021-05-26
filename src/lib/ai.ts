@@ -6,6 +6,7 @@ import { Direction, Entity, RawState, Pos, Action } from "~/types";
 import { getDistance, arePositionsEqual } from "./geometry";
 import WrappedState from "~types/WrappedState";
 import renderer from "~renderer";
+import audio from "./audio";
 
 function isPassable(gameState: RawState, position: Pos) {
   return selectors
@@ -124,6 +125,16 @@ export function getAIActions(entity: Entity, state: WrappedState): Action[] {
 
 function destroyAllAtPos(state: WrappedState, pos: Pos) {
   const entitiesAtTargetPos = state.select.entitiesAtPosition(pos);
+  audio.playAtPos(
+    ROT.RNG.getItem([
+      "alien_attack_1",
+      "alien_attack_2",
+      "alien_attack_3",
+      "alien_attack_4",
+    ]) || "",
+    pos,
+    { volume: 2 },
+  );
   return entitiesAtTargetPos
     .filter((e) => e.destructible)
     .map((e) => actions.destroy(e.id));

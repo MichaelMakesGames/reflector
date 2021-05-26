@@ -29,28 +29,27 @@ function destroyHandler(
     if (entity.pos) {
       renderer.explode(entity.pos);
       if (entity.building) {
+        audio.playAtPos("building_destroyed", entity.pos);
+      } else if (entity.ai) {
         audio.playAtPos(
-          RNG.getItem([
-            "building_destroyed_1",
-            "building_destroyed_2",
-            "building_destroyed_3",
-          ]) || "",
+          RNG.getItem(["alien_death_1", "alien_death_2", "alien_death_3"]) ||
+            "",
           entity.pos,
         );
       } else {
-        audio.playAtPos(
-          RNG.getItem([
-            "explosion_1",
-            "explosion_2",
-            "explosion_3",
-            "explosion_4",
-            "explosion_5",
-            "explosion_6",
-            "explosion_7",
-          ]) || "",
-          entity.pos,
-          { rollOff: 0.1, volume: 3 },
-        );
+        // audio.playAtPos(
+        //   RNG.getItem([
+        //     "explosion_1",
+        //     "explosion_2",
+        //     "explosion_3",
+        //     "explosion_4",
+        //     "explosion_5",
+        //     "explosion_6",
+        //     "explosion_7",
+        //   ]) || "",
+        //   entity.pos,
+        //   { rollOff: 0.1, volume: 3 },
+        // );
       }
     }
   }

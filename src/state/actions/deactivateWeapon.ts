@@ -10,16 +10,19 @@ function deactivateWeaponHandler(
   state: WrappedState,
   action: ReturnType<typeof deactivateWeapon>,
 ): void {
-  if (state.raw.laserState === "ACTIVE") {
-    state.setRaw({
-      ...state.raw,
-      laserState: "READY",
-    });
+  const laserState = state.select.laserState();
+  if (["ACTIVE", "FIRING"].includes(laserState)) {
     state.act.removeEntities(
       state.select.entitiesWithComps("laser").map((e) => e.id),
     );
     audio.stop("laser_active");
-    audio.play("laser_cancel");
+    if (laserState === "ACTIVE") {
+      state.setRaw({
+        ...state.raw,
+        laserState: "READY",
+      });
+      audio.play("laser_cancel");
+    }
   }
 }
 

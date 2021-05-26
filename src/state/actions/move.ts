@@ -57,14 +57,13 @@ function moveHandler(
     );
   } else if (entity.id === PLAYER_ID) {
     audio.setListenerPos(newPosition);
-    audio.playAtPos(
+    audio.play(
       RNG.getItem([
         "player_move_1",
         "player_move_2",
         "player_move_3",
         "player_move_4",
       ]) || "",
-      newPosition,
       { volume: 0.25 },
     );
   } else if (entity.ai) {

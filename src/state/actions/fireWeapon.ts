@@ -34,11 +34,11 @@ function fireWeaponHandler(
     state.act.destroy(id);
   }
 
-  state.act.deactivateWeapon();
   state.setRaw({
     ...state.raw,
     laserState: "FIRING",
   });
+  state.act.deactivateWeapon();
 
   audio.stop("laser_active");
   audio.play(
@@ -47,11 +47,6 @@ function fireWeaponHandler(
       "laser_shot_2",
       "laser_shot_3",
       "laser_shot_4",
-      "laser_shot_5",
-      "laser_shot_6",
-      "laser_shot_7",
-      "laser_shot_8",
-      "laser_shot_9",
     ]) || "",
   );
 
