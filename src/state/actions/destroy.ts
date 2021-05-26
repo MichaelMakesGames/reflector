@@ -5,6 +5,7 @@ import onDestroyEffects from "~lib/onDestroyEffects";
 import renderer from "~renderer";
 import { registerHandler } from "~state/handleAction";
 import WrappedState from "~types/WrappedState";
+import { PLAYER_ID } from "~constants";
 
 const destroy = createStandardAction("DESTROY")<string>();
 export default destroy;
@@ -36,20 +37,20 @@ function destroyHandler(
             "",
           entity.pos,
         );
-      } else {
-        // audio.playAtPos(
-        //   RNG.getItem([
-        //     "explosion_1",
-        //     "explosion_2",
-        //     "explosion_3",
-        //     "explosion_4",
-        //     "explosion_5",
-        //     "explosion_6",
-        //     "explosion_7",
-        //   ]) || "",
-        //   entity.pos,
-        //   { rollOff: 0.1, volume: 3 },
-        // );
+      } else if (entity.id === PLAYER_ID) {
+        audio.playAtPos(
+          RNG.getItem([
+            "explosion_1",
+            "explosion_2",
+            "explosion_3",
+            "explosion_4",
+            "explosion_5",
+            "explosion_6",
+            "explosion_7",
+          ]) || "",
+          entity.pos,
+          { rollOff: 0.1, volume: 2 },
+        );
       }
     }
   }
