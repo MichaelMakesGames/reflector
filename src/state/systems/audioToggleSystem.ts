@@ -10,7 +10,11 @@ export default function audioToggleSystem(state: WrappedState): void {
       ...entity.audioToggle.conditions,
     );
     if (conditionsMet) {
-      audio.loopAtPos(entity.audioToggle.soundName, entity.pos);
+      audio.loopAtPos(
+        entity.audioToggle.soundName,
+        entity.pos,
+        entity.audioToggle.soundOptions,
+      );
     } else {
       audio.stopAtPos(entity.audioToggle.soundName, entity.pos);
     }

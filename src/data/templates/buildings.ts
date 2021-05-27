@@ -366,7 +366,8 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   BUILDING_FACTORY: {
     building: {},
     audioToggle: {
-      soundName: "factory_1",
+      soundName: "factory",
+      soundOptions: { volume: 0.5, rollOff: 2 },
       conditions: ["hasOneActiveWorker"],
     },
     display: {

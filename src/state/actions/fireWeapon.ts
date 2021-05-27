@@ -46,7 +46,9 @@ function fireWeaponHandler(
       "laser_shot_1",
       "laser_shot_2",
       "laser_shot_3",
-      "laser_shot_4",
+      // "laser_shot_4",
+      // "laser_shot_5",
+      // "laser_shot_6",
     ]) || "",
   );
 

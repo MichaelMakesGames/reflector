@@ -2,6 +2,7 @@ import { Direction } from "./Direction";
 import { ResourceCode } from "~data/resources";
 import { JobTypeCode } from "~data/jobTypes";
 import { ColonistStatusCode } from "~data/colonistStatuses";
+import { SoundOptions } from "~lib/audio/Audio";
 
 export interface Pos {
   x: number;
@@ -31,6 +32,7 @@ export interface ColorToggle {
 
 export interface AudioToggle {
   soundName: string;
+  soundOptions?: SoundOptions;
   conditions: ConditionName[];
 }
 

@@ -64,7 +64,7 @@ function moveHandler(
         "player_move_3",
         "player_move_4",
       ]) || "",
-      { volume: 0.25 },
+      { volume: 0.1 },
     );
   } else if (entity.ai) {
     audio.playAtPos(
