@@ -28,8 +28,8 @@ function destroyHandler(
     state.act.removeEntity(entityId);
 
     if (entity.pos) {
-      renderer.explode(entity.pos);
       if (entity.building) {
+        renderer.dustCloud(entity.pos);
         audio.playAtPos("building_destroyed", entity.pos);
       } else if (entity.ai) {
         audio.playAtPos(
@@ -38,6 +38,7 @@ function destroyHandler(
           entity.pos,
         );
       } else if (entity.id === PLAYER_ID) {
+        renderer.explode(entity.pos);
         audio.playAtPos(
           RNG.getItem([
             "explosion_1",

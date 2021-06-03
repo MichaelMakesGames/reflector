@@ -548,6 +548,71 @@ export default class Renderer {
     });
   }
 
+  public dustCloud(pos: Pos): void {
+    if (!this.loadPromise) return;
+    this.loadPromise.then(() => {
+      const texture = PIXI.Texture.WHITE;
+      const config: particles.EmitterConfig = {
+        alpha: {
+          list: [
+            { value: 1, time: 0 },
+            { value: 0, time: 1 },
+          ],
+        },
+        scale: {
+          list: [
+            { value: 1 / 2, time: 0 },
+            { value: 1 / 2, time: 1 },
+          ],
+        },
+        color: {
+          list: [{ value: colors.ground, time: 0 }],
+        },
+        speed: {
+          list: [
+            { value: 50, time: 0 },
+            { value: 25, time: 1 },
+          ],
+        },
+        acceleration: {
+          x: 0,
+          y: 0,
+        },
+        maxSpeed: 0,
+        startRotation: {
+          min: 240,
+          max: 300,
+        },
+        noRotation: true,
+        lifetime: {
+          min: 0.25,
+          max: 0.5,
+        },
+        frequency: 0.02,
+        emitterLifetime: 0.1,
+        maxParticles: 1000,
+        particlesPerWave: 10,
+        pos: {
+          x: pos.x * this.tileWidth,
+          y: pos.y * this.tileHeight,
+        },
+        addAtBack: false,
+        spawnType: "rect",
+        spawnRect: {
+          x: 0,
+          y: this.tileHeight / 2,
+          w: this.tileWidth,
+          h: this.tileHeight / 2,
+        },
+      };
+      new particles.Emitter(
+        this.app.stage,
+        [texture],
+        config,
+      ).playOnceAndDestroy();
+    });
+  }
+
   public start(): void {
     if (!this.loadPromise) return;
     this.loadPromise.then(() => {

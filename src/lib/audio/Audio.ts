@@ -50,7 +50,6 @@ export default class Audio {
     const id = sound.play();
 
     const volume = options.volume || DEFAULT_OPTIONS.volume;
-    console.warn("volume", volume);
     sound.volume(volume, id);
 
     sound.pos(pos.x, pos.y, 0, id);
