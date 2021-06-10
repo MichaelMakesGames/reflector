@@ -41,6 +41,8 @@ export interface AI {
   type: AIType;
 }
 
+export interface StopsLaser {}
+
 export interface Blocking {
   moving: boolean;
   lasers: boolean;
@@ -192,6 +194,7 @@ export interface Entity {
   rotatable?: Rotatable;
   smokeEmitter?: SmokeEmitter;
   splitter?: Splitter;
+  stopsLaser?: StopsLaser;
   validMarker?: ValidMarker;
   warning?: Warning;
 }

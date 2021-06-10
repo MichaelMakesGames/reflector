@@ -37,6 +37,7 @@ type TemplateName =
   | "COLONIST"
   | "COLONISTS"
   | "CURSOR"
+  | "ENEMY_ARMORED"
   | "ENEMY_BASE"
   | "ENEMY_DRONE"
   | "HIGHLIGHT"

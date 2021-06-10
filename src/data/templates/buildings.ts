@@ -433,6 +433,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     destructible: {
       onDestroy: "wall",
     },
+    stopsLaser: {},
     description: {
       name: "Wall",
       description:

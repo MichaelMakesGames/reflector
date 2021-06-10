@@ -160,6 +160,9 @@ function targetWeaponHandler(
       } else if (solidEntity && solidEntity.destructible) {
         state.act.addEntity(createLaser(beam, beam.strength, true, nextPos));
         beam.strength--;
+        if (solidEntity.stopsLaser) {
+          beam.strength = 0;
+        }
       } else {
         beam.strength = 0;
       }

@@ -59,6 +59,16 @@ const onDestroyEffects: {
       ),
     ];
   },
+
+  enemyArmored(state: WrappedState, entity: Entity) {
+    return [
+      actions.addEntity(
+        createEntityFromTemplate("ENEMY_DRONE", {
+          pos: entity.pos,
+        }),
+      ),
+    ];
+  },
 };
 
 export default onDestroyEffects;

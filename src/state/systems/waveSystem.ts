@@ -1,16 +1,17 @@
+import { RNG } from "rot-js";
 import {
+  END_OF_NIGHT_ENEMY_SPAWNING_BUFFER,
   ENEMIES_PER_TURN_DAY_MULTIPLIER,
   ENEMIES_PER_TURN_POPULATION_MULTIPLIER,
   MAP_HEIGHT,
   MAP_WIDTH,
   TURNS_PER_DAY,
-  END_OF_NIGHT_ENEMY_SPAWNING_BUFFER,
 } from "~constants";
-import { Pos } from "~types";
-import WrappedState from "~types/WrappedState";
 import { createEntityFromTemplate } from "~lib/entities";
 import { rangeTo } from "~lib/math";
 import { choose, pickWeighted } from "~lib/rng";
+import { Pos } from "~types";
+import WrappedState from "~types/WrappedState";
 
 export default function waveSystem(state: WrappedState): void {
   if (
@@ -41,7 +42,15 @@ function spawnEnemy(state: WrappedState): void {
   const positions = getPossibleSpawnPositions(state);
   if (positions.length) {
     const pos = choose(positions);
-    state.act.addEntity(createEntityFromTemplate("ENEMY_DRONE", { pos }));
+    state.act.addEntity(
+      createEntityFromTemplate(
+        RNG.getWeightedValue({
+          ENEMY_DRONE: 2,
+          ENEMY_ARMORED: 1,
+        }) as TemplateName,
+        { pos },
+      ),
+    );
   } else {
     console.warn("Unable to find spawn position");
   }

@@ -18,9 +18,28 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     ai: { type: "DRONE" },
     description: {
-      name: "Bug",
+      name: "Soldier",
       description:
         "The most basic enemy. It targets the player or nearest building.",
+      shortDescription: "basic enemy",
+    },
+  },
+  ENEMY_ARMORED: {
+    parentTemplate: "ENEMY_BASE",
+    display: {
+      tile: ["enemy_armored_1", "enemy_armored_2"],
+      speed: 0.03,
+      color: colors.enemyUnit,
+      priority: PRIORITY_UNIT,
+      flashWhenVisible: true,
+    },
+    destructible: { onDestroy: "enemyArmored" },
+    stopsLaser: {},
+    ai: { type: "DRONE" },
+    description: {
+      name: "Beetle",
+      description: "A bug with a thick armored shell that blocks 1 attack.",
+      shortDescription: "armored enemy",
     },
   },
 };
