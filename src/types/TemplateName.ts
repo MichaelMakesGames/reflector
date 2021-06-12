@@ -39,6 +39,8 @@ type TemplateName =
   | "CURSOR"
   | "ENEMY_ARMORED"
   | "ENEMY_BASE"
+  | "ENEMY_BURROWED"
+  | "ENEMY_BURROWER"
   | "ENEMY_DRONE"
   | "ENEMY_FLYER"
   | "HIGHLIGHT"

@@ -58,6 +58,43 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       shortDescription: "flying enemy",
     },
   },
+  ENEMY_BURROWER: {
+    parentTemplate: "ENEMY_BASE",
+    display: {
+      tile: ["enemy_burrower_1", "enemy_burrower_2"],
+      speed: 0.03,
+      color: colors.enemyUnit,
+      priority: PRIORITY_UNIT,
+      flashWhenVisible: true,
+    },
+    ai: { type: "BURROWER" },
+    description: {
+      name: "Burrower",
+      description: "A bug that digs underground until ready to attack.",
+      shortDescription: "digging enemy",
+    },
+  },
+  ENEMY_BURROWED: {
+    parentTemplate: "ENEMY_BASE",
+    display: {
+      tile: ["enemy_burrowed_1", "enemy_burrowed_2"],
+      speed: 0.03,
+      color: colors.enemyUnit,
+      priority: PRIORITY_UNIT,
+      flashWhenVisible: true,
+    },
+    ai: { type: "BURROWED" },
+    description: {
+      name: "Burrower (underground)",
+      description: "A bug that digs underground until ready to attack.",
+      shortDescription: "digging enemy",
+    },
+    blocking: {
+      moving: true,
+      windmill: false,
+      lasers: false,
+    },
+  },
 };
 
 export default templates;

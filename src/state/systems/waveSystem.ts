@@ -48,6 +48,7 @@ function spawnEnemy(state: WrappedState): void {
           ENEMY_DRONE: 1,
           ENEMY_ARMORED: 1,
           ENEMY_FLYER: 1,
+          ENEMY_BURROWER: 1,
         }) as TemplateName,
         { pos },
       ),
