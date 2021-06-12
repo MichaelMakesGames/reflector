@@ -215,3 +215,11 @@ export function areThereMoreJobsThanColonists(state: RawState) {
 export function areEnemiesPresent(state: RawState) {
   return entitiesWithComps(state, "ai").length > 0;
 }
+
+export function canFly(state: RawState, entity: Entity) {
+  return Boolean(entity.ai && entity.ai.type === "FLYER");
+}
+
+export function isFlyable(state: RawState, entity: Entity) {
+  return Boolean(!entity.blocking || !entity.blocking.lasers);
+}

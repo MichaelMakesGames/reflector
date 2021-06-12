@@ -239,6 +239,7 @@ function goHomeOrSleep(
       const direction = getDirectionTowardTarget(
         colonist.pos,
         residence.pos,
+        colonist,
         state,
       );
       if (direction) {
@@ -279,6 +280,7 @@ function goToWork(
       const direction = getDirectionTowardTarget(
         colonist.pos,
         employment.pos,
+        colonist,
         state,
       );
       if (direction) {

@@ -26,10 +26,17 @@ function moveHandler(
     x: pos.x + action.payload.dx,
     y: pos.y + action.payload.dy,
   };
-  const entitiesAtNewPosition = state.select.entitiesAtPosition(newPosition);
+  const entitiesAtNewPosition = state.select
+    .entitiesAtPosition(newPosition)
+    .filter((other) => other !== entity);
   if (
     entity.blocking &&
-    entitiesAtNewPosition.some((other) => Boolean(other.blocking))
+    state.select.isPositionBlocked(newPosition, [
+      entity,
+      ...(state.select.canFly(entity)
+        ? entitiesAtNewPosition.filter((other) => state.select.isFlyable(other))
+        : []),
+    ])
   ) {
     return;
   }

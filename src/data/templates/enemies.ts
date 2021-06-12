@@ -42,6 +42,22 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       shortDescription: "armored enemy",
     },
   },
+  ENEMY_FLYER: {
+    parentTemplate: "ENEMY_BASE",
+    display: {
+      tile: ["enemy_flyer_1", "enemy_flyer_2"],
+      speed: 0.03,
+      color: colors.enemyUnit,
+      priority: PRIORITY_UNIT,
+      flashWhenVisible: true,
+    },
+    ai: { type: "FLYER" },
+    description: {
+      name: "Flyer",
+      description: "A winged bug that can fly over water.",
+      shortDescription: "flying enemy",
+    },
+  },
 };
 
 export default templates;

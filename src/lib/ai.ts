@@ -1,49 +1,49 @@
 /* eslint-disable import/prefer-default-export */
 import * as ROT from "rot-js";
-import actions from "~state/actions";
-import selectors from "~/state/selectors";
-import { Direction, Entity, RawState, Pos, Action } from "~/types";
-import { getDistance, arePositionsEqual } from "./geometry";
-import WrappedState from "~types/WrappedState";
+import { Action, Direction, Entity, Pos } from "~/types";
 import renderer from "~renderer";
+import actions from "~state/actions";
+import WrappedState from "~types/WrappedState";
 import audio from "./audio";
+import { arePositionsEqual, getDistance } from "./geometry";
 
-function isPassable(gameState: RawState, position: Pos) {
-  return selectors
-    .entitiesAtPosition(gameState, position)
-    .every((entity) => !entity.blocking || !entity.blocking.moving);
+function isPassable(
+  state: WrappedState,
+  actor: Entity,
+  entityAtDestination: Entity,
+) {
+  return (
+    !entityAtDestination.blocking ||
+    !entityAtDestination.blocking.moving ||
+    (state.select.canFly(actor) && state.select.isFlyable(entityAtDestination))
+  );
 }
 
-function isDestructibleNonEnemy(gameState: RawState, position: Pos) {
-  return selectors
-    .entitiesAtPosition(gameState, position)
-    .every((entity) =>
-      Boolean(
-        !entity.blocking ||
-          !entity.blocking.moving ||
-          (entity.destructible && !entity.ai),
-      ),
-    );
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function moveToward(state: WrappedState, entity: Entity, to: Pos) {
-  if (!entity.pos) return [];
-  const direction = getDirectionTowardTarget(entity.pos, to, state);
-  if (!direction) return [];
-  return [actions.move({ entityId: entity.id, ...direction })];
+function isDestructibleNonEnemy(
+  state: WrappedState,
+  actor: Entity,
+  entity: Entity,
+) {
+  return Boolean(entity.destructible && !entity.ai);
 }
 
 export function getDirectionTowardTarget(
   from: Pos,
   to: Pos,
+  actor: Entity,
   state: WrappedState,
-  passableFunc = isPassable,
+  passableFunc: (
+    state: WrappedState,
+    actor: Entity,
+    entityAtPos: Entity,
+  ) => boolean = isPassable,
 ): Direction | null {
   const passable = (x: number, y: number) =>
     (x === from.x && y === from.y) ||
     (x === to.x && y === to.y) ||
-    passableFunc(state.raw, { x, y });
+    state.select
+      .entitiesAtPosition({ x, y })
+      .every((e) => passableFunc(state, actor, e));
   const path: Pos[] = [];
   const aStar = new ROT.Path.AStar(to.x, to.y, passable);
   aStar.compute(from.x, from.y, (x, y) => {
@@ -61,11 +61,15 @@ export function getDirectionTowardTarget(
 export function getPath(
   from: Pos,
   to: Pos,
+  actor: Entity,
   state: WrappedState,
   passableFunc = isPassable,
 ): Pos[] | null {
   const passable = (x: number, y: number) =>
-    arePositionsEqual(from, { x, y }) || passableFunc(state.raw, { x, y });
+    arePositionsEqual(from, { x, y }) ||
+    state.select
+      .entitiesAtPosition({ x, y })
+      .every((e) => passableFunc(state, actor, e));
   const path: Pos[] = [];
   const aStar = new ROT.Path.AStar(from.x, from.y, passable, { topology: 4 });
   aStar.compute(to.x, to.y, (x, y) => {
@@ -84,7 +88,7 @@ export function getAIActions(entity: Entity, state: WrappedState): Action[] {
   const { ai } = entity;
   if (!ai) return [];
 
-  if (ai.type === "DRONE") {
+  if (ai.type === "DRONE" || ai.type === "FLYER") {
     if (!entity.pos) return [];
     const { pos } = entity;
     const targets = state.select
@@ -104,8 +108,9 @@ export function getAIActions(entity: Entity, state: WrappedState): Action[] {
     const direction = getDirectionTowardTarget(
       entity.pos,
       target.pos,
+      entity,
       state,
-      isDestructibleNonEnemy,
+      (...args) => isPassable(...args) || isDestructibleNonEnemy(...args),
     );
     if (!direction) return [];
     const targetPos = {

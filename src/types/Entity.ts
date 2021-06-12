@@ -36,7 +36,7 @@ export interface AudioToggle {
   conditions: ConditionName[];
 }
 
-export type AIType = "DRONE";
+export type AIType = "DRONE" | "FLYER";
 export interface AI {
   type: AIType;
 }

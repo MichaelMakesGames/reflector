@@ -9,9 +9,11 @@ const setAutoMovePathToCursor = createStandardAction(
 export default setAutoMovePathToCursor;
 
 function setAutoMovePathToCursorHandler(state: WrappedState) {
+  const player = state.select.player();
   const playerPos = state.select.playerPos();
   const cursorPos = state.select.cursorPos();
   if (
+    player &&
     playerPos &&
     cursorPos &&
     !state.raw.isAutoMoving &&
@@ -20,7 +22,7 @@ function setAutoMovePathToCursorHandler(state: WrappedState) {
   ) {
     const pathPreviews = state.select.entitiesWithComps("pathPreview", "pos");
     state.act.removeEntities(pathPreviews.map((e) => e.id));
-    const path = getPath(playerPos, cursorPos, state);
+    const path = getPath(playerPos, cursorPos, player, state);
     if (path) {
       state.act.setAutoMovePath(path);
     }

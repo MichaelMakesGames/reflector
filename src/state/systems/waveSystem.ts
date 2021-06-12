@@ -45,8 +45,9 @@ function spawnEnemy(state: WrappedState): void {
     state.act.addEntity(
       createEntityFromTemplate(
         RNG.getWeightedValue({
-          ENEMY_DRONE: 2,
+          ENEMY_DRONE: 1,
           ENEMY_ARMORED: 1,
+          ENEMY_FLYER: 1,
         }) as TemplateName,
         { pos },
       ),
