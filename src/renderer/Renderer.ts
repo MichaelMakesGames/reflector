@@ -493,9 +493,11 @@ export default class Renderer {
         alpha: {
           list: [
             { value: 1, time: 0 },
-            { value: 0.5, time: 1 },
+            { value: 1, time: 0.75 },
+            { value: 0, time: 1 },
           ],
         },
+
         scale: {
           list: [
             { value: 1 / 2, time: 0 },
@@ -506,12 +508,14 @@ export default class Renderer {
           list: [
             { value: colors.power, time: 0 },
             { value: colors.laser, time: 0.5 },
+            { value: colors.ground, time: 0.75 },
             { value: colors.ground, time: 1 },
           ],
         },
         speed: {
           list: [
             { value: 100, time: 0 },
+            { value: 100, time: 0.75 },
             { value: 50, time: 1 },
           ],
         },
@@ -526,13 +530,13 @@ export default class Renderer {
         },
         noRotation: true,
         lifetime: {
-          min: 0.1,
+          min: 0.3,
           max: 0.3,
         },
         frequency: 0.02,
         emitterLifetime: 0.1,
         maxParticles: 1000,
-        particlesPerWave: 10,
+        particlesPerWave: 20,
         pos: {
           x: pos.x * this.tileWidth + this.tileWidth / 2,
           y: pos.y * this.tileHeight + this.tileHeight / 2,

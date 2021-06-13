@@ -6,6 +6,7 @@ import renderer from "~renderer";
 import { registerHandler } from "~state/handleAction";
 import WrappedState from "~types/WrappedState";
 import { PLAYER_ID } from "~constants";
+import { getAdjacentPositions } from "~lib/geometry";
 
 const destroy = createStandardAction("DESTROY")<string>();
 export default destroy;
@@ -16,6 +17,8 @@ function destroyHandler(
 ): void {
   const entityId = action.payload;
   const entity = state.select.entityById(entityId);
+  if (!entity) return;
+
   if (entity.destructible) {
     if (entity.destructible.onDestroy) {
       const effect = onDestroyEffects[entity.destructible.onDestroy];
@@ -37,7 +40,9 @@ function destroyHandler(
             "",
           entity.pos,
         );
-      } else if (entity.id === PLAYER_ID) {
+      }
+
+      if (entity.destructible.explosive) {
         renderer.explode(entity.pos);
         audio.playAtPos(
           RNG.getItem([
@@ -52,6 +57,17 @@ function destroyHandler(
           entity.pos,
           { rollOff: 0.1, volume: 2 },
         );
+        for (const adjacentPos of [
+          entity.pos,
+          ...getAdjacentPositions(entity.pos),
+        ]) {
+          for (const adjacentEntity of state.select.entitiesAtPosition(
+            adjacentPos,
+          )) {
+            if (adjacentEntity.destructible)
+              state.act.destroy(adjacentEntity.id);
+          }
+        }
       }
     }
   }

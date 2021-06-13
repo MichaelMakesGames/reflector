@@ -20,6 +20,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     blocking: { moving: true, lasers: true, windmill: false },
     destructible: {
       onDestroy: "player",
+      explosive: true,
     },
     projector: {
       condition: null,

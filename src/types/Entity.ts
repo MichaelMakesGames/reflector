@@ -58,6 +58,7 @@ export interface Laser {
 
 export interface Destructible {
   onDestroy?: string;
+  explosive?: boolean;
 }
 
 export interface Colonist {
