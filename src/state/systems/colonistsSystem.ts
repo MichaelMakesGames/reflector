@@ -363,7 +363,7 @@ function wander(
   state: WrappedState,
   colonist: Required<Entity, "colonist" | "pos">,
 ) {
-  const newPosOptions = getAdjacentPositions(colonist.pos).filter(
+  const newPosOptions = getAdjacentPositions(colonist.pos, true).filter(
     (pos) => !state.select.isPositionBlocked(pos),
   );
   if (newPosOptions.length >= 1) {

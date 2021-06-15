@@ -46,7 +46,7 @@ export function getDirectionTowardTarget(
       .entitiesAtPosition({ x, y })
       .every((e) => passableFunc(state, actor, e));
   const path: Pos[] = [];
-  const aStar = new ROT.Path.AStar(to.x, to.y, passable);
+  const aStar = new ROT.Path.AStar(to.x, to.y, passable, { topology: 4 });
   aStar.compute(from.x, from.y, (x, y) => {
     const pos = { x, y };
     if (!arePositionsEqual(pos, from)) {

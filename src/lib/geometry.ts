@@ -10,29 +10,41 @@ export function arePositionsEqual(pos1: Pos, pos2: Pos) {
   return pos1.x === pos2.x && pos1.y === pos2.y;
 }
 
-export function getDistance(from: Pos, to: Pos) {
+export function getDistance(from: Pos, to: Pos, fourWay = false) {
+  if (fourWay) return Math.abs(from.x - to.x) + Math.abs(from.y - to.y);
   return Math.max(Math.abs(from.x - to.x), Math.abs(from.y - to.y));
 }
 
-export function getClosestPosition(options: Pos[], to: Pos): Pos | null {
+export function getClosestPosition(
+  options: Pos[],
+  to: Pos,
+  fourWay = false,
+): Pos | null {
   return (
     [...options].sort((a, b) => {
-      const aDistance = getDistance(a, to);
-      const bDistance = getDistance(b, to);
+      const aDistance = getDistance(a, to, fourWay);
+      const bDistance = getDistance(b, to, fourWay);
       return aDistance - bDistance;
     })[0] || null
   );
 }
 
-export function getAdjacentPositions(pos: Pos): Pos[] {
-  return getPositionsWithinRange(pos, 1);
+export function getAdjacentPositions(pos: Pos, fourWay = false): Pos[] {
+  return getPositionsWithinRange(pos, 1, fourWay);
 }
 
-export function getPositionsWithinRange(pos: Pos, range: number): Pos[] {
+export function getPositionsWithinRange(
+  pos: Pos,
+  range: number,
+  fourWay = false,
+): Pos[] {
   const positions: Pos[] = [];
   for (const dy of rangeFromTo(-1 * range, range + 1)) {
     for (const dx of rangeFromTo(-1 * range, range + 1)) {
-      if (dx !== 0 || dy !== 0) {
+      if (
+        (dx !== 0 || dy !== 0) &&
+        (!fourWay || Math.abs(dx) + Math.abs(dy) <= range)
+      ) {
         positions.push({
           x: pos.x + dx,
           y: pos.y + dy,
