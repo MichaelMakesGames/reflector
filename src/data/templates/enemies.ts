@@ -24,6 +24,23 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       shortDescription: "basic enemy",
     },
   },
+  ENEMY_VOLATILE: {
+    parentTemplate: "ENEMY_BASE",
+    display: {
+      tile: ["enemy_volatile_1", "enemy_volatile_2"],
+      speed: 0.03,
+      color: colors.enemyUnit,
+      priority: PRIORITY_UNIT,
+      flashWhenVisible: true,
+    },
+    destructible: { explosive: true },
+    ai: { type: "DRONE" },
+    description: {
+      name: "Volatile",
+      description: "Explodes when killed, damaging everything adjacent.",
+      shortDescription: "explosive enemy",
+    },
+  },
   ENEMY_ARMORED: {
     parentTemplate: "ENEMY_BASE",
     display: {

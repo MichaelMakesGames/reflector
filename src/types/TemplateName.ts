@@ -43,6 +43,7 @@ type TemplateName =
   | "ENEMY_BURROWER"
   | "ENEMY_DRONE"
   | "ENEMY_FLYER"
+  | "ENEMY_VOLATILE"
   | "HIGHLIGHT"
   | "JOB_DISABLER"
   | "LASER_4SPLIT"
