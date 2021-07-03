@@ -19,14 +19,15 @@ import productionSystem from "./productionSystem";
 import reflectorSystem from "./reflectorSystem";
 import timeSystem from "./timeSystem";
 import waveSystem from "./waveSystem";
+import directionIndicationSystem from "./directionIndicationSystem";
 
 const systems: ((state: WrappedState) => void)[] = [
+  waveSystem,
   aiSystem,
   productionSystem,
   immigrationSystem,
   colonistsSystem,
   hungerSystem,
-  waveSystem,
   poweredSystem,
   reflectorSystem,
   laserRechargingSystem,
@@ -37,6 +38,7 @@ const systems: ((state: WrappedState) => void)[] = [
   gameOverSystem,
   emitterSystem,
   bordersSystem,
+  directionIndicationSystem,
   missingResourceIndicatorSystem,
   colorToggleSystem,
   animationToggleSystem,

@@ -40,7 +40,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       conditions: ["isPowered"],
     },
     blocking: { moving: true, lasers: true, windmill: true },
-    destructible: {},
+    destructible: { attackPriority: 2 },
     description: {
       name: "Splitter",
       description:
@@ -84,6 +84,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       priority: PRIORITY_BUILDING_HIGH,
     },
     splitter: { type: "advanced" },
+    destructible: { attackPriority: 3 },
     description: {
       name: "Adv. Splitter",
       description:
@@ -114,7 +115,9 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       desirability: -1,
       removeOnVacancy: true,
     },
-    destructible: {},
+    destructible: {
+      attackPriority: 1,
+    },
     description: {
       name: "Tent",
       description:
@@ -139,7 +142,9 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       capacity: 3,
       desirability: 0,
     },
-    destructible: {},
+    destructible: {
+      attackPriority: 1,
+    },
     description: {
       name: "Residence",
       description:
@@ -175,7 +180,9 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       lasers: true,
       windmill: true,
     },
-    destructible: {},
+    destructible: {
+      attackPriority: 1,
+    },
     jobProvider: {
       consumes: {
         [ResourceCode.Power]: 1,
@@ -273,7 +280,9 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
         },
       ],
     },
-    destructible: {},
+    destructible: {
+      attackPriority: 3,
+    },
     jobProvider: {
       consumes: {},
       produces: {
@@ -316,7 +325,9 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       lasers: false,
       windmill: false,
     },
-    destructible: {},
+    destructible: {
+      attackPriority: 1,
+    },
     production: {
       resource: ResourceCode.Power,
       amount: 1,
@@ -349,7 +360,9 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       trueColor: colors.activeBuilding,
       falseColor: colors.inactiveBuilding,
     },
-    destructible: {},
+    destructible: {
+      attackPriority: 3,
+    },
     blocking: { moving: true, lasers: true, windmill: true },
     production: {
       resource: ResourceCode.Power,
@@ -392,7 +405,9 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
         },
       ],
     },
-    destructible: {},
+    destructible: {
+      attackPriority: 1,
+    },
     jobProvider: {
       consumes: {
         POWER: 5,
@@ -432,6 +447,8 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     destructible: {
       onDestroy: "wall",
+      attackPriority: 0,
+      movementCost: 5,
     },
     stopsLaser: {},
     description: {
@@ -453,7 +470,9 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       lasers: true,
       windmill: true,
     },
-    destructible: {},
+    destructible: {
+      attackPriority: 0,
+    },
     description: {
       name: "Damaged Wall",
       description: "This wall will be destroyed if hit again.",
@@ -481,7 +500,9 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       lasers: true,
       windmill: true,
     },
-    destructible: {},
+    destructible: {
+      attackPriority: 3,
+    },
     powered: {
       hasPower: true,
       powerNeeded: 1,
@@ -519,7 +540,9 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       lasers: true,
       windmill: true,
     },
-    destructible: {},
+    destructible: {
+      attackPriority: 5,
+    },
     powered: {
       hasPower: true,
       powerNeeded: 4,

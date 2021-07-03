@@ -39,7 +39,12 @@ export interface AudioToggle {
 export type AIType = "DRONE" | "FLYER" | "BURROWER" | "BURROWED";
 export interface AI {
   type: AIType;
+  target: Pos | null;
+  plannedAction: "MOVE_OR_ATTACK" | "DIG" | null;
+  plannedActionDirection: Direction | null;
 }
+
+export interface DirectionIndicator {}
 
 export interface StopsLaser {}
 
@@ -59,6 +64,8 @@ export interface Laser {
 export interface Destructible {
   onDestroy?: string;
   explosive?: boolean;
+  attackPriority?: number;
+  movementCost?: number;
 }
 
 export interface Colonist {
@@ -178,6 +185,7 @@ export interface Entity {
   cursor?: Cursor;
   description?: Description;
   destructible?: Destructible;
+  directionIndicator?: DirectionIndicator;
   display?: Display;
   highlight?: Highlight;
   housing?: Housing;

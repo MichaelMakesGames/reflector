@@ -21,6 +21,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     destructible: {
       onDestroy: "player",
       explosive: true,
+      attackPriority: 0,
     },
     projector: {
       condition: null,
@@ -107,6 +108,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     destructible: {
       onDestroy: "colonist",
+      attackPriority: 2,
     },
     colonist: {
       residence: null,
@@ -181,6 +183,41 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       priority: PRIORITY_MARKER,
     },
     border: {},
+  },
+  DIRECTION_INDICATOR_E: {
+    display: {
+      tile: "direction-indicator",
+      color: colors.enemyUnit,
+      priority: PRIORITY_MARKER,
+      rotation: 90,
+    },
+    directionIndicator: {},
+  },
+  DIRECTION_INDICATOR_N: {
+    display: {
+      tile: "direction-indicator",
+      color: colors.enemyUnit,
+      priority: PRIORITY_MARKER,
+    },
+    directionIndicator: {},
+  },
+  DIRECTION_INDICATOR_S: {
+    display: {
+      tile: "direction-indicator",
+      color: colors.enemyUnit,
+      priority: PRIORITY_MARKER,
+      rotation: 180,
+    },
+    directionIndicator: {},
+  },
+  DIRECTION_INDICATOR_W: {
+    display: {
+      tile: "direction-indicator",
+      color: colors.enemyUnit,
+      priority: PRIORITY_MARKER,
+      rotation: 270,
+    },
+    directionIndicator: {},
   },
   NONE: {},
 };

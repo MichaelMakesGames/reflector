@@ -6,6 +6,11 @@ export function getPosKey(pos: Pos) {
   return `${pos.x},${pos.y}`;
 }
 
+export function fromPosKey(posKey: string): Pos {
+  const [x, y] = posKey.split(",").map(parseFloat);
+  return { x, y };
+}
+
 export function arePositionsEqual(pos1: Pos, pos2: Pos) {
   return pos1.x === pos2.x && pos1.y === pos2.y;
 }

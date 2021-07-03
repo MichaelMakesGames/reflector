@@ -61,13 +61,17 @@ const onDestroyEffects: {
   },
 
   enemyArmored(state: WrappedState, entity: Entity) {
-    return [
-      actions.addEntity(
-        createEntityFromTemplate("ENEMY_DRONE", {
-          pos: entity.pos,
-        }),
-      ),
-    ];
+    const drone = createEntityFromTemplate("ENEMY_DRONE", {
+      pos: entity.pos,
+    });
+    if (drone.ai && entity.ai) {
+      drone.ai = {
+        ...drone.ai,
+        plannedAction: entity.ai.plannedAction,
+        plannedActionDirection: entity.ai.plannedActionDirection,
+      };
+    }
+    return [actions.addEntity(drone)];
   },
 };
 

@@ -157,7 +157,7 @@ templates.BLUEPRINT_RESIDENCE = makeBlueprint({
 });
 templates.BLUEPRINT_WALL = makeBlueprint({
   builds: "BUILDING_WALL",
-  cost: { resource: ResourceCode.Metal, amount: 20 },
+  cost: { resource: ResourceCode.Metal, amount: 10 },
   canReplace: ["BUILDING_WALL_DAMAGED"],
 });
 
