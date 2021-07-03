@@ -3,6 +3,7 @@ import { ResourceCode } from "~data/resources";
 import { JobTypeCode } from "~data/jobTypes";
 import { ColonistStatusCode } from "~data/colonistStatuses";
 import { SoundOptions } from "~lib/audio/Audio";
+import { EffectId } from "./EffectId";
 
 export interface Pos {
   x: number;
@@ -75,6 +76,8 @@ export interface Colonist {
   missingResources: ResourceCode[];
 }
 
+export interface Road {}
+
 export interface Rotatable {
   rotatesTo: TemplateName;
 }
@@ -141,6 +144,7 @@ export interface Blueprint {
   canReplace?: TemplateName[];
   cost: { resource: ResourceCode; amount: number };
   validityConditions: { condition: ConditionName; invalidMessage: string }[];
+  onBuild?: EffectId;
 }
 
 export interface JobDisabler {}
@@ -200,6 +204,7 @@ export interface Entity {
   production?: Production;
   projector?: Projector;
   reflector?: Reflector;
+  road?: Road;
   rotatable?: Rotatable;
   smokeEmitter?: SmokeEmitter;
   splitter?: Splitter;

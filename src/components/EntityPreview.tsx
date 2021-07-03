@@ -3,7 +3,7 @@ import templates from "~data/templates";
 import { createEntityFromTemplate } from "~lib/entities";
 // @ts-ignore
 import tiles from "../assets/tiles/*.png";
-
+import colors from "../data/colors.json";
 interface Props {
   templateName: TemplateName;
   style?: React.CSSProperties;
@@ -26,7 +26,10 @@ export default function EntityPreview({ templateName, style = {} }: Props) {
         position: "relative",
         bottom: "8px",
         margin: "-12px 0",
-        background: entity.display.color,
+        background:
+          entity.display.color === colors.darkGray
+            ? colors.gray
+            : entity.display.color,
         height: 24,
         width: 24,
         WebkitMaskImage: maskImage,

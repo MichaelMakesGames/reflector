@@ -5,6 +5,7 @@ import WrappedState from "~types/WrappedState";
 import { areConditionsMet } from "~lib/conditions";
 import { createEntityFromTemplate } from "~lib/entities";
 import audio from "~lib/audio";
+import effects from "~data/effects";
 
 const blueprintBuild = createStandardAction("BLUEPRINT_BUILD")();
 export default blueprintBuild;
@@ -58,16 +59,19 @@ function blueprintBuildHandler(
   );
 
   state.act.removeEntity(blueprint.id);
-  state.act.addEntity(
-    createEntityFromTemplate(blueprint.blueprint.builds, {
-      pos: blueprint.pos,
-    }),
-  );
+  const building = createEntityFromTemplate(blueprint.blueprint.builds, {
+    pos: blueprint.pos,
+  });
+  state.act.addEntity(building);
 
   state.act.removeEntities([
     ...state.select.entitiesWithComps("validMarker").map((e) => e.id),
     ...entitiesToReplace.map((e) => e.id),
   ]);
+
+  if (blueprint.blueprint.onBuild) {
+    effects[blueprint.blueprint.onBuild](state, blueprint, building);
+  }
 
   state.act.playerTookTurn();
 

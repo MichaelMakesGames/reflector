@@ -31,6 +31,7 @@ import removeEntities from "./removeEntities";
 import removeEntity from "./removeEntity";
 import removeReflector from "./removeReflector";
 import resetTutorials from "./resetTutorials";
+import roadUpdateTile from "./roadUpdateTile";
 import rotateEntity from "./rotateEntity";
 import setAutoMovePath from "./setAutoMovePath";
 import setAutoMovePathToCursor from "./setAutoMovePathToCursor";
@@ -76,6 +77,7 @@ export default {
   removeEntity,
   removeReflector,
   resetTutorials,
+  roadUpdateTile,
   rotateEntity,
   setAutoMovePath,
   setAutoMovePathToCursor,

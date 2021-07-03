@@ -3,6 +3,7 @@ import { BUILDING_RANGE, PRIORITY_BUILDING_HIGH } from "~constants";
 import { ResourceCode } from "~data/resources";
 import { Description, Entity } from "~types";
 import buildings from "./buildings";
+import { EffectId } from "~types/EffectId";
 
 const DEFAULT_VALIDITY_CONDITIONS: {
   condition: ConditionName;
@@ -32,6 +33,7 @@ interface MakeBlueprintConfig {
   validityConditions?: { condition: ConditionName; invalidMessage: string }[];
   rotatesTo?: TemplateName;
   canReplace?: TemplateName[];
+  onBuild?: EffectId;
 }
 
 function makeBlueprint({
@@ -40,6 +42,7 @@ function makeBlueprint({
   validityConditions = DEFAULT_VALIDITY_CONDITIONS,
   rotatesTo,
   canReplace,
+  onBuild,
 }: MakeBlueprintConfig): Partial<Entity> {
   const buildsTemplate = buildings[builds];
   const buildsTemplateParent =
@@ -60,6 +63,7 @@ function makeBlueprint({
       cost,
       validityConditions,
       canReplace,
+      onBuild,
     },
     display:
       buildsTemplate && buildsTemplate.display
@@ -126,6 +130,11 @@ templates.BLUEPRINT_SOLAR_PANEL = makeBlueprint({
 templates.BLUEPRINT_REACTOR = makeBlueprint({
   builds: "BUILDING_REACTOR",
   cost: { resource: ResourceCode.Machinery, amount: 80 },
+});
+templates.BLUEPRINT_ROAD = makeBlueprint({
+  builds: "BUILDING_ROAD",
+  cost: { resource: ResourceCode.Metal, amount: 10 },
+  onBuild: "ON_ROAD_BUILD",
 });
 templates.BLUEPRINT_PROJECTOR_BASIC = makeBlueprint({
   builds: "BUILDING_PROJECTOR_BASIC",

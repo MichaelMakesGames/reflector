@@ -41,7 +41,7 @@ const buildingCategories: BuildingCategory[] = [
     code: BuildingCategoryCode.Misc,
     label: "Misc",
     description: "Miscellaneous buildings: walls and residences.",
-    blueprints: ["BLUEPRINT_RESIDENCE", "BLUEPRINT_WALL"],
+    blueprints: ["BLUEPRINT_RESIDENCE", "BLUEPRINT_WALL", "BLUEPRINT_ROAD"],
   },
 ];
 

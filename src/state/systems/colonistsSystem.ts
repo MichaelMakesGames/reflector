@@ -217,6 +217,37 @@ function assignResidence(
   }
 }
 
+function tryToMove(
+  state: WrappedState,
+  colonist: Required<Entity, "colonist" | "pos">,
+  pos: Pos,
+): boolean {
+  const direction = getDirectionTowardTarget(
+    colonist.pos,
+    pos,
+    colonist,
+    state,
+  );
+  if (direction) {
+    state.act.move({ entityId: colonist.id, ...direction });
+    const updatedColonist = state.select.entityById(
+      colonist.id,
+    ) as typeof colonist;
+    if (state.select.hasRoad(updatedColonist.pos)) {
+      const secondDirection = getDirectionTowardTarget(
+        updatedColonist.pos,
+        pos,
+        colonist,
+        state,
+      );
+      if (secondDirection)
+        state.act.move({ entityId: colonist.id, ...secondDirection });
+    }
+    return true;
+  }
+  return false;
+}
+
 function goHomeOrSleep(
   state: WrappedState,
   colonist: Required<Entity, "colonist" | "pos">,
@@ -236,23 +267,16 @@ function goHomeOrSleep(
     }
     const residence = state.select.entityById(colonist.colonist.residence);
     if (residence.pos) {
-      const direction = getDirectionTowardTarget(
-        colonist.pos,
-        residence.pos,
-        colonist,
-        state,
-      );
-      if (direction) {
-        state.act.move({ entityId: colonist.id, ...direction });
-        state.act.updateEntity({
-          id: colonist.id,
-          colonist: {
-            ...colonist.colonist,
-            status: ColonistStatusCode.GoingHome,
-          },
-        });
-        return;
-      }
+      const didMove = tryToMove(state, colonist, residence.pos);
+      state.act.updateEntity({
+        id: colonist.id,
+        colonist: {
+          ...colonist.colonist,
+          status: didMove
+            ? ColonistStatusCode.GoingHome
+            : ColonistStatusCode.CannotFindPathHome,
+        },
+      });
     }
   }
   state.act.updateEntity({
@@ -277,23 +301,16 @@ function goToWork(
   ) {
     const employment = state.select.entityById(colonist.colonist.employment);
     if (employment.pos) {
-      const direction = getDirectionTowardTarget(
-        colonist.pos,
-        employment.pos,
-        colonist,
-        state,
-      );
-      if (direction) {
-        state.act.move({ entityId: colonist.id, ...direction });
-        state.act.updateEntity({
-          id: colonist.id,
-          colonist: {
-            ...colonist.colonist,
-            status: ColonistStatusCode.GoingToWork,
-          },
-        });
-        return;
-      }
+      const didMove = tryToMove(state, colonist, employment.pos);
+      state.act.updateEntity({
+        id: colonist.id,
+        colonist: {
+          ...colonist.colonist,
+          status: didMove
+            ? ColonistStatusCode.GoingToWork
+            : ColonistStatusCode.CannotFindPathToWork,
+        },
+      });
     }
   }
   state.act.updateEntity({

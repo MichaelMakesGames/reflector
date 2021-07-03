@@ -182,14 +182,16 @@ export function getDirectionTowardTarget(
             isPassable(state, actor, e) ||
             isDestructibleNonEnemy(state, actor, e),
         ));
+
     if (!passable) return Infinity;
     return (
-      1 +
-      Math.max(
-        ...nonAiEntitiesPosition.map((e) =>
-          e.destructible ? e.destructible.movementCost || 1 : 0,
-        ),
-      )
+      (1 +
+        Math.max(
+          ...nonAiEntitiesPosition.map((e) =>
+            e.destructible ? e.destructible.movementCost || 1 : 0,
+          ),
+        )) *
+      (actor.colonist && !nonAiEntitiesPosition.some((e) => e.road) ? 2 : 1)
     );
   };
   const path = aStar({

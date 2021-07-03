@@ -223,3 +223,7 @@ export function canFly(state: RawState, entity: Entity) {
 export function isFlyable(state: RawState, entity: Entity) {
   return Boolean(!entity.blocking || !entity.blocking.lasers);
 }
+
+export function hasRoad(state: RawState, pos: Pos) {
+  return entitiesAtPosition(state, pos).some((e) => e.road);
+}

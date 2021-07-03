@@ -558,6 +558,20 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
         "Lets you place reflectors within 2 spaces. Needs 4 power per turn.",
     },
   },
+  BUILDING_ROAD: {
+    building: {},
+    road: {},
+    display: {
+      tile: "road_0",
+      color: colors.ground,
+      priority: PRIORITY_BUILDING_LOW,
+      hasBackground: true,
+    },
+    description: {
+      name: "Road",
+      description: "Let's colonists move 2 spaces per turn.",
+    },
+  },
 };
 
 export default templates;
