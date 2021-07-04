@@ -136,3 +136,10 @@ export function isInProjectorRange(state: RawState, pos?: Pos | null): boolean {
       .filter((e) => !e.powered || e.powered.hasPower).length > 0
   );
 }
+
+export function storage(state: RawState, resourceCode: ResourceCode): number {
+  return entitiesWithComps(state, "storage").reduce(
+    (acc, cur) => acc + (cur.storage.resources[resourceCode] || 0),
+    0,
+  );
+}

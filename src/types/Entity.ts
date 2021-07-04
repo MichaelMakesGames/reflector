@@ -172,6 +172,10 @@ export interface Warning {
   text: string;
 }
 
+export interface Storage {
+  resources: Partial<Record<ResourceCode, number>>;
+}
+
 export interface Entity {
   id: string;
   parentTemplate?: TemplateName;
@@ -209,6 +213,7 @@ export interface Entity {
   smokeEmitter?: SmokeEmitter;
   splitter?: Splitter;
   stopsLaser?: StopsLaser;
+  storage?: Storage;
   validMarker?: ValidMarker;
   warning?: Warning;
 }

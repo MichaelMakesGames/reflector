@@ -4,6 +4,7 @@ import { createEntityFromTemplate } from "~lib/entities";
 // @ts-ignore
 import tiles from "../assets/tiles/*.png";
 import colors from "../data/colors.json";
+
 interface Props {
   templateName: TemplateName;
   style?: React.CSSProperties;

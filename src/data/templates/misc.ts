@@ -31,6 +31,14 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       name: "Player",
       description: "This is you.",
     },
+    storage: {
+      resources: {
+        MACHINERY: 100,
+        METAL: 100,
+        FOOD: 100,
+        POWER: 100,
+      },
+    },
   },
   PLAYER_CORPSE: {
     display: {

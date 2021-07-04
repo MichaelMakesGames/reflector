@@ -7,6 +7,7 @@ import bordersSystem from "./bordersSystem";
 import buildingSystem from "./buildingSystem";
 import colonistsSystem from "./colonistsSystem";
 import colorToggleSystem from "./colorToggleSystem";
+import directionIndicationSystem from "./directionIndicationSystem";
 import emitterSystem from "./emitterSystem";
 import eventSystem from "./eventSystem";
 import gameOverSystem from "./gameOverSystem";
@@ -17,9 +18,9 @@ import missingResourceIndicatorSystem from "./missingResourceIndicatorSystem";
 import poweredSystem from "./poweredSystem";
 import productionSystem from "./productionSystem";
 import reflectorSystem from "./reflectorSystem";
+import storageSystem from "./storageSystem";
 import timeSystem from "./timeSystem";
 import waveSystem from "./waveSystem";
-import directionIndicationSystem from "./directionIndicationSystem";
 
 const systems: ((state: WrappedState) => void)[] = [
   waveSystem,
@@ -29,6 +30,7 @@ const systems: ((state: WrappedState) => void)[] = [
   colonistsSystem,
   hungerSystem,
   poweredSystem,
+  storageSystem,
   reflectorSystem,
   laserRechargingSystem,
   aimingSystem,

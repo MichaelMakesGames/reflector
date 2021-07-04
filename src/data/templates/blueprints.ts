@@ -169,5 +169,13 @@ templates.BLUEPRINT_WALL = makeBlueprint({
   cost: { resource: ResourceCode.Metal, amount: 10 },
   canReplace: ["BUILDING_WALL_DAMAGED"],
 });
+templates.BLUEPRINT_BATTERY = makeBlueprint({
+  builds: "BUILDING_BATTERY",
+  cost: { resource: ResourceCode.Metal, amount: 30 },
+});
+templates.BLUEPRINT_WAREHOUSE = makeBlueprint({
+  builds: "BUILDING_WAREHOUSE",
+  cost: { resource: ResourceCode.Metal, amount: 20 },
+});
 
 export default templates;

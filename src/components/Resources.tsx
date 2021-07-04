@@ -33,6 +33,9 @@ function ResourceRow({ resource }: { resource: Resource }) {
   const amount = useSelector((state: RawState) =>
     selectors.resource(state, resource.code),
   );
+  const storage = useSelector((state: RawState) =>
+    selectors.storage(state, resource.code),
+  );
   const changes = useSelector((state: RawState) =>
     selectors.resourceChange(state, resource.code),
   );
@@ -59,7 +62,12 @@ function ResourceRow({ resource }: { resource: Resource }) {
       <Tippy content={resource.description}>
         <td className="flex-1">{resource.label}</td>
       </Tippy>
-      <td className="flex-1 text-right">{formatNumber(amount)}</td>
+      <td className="flex-1 text-right">
+        <span className={amount >= storage ? "text-yellow" : "text-white"}>
+          {formatNumber(amount)}
+        </span>
+        <span className="text-lightGray">/{formatNumber(storage)}</span>
+      </td>
       <Tippy
         placement="right"
         content={

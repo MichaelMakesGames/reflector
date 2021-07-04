@@ -282,6 +282,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     destructible: {
       attackPriority: 3,
+      explosive: true,
     },
     jobProvider: {
       consumes: {},
@@ -569,8 +570,44 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     description: {
       name: "Road",
-      description: "Let's colonists move 2 spaces per turn.",
+      description: "Lets colonists move 2 spaces per turn.",
     },
+  },
+  BUILDING_BATTERY: {
+    building: {},
+    display: {
+      tile: "battery",
+      color: colors.activeBuilding,
+      priority: PRIORITY_BUILDING_LOW,
+      hasBackground: true,
+    },
+    blocking: { moving: true, lasers: true, windmill: true },
+    description: {
+      name: "Battery",
+      description: "Stored power. Explodes when destroyed.",
+    },
+    storage: {
+      resources: { POWER: 100 },
+    },
+    destructible: { explosive: true, attackPriority: 1 },
+  },
+  BUILDING_WAREHOUSE: {
+    building: {},
+    display: {
+      tile: "warehouse",
+      color: colors.activeBuilding,
+      priority: PRIORITY_BUILDING_LOW,
+      hasBackground: true,
+    },
+    blocking: { moving: true, lasers: true, windmill: true },
+    description: {
+      name: "Warehouse",
+      description: "Stores food, metal, and machinery.",
+    },
+    storage: {
+      resources: { FOOD: 100, METAL: 100, MACHINERY: 100 },
+    },
+    destructible: { attackPriority: 1 },
   },
 };
 
