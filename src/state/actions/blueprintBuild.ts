@@ -40,9 +40,9 @@ function blueprintBuildHandler(
     const { cost } = blueprint.blueprint;
     if (!state.select.canAffordToPay(cost.resource, cost.amount)) {
       state.act.logMessage({
-        message: `Cannot afford building. You need ${cost.amount} ${
+        message: `Cannot afford building (${cost.amount} ${
           resources[cost.resource].label
-        }.`,
+        })`,
       });
       return;
     } else {

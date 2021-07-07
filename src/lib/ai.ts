@@ -273,10 +273,12 @@ export function clearPlan(
   state: WrappedState,
   entity: Required<Entity, "ai">,
 ): void {
-  state.act.updateEntity({
-    id: entity.id,
-    ai: { ...entity.ai, plannedAction: null, plannedActionDirection: null },
-  });
+  if (state.select.entityById(entity.id)) {
+    state.act.updateEntity({
+      id: entity.id,
+      ai: { ...entity.ai, plannedAction: null, plannedActionDirection: null },
+    });
+  }
 }
 
 export function makePlan(

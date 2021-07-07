@@ -139,6 +139,10 @@ export interface Powered {
 
 export interface Building {}
 
+export interface Rebuildable {
+  blueprint: TemplateName;
+}
+
 export interface Blueprint {
   builds: TemplateName;
   canReplace?: TemplateName[];
@@ -207,6 +211,7 @@ export interface Entity {
   powered?: Powered;
   production?: Production;
   projector?: Projector;
+  rebuildable?: Rebuildable;
   reflector?: Reflector;
   road?: Road;
   rotatable?: Rotatable;

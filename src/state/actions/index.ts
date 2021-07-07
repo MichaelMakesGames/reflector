@@ -26,6 +26,7 @@ import move from "./move";
 import moveCursor from "./moveCursor";
 import newGame from "./newGame";
 import playerTookTurn from "./playerTookTurn";
+import rebuild from "./rebuild";
 import reduceMorale from "./reduceMorale";
 import removeEntities from "./removeEntities";
 import removeEntity from "./removeEntity";
@@ -72,6 +73,7 @@ export default {
   moveCursor,
   newGame,
   playerTookTurn,
+  rebuild,
   reduceMorale,
   removeEntities,
   removeEntity,

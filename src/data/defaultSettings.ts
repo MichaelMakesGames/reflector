@@ -34,6 +34,7 @@ const defaultSettings: Settings = {
     [ControlCode.RemoveReflector]: ["x"],
     [ControlCode.ClearAllReflectors]: ["c"],
     [ControlCode.RemoveBuilding]: ["backspace"],
+    [ControlCode.Rebuild]: ["r"],
     [ControlCode.ToggleJobs]: ["e"],
 
     [ControlCode.Wait]: ["z"],

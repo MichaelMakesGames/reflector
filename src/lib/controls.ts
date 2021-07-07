@@ -38,6 +38,14 @@ export function getQuickAction(
     };
   }
 
+  const rubble = entitiesAtPos.find((e) => e.rebuildable);
+  if (rubble) {
+    return {
+      action: actions.rebuild(rubble.id),
+      label: "Rebuild",
+    };
+  }
+
   if (
     wrappedState.select.entitiesWithComps("pathPreview", "pos").length &&
     !wrappedState.select.isWeaponActive()
@@ -106,10 +114,23 @@ export function getActionsAvailableAtPos(
 ): ActionControl[] {
   if (selectors.hasActiveBlueprint(state)) return [];
   const results: ActionControl[] = [];
+  addRebuildAction(state, pos, results);
   addReflectorActions(state, pos, results);
   addRemoveBuildingAction(state, pos, results);
   addDisableBuildingActions(state, pos, results);
   return results;
+}
+
+function addRebuildAction(state: RawState, pos: Pos, results: ActionControl[]) {
+  const entitiesAtPos = selectors.entitiesAtPosition(state, pos);
+  const rubble = entitiesAtPos.find((e) => e.rebuildable);
+  if (rubble) {
+    results.push({
+      label: "Rebuild",
+      code: ControlCode.Rebuild,
+      action: actions.rebuild(rubble.id),
+    });
+  }
 }
 
 function addDisableBuildingActions(

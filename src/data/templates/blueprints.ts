@@ -62,7 +62,7 @@ function makeBlueprint({
       builds,
       cost,
       validityConditions,
-      canReplace,
+      canReplace: ["BUILDING_RUBBLE", ...(canReplace || [])],
       onBuild,
     },
     display:

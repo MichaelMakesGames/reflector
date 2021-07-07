@@ -609,6 +609,14 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     destructible: { attackPriority: 1 },
   },
+  BUILDING_RUBBLE: {
+    building: {},
+    display: {
+      tile: "rubble",
+      color: colors.inactiveBuilding,
+      priority: PRIORITY_BUILDING_LOW,
+    },
+  },
 };
 
 export default templates;

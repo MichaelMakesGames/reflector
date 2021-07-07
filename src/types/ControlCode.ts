@@ -23,6 +23,7 @@ export enum ControlCode {
   RemoveReflector = "REMOVE_REFLECTOR",
   ClearAllReflectors = "CLEAR_ALL_REFLECTORS",
 
+  Rebuild = "REBUILD",
   RemoveBuilding = "REMOVE_BUILDING",
   RotateBuilding = "ROTATE_BUILDING",
   ToggleJobs = "TOGGLE_JOBS",
