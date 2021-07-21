@@ -17,13 +17,6 @@ export interface Resource {
 }
 
 const resources: Record<ResourceCode, Resource> = {
-  [ResourceCode.Food]: {
-    code: ResourceCode.Food,
-    label: "Food",
-    icon: "food",
-    color: colors.food,
-    description: `Food is grown on farms. Every night, each colonist needs to eat ${FOOD_PER_COLONIST} food, otherwise you lose morale.`,
-  },
   [ResourceCode.Power]: {
     code: ResourceCode.Power,
     label: "Power",
@@ -31,6 +24,13 @@ const resources: Record<ResourceCode, Resource> = {
     color: colors.power,
     description:
       "Power is used by many jobs and buildings. It can be produced automatically by some buildings, or by colonists working at a reactor.",
+  },
+  [ResourceCode.Food]: {
+    code: ResourceCode.Food,
+    label: "Food",
+    icon: "food",
+    color: colors.food,
+    description: `Food is grown on farms. Every night, each colonist needs to eat ${FOOD_PER_COLONIST} food, otherwise you lose morale.`,
   },
   [ResourceCode.Metal]: {
     code: ResourceCode.Metal,

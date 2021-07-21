@@ -3,6 +3,8 @@ import {
   RIGHT,
   STARTING_MORALE,
   VERSION,
+  NEW_COLONISTS_PER_DAY,
+  FOOD_PER_COLONIST,
 } from "~constants";
 import { RawState } from "~types";
 import { TutorialId } from "~types/TutorialId";
@@ -28,7 +30,7 @@ export function createInitialState({
     laserState: "READY",
     resources: {
       METAL: 0,
-      FOOD: 0,
+      FOOD: NEW_COLONISTS_PER_DAY * FOOD_PER_COLONIST,
       POWER: 0,
       MACHINERY: 0,
     },

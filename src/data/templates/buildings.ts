@@ -1,5 +1,12 @@
 import colors from "~colors";
-import { PRIORITY_BUILDING_HIGH, PRIORITY_BUILDING_LOW } from "~constants";
+import {
+  PRIORITY_BUILDING_HIGH,
+  PRIORITY_BUILDING_LOW,
+  MINE_WORK,
+  FARM_WORK,
+  FARM_PRODUCTION,
+  FACTORY_WORK,
+} from "~constants";
 import { JobTypeCode } from "~data/jobTypes";
 import { ResourceCode } from "~data/resources";
 import { Entity } from "~types";
@@ -188,8 +195,10 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
         [ResourceCode.Power]: 1,
       },
       produces: {
-        [ResourceCode.Metal]: 2,
+        [ResourceCode.Metal]: 1,
       },
+      workContributed: 1,
+      workRequired: MINE_WORK,
       numberEmployed: 0,
       maxNumberEmployed: 2,
       jobType: JobTypeCode.Mining,
@@ -198,7 +207,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     description: {
       name: "Mine",
       description:
-        "Provides 2 jobs, that each consume 1 power to produce 2 metal per turn.",
+        "Provides jobs for 2 colonists, so it can produce twice as fast as a Mining Spot, but each job consumes 1 power.",
     },
   },
   BUILDING_MINING_SPOT: {
@@ -217,15 +226,16 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       produces: {
         [ResourceCode.Metal]: 1,
       },
+      workContributed: 0,
+      workRequired: MINE_WORK,
       numberEmployed: 0,
       maxNumberEmployed: 1,
       jobType: JobTypeCode.Mining,
-      resourceChangeReason: "Mining (at mining spot)",
+      resourceChangeReason: "Mining",
     },
     description: {
       name: "Mining Spot",
-      description:
-        "Provides 1 job that produces 1 metal per turn. Less efficient than a Mine, but is free to build and doesn't need power. This building is VERY LOW (you can shoot and walk over it).",
+      description: `Provides 1 job that produces Metal every ${MINE_WORK} turns. This building is VERY LOW (you can shoot and walk over it).`,
     },
   },
   BUILDING_FARM: {
@@ -243,17 +253,21 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     jobProvider: {
       consumes: {},
       produces: {
-        [ResourceCode.Food]: 1,
+        [ResourceCode.Food]: FARM_PRODUCTION,
       },
+      workContributed: 0,
+      workRequired: FARM_WORK,
       numberEmployed: 0,
       maxNumberEmployed: 1,
       jobType: JobTypeCode.Farming,
       resourceChangeReason: "Farming",
     },
+    destructible: {
+      attackPriority: 2,
+    },
     description: {
       name: "Farm",
-      description:
-        "Provides 1 job that produces 1 food per turn. This building is VERY LOW (you can shoot and walk over it).",
+      description: `Produces ${FARM_PRODUCTION} Food after being worked a whole day. This building is VERY LOW (you can shoot and walk over it).`,
     },
   },
   BUILDING_REACTOR: {
@@ -289,6 +303,8 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       produces: {
         [ResourceCode.Power]: 3,
       },
+      workContributed: 0,
+      workRequired: 1,
       numberEmployed: 0,
       maxNumberEmployed: 2,
       jobType: JobTypeCode.Power,
@@ -411,12 +427,14 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     jobProvider: {
       consumes: {
-        POWER: 5,
-        METAL: 5,
+        POWER: 1,
+        METAL: 1,
       },
       produces: {
         [ResourceCode.Machinery]: 1,
       },
+      workContributed: 0,
+      workRequired: FACTORY_WORK,
       numberEmployed: 0,
       maxNumberEmployed: 3,
       jobType: JobTypeCode.Manufacturing,
@@ -430,7 +448,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     description: {
       name: "Factory",
       description:
-        "Provides 3 jobs that consume 5 power and 5 metal to produce 1 machinery per turn.",
+        "Provides 3 jobs that consume power and metal, and produce Machinery in 2 turns if fully worked.",
     },
   },
   BUILDING_WALL: {
@@ -605,7 +623,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       description: "Stores food, metal, and machinery.",
     },
     storage: {
-      resources: { FOOD: 100, METAL: 100, MACHINERY: 100 },
+      resources: { FOOD: 20, METAL: 20, MACHINERY: 20 },
     },
     destructible: { attackPriority: 1 },
   },

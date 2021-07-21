@@ -125,6 +125,8 @@ export interface Description {
 export interface JobProvider {
   consumes: Partial<Record<ResourceCode, number>>;
   produces: Partial<Record<ResourceCode, number>>;
+  workContributed: number;
+  workRequired: number;
   numberEmployed: number;
   maxNumberEmployed: number;
   jobType: JobTypeCode;

@@ -1,10 +1,11 @@
+import nanoid from "nanoid";
 import { Required } from "Object/_api";
 import * as particles from "pixi-particles";
 import * as PIXI from "pixi.js";
 import colors from "~colors";
-import { PLAYER_ID } from "~constants";
+import { PLAYER_ID, PRIORITY_BUILDING_DETAIL, UP } from "~constants";
+import { arePositionsEqual, getPositionToDirection } from "~lib/geometry";
 import { Display, Entity, Pos } from "~types";
-import { arePositionsEqual } from "~lib/geometry";
 
 const BASE_SPEED = 3;
 
@@ -753,6 +754,25 @@ export default class Renderer {
 
   public appendView(el: HTMLElement) {
     el.appendChild(this.app.view);
+  }
+
+  public flashTile(pos: Pos, tile: string, color: string) {
+    // set timeout to give entities time to move
+    setTimeout(() => {
+      const id = nanoid();
+      this.addEntity({
+        template: "NONE",
+        id,
+        pos,
+        display: {
+          tile,
+          color,
+          priority: PRIORITY_BUILDING_DETAIL,
+        },
+      });
+      this.movementPaths.set(id, [getPositionToDirection(pos, UP)]);
+      setTimeout(() => this.removeEntity(id), 500);
+    }, 50);
   }
 }
 

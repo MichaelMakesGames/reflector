@@ -33,9 +33,9 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     storage: {
       resources: {
-        MACHINERY: 100,
-        METAL: 100,
-        FOOD: 100,
+        MACHINERY: 20,
+        METAL: 20,
+        FOOD: 20,
         POWER: 100,
       },
     },

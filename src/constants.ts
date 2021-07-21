@@ -10,7 +10,6 @@ export const NEW_COLONISTS_PER_DAY = 3;
 export const ENEMIES_PER_TURN_POPULATION_MULTIPLIER = 0.05;
 export const ENEMIES_PER_TURN_DAY_MULTIPLIER = 0.1;
 export const BASE_LASER_STRENGTH = 100;
-export const FOOD_PER_COLONIST = 10;
 
 export const MAP_WIDTH = 32;
 export const MAP_HEIGHT = MAP_WIDTH;
@@ -31,6 +30,12 @@ export const END_OF_NIGHT_ENEMY_SPAWNING_BUFFER =
 export const BASE_IMMIGRATION_RATE = TURNS_PER_DAY;
 export const DAY_START_MINUTES = 6 * 60; // 6:00am
 export const VICTORY_ON_TURN = TURNS_PER_DAY * 10;
+
+export const FOOD_PER_COLONIST = 1;
+export const FARM_PRODUCTION = 5;
+export const FARM_WORK = TURNS_PER_DAY / 2;
+export const MINE_WORK = 4;
+export const FACTORY_WORK = 6;
 
 export const PRIORITY_MARKER = 30;
 export const PRIORITY_LASER = 25;

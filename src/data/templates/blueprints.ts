@@ -101,7 +101,7 @@ templates.BLUEPRINT_MINING_SPOT = makeBlueprint({
 });
 templates.BLUEPRINT_MINE = makeBlueprint({
   builds: "BUILDING_MINE",
-  cost: { resource: ResourceCode.Metal, amount: 30 },
+  cost: { resource: ResourceCode.Metal, amount: 10 },
   validityConditions: [
     ...DEFAULT_VALIDITY_CONDITIONS,
     { condition: "isOnOre", invalidMessage: "Must build on ore." },
@@ -110,11 +110,11 @@ templates.BLUEPRINT_MINE = makeBlueprint({
 });
 templates.BLUEPRINT_FACTORY = makeBlueprint({
   builds: "BUILDING_FACTORY",
-  cost: { resource: ResourceCode.Metal, amount: 50 },
+  cost: { resource: ResourceCode.Metal, amount: 15 },
 });
 templates.BLUEPRINT_WINDMILL = makeBlueprint({
   builds: "BUILDING_WINDMILL",
-  cost: { resource: ResourceCode.Metal, amount: 20 },
+  cost: { resource: ResourceCode.Metal, amount: 5 },
   validityConditions: [
     ...DEFAULT_VALIDITY_CONDITIONS,
     {
@@ -125,57 +125,57 @@ templates.BLUEPRINT_WINDMILL = makeBlueprint({
 });
 templates.BLUEPRINT_SOLAR_PANEL = makeBlueprint({
   builds: "BUILDING_SOLAR_PANEL",
-  cost: { resource: ResourceCode.Machinery, amount: 20 },
+  cost: { resource: ResourceCode.Machinery, amount: 2 },
 });
 templates.BLUEPRINT_REACTOR = makeBlueprint({
   builds: "BUILDING_REACTOR",
-  cost: { resource: ResourceCode.Machinery, amount: 80 },
+  cost: { resource: ResourceCode.Machinery, amount: 10 },
 });
 templates.BLUEPRINT_ROAD = makeBlueprint({
   builds: "BUILDING_ROAD",
-  cost: { resource: ResourceCode.Metal, amount: 10 },
+  cost: { resource: ResourceCode.Metal, amount: 1 },
   onBuild: "ON_ROAD_BUILD",
 });
 templates.BLUEPRINT_PROJECTOR_BASIC = makeBlueprint({
   builds: "BUILDING_PROJECTOR_BASIC",
-  cost: { resource: ResourceCode.Metal, amount: 50 },
+  cost: { resource: ResourceCode.Metal, amount: 3 },
 });
 templates.BLUEPRINT_SPLITTER_HORIZONTAL = makeBlueprint({
   builds: "BUILDING_SPLITTER_HORIZONTAL",
-  cost: { resource: ResourceCode.Metal, amount: 80 },
+  cost: { resource: ResourceCode.Metal, amount: 5 },
   rotatesTo: "BLUEPRINT_SPLITTER_VERTICAL",
 });
 templates.BLUEPRINT_SPLITTER_VERTICAL = makeBlueprint({
   builds: "BUILDING_SPLITTER_VERTICAL",
-  cost: { resource: ResourceCode.Metal, amount: 80 },
+  cost: { resource: ResourceCode.Metal, amount: 5 },
   rotatesTo: "BLUEPRINT_SPLITTER_HORIZONTAL",
 });
 templates.BLUEPRINT_PROJECTOR_ADVANCED = makeBlueprint({
   builds: "BUILDING_PROJECTOR_ADVANCED",
-  cost: { resource: ResourceCode.Machinery, amount: 50 },
+  cost: { resource: ResourceCode.Machinery, amount: 5 },
   canReplace: ["BUILDING_PROJECTOR_BASIC"],
 });
 templates.BLUEPRINT_SPLITTER_ADVANCED = makeBlueprint({
   builds: "BUILDING_SPLITTER_ADVANCED",
-  cost: { resource: ResourceCode.Machinery, amount: 80 },
+  cost: { resource: ResourceCode.Machinery, amount: 8 },
   canReplace: ["BUILDING_SPLITTER_HORIZONTAL", "BUILDING_SPLITTER_VERTICAL"],
 });
 templates.BLUEPRINT_RESIDENCE = makeBlueprint({
   builds: "BUILDING_RESIDENCE",
-  cost: { resource: ResourceCode.Metal, amount: 30 },
+  cost: { resource: ResourceCode.Metal, amount: 3 },
 });
 templates.BLUEPRINT_WALL = makeBlueprint({
   builds: "BUILDING_WALL",
-  cost: { resource: ResourceCode.Metal, amount: 10 },
+  cost: { resource: ResourceCode.Metal, amount: 1 },
   canReplace: ["BUILDING_WALL_DAMAGED"],
 });
 templates.BLUEPRINT_BATTERY = makeBlueprint({
   builds: "BUILDING_BATTERY",
-  cost: { resource: ResourceCode.Metal, amount: 30 },
+  cost: { resource: ResourceCode.Metal, amount: 3 },
 });
 templates.BLUEPRINT_WAREHOUSE = makeBlueprint({
   builds: "BUILDING_WAREHOUSE",
-  cost: { resource: ResourceCode.Metal, amount: 20 },
+  cost: { resource: ResourceCode.Metal, amount: 2 },
 });
 
 export default templates;

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { HotkeyGroup, useControl } from "~components/HotkeysProvider";
 import { SettingsContext } from "~contexts";
 import colonistStatuses, { ColonistStatusCode } from "~data/colonistStatuses";
-import resources from "~data/resources";
+import resources, { ResourceCode } from "~data/resources";
 import selectors from "~state/selectors";
 import wrapState from "~state/wrapState";
 import { Entity, RawState } from "~types";
@@ -188,9 +188,22 @@ function InspectorEntity({
           </span>
         )}
         {entity.jobProvider && (
-          <span className="text-lightGray text-sm">
-            {` - ${entity.jobProvider.numberEmployed}/${entity.jobProvider.maxNumberEmployed} jobs filled`}
-          </span>
+          <>
+            <span className="text-lightGray text-sm">
+              {` - ${entity.jobProvider.numberEmployed}/${entity.jobProvider.maxNumberEmployed} jobs filled`}
+            </span>
+            <div className="ml-3 text-lightGray text-sm">
+              Producing{" "}
+              <ResourceAmount
+                resourceCode={
+                  Object.keys(entity.jobProvider.produces)[0] as ResourceCode
+                }
+                amount={Object.values(entity.jobProvider.produces)[0] as number}
+              />
+              : {entity.jobProvider.workContributed}/
+              {entity.jobProvider.workRequired} work
+            </div>
+          </>
         )}
         {entity.housing && (
           <span className="text-lightGray text-sm">

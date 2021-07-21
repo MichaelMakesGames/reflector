@@ -1,5 +1,6 @@
 import Tippy from "@tippyjs/react";
 import React from "react";
+import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import resources, { Resource } from "~data/resources";
 import selectors from "~state/selectors";
@@ -42,7 +43,7 @@ function ResourceRow({ resource }: { resource: Resource }) {
   const totalChange = changes
     .filter((change) => change.reason !== "Building")
     .reduce((acc, cur) => acc + cur.amount, 0);
-  const formatNumber = Intl.NumberFormat().format;
+  const { formatNumber } = useIntl();
   const getChangeColorClass = (change: number) => {
     if (change > 0) return "text-green";
     if (change < 0) return "text-red";
@@ -62,32 +63,30 @@ function ResourceRow({ resource }: { resource: Resource }) {
       <Tippy content={resource.description}>
         <td className="flex-1">{resource.label}</td>
       </Tippy>
-      <td className="flex-1 text-right">
-        <span className={amount >= storage ? "text-yellow" : "text-white"}>
-          {formatNumber(amount)}
-        </span>
-        <span className="text-lightGray">/{formatNumber(storage)}</span>
-      </td>
       <Tippy
         placement="right"
         content={
           <table>
             <tbody>
-              {changes.length === 0 && (
-                <tr>
-                  <td>No changes</td>
-                </tr>
-              )}
+              <tr>
+                <th className="text-left">Last Turn</th>
+                <th
+                  className={`text-right pl-2 ${getChangeColorClass(
+                    totalChange,
+                  )}`}
+                >
+                  {formatNumber(totalChange, { signDisplay: "always" })}
+                </th>
+              </tr>
               {changes.map((change) => (
                 <tr key={change.reason}>
-                  <td>{change.reason}</td>
+                  <td className="text-left">{change.reason}</td>
                   <td
                     className={`text-right pl-2 ${getChangeColorClass(
                       change.amount,
                     )}`}
                   >
-                    {change.amount >= 0 ? "+" : null}
-                    {formatNumber(change.amount)}
+                    {formatNumber(change.amount, { signDisplay: "always" })}
                   </td>
                 </tr>
               ))}
@@ -95,9 +94,11 @@ function ResourceRow({ resource }: { resource: Resource }) {
           </table>
         }
       >
-        <td className={`flex-1 text-right ${getChangeColorClass(totalChange)}`}>
-          {totalChange >= 0 ? "+" : null}
-          {formatNumber(totalChange)}
+        <td className="flex-1 text-right">
+          <span className={amount >= storage ? "text-yellow" : "text-white"}>
+            {formatNumber(amount)}
+          </span>
+          <span className="text-lightGray">/{formatNumber(storage)}</span>
         </td>
       </Tippy>
     </tr>

@@ -5,7 +5,7 @@ import {
   TURNS_PER_NIGHT,
 } from "~constants";
 import { ColonistStatusCode } from "~data/colonistStatuses";
-import { ResourceCode } from "~data/resources";
+import resources, { ResourceCode } from "~data/resources";
 import { getDirectionTowardTarget } from "~lib/ai";
 import { createEntityFromTemplate } from "~lib/entities";
 import {
@@ -16,8 +16,9 @@ import {
 } from "~lib/geometry";
 import { rangeTo } from "~lib/math";
 import { choose } from "~lib/rng";
-import { Entity, Pos } from "~types";
+import { Entity, Pos, JobProvider } from "~types";
 import WrappedState from "~types/WrappedState";
+import renderer from "~renderer";
 
 export default function colonistsSystem(state: WrappedState): void {
   if (!state.select.isNight() || state.select.isFirstTurnOfNight()) {
@@ -343,15 +344,28 @@ function doWork(
           reason: employment.jobProvider.resourceChangeReason,
         }),
       );
-    Object.entries(employment.jobProvider.produces)
-      .filter((entry): entry is [ResourceCode, number] => Boolean(entry[1]))
-      .every(([resource, amount]) =>
-        state.act.modifyResource({
-          resource,
-          amount,
-          reason: employment.jobProvider.resourceChangeReason,
-        }),
-      );
+
+    const updatedJobProvider: JobProvider = { ...employment.jobProvider };
+    updatedJobProvider.workContributed += 1;
+    if (updatedJobProvider.workContributed >= updatedJobProvider.workRequired) {
+      updatedJobProvider.workContributed -= updatedJobProvider.workRequired;
+      Object.entries(employment.jobProvider.produces)
+        .filter((entry): entry is [ResourceCode, number] => Boolean(entry[1]))
+        .forEach(([resourceCode, amount]) => {
+          state.act.modifyResource({
+            resource: resourceCode,
+            amount,
+            reason: employment.jobProvider.resourceChangeReason,
+          });
+          const resource = resources[resourceCode];
+          renderer.flashTile(colonist.pos, resource.icon, resource.color);
+        });
+    }
+    state.act.updateEntity({
+      id: employment.id,
+      jobProvider: updatedJobProvider,
+    });
+
     state.act.updateEntity({
       id: colonist.id,
       colonist: { ...colonist.colonist, status: ColonistStatusCode.Working },
