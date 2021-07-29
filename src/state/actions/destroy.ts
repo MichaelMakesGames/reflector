@@ -4,10 +4,10 @@ import templates from "~data/templates";
 import audio from "~lib/audio";
 import { createEntityFromTemplate } from "~lib/entities";
 import { getAdjacentPositions } from "~lib/geometry";
-import onDestroyEffects from "~lib/onDestroyEffects";
 import renderer from "~renderer";
 import { registerHandler } from "~state/handleAction";
 import WrappedState from "~types/WrappedState";
+import effects from "~data/effects";
 
 const destroy = createStandardAction("DESTROY")<string>();
 export default destroy;
@@ -22,11 +22,7 @@ function destroyHandler(
 
   if (entity.destructible) {
     if (entity.destructible.onDestroy) {
-      const effect = onDestroyEffects[entity.destructible.onDestroy];
-      if (effect) {
-        const effectActions = effect(state, entity);
-        effectActions.forEach((effectAction) => state.handle(effectAction));
-      }
+      effects[entity.destructible.onDestroy](state, undefined, entity);
     }
 
     state.act.removeEntity(entityId);

@@ -1,6 +1,6 @@
 const messages = {
   "tutorials.basics.0":
-    "Reflector is a turn-based game. Colonists <entity>COLONISTS</entity> and enemies <entity>ENEMY_DRONE</entity> move when you move. <br></br>Try moving by <b>clicking the map</b>, or using the <kbd>wasd</kbd> or arrow keys.",
+    "Reflector is a turn-based game. Colonists <entity>UI_COLONISTS</entity> and enemies <entity>ENEMY_DRONE</entity> move when you move. <br></br>Try moving by <b>clicking the map</b>, or using the <kbd>wasd</kbd> or arrow keys.",
   "tutorials.basics.1":
     "You need to build places for colonists to work. Let's start by building a farm.<br></br>In the bottom menu, <b>click Production</b> then <b>click Farm</b>, or use the number keys to make your selection.",
   "tutorials.basics.2":
@@ -19,7 +19,7 @@ const messages = {
     "You're off to a great start! Continue collecting resources and building your colony.<br></br>Since you have power, you might want to build a Mine next, but now it's up to you.<br></br>You'll learn about combat at night.",
 
   "tutorials.combat.0":
-    "It is now night. Your colonists <entity>COLONISTS</entity> will stop working and go to sleep, and enemies <entity>ENEMY_DRONE</entity> will attack, so it's time to learn how to fight!<br></br>To activate your laser, <b>click Activate</b> or press <kbd>f</kbd>.",
+    "It is now night. Your colonists <entity>UI_COLONISTS</entity> will stop working and go to sleep, and enemies <entity>ENEMY_DRONE</entity> will attack, so it's time to learn how to fight!<br></br>To activate your laser, <b>click Activate</b> or press <kbd>f</kbd>.",
   "tutorials.combat.1":
     "You are now aiming your laser, but haven't fired yet.<br></br>Use the <b>arrow buttons</b>, arrow keys, or <kbd>wasd</kbd> to change what direction you're aiming in.",
   "tutorials.combat.2":

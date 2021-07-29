@@ -18,7 +18,7 @@ function toggleDisabledHandler(
   if (disablerAtPos) {
     state.act.removeEntity(disablerAtPos.id);
   } else if (state.select.entitiesAtPosition(pos).some((e) => e.jobProvider)) {
-    state.act.addEntity(createEntityFromTemplate("JOB_DISABLER", { pos }));
+    state.act.addEntity(createEntityFromTemplate("UI_JOB_DISABLER", { pos }));
   }
 }
 

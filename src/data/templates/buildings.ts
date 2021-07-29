@@ -6,6 +6,7 @@ import {
   FARM_WORK,
   FARM_PRODUCTION,
   FACTORY_WORK,
+  REACTOR_PRODUCTION,
 } from "~constants";
 import { JobTypeCode } from "~data/jobTypes";
 import { ResourceCode } from "~data/resources";
@@ -285,11 +286,11 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     smokeEmitter: {
       emitters: [
         {
-          conditions: ["hasOneActiveWorker"],
+          conditions: [],
           offset: { x: 8, y: 10 },
         },
         {
-          conditions: ["hasTwoActiveWorkers"],
+          conditions: [],
           offset: { x: 19, y: 10 },
         },
       ],
@@ -297,18 +298,17 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     destructible: {
       attackPriority: 3,
       explosive: true,
+      onDestroy: "CLEAR_UI_OVERHEAT",
     },
-    jobProvider: {
-      consumes: {},
-      produces: {
-        [ResourceCode.Power]: 3,
-      },
-      workContributed: 0,
-      workRequired: 1,
-      numberEmployed: 0,
-      maxNumberEmployed: 2,
-      jobType: JobTypeCode.Power,
-      resourceChangeReason: "Reactor",
+    production: {
+      resource: ResourceCode.Power,
+      resourceChangeReason: "Reactors",
+      amount: REACTOR_PRODUCTION,
+      conditions: [],
+    },
+    temperature: {
+      status: "normal",
+      onOverheat: "DESTROY",
     },
     blocking: {
       moving: true,
@@ -317,7 +317,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     description: {
       name: "Reactor",
-      description: "Provides 2 jobs that each produce 3 power per turn.",
+      description: "Produces 10 power, but overheats if power isn't consumed",
     },
   },
   BUILDING_SOLAR_PANEL: {
@@ -465,7 +465,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       windmill: true,
     },
     destructible: {
-      onDestroy: "wall",
+      onDestroy: "SPAWN_BUILDING_WALL_DAMAGED",
       attackPriority: 0,
       movementCost: 5,
     },

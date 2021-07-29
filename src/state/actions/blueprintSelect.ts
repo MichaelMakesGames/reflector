@@ -70,10 +70,10 @@ function blueprintSelectHandler(
     const warning = checkForPlacementWarning(state, pos, blueprint);
     if (warning) {
       state.act.addEntity(
-        createEntityFromTemplate("VALID_WITH_WARNING_MARKER", { pos, warning }),
+        createEntityFromTemplate("UI_VALID_WITH_WARNING", { pos, warning }),
       );
     } else {
-      state.act.addEntity(createEntityFromTemplate("VALID_MARKER", { pos }));
+      state.act.addEntity(createEntityFromTemplate("UI_VALID", { pos }));
     }
   }
 

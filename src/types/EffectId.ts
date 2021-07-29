@@ -1,1 +1,8 @@
-export type EffectId = "ON_ROAD_BUILD";
+export type EffectId =
+  | "CLEAR_UI_OVERHEAT"
+  | "DESTROY"
+  | "ON_COLONIST_DESTROYED"
+  | "ON_ROAD_BUILD"
+  | "SPAWN_BUILDING_WALL_DAMAGED"
+  | "SPAWN_ENEMY_DRONE"
+  | "SPAWN_PLAYER_CORPSE";

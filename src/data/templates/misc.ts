@@ -19,7 +19,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     blocking: { moving: true, lasers: true, windmill: false },
     destructible: {
-      onDestroy: "player",
+      onDestroy: "SPAWN_PLAYER_CORPSE",
       explosive: true,
       attackPriority: 0,
     },
@@ -48,7 +48,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     blocking: { moving: true, lasers: true, windmill: false },
   },
-  VALID_MARKER: {
+  UI_VALID: {
     display: {
       tile: "outline_dashed",
       color: colors.secondary,
@@ -56,7 +56,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     validMarker: {},
   },
-  VALID_WITH_WARNING_MARKER: {
+  UI_VALID_WITH_WARNING: {
     display: {
       tile: "outline_exclamation",
       color: colors.warning,
@@ -64,7 +64,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     validMarker: {},
   },
-  JOB_DISABLER: {
+  UI_JOB_DISABLER: {
     display: {
       tile: "disabled",
       color: colors.invalid,
@@ -72,7 +72,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     jobDisabler: {},
   },
-  CURSOR: {
+  UI_CURSOR: {
     display: {
       tile: "outline_solid",
       color: colors.secondary,
@@ -81,7 +81,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     cursor: {},
   },
-  HIGHLIGHT: {
+  UI_HIGHLIGHT: {
     display: {
       tile: ["outline_dashed", "blank"],
       speed: 0.05,
@@ -90,7 +90,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     highlight: {},
   },
-  NO_METAL_INDICATOR: {
+  UI_NO_METAL: {
     display: {
       tile: ["metal", "blank"],
       speed: 0.05,
@@ -99,7 +99,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     missingResourceIndicator: {},
   },
-  NO_POWER_INDICATOR: {
+  UI_NO_POWER: {
     display: {
       tile: ["power", "blank"],
       speed: 0.05,
@@ -108,6 +108,14 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     missingResourceIndicator: {},
   },
+  UI_OVERHEATING: {
+    display: {
+      tile: ["outline_exclamation", "blank"],
+      speed: 0.05,
+      color: colors.laser,
+      priority: PRIORITY_MARKER,
+    },
+  },
   COLONIST: {
     display: {
       tile: "colonists1",
@@ -115,7 +123,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       priority: PRIORITY_UNIT,
     },
     destructible: {
-      onDestroy: "colonist",
+      onDestroy: "ON_COLONIST_DESTROYED",
       attackPriority: 2,
     },
     colonist: {
@@ -129,14 +137,14 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       description: "",
     },
   },
-  COLONISTS: {
+  UI_COLONISTS: {
     display: {
       tile: "colonists3",
       color: colors.player,
       priority: PRIORITY_UNIT,
     },
   },
-  PATH_PREVIEW: {
+  UI_PATH: {
     display: {
       tile: "target",
       color: colors.secondary,
@@ -146,7 +154,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       index: 0,
     },
   },
-  PATH_PREVIEW_DEEMPHASIZED: {
+  UI_PATH_DEEMPHASIZED: {
     display: {
       tile: "target",
       color: colors.inactiveBuilding,
@@ -156,7 +164,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       index: 0,
     },
   },
-  BORDER_NORTH: {
+  UI_BORDER_NORTH: {
     display: {
       tile: "border",
       color: colors.secondary,
@@ -165,7 +173,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     border: {},
   },
-  BORDER_EAST: {
+  UI_BORDER_EAST: {
     display: {
       tile: "border",
       color: colors.secondary,
@@ -174,7 +182,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     border: {},
   },
-  BORDER_SOUTH: {
+  UI_BORDER_SOUTH: {
     display: {
       tile: "border",
       color: colors.secondary,
@@ -183,7 +191,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     border: {},
   },
-  BORDER_WEST: {
+  UI_BORDER_WEST: {
     display: {
       tile: "border",
       color: colors.secondary,
@@ -192,7 +200,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     border: {},
   },
-  DIRECTION_INDICATOR_E: {
+  UI_DIRECTION_E: {
     display: {
       tile: "direction-indicator",
       color: colors.enemyUnit,
@@ -201,7 +209,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     directionIndicator: {},
   },
-  DIRECTION_INDICATOR_N: {
+  UI_DIRECTION_N: {
     display: {
       tile: "direction-indicator",
       color: colors.enemyUnit,
@@ -209,7 +217,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     directionIndicator: {},
   },
-  DIRECTION_INDICATOR_S: {
+  UI_DIRECTION_S: {
     display: {
       tile: "direction-indicator",
       color: colors.enemyUnit,
@@ -218,7 +226,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     directionIndicator: {},
   },
-  DIRECTION_INDICATOR_W: {
+  UI_DIRECTION_W: {
     display: {
       tile: "direction-indicator",
       color: colors.enemyUnit,

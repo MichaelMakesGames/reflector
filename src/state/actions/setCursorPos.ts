@@ -35,7 +35,7 @@ function setCursorPosHandler(
       });
     } else {
       state.act.addEntity({
-        ...createEntityFromTemplate("CURSOR", { pos: newCursorPos }),
+        ...createEntityFromTemplate("UI_CURSOR", { pos: newCursorPos }),
         id: CURSOR_ID,
       });
     }
@@ -62,7 +62,7 @@ function setCursorPosHandler(
       }
     });
     positionsToHighlight.forEach((pos) =>
-      state.act.addEntity(createEntityFromTemplate("HIGHLIGHT", { pos })),
+      state.act.addEntity(createEntityFromTemplate("UI_HIGHLIGHT", { pos })),
     );
 
     state.act.setAutoMovePathToCursor();

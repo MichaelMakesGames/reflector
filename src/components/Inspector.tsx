@@ -220,6 +220,24 @@ function InspectorEntity({
             {entity.production.producedLastTurn ? " - Active" : " - Inactive"}
           </span>
         )}
+        {entity.temperature && (
+          <div className="ml-3 text-lightGray text-sm">
+            Temperature:{" "}
+            <span
+              className={`${
+                ["normal", "critical"].includes(entity.temperature.status)
+                  ? ""
+                  : "text-yellow"
+              } ${
+                entity.temperature.status === "critical"
+                  ? "text-red font-bold animate-pulse"
+                  : ""
+              }`}
+            >
+              {entity.temperature.status}
+            </span>
+          </div>
+        )}
         {entity.description && entity.description.shortDescription && (
           <span className="text-lightGray text-sm">
             {" - "}

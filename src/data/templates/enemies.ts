@@ -16,7 +16,12 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       priority: PRIORITY_UNIT,
       flashWhenVisible: true,
     },
-    ai: { type: "DRONE" },
+    ai: {
+      type: "DRONE",
+      target: null,
+      plannedAction: null,
+      plannedActionDirection: null,
+    },
     description: {
       name: "Soldier",
       description:
@@ -34,7 +39,12 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       flashWhenVisible: true,
     },
     destructible: { explosive: true },
-    ai: { type: "DRONE" },
+    ai: {
+      type: "DRONE",
+      target: null,
+      plannedAction: null,
+      plannedActionDirection: null,
+    },
     description: {
       name: "Volatile",
       description: "Explodes when killed, damaging everything adjacent.",
@@ -50,9 +60,14 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       priority: PRIORITY_UNIT,
       flashWhenVisible: true,
     },
-    destructible: { onDestroy: "enemyArmored" },
+    destructible: { onDestroy: "SPAWN_ENEMY_DRONE" },
     stopsLaser: {},
-    ai: { type: "DRONE" },
+    ai: {
+      type: "DRONE",
+      target: null,
+      plannedAction: null,
+      plannedActionDirection: null,
+    },
     description: {
       name: "Beetle",
       description: "A bug with a thick armored shell that blocks 1 attack.",
@@ -68,7 +83,12 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       priority: PRIORITY_UNIT,
       flashWhenVisible: true,
     },
-    ai: { type: "FLYER" },
+    ai: {
+      type: "FLYER",
+      target: null,
+      plannedAction: null,
+      plannedActionDirection: null,
+    },
     description: {
       name: "Flyer",
       description: "A winged bug that can fly over water.",
@@ -84,7 +104,12 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       priority: PRIORITY_UNIT,
       flashWhenVisible: true,
     },
-    ai: { type: "BURROWER" },
+    ai: {
+      type: "BURROWER",
+      target: null,
+      plannedAction: null,
+      plannedActionDirection: null,
+    },
     description: {
       name: "Burrower",
       description: "A bug that digs underground until ready to attack.",
@@ -100,7 +125,12 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       priority: PRIORITY_UNIT,
       flashWhenVisible: true,
     },
-    ai: { type: "BURROWED" },
+    ai: {
+      type: "BURROWED",
+      target: null,
+      plannedAction: null,
+      plannedActionDirection: null,
+    },
     description: {
       name: "Burrower (underground)",
       description: "A bug that digs underground until ready to attack.",

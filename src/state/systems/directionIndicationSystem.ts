@@ -13,19 +13,19 @@ export default function directionIndicationSystem(state: WrappedState): void {
     if (direction) {
       if (getConstDir(direction) === UP)
         state.act.addEntity(
-          createEntityFromTemplate("DIRECTION_INDICATOR_N", { pos }),
+          createEntityFromTemplate("UI_DIRECTION_N", { pos }),
         );
       if (getConstDir(direction) === DOWN)
         state.act.addEntity(
-          createEntityFromTemplate("DIRECTION_INDICATOR_S", { pos }),
+          createEntityFromTemplate("UI_DIRECTION_S", { pos }),
         );
       if (getConstDir(direction) === LEFT)
         state.act.addEntity(
-          createEntityFromTemplate("DIRECTION_INDICATOR_W", { pos }),
+          createEntityFromTemplate("UI_DIRECTION_W", { pos }),
         );
       if (getConstDir(direction) === RIGHT)
         state.act.addEntity(
-          createEntityFromTemplate("DIRECTION_INDICATOR_E", { pos }),
+          createEntityFromTemplate("UI_DIRECTION_E", { pos }),
         );
     }
   });

@@ -29,6 +29,15 @@ function executeRemoveBuildingHandler(
       return;
     }
   }
+  if (
+    removingTarget.temperature &&
+    removingTarget.temperature.status !== "normal"
+  ) {
+    state.act.logMessage({
+      message: "You cannot remove overheating buildings",
+    });
+    return;
+  }
   state.act.removeEntity(removingTarget.id);
 
   // remove job disabler

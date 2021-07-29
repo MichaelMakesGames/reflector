@@ -18,7 +18,7 @@ export default function missingResourceIndicatorSystem(
     .filter((e) => !e.powered.hasPower);
   entitiesToAdd.push(
     ...unpoweredEntities.map(({ pos }) =>
-      createEntityFromTemplate("NO_POWER_INDICATOR", { pos }),
+      createEntityFromTemplate("UI_NO_POWER", { pos }),
     ),
   );
 
@@ -30,13 +30,9 @@ export default function missingResourceIndicatorSystem(
   colonistsWithMissingResources.forEach(({ colonist, pos }) => {
     colonist.missingResources.forEach((resource) => {
       if (resource === ResourceCode.Power) {
-        entitiesToAdd.push(
-          createEntityFromTemplate("NO_POWER_INDICATOR", { pos }),
-        );
+        entitiesToAdd.push(createEntityFromTemplate("UI_NO_POWER", { pos }));
       } else if (resource === ResourceCode.Metal) {
-        entitiesToAdd.push(
-          createEntityFromTemplate("NO_METAL_INDICATOR", { pos }),
-        );
+        entitiesToAdd.push(createEntityFromTemplate("UI_NO_METAL", { pos }));
       } else {
         console.error("Unhandled missing resource indicator:", resource);
       }

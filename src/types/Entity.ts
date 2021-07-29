@@ -63,7 +63,7 @@ export interface Laser {
 }
 
 export interface Destructible {
-  onDestroy?: string;
+  onDestroy?: EffectId;
   explosive?: boolean;
   attackPriority?: number;
   movementCost?: number;
@@ -137,6 +137,11 @@ export interface Powered {
   hasPower: boolean;
   powerNeeded: number;
   resourceChangeReason: string;
+}
+
+export interface Temperature {
+  status: "normal" | "hot" | "very hot" | "critical";
+  onOverheat: EffectId;
 }
 
 export interface Building {}
@@ -221,6 +226,7 @@ export interface Entity {
   splitter?: Splitter;
   stopsLaser?: StopsLaser;
   storage?: Storage;
+  temperature?: Temperature;
   validMarker?: ValidMarker;
   warning?: Warning;
 }

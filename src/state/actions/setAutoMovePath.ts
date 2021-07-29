@@ -17,8 +17,8 @@ function setAutoMovePathHandler(
   action.payload.forEach((pos, index) => {
     const template: TemplateName =
       index === 0 || !state.select.areEnemiesPresent()
-        ? "PATH_PREVIEW"
-        : "PATH_PREVIEW_DEEMPHASIZED";
+        ? "UI_PATH"
+        : "UI_PATH_DEEMPHASIZED";
     state.act.addEntity(
       createEntityFromTemplate(template, { pos, pathPreview: { index } }),
     );

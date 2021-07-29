@@ -40,6 +40,8 @@ import setCursorPos from "./setCursorPos";
 import setJobPriority from "./setJobPriority";
 import startTutorial from "./startTutorial";
 import targetWeapon from "./targetWeapon";
+import temperatureDecrease from "./temperatureDecrease";
+import temperatureIncrease from "./temperatureIncrease";
 import toggleDisabled from "./toggleDisabled";
 import undoTurn from "./undoTurn";
 import updateEntity from "./updateEntity";
@@ -87,6 +89,8 @@ export default {
   setJobPriority,
   startTutorial,
   targetWeapon,
+  temperatureDecrease,
+  temperatureIncrease,
   toggleDisabled,
   undoTurn,
   updateEntity,

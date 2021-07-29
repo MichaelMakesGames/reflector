@@ -40,16 +40,16 @@ export default function bordersSystem(state: WrappedState): void {
     const posToWestIsInRange = posKeys.has(getPosKey(posToWest));
 
     if (!posToNorthIsInRange) {
-      state.act.addEntity(createEntityFromTemplate("BORDER_NORTH", { pos }));
+      state.act.addEntity(createEntityFromTemplate("UI_BORDER_NORTH", { pos }));
     }
     if (!posToSouthIsInRange) {
-      state.act.addEntity(createEntityFromTemplate("BORDER_SOUTH", { pos }));
+      state.act.addEntity(createEntityFromTemplate("UI_BORDER_SOUTH", { pos }));
     }
     if (!posToEastIsInRange) {
-      state.act.addEntity(createEntityFromTemplate("BORDER_EAST", { pos }));
+      state.act.addEntity(createEntityFromTemplate("UI_BORDER_EAST", { pos }));
     }
     if (!posToWestIsInRange) {
-      state.act.addEntity(createEntityFromTemplate("BORDER_WEST", { pos }));
+      state.act.addEntity(createEntityFromTemplate("UI_BORDER_WEST", { pos }));
     }
   }
 }
