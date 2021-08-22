@@ -1,4 +1,4 @@
-type TemplateName =
+export type TemplateName =
   | "BLUEPRINT_BATTERY"
   | "BLUEPRINT_FACTORY"
   | "BLUEPRINT_FARM"

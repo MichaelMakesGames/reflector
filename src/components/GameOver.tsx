@@ -1,10 +1,10 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import actions from "~state/actions";
-import selectors from "~state/selectors";
+import actions from "../state/actions";
+import selectors from "../state/selectors";
 import Modal from "./Modal";
 import HotkeyButton from "./HotkeyButton";
-import { ControlCode } from "~types/ControlCode";
+import { ControlCode } from "../types/ControlCode";
 import { HotkeyGroup } from "./HotkeysProvider";
 
 export default function GameOver() {

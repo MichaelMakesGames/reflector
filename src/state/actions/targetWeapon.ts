@@ -1,20 +1,20 @@
-import { createStandardAction } from "typesafe-actions";
-import { Pos, Direction } from "~/types";
-import { createLaser, getSplitTemplateName, reflect } from "~lib/lasers";
-import { BASE_LASER_STRENGTH, DOWN, LEFT, RIGHT, UP } from "~constants";
-import { registerHandler } from "~state/handleAction";
-import WrappedState from "~types/WrappedState";
-import { areConditionsMet } from "~lib/conditions";
-import { createEntityFromTemplate } from "~lib/entities";
-import { areDirectionsEqual, getConstDir } from "~lib/geometry";
-import audio from "~lib/audio";
+import { createAction } from "typesafe-actions";
+import { Pos, Direction } from "../../types";
+import { createLaser, getSplitTemplateName, reflect } from "../../lib/lasers";
+import { BASE_LASER_STRENGTH, DOWN, LEFT, RIGHT, UP } from "../../constants";
+import { registerHandler } from "../handleAction";
+import WrappedState from "../../types/WrappedState";
+import { areConditionsMet } from "../../lib/conditions";
+import { createEntityFromTemplate } from "../../lib/entities";
+import { areDirectionsEqual, getConstDir } from "../../lib/geometry";
+import audio from "../../lib/audio";
 
-const targetWeapon = createStandardAction("TARGET_WEAPON")<Direction>();
+const targetWeapon = createAction("TARGET_WEAPON")<Direction>();
 export default targetWeapon;
 
 function targetWeaponHandler(
   state: WrappedState,
-  action: ReturnType<typeof targetWeapon>,
+  action: ReturnType<typeof targetWeapon>
 ): void {
   if (state.select.laserState() === "RECHARGING") {
     state.act.logMessage({
@@ -44,19 +44,19 @@ function targetWeaponHandler(
 
   if (getConstDir(action.payload) === UP) {
     state.act.addEntity(
-      createEntityFromTemplate("LASER_PLAYER_UP", { pos: playerPosition }),
+      createEntityFromTemplate("LASER_PLAYER_UP", { pos: playerPosition })
     );
   } else if (getConstDir(action.payload) === DOWN) {
     state.act.addEntity(
-      createEntityFromTemplate("LASER_PLAYER_DOWN", { pos: playerPosition }),
+      createEntityFromTemplate("LASER_PLAYER_DOWN", { pos: playerPosition })
     );
   } else if (getConstDir(action.payload) === LEFT) {
     state.act.addEntity(
-      createEntityFromTemplate("LASER_PLAYER_LEFT", { pos: playerPosition }),
+      createEntityFromTemplate("LASER_PLAYER_LEFT", { pos: playerPosition })
     );
   } else if (getConstDir(action.payload) === RIGHT) {
     state.act.addEntity(
-      createEntityFromTemplate("LASER_PLAYER_RIGHT", { pos: playerPosition }),
+      createEntityFromTemplate("LASER_PLAYER_RIGHT", { pos: playerPosition })
     );
   }
 
@@ -79,7 +79,7 @@ function targetWeaponHandler(
       };
       const entitiesAtPos = state.select.entitiesAtPosition(nextPos);
       const solidEntity = entitiesAtPos.find(
-        (entity) => entity.blocking && entity.blocking.lasers,
+        (entity) => entity.blocking && entity.blocking.lasers
       );
       const reflectorEntity = entitiesAtPos.find((entity) => entity.reflector);
       const splitterEntity = entitiesAtPos.find((entity) => entity.splitter);
@@ -89,7 +89,7 @@ function targetWeaponHandler(
           (e) =>
             e.laser &&
             e.laser.strength >= beam.strength &&
-            areDirectionsEqual(beam, e.laser.direction),
+            areDirectionsEqual(beam, e.laser.direction)
         )
       ) {
         // if there's already a laser in the same direction, set beam to zero to avoid infinite loops
@@ -108,12 +108,12 @@ function targetWeaponHandler(
         const cosmeticTemplate = getSplitTemplateName(
           beam.strength,
           beam,
-          splitter.type,
+          splitter.type
         );
         state.act.addEntity(
           createEntityFromTemplate(cosmeticTemplate, {
             pos: nextPos,
-          }),
+          })
         );
         if (splitter.type === "advanced") {
           const oppositeDir = getConstDir({
@@ -148,12 +148,12 @@ function targetWeaponHandler(
         const { direction: newDirection, cosmeticTemplate } = reflect(
           beam,
           reflectorEntity.reflector.type,
-          beam.strength,
+          beam.strength
         );
         state.act.addEntity(
           createEntityFromTemplate(cosmeticTemplate, {
             pos: nextPos,
-          }),
+          })
         );
         beam.dx = newDirection.dx;
         beam.dy = newDirection.dy;

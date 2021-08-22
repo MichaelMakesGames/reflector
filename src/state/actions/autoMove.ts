@@ -1,9 +1,9 @@
-import { createStandardAction } from "typesafe-actions";
-import { registerHandler } from "~state/handleAction";
-import { Direction } from "~types";
-import WrappedState from "~types/WrappedState";
+import { createAction } from "typesafe-actions";
+import { registerHandler } from "../handleAction";
+import { Direction } from "../../types";
+import WrappedState from "../../types/WrappedState";
 
-const autoMove = createStandardAction("AUTO_MOVE")();
+const autoMove = createAction("AUTO_MOVE")();
 export default autoMove;
 
 function autoMoveHandler(state: WrappedState): void {
@@ -32,7 +32,7 @@ function autoMoveHandler(state: WrappedState): void {
 
   if (Math.abs(direction.dx) + Math.abs(direction.dy) !== 1) {
     console.warn(
-      `Invalid auto-move from ${player.pos.x},${player.pos.y} to ${next.pos.x},${next.pos.y}`,
+      `Invalid auto-move from ${player.pos.x},${player.pos.y} to ${next.pos.x},${next.pos.y}`
     );
     state.act.cancelAutoMove();
     return;

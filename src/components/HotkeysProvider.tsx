@@ -7,8 +7,8 @@ import React, {
   useEffect,
   useContext,
 } from "react";
-import { ControlCode } from "~types/ControlCode";
-import { SettingsContext } from "~contexts";
+import { ControlCode } from "../types/ControlCode";
+import { SettingsContext } from "../contexts";
 
 const HotkeyContext = createContext({
   register: (hotkey: Hotkey) => {},
@@ -110,6 +110,7 @@ export default function HotkeysProvider({
           event.preventDefault();
           event.stopPropagation();
           hotkey.callback();
+          return;
         }
       }
     };
@@ -180,7 +181,7 @@ export function useControl({
           disabled,
           ...(parsedModifier ? { [parsedModifier]: true } : {}),
         };
-      },
+      }
     );
 
     hotkeys.forEach(register);

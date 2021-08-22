@@ -1,4 +1,4 @@
-import colors from "~colors";
+import colors from "../../colors";
 import {
   PRIORITY_BUILDING_HIGH,
   PRIORITY_BUILDING_LOW,
@@ -7,10 +7,11 @@ import {
   FARM_PRODUCTION,
   FACTORY_WORK,
   REACTOR_PRODUCTION,
-} from "~constants";
-import { JobTypeCode } from "~data/jobTypes";
-import { ResourceCode } from "~data/resources";
-import { Entity } from "~types";
+} from "../../constants";
+import { JobTypeCode } from "../jobTypes";
+import { ResourceCode } from "../resources";
+import { Entity } from "../../types";
+import { TemplateName } from "../../types/TemplateName";
 
 const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   REFLECTOR_BASE: {

@@ -1,19 +1,19 @@
-import { createStandardAction } from "typesafe-actions";
-import { registerHandler } from "~state/handleAction";
-import WrappedState from "~types/WrappedState";
-import audio from "~lib/audio";
+import { createAction } from "typesafe-actions";
+import { registerHandler } from "../handleAction";
+import WrappedState from "../../types/WrappedState";
+import audio from "../../lib/audio";
 
-const deactivateWeapon = createStandardAction("DEACTIVATE_WEAPON")();
+const deactivateWeapon = createAction("DEACTIVATE_WEAPON")();
 export default deactivateWeapon;
 
 function deactivateWeaponHandler(
   state: WrappedState,
-  action: ReturnType<typeof deactivateWeapon>,
+  action: ReturnType<typeof deactivateWeapon>
 ): void {
   const laserState = state.select.laserState();
   if (["ACTIVE", "FIRING"].includes(laserState)) {
     state.act.removeEntities(
-      state.select.entitiesWithComps("laser").map((e) => e.id),
+      state.select.entitiesWithComps("laser").map((e) => e.id)
     );
     audio.stop("laser_active");
     if (laserState === "ACTIVE") {

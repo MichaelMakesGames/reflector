@@ -1,5 +1,5 @@
 import React from "react";
-import { ResourceCode } from "~data/resources";
+import { ResourceCode } from "../data/resources";
 import ResourceIcon from "./ResourceIcon";
 
 interface Props {

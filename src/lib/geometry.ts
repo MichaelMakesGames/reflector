@@ -1,5 +1,5 @@
-import { Pos, Direction } from "~/types";
-import { DOWN, RIGHT, LEFT, UP, MAP_WIDTH, MAP_HEIGHT } from "~/constants";
+import { Pos, Direction } from "../types";
+import { DOWN, RIGHT, LEFT, UP, MAP_WIDTH, MAP_HEIGHT } from "../constants";
 import { rangeFromTo } from "./math";
 
 export function getPosKey(pos: Pos) {
@@ -23,7 +23,7 @@ export function getDistance(from: Pos, to: Pos, fourWay = false) {
 export function getClosestPosition(
   options: Pos[],
   to: Pos,
-  fourWay = false,
+  fourWay = false
 ): Pos | null {
   return (
     [...options].sort((a, b) => {
@@ -41,7 +41,7 @@ export function getAdjacentPositions(pos: Pos, fourWay = false): Pos[] {
 export function getPositionsWithinRange(
   pos: Pos,
   range: number,
-  fourWay = false,
+  fourWay = false
 ): Pos[] {
   const positions: Pos[] = [];
   for (const dy of rangeFromTo(-1 * range, range + 1)) {
@@ -91,10 +91,10 @@ export function isPositionInMap(position: Pos) {
 
 export function getClosest<T extends { pos: Pos }>(
   choices: T[],
-  position: Pos,
+  position: Pos
 ): T {
   return [...choices].sort(
-    (a, b) => getDistance(a.pos, position) - getDistance(b.pos, position),
+    (a, b) => getDistance(a.pos, position) - getDistance(b.pos, position)
   )[0];
 }
 

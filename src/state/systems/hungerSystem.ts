@@ -1,6 +1,6 @@
-import WrappedState from "~types/WrappedState";
-import { ResourceCode } from "~data/resources";
-import { FOOD_PER_COLONIST } from "~constants";
+import WrappedState from "../../types/WrappedState";
+import { ResourceCode } from "../../data/resources";
+import { FOOD_PER_COLONIST } from "../../constants";
 
 export default function hungerSystem(state: WrappedState): void {
   if (state.select.turnOfNight() === 0) {

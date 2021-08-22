@@ -1,11 +1,9 @@
-import { createStandardAction } from "typesafe-actions";
-import { registerHandler } from "~state/handleAction";
-import WrappedState from "~types/WrappedState";
-import { getPath } from "~lib/ai";
+import { createAction } from "typesafe-actions";
+import { registerHandler } from "../handleAction";
+import WrappedState from "../../types/WrappedState";
+import { getPath } from "../../lib/ai";
 
-const setAutoMovePathToCursor = createStandardAction(
-  "SET_AUTO_MOVE_PATH_TO_CURSOR",
-)();
+const setAutoMovePathToCursor = createAction("SET_AUTO_MOVE_PATH_TO_CURSOR")();
 export default setAutoMovePathToCursor;
 
 function setAutoMovePathToCursorHandler(state: WrappedState) {

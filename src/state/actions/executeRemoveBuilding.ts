@@ -1,17 +1,15 @@
-import { createStandardAction } from "typesafe-actions";
-import { registerHandler } from "~state/handleAction";
-import { Pos } from "~types";
-import WrappedState from "~types/WrappedState";
-import { arePositionsEqual } from "~lib/geometry";
+import { createAction } from "typesafe-actions";
+import { registerHandler } from "../handleAction";
+import { Pos } from "../../types";
+import WrappedState from "../../types/WrappedState";
+import { arePositionsEqual } from "../../lib/geometry";
 
-const executeRemoveBuilding = createStandardAction("EXECUTE_REMOVE_BUILDING")<
-  Pos
->();
+const executeRemoveBuilding = createAction("EXECUTE_REMOVE_BUILDING")<Pos>();
 export default executeRemoveBuilding;
 
 function executeRemoveBuildingHandler(
   state: WrappedState,
-  action: ReturnType<typeof executeRemoveBuilding>,
+  action: ReturnType<typeof executeRemoveBuilding>
 ): void {
   const removingTarget = state.select
     .entitiesWithComps("pos", "building")

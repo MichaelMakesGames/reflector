@@ -2,9 +2,8 @@
   "name": "reflector",
   "version": "2.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
-    "start": "parcel --no-hmr src/index.html",
+    "start": "parcel serve src/index.html",
     "test": "npm run format:check && npm run lint:check && npm run test:types",
     "test:types": "tsc",
     "build": "parcel build src/index.html --public-url ./",
@@ -15,20 +14,21 @@
   },
   "author": "",
   "license": "GPL",
-  "browserslist": [
-    "last 2 chrome versions",
-    "last 2 firefox versions"
-  ],
-  "prettier": {
-    "trailingComma": "all"
-  },
   "eslintConfig": {
     "extends": [
       "airbnb-typescript",
       "prettier"
     ],
+    "parserOptions": {
+      "project": [
+        "./tsconfig.json"
+      ]
+    },
+    "ignorePatterns": [
+      "tailwind.config.js"
+    ],
     "rules": {
-      "no-use-before-define": [
+      "@typescript-eslint/no-use-before-define": [
         "error",
         {
           "functions": false
@@ -46,6 +46,7 @@
           "message": "`with` is disallowed in strict mode because it makes code impossible to predict and optimize."
         }
       ],
+      "arrow-body-style": "off",
       "no-console": "off",
       "no-else-return": "off",
       "prefer-destructuring": "off",
@@ -63,58 +64,61 @@
       "react/require-default-props": "off",
       "react/jsx-one-expression-per-line": "off",
       "react/jsx-indent": "off",
-      "react/jsx-wrap-multilines": "off"
+      "react/jsx-wrap-multilines": "off",
+      "react/jsx-props-no-spreading": "off"
     }
   },
   "devDependencies": {
-    "@babel/core": "^7.8.4",
-    "@fullhuman/postcss-purgecss": "^2.0.6",
+    "@parcel/resolver-glob": "^2.0.0-nightly.2338",
+    "@parcel/transformer-image": "^2.0.0-rc.0",
+    "@types/classnames": "^2.3.1",
     "@types/howler": "^2.2.1",
     "@types/nanoid": "^2.0.0",
     "@types/priorityqueuejs": "^1.0.1",
-    "@types/react": "^16.9.2",
-    "@types/react-beautiful-dnd": "^13.0.0",
-    "@types/react-dom": "^16.9.0",
-    "@types/react-modal": "^3.10.4",
-    "@types/react-redux": "^7.1.2",
-    "@typescript-eslint/eslint-plugin": "^2.3.0",
-    "@typescript-eslint/parser": "^2.3.0",
-    "eslint": "^5.16.0",
-    "eslint-config-airbnb-typescript": "^4.0.1",
-    "eslint-config-prettier": "^6.3.0",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-react": "^7.14.3",
-    "parcel-bundler": "^1.12.4",
-    "prettier": "^2.0.2",
-    "typescript": "^3.7.5"
+    "@types/react": "^17.0.16",
+    "@types/react-beautiful-dnd": "^13.1.1",
+    "@types/react-dom": "^17.0.9",
+    "@types/react-modal": "^3.12.1",
+    "@types/react-redux": "^7.1.18",
+    "@typescript-eslint/eslint-plugin": "^4.29.0",
+    "@typescript-eslint/parser": "^4.29.0",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-typescript": "^12.3.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.24.0",
+    "parcel": "^2.0.0-rc.0",
+    "prettier": "^2.3.2",
+    "typescript": "^4.3.5"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.2.5",
-    "@tippyjs/react": "^4.1.0",
-    "@types/classnames": "^2.2.9",
-    "classnames": "^2.2.6",
+    "@tippyjs/react": "^4.2.5",
+    "autoprefixer": "^10.3.1",
+    "classnames": "^2.3.1",
     "has": "^1.0.3",
-    "howler": "^2.2.1",
-    "idb-keyval": "^3.2.0",
-    "nanoid": "^2.1.1",
+    "howler": "^2.2.3",
+    "idb-keyval": "^5.1.3",
+    "nanoid": "^3.1.23",
     "notyf": "^3.7.0",
-    "pixi-particles": "^4.2.0",
-    "pixi.js": "^5.1.3",
+    "pixi-particles": "^4.3.1",
+    "pixi.js": "^6.1.1",
+    "postcss": "^8.3.6",
+    "postcss-cli": "^8.3.1",
     "priorityqueuejs": "^2.0.0",
-    "react": "^16.9.0",
-    "react-beautiful-dnd": "^13.0.0",
-    "react-dom": "^16.9.0",
+    "react": "^17.0.2",
+    "react-beautiful-dnd": "^13.1.0",
+    "react-dom": "^17.0.2",
     "react-draggable": "^4.4.3",
-    "react-intl": "^5.10.16",
-    "react-modal": "^3.11.1",
-    "react-redux": "^7.1.1",
-    "redux": "^4.0.4",
-    "redux-devtools-extension": "^2.13.8",
-    "rot-js": "^2.1.1",
-    "tailwindcss": "^2.0.2",
-    "tippy.js": "^6.2.6",
-    "ts-toolbelt": "^4.10.21",
-    "typesafe-actions": "^4.4.2"
+    "react-intl": "^5.20.7",
+    "react-modal": "^3.14.3",
+    "react-redux": "^7.2.4",
+    "redux": "^4.1.1",
+    "redux-devtools-extension": "^2.13.9",
+    "rot-js": "^2.2.0",
+    "tailwindcss": "^2.2.7",
+    "tippy.js": "^6.3.1",
+    "ts-toolbelt": "^9.6.0",
+    "typesafe-actions": "^5.1.0"
   }
 }

@@ -1,15 +1,15 @@
-import WrappedState from "~types/WrappedState";
-import { areConditionsMet } from "~lib/conditions";
+import WrappedState from "../../types/WrappedState";
+import { areConditionsMet } from "../../lib/conditions";
 
 export default function colorToggleSystem(state: WrappedState): void {
   for (const entity of state.select.entitiesWithComps(
     "colorToggle",
-    "display",
+    "display"
   )) {
     const conditionsMet = areConditionsMet(
       state,
       entity,
-      ...entity.colorToggle.conditions,
+      ...entity.colorToggle.conditions
     );
     const newColor = conditionsMet
       ? entity.colorToggle.trueColor

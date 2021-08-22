@@ -1,15 +1,15 @@
 import { RNG } from "rot-js";
-import { createStandardAction } from "typesafe-actions";
-import audio from "~lib/audio";
-import { registerHandler } from "~state/handleAction";
-import WrappedState from "~types/WrappedState";
+import { createAction } from "typesafe-actions";
+import audio from "../../lib/audio";
+import { registerHandler } from "../handleAction";
+import WrappedState from "../../types/WrappedState";
 
-const fireWeapon = createStandardAction("FIRE_WEAPON")();
+const fireWeapon = createAction("FIRE_WEAPON")();
 export default fireWeapon;
 
 function fireWeaponHandler(
   state: WrappedState,
-  action: ReturnType<typeof fireWeapon>,
+  action: ReturnType<typeof fireWeapon>
 ): void {
   if (!state.select.isWeaponActive()) return;
   if (!state.select.player()) return;
@@ -49,7 +49,7 @@ function fireWeaponHandler(
       // "laser_shot_4",
       // "laser_shot_5",
       // "laser_shot_6",
-    ]) || "",
+    ]) || ""
   );
 
   state.act.playerTookTurn();

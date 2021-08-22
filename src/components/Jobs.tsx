@@ -2,18 +2,18 @@ import Tippy from "@tippyjs/react";
 import React, { useContext, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { useDispatch, useSelector } from "react-redux";
-import jobTypes, { JobTypeCode } from "~data/jobTypes";
-import actions from "~state/actions";
-import selectors from "~state/selectors";
-import { RawState } from "~types";
+import jobTypes, { JobTypeCode } from "../data/jobTypes";
+import actions from "../state/actions";
+import selectors from "../state/selectors";
+import { RawState } from "../types";
 import Warning from "./Warning";
-import colonistStatuses, { ColonistStatusCode } from "~data/colonistStatuses";
+import colonistStatuses, { ColonistStatusCode } from "../data/colonistStatuses";
 import Icons from "./Icons";
-import colors from "~colors";
+import colors from "../colors";
 import { HotkeyGroup, useControl } from "./HotkeysProvider";
-import { ControlCode } from "~types/ControlCode";
+import { ControlCode } from "../types/ControlCode";
 import Kbd from "./Kbd";
-import { SettingsContext } from "~contexts";
+import { SettingsContext } from "../contexts";
 
 export default function Jobs() {
   const dispatch = useDispatch();
@@ -63,7 +63,7 @@ export default function Jobs() {
         dispatch(actions.increaseJobPriority(selectedJob));
       } else if (focusedJob) {
         const focusedJobIndex = orderedJobTypes.findIndex(
-          (j) => j.code === focusedJob,
+          (j) => j.code === focusedJob
         );
         const newIndex = focusedJobIndex - 1;
         if (orderedJobTypes[newIndex]) {
@@ -81,7 +81,7 @@ export default function Jobs() {
         dispatch(actions.decreaseJobPriority(selectedJob));
       } else if (focusedJob) {
         const focusedJobIndex = orderedJobTypes.findIndex(
-          (j) => j.code === focusedJob,
+          (j) => j.code === focusedJob
         );
         const newIndex = focusedJobIndex + 1;
         if (orderedJobTypes[newIndex]) {
@@ -128,7 +128,7 @@ export default function Jobs() {
               actions.setJobPriority({
                 jobType: e.draggableId as JobTypeCode,
                 priority: e.destination.index + 1,
-              }),
+              })
             );
           }
         }}
@@ -171,19 +171,19 @@ function JobRow({
 }) {
   const jobType = jobTypes[code];
   const numEmployed = useSelector((state: RawState) =>
-    selectors.numberEmployed(state, code),
+    selectors.numberEmployed(state, code)
   );
   const employedColonists = useSelector((state: RawState) =>
-    selectors.colonistsEmployedInJobType(state, code),
+    selectors.colonistsEmployedInJobType(state, code)
   );
   const isMissingResources = employedColonists.some(
-    (e) => e.colonist.status === ColonistStatusCode.MissingResources,
+    (e) => e.colonist.status === ColonistStatusCode.MissingResources
   );
   const numDisabled = useSelector((state: RawState) =>
-    selectors.numberOfDisabledJobs(state, code),
+    selectors.numberOfDisabledJobs(state, code)
   );
   const max = useSelector((state: RawState) =>
-    selectors.maxNumberEmployed(state, code),
+    selectors.maxNumberEmployed(state, code)
   );
   // const priority = useSelector((state: RawState) =>
   //   selectors.jobPriority(state, code),
@@ -266,7 +266,7 @@ function JobRow({
                     <tbody>
                       {Object.values(colonistStatuses).map((status) => {
                         const count = employedColonists.filter(
-                          (e) => e.colonist.status === status.code,
+                          (e) => e.colonist.status === status.code
                         ).length;
                         if (count === 0) return null;
                         return (

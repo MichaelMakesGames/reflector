@@ -1,5 +1,5 @@
 import { getType } from "typesafe-actions";
-import { Action, RawState } from "~/types";
+import { Action, RawState } from "../types";
 import actions from "./actions";
 import { createInitialState } from "./initialState";
 import { processTutorials } from "../lib/tutorials";
@@ -18,7 +18,7 @@ const AUTO_MOVE_ALLOW_LIST: string[] = [
 
 export default function reducer(
   state: RawState = createInitialState({ completedTutorials: [] }),
-  action: Action,
+  action: Action
 ): RawState {
   const wrappedState = wrapState(state);
 

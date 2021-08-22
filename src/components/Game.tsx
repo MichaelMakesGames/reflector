@@ -1,6 +1,6 @@
 /* global document */
 import React, { useEffect } from "react";
-import colors from "~colors";
+import colors from "../colors";
 import BottomMenu from "./BottomMenu";
 import GameMap from "./GameMap";
 import Header from "./Header";
@@ -11,7 +11,7 @@ import LoadGame from "./LoadGame";
 import Resources from "./Resources";
 import Status from "./Status";
 import GameOver from "./GameOver";
-import { TILE_SIZE, MAP_WIDTH, MAP_CSS_WIDTH } from "~constants";
+import { TILE_SIZE, MAP_WIDTH, MAP_CSS_WIDTH } from "../constants";
 import Introduction from "./Introduction";
 import HotkeysProvider from "./HotkeysProvider";
 import Tutorials from "./Tutorials";
@@ -19,7 +19,7 @@ import Tutorials from "./Tutorials";
 export default function Game() {
   useEffect(() => {
     Object.entries(colors).forEach(([color, value]) =>
-      document.body.style.setProperty(`--${color}`, value),
+      document.body.style.setProperty(`--${color}`, value)
     );
   }, []);
 

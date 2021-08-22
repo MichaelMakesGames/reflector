@@ -1,5 +1,5 @@
-import { PLAYER_ID } from "~/constants";
-import WrappedState from "~types/WrappedState";
+import { PLAYER_ID } from "../constants";
+import WrappedState from "../types/WrappedState";
 import generateMap from "./generateMap";
 
 export default function makeLevel(state: WrappedState): WrappedState {
@@ -7,7 +7,7 @@ export default function makeLevel(state: WrappedState): WrappedState {
     state.select
       .entityList()
       .filter((e) => e.pos && e.id !== PLAYER_ID)
-      .map((e) => e.id),
+      .map((e) => e.id)
   );
   for (const entity of generateMap()) {
     state.act.addEntity(entity);

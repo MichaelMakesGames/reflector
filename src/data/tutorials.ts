@@ -1,12 +1,11 @@
 import { getType } from "typesafe-actions";
-import actions from "~state/actions";
-import selectors from "~state/selectors";
-import { ControlCode } from "~types/ControlCode";
-import { Tutorial } from "~types/Tutorial";
-import { TutorialId } from "~types/TutorialId";
+import selectors from "../state/selectors";
+import { ControlCode } from "../types/ControlCode";
+import { Tutorial } from "../types/Tutorial";
+import { TutorialId } from "../types/TutorialId";
 import { BuildingCategoryCode } from "./buildingCategories";
 import { ResourceCode } from "./resources";
-import { RawState } from "~types";
+import { RawState } from "../types";
 
 const tutorials: Record<TutorialId, Tutorial> = {
   [TutorialId.Basics]: {
@@ -16,17 +15,19 @@ const tutorials: Record<TutorialId, Tutorial> = {
       {
         text: "tutorials.basics.0",
         checkForCompletion: (prevState, nextState, action) => {
-          return ([
-            getType(actions.move),
-            getType(actions.autoMove),
-          ] as string[]).includes(action.type);
+          return (
+            [
+              getType(nextState.actions.move),
+              getType(nextState.actions.autoMove),
+            ] as string[]
+          ).includes(action.type);
         },
       },
       {
         text: "tutorials.basics.1",
         checkForCompletion: (prevState, nextState, action) => {
           return (
-            action.type === getType(actions.blueprintSelect) &&
+            action.type === getType(nextState.actions.blueprintSelect) &&
             action.payload === "BLUEPRINT_FARM"
           );
         },
@@ -129,19 +130,19 @@ const tutorials: Record<TutorialId, Tutorial> = {
       {
         text: "tutorials.combat.1",
         checkForCompletion: (prevState, nextState, action) =>
-          action.type === getType(actions.targetWeapon),
+          action.type === getType(nextState.actions.targetWeapon),
         elementHighlightSelectors: [`#AIMING_ARROWS`],
       },
       {
         text: "tutorials.combat.2",
         checkForCompletion: (prevState, nextState, action) => {
           return Boolean(
-            action.type === getType(actions.addEntity) &&
+            action.type === getType(nextState.actions.addEntity) &&
               action.payload.reflector &&
               action.payload.pos &&
               nextState.select
                 .entitiesAtPosition(action.payload.pos)
-                .some((e) => e.laser),
+                .some((e) => e.laser)
           );
         },
       },
@@ -149,10 +150,10 @@ const tutorials: Record<TutorialId, Tutorial> = {
         text: "tutorials.combat.3",
         checkForCompletion: (prevState, nextState, action) => {
           return Boolean(
-            action.type === getType(actions.addEntity) &&
+            action.type === getType(nextState.actions.addEntity) &&
               action.payload.reflector &&
               action.payload.pos &&
-              nextState.select.entitiesWithComps("reflector").length >= 2,
+              nextState.select.entitiesWithComps("reflector").length >= 2
           );
         },
       },
@@ -160,21 +161,21 @@ const tutorials: Record<TutorialId, Tutorial> = {
         text: "tutorials.combat.4",
         checkForCompletion: (prevState, nextState, action) => {
           return Boolean(
-            action.type === getType(actions.rotateEntity) &&
-              action.payload.reflector,
+            action.type === getType(nextState.actions.rotateEntity) &&
+              action.payload.reflector
           );
         },
       },
       {
         text: "tutorials.combat.5",
         checkForCompletion: (prevState, nextState, action) => {
-          return action.type === getType(actions.removeReflector);
+          return action.type === getType(nextState.actions.removeReflector);
         },
       },
       {
         text: "tutorials.combat.6",
         checkForCompletion: (prevState, nextState, action) => {
-          return action.type === getType(actions.fireWeapon);
+          return action.type === getType(nextState.actions.fireWeapon);
         },
         elementHighlightSelectors: [
           `[data-control-code="${ControlCode.Fire}"]`,
@@ -219,9 +220,9 @@ const tutorials: Record<TutorialId, Tutorial> = {
         text: "tutorials.jobPriorities.0",
         checkForCompletion: (prevState, nextState, action) => {
           const allowedActionTypes: string[] = [
-            getType(actions.setJobPriority),
-            getType(actions.increaseJobPriority),
-            getType(actions.decreaseJobPriority),
+            getType(nextState.actions.setJobPriority),
+            getType(nextState.actions.increaseJobPriority),
+            getType(nextState.actions.decreaseJobPriority),
           ];
           return allowedActionTypes.includes(action.type);
         },
@@ -231,7 +232,7 @@ const tutorials: Record<TutorialId, Tutorial> = {
         text: "tutorials.jobPriorities.1",
         checkForCompletion: (prevState, nextState, action) => {
           const allowedActionTypes: string[] = [
-            getType(actions.toggleDisabled),
+            getType(nextState.actions.toggleDisabled),
           ];
           return allowedActionTypes.includes(action.type);
         },
@@ -253,7 +254,7 @@ const tutorials: Record<TutorialId, Tutorial> = {
       {
         text: "tutorials.deconstruct.0",
         checkForCompletion: (prevState, nextState, action) =>
-          action.type === getType(actions.executeRemoveBuilding),
+          action.type === getType(nextState.actions.executeRemoveBuilding),
         isDismissible: true,
       },
       {

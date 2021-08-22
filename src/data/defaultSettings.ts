@@ -1,4 +1,4 @@
-import Settings from "~types/Settings";
+import Settings from "../types/Settings";
 import { ControlCode } from "../types/ControlCode";
 
 const defaultSettings: Settings = {

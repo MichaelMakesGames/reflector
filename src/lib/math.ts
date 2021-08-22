@@ -12,11 +12,11 @@ export function rangeTo(to: number): number[] {
 
 export function calcPercentile(
   sortedArray: number[],
-  percentile: number,
+  percentile: number
 ): number {
   const index = Math.min(
     sortedArray.length,
-    Math.max(0, Math.round((sortedArray.length * percentile) / 100)),
+    Math.max(0, Math.round((sortedArray.length * percentile) / 100))
   );
   return sortedArray[index];
 }

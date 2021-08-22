@@ -1,28 +1,12 @@
 const colors = require("./src/data/colors.json");
 
 module.exports = {
-  purge: false,
+  mode: "jit",
+  purge: ["./src/index.html", "./src/**/*.{ts,tsx}"],
   theme: {
     colors: {
       ...colors,
-      // ...palette,
     },
-    extend: {},
   },
-  variants: [
-    "responsive",
-    "group-hover",
-    "group-focus",
-    "focus-within",
-    "first",
-    "last",
-    "odd",
-    "even",
-    "hover",
-    "focus",
-    "active",
-    "visited",
-    "disabled",
-  ],
   plugins: [],
 };

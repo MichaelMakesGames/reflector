@@ -1,18 +1,18 @@
-import { Required } from "Object/_api";
-import { createStandardAction } from "typesafe-actions";
-import renderer from "~/renderer";
-import { Entity } from "~/types";
-import { getPosKey } from "~lib/geometry";
-import { registerHandler } from "~state/handleAction";
-import WrappedState from "~types/WrappedState";
-import { retargetLaserOnReflectorChange } from "~lib/lasers";
+import { Required } from "ts-toolbelt/out/Object/Required";
+import { createAction } from "typesafe-actions";
+import renderer from "../../renderer";
+import { Entity } from "../../types";
+import { getPosKey } from "../../lib/geometry";
+import { registerHandler } from "../handleAction";
+import WrappedState from "../../types/WrappedState";
+import { retargetLaserOnReflectorChange } from "../../lib/lasers";
 
-const addEntity = createStandardAction("ADD_ENTITY")<Entity>();
+const addEntity = createAction("ADD_ENTITY")<Entity>();
 export default addEntity;
 
 function addEntityHandler(
   wrappedState: WrappedState,
-  action: ReturnType<typeof addEntity>,
+  action: ReturnType<typeof addEntity>
 ): void {
   let state = wrappedState.raw;
   const entity = action.payload;

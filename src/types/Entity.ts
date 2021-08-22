@@ -1,9 +1,11 @@
-import { Direction } from "./Direction";
-import { ResourceCode } from "~data/resources";
-import { JobTypeCode } from "~data/jobTypes";
-import { ColonistStatusCode } from "~data/colonistStatuses";
-import { SoundOptions } from "~lib/audio/Audio";
-import { EffectId } from "./EffectId";
+import type { Direction } from "./Direction";
+import type { ResourceCode } from "../data/resources";
+import type { JobTypeCode } from "../data/jobTypes";
+import type { ColonistStatusCode } from "../data/colonistStatuses";
+import type { SoundOptions } from "../lib/audio/Audio";
+import type { EffectId } from "./EffectId";
+import { ConditionName } from "./ConditionName";
+import { TemplateName } from "./TemplateName";
 
 export interface Pos {
   x: number;

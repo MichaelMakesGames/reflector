@@ -1,9 +1,9 @@
-import { Tuple, Object } from "ts-toolbelt";
-import { RawState } from "./RawState";
-import selectors from "~state/selectors";
-import actions from "~state/actions";
-import { Action } from "./Action";
-import { Entity } from "./Entity";
+import type { Tuple, Object } from "ts-toolbelt";
+import type { RawState } from "./RawState";
+import type selectors from "../state/selectors";
+import type actions from "../state/actions";
+import type { Action } from "./Action";
+import type { Entity } from "./Entity";
 
 type SelectBase = {
   [K in keyof typeof selectors]: (
@@ -11,7 +11,7 @@ type SelectBase = {
   ) => ReturnType<typeof selectors[K]>;
 };
 
-interface Select extends SelectBase {
+interface Select extends Omit<SelectBase, "entitiesWithComps"> {
   entitiesWithComps: <C extends keyof Entity>(
     ...comps: C[]
   ) => Object.Required<Entity, C>[];
@@ -28,5 +28,6 @@ export default interface WrappedState {
   setRaw: (state: RawState) => WrappedState;
   select: Select;
   act: Act;
+  actions: typeof actions;
   handle: (action: Action) => WrappedState;
 }

@@ -1,19 +1,19 @@
-import { createStandardAction } from "typesafe-actions";
-import { registerHandler } from "~state/handleAction";
-import WrappedState from "~types/WrappedState";
+import { createAction } from "typesafe-actions";
+import { registerHandler } from "../handleAction";
+import WrappedState from "../../types/WrappedState";
 
-const blueprintCancel = createStandardAction("BLUEPRINT_CANCEL")();
+const blueprintCancel = createAction("BLUEPRINT_CANCEL")();
 export default blueprintCancel;
 
 function blueprintCancelHandler(
   state: WrappedState,
-  action: ReturnType<typeof blueprintCancel>,
+  action: ReturnType<typeof blueprintCancel>
 ): void {
   state.act.removeEntities(
     state.select
       .entityList()
       .filter((e) => e.validMarker)
-      .map((e) => e.id),
+      .map((e) => e.id)
   );
   const entity = state.select.blueprint();
   if (!entity) return;

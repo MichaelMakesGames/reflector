@@ -1,10 +1,11 @@
+/* global document */
 import Tippy from "@tippyjs/react";
 import React, { ReactElement, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import renderer from "~renderer";
-import selectors from "~state/selectors";
-import { Pos } from "~types";
-import { getActionsAvailableAtPos, noFocusOnClick } from "~lib/controls";
+import renderer from "../renderer";
+import selectors from "../state/selectors";
+import { Pos } from "../types";
+import { getActionsAvailableAtPos, noFocusOnClick } from "../lib/controls";
 
 interface Props {
   pos: Pos | null;
@@ -33,6 +34,7 @@ export default function ContextMenu({ pos, onClose, children }: Props) {
         renderer.getClientRectFromPos(posRef.current || { x: 0, y: 0 })
       }
       offset={[0, 0]}
+      appendTo={document.body}
       content={
         <div>
           <ul className="flex flex-col">

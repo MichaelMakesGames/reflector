@@ -1,14 +1,14 @@
-import { createStandardAction } from "typesafe-actions";
-import { registerHandler } from "~state/handleAction";
-import { RawState } from "~types";
-import WrappedState from "~types/WrappedState";
+import { createAction } from "typesafe-actions";
+import { registerHandler } from "../handleAction";
+import { RawState } from "../../types";
+import WrappedState from "../../types/WrappedState";
 
-const undoTurn = createStandardAction("UNDO_TURN")();
+const undoTurn = createAction("UNDO_TURN")();
 export default undoTurn;
 
 function undoTurnHandler(
   state: WrappedState,
-  action: ReturnType<typeof undoTurn>,
+  action: ReturnType<typeof undoTurn>
 ) {
   if (state.raw.startOfLastTurn) {
     const stateToLoad: RawState = {

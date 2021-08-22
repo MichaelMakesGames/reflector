@@ -2,24 +2,23 @@
 import Tippy from "@tippyjs/react";
 import React, { useCallback, useContext, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  HotkeyGroup,
-  useControl,
-  ControlConfig,
-} from "~components/HotkeysProvider";
-import { SettingsContext } from "~contexts";
-import buildingCategories, { BuildingCategory } from "~data/buildingCategories";
-import { useBoolean } from "~hooks";
-import actions from "~state/actions";
-import selectors from "~state/selectors";
-import { ControlCode } from "~types/ControlCode";
-import { noFocusOnClick } from "~lib/controls";
-import { createEntityFromTemplate } from "~lib/entities";
-import notifications from "~lib/notifications";
+import { HotkeyGroup, useControl, ControlConfig } from "./HotkeysProvider";
+import { SettingsContext } from "../contexts";
+import buildingCategories, {
+  BuildingCategory,
+} from "../data/buildingCategories";
+import { useBoolean } from "../hooks";
+import actions from "../state/actions";
+import selectors from "../state/selectors";
+import { ControlCode } from "../types/ControlCode";
+import { noFocusOnClick } from "../lib/controls";
+import { createEntityFromTemplate } from "../lib/entities";
+import notifications from "../lib/notifications";
 import EntityPreview from "./EntityPreview";
 import Icons from "./Icons";
 import Kbd from "./Kbd";
 import ResourceAmount from "./ResourceAmount";
+import { TemplateName } from "../types/TemplateName";
 
 const buttonStyle: React.CSSProperties = { margin: "-1px -1px -1px 0" };
 const buttonClassName =
@@ -65,6 +64,7 @@ export default function BottomMenu() {
     code: ControlCode.Back,
     callback: cancel,
     group: HotkeyGroup.Main,
+    disabled: !blueprint,
   });
   useControl({
     code: ControlCode.RotateBuilding,
@@ -315,6 +315,7 @@ function BuildingCategoryMenu({
       onClickOutside={close}
       arrow={false}
       interactive
+      appendTo={document.body}
       content={
         isOpen ? (
           <div>

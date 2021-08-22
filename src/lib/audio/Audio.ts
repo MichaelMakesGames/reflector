@@ -1,8 +1,8 @@
 import { Howl, Howler } from "howler";
-import { getPosKey } from "~lib/geometry";
-import { Pos } from "~types";
 // @ts-ignore
-import audio from "../../assets/audio/*.webm"; // eslint-disable-line import/no-unresolved
+import audio from "url:../../assets/audio/*.webm"; // eslint-disable-line import/no-unresolved
+import { getPosKey } from "../geometry";
+import { Pos } from "../../types";
 
 export interface SoundOptions {
   rollOff?: number;
@@ -44,7 +44,7 @@ export default class Audio {
   playAtPos(
     soundName: string,
     pos: Pos,
-    options: SoundOptions = DEFAULT_OPTIONS,
+    options: SoundOptions = DEFAULT_OPTIONS
   ) {
     const sound = this.sounds[soundName];
     const id = sound.play();
@@ -61,7 +61,7 @@ export default class Audio {
         distanceModel: "inverse",
         panningModel: "HRTF",
       },
-      id,
+      id
     );
   }
 
@@ -84,7 +84,7 @@ export default class Audio {
   loopAtPos(
     soundName: string,
     pos: Pos,
-    options: SoundOptions = DEFAULT_OPTIONS,
+    options: SoundOptions = DEFAULT_OPTIONS
   ) {
     const key = Audio.makePositionalLoopKey(soundName, pos);
     if (!this.positionalLoops[key]) {
@@ -103,7 +103,7 @@ export default class Audio {
           distanceModel: "inverse",
           panningModel: "HRTF",
         },
-        id,
+        id
       );
     }
   }

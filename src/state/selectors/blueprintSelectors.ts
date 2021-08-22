@@ -1,4 +1,4 @@
-import { RawState } from "~types";
+import { RawState } from "../../types";
 import { entitiesWithComps } from "./entitySelectors";
 
 export function blueprint(state: RawState) {

@@ -1,7 +1,7 @@
 import React from "react";
-import resources, { ResourceCode } from "~data/resources";
 // @ts-ignore
-import tiles from "../assets/tiles/*.png";
+import tiles from "url:../assets/tiles/*.png";
+import resources, { ResourceCode } from "../data/resources";
 
 interface Props {
   resourceCode: ResourceCode;

@@ -1,5 +1,5 @@
-import { RawState } from "~types";
-import { TutorialId } from "~types/TutorialId";
+import type { RawState } from "../../types";
+import { TutorialId } from "../../types/TutorialId";
 
 export function tutorialsState(state: RawState) {
   return state.tutorials;

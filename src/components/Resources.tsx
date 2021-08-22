@@ -2,9 +2,9 @@ import Tippy from "@tippyjs/react";
 import React from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
-import resources, { Resource } from "~data/resources";
-import selectors from "~state/selectors";
-import { RawState } from "~types";
+import resources, { Resource } from "../data/resources";
+import selectors from "../state/selectors";
+import { RawState } from "../types";
 import ResourceIcon from "./ResourceIcon";
 
 export default function Resources() {
@@ -14,7 +14,7 @@ export default function Resources() {
       <table className="w-full">
         <thead className="hidden">
           <tr>
-            <th />
+            <th>Icon</th>
             <th>Resource</th>
             <th>Amount</th>
             <th>Change</th>
@@ -32,13 +32,13 @@ export default function Resources() {
 
 function ResourceRow({ resource }: { resource: Resource }) {
   const amount = useSelector((state: RawState) =>
-    selectors.resource(state, resource.code),
+    selectors.resource(state, resource.code)
   );
   const storage = useSelector((state: RawState) =>
-    selectors.storage(state, resource.code),
+    selectors.storage(state, resource.code)
   );
   const changes = useSelector((state: RawState) =>
-    selectors.resourceChange(state, resource.code),
+    selectors.resourceChange(state, resource.code)
   );
   const totalChange = changes
     .filter((change) => change.reason !== "Building")
@@ -72,7 +72,7 @@ function ResourceRow({ resource }: { resource: Resource }) {
                 <th className="text-left">Last Turn</th>
                 <th
                   className={`text-right pl-2 ${getChangeColorClass(
-                    totalChange,
+                    totalChange
                   )}`}
                 >
                   {formatNumber(totalChange, { signDisplay: "always" })}
@@ -83,7 +83,7 @@ function ResourceRow({ resource }: { resource: Resource }) {
                   <td className="text-left">{change.reason}</td>
                   <td
                     className={`text-right pl-2 ${getChangeColorClass(
-                      change.amount,
+                      change.amount
                     )}`}
                   >
                     {formatNumber(change.amount, { signDisplay: "always" })}

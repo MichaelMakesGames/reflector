@@ -7,7 +7,7 @@ import React, {
   useState,
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import renderer from "~/renderer";
+import renderer from "../renderer";
 import {
   DOWN,
   LEFT,
@@ -16,18 +16,17 @@ import {
   UP,
   MAP_WIDTH,
   MAP_HEIGHT,
-} from "~constants";
-import { SettingsContext } from "~contexts";
-import { useControl, HotkeyGroup } from "~components/HotkeysProvider";
-import actions from "~state/actions";
-import selectors from "~state/selectors";
-import { Pos, RawState } from "~types";
-import { ControlCode } from "~types/ControlCode";
-import { getQuickAction, noFocusOnClick } from "~lib/controls";
-import { arePositionsEqual } from "~lib/geometry";
+} from "../constants";
+import { SettingsContext } from "../contexts";
+import { useControl, HotkeyGroup } from "./HotkeysProvider";
+import actions from "../state/actions";
+import selectors from "../state/selectors";
+import { Pos, RawState } from "../types";
+import { ControlCode } from "../types/ControlCode";
+import { getQuickAction, noFocusOnClick } from "../lib/controls";
+import { arePositionsEqual } from "../lib/geometry";
 import ContextMenu from "./ContextMenu";
-import { useInterval } from "~hooks";
-import audio from "~lib/audio";
+import { useInterval } from "../hooks";
 
 export default function GameMap() {
   useEffect(() => {
@@ -46,7 +45,7 @@ export default function GameMap() {
   const playerPos = useSelector(selectors.playerPos);
   const state = useSelector(selectors.state);
   const isCursorInProjectorRange = useSelector((s: RawState) =>
-    selectors.isInProjectorRange(s, cursorPos),
+    selectors.isInProjectorRange(s, cursorPos)
   );
   const mousePosRef = useRef<Pos | null>(null);
 
@@ -177,6 +176,7 @@ export default function GameMap() {
       setContextMenuPos(null);
       if (cursorPos) dispatch(actions.setCursorPos(null));
     },
+    disabled: !cursorPos || isWeaponActive || hasActiveBlueprint,
   });
 
   useControl({
@@ -253,7 +253,7 @@ export default function GameMap() {
             if (mousePosRef.current) {
               const gamePos = renderer.getPosFromMouse(
                 mousePosRef.current.x,
-                mousePosRef.current.y,
+                mousePosRef.current.y
               );
               if (!cursorPos || !arePositionsEqual(cursorPos, gamePos)) {
                 dispatch(actions.setCursorPos(gamePos));

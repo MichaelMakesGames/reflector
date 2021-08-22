@@ -1,8 +1,8 @@
-import { createStandardAction } from "typesafe-actions";
-import { registerHandler } from "~state/handleAction";
-import WrappedState from "~types/WrappedState";
+import { createAction } from "typesafe-actions";
+import { registerHandler } from "../handleAction";
+import WrappedState from "../../types/WrappedState";
 
-const logEvent = createStandardAction("LOG_EVENT")<{
+const logEvent = createAction("LOG_EVENT")<{
   type: string;
   count?: number;
 }>();
@@ -10,7 +10,7 @@ export default logEvent;
 
 function logEventHandler(
   state: WrappedState,
-  action: ReturnType<typeof logEvent>,
+  action: ReturnType<typeof logEvent>
 ): void {
   const { type } = action.payload;
   const count = action.payload.count || 1;

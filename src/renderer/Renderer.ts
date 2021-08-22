@@ -1,11 +1,11 @@
-import nanoid from "nanoid";
-import { Required } from "Object/_api";
+import { nanoid } from "nanoid";
 import * as particles from "pixi-particles";
 import * as PIXI from "pixi.js";
-import colors from "~colors";
-import { PLAYER_ID, PRIORITY_BUILDING_DETAIL, UP } from "~constants";
-import { arePositionsEqual, getPositionToDirection } from "~lib/geometry";
-import { Display, Entity, Pos } from "~types";
+import { Required } from "ts-toolbelt/out/Object/Required";
+import colors from "../colors";
+import { PLAYER_ID, PRIORITY_BUILDING_DETAIL, UP } from "../constants";
+import { arePositionsEqual, getPositionToDirection } from "../lib/geometry";
+import { Display, Entity, Pos } from "../types";
 
 const BASE_SPEED = 3;
 
@@ -80,9 +80,9 @@ export default class Renderer {
           Object.entries(assets).map(([name, file]) => ({
             name,
             url: file.startsWith("/") ? `.${file}` : file,
-          })),
+          }))
         )
-        .load(resolve),
+        .load(resolve)
     );
     return this.loadPromise;
   }
@@ -95,18 +95,19 @@ export default class Renderer {
     const x = Math.max(Math.min(pos.x - this.gridWidth / 4, X_MAX), X_MIN);
     const y = Math.max(Math.min(pos.y - this.gridHeight / 4, Y_MAX), Y_MIN);
     this.zoomedIn = true;
-    this.app.stage.scale = new PIXI.Point(2, 2);
-    this.app.stage.position = new PIXI.Point(
-      -x * this.tileWidth * 2,
-      -y * this.tileHeight * 2,
-    );
+    this.app.stage.scale.x = 2;
+    this.app.stage.scale.y = 2;
+    this.app.stage.position.x = -x * this.tileWidth * 2;
+    this.app.stage.position.y = -y * this.tileHeight * 2;
     Object.values(this.renderEntities).forEach((e) => this.updateVisibility(e));
   }
 
   public zoomOut(): void {
     this.zoomedIn = false;
-    this.app.stage.scale = new PIXI.Point(1, 1);
-    this.app.stage.position = new PIXI.Point(0, 0);
+    this.app.stage.scale.x = 1;
+    this.app.stage.scale.y = 1;
+    this.app.stage.position.x = 0;
+    this.app.stage.position.y = 0;
     Object.values(this.renderEntities).forEach((e) => this.updateVisibility(e));
   }
 
@@ -148,10 +149,8 @@ export default class Renderer {
       background.lineStyle(0);
       background.drawRect(0, 0, this.tileWidth, this.tileHeight);
       background.endFill();
-      background.position = new PIXI.Point(
-        pos.x * this.tileWidth,
-        pos.y * this.tileHeight,
-      );
+      background.position.x = pos.x * this.tileWidth;
+      background.position.y = pos.y * this.tileHeight;
 
       this.renderEntities[entity.id].background = background;
       this.getLayer(display.priority).addChild(background);
@@ -170,7 +169,7 @@ export default class Renderer {
           this.setSpritePosition(
             renderEntity.sprite,
             renderEntity.pos,
-            renderEntity.displayComp,
+            renderEntity.displayComp
           );
         } else if (this.movementPaths.has(entity.id)) {
           (this.movementPaths.get(entity.id) || []).push(entity.pos);
@@ -181,7 +180,7 @@ export default class Renderer {
         if (renderEntity.background) {
           renderEntity.background.position.set(
             entity.pos.x * this.tileWidth,
-            entity.pos.y * this.tileHeight,
+            entity.pos.y * this.tileHeight
           );
         }
         if (entity.id === PLAYER_ID && this.zoomedIn) {
@@ -262,11 +261,11 @@ export default class Renderer {
     let sprite: PIXI.Sprite | PIXI.AnimatedSprite;
     if (typeof display.tile === "string") {
       sprite = new PIXI.Sprite(
-        PIXI.utils.TextureCache[display.tile || "unknown"],
+        PIXI.utils.TextureCache[display.tile || "unknown"]
       );
     } else {
       sprite = new PIXI.AnimatedSprite(
-        display.tile.map((tile) => PIXI.utils.TextureCache[tile || "unknown"]),
+        display.tile.map((tile) => PIXI.utils.TextureCache[tile || "unknown"])
       );
       (sprite as PIXI.AnimatedSprite).animationSpeed = display.speed || 0.2;
       (sprite as PIXI.AnimatedSprite).play();
@@ -347,7 +346,7 @@ export default class Renderer {
           display: entity.displayComp,
           pos: entity.pos,
           template: "NONE",
-        }),
+        })
       );
   }
 
@@ -548,7 +547,7 @@ export default class Renderer {
       new particles.Emitter(
         this.app.stage,
         [texture],
-        config,
+        config
       ).playOnceAndDestroy();
     });
   }
@@ -613,7 +612,7 @@ export default class Renderer {
       new particles.Emitter(
         this.app.stage,
         [texture],
-        config,
+        config
       ).playOnceAndDestroy();
     });
   }
@@ -623,8 +622,8 @@ export default class Renderer {
     this.loadPromise.then(() => {
       this.app.ticker.add((delta: number) =>
         Object.values(this.emitters).forEach((emitter) =>
-          emitter.update(delta / 60),
-        ),
+          emitter.update(delta / 60)
+        )
       );
       this.app.ticker.add((delta: number) => this.handleMovement(delta));
     });
@@ -641,7 +640,7 @@ export default class Renderer {
     const { pos } = renderEntity;
     path.push(
       { x: (pos.x + towardsPos.x) / 2, y: (pos.y + towardsPos.y) / 2 },
-      pos,
+      pos
     );
   }
 
@@ -656,7 +655,7 @@ export default class Renderer {
         const oldY = entity.sprite.y;
         const { x: destX, y: destY } = this.calcAppPos(
           path[0],
-          entity.displayComp,
+          entity.displayComp
         );
         const deltaX = destX - oldX;
         const deltaY = destY - oldY;

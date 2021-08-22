@@ -1,16 +1,17 @@
-import { Required } from "Object/_api";
-import { DOWN, LEFT, RIGHT, UP } from "~/constants";
-import { Direction, Entity, Pos } from "~/types";
-import colors from "~colors";
-import WrappedState from "~types/WrappedState";
+import { Required } from "ts-toolbelt/out/Object/Required";
+import { DOWN, LEFT, RIGHT, UP } from "../constants";
+import { Direction, Entity, Pos } from "../types";
+import colors from "../colors";
+import WrappedState from "../types/WrappedState";
 import { createEntityFromTemplate } from "./entities";
 import { getConstDir } from "./geometry";
+import { TemplateName } from "../types/TemplateName";
 
 export function createLaser(
   direction: Direction,
   strength: number,
   hit: boolean,
-  pos: Pos,
+  pos: Pos
 ): Entity {
   const color = colors.laser;
 
@@ -40,7 +41,7 @@ export function createLaser(
 export function reflect(
   previousDirection: Direction,
   reflectorType: "\\" | "/",
-  strength: number,
+  strength: number
 ): { direction: Direction; cosmeticTemplate: TemplateName } {
   const constPrevDir = getConstDir(previousDirection);
   let newDirection = constPrevDir;
@@ -58,7 +59,7 @@ export function reflect(
   const cosmeticTemplate = getReflectedTemplateName(
     strength,
     previousDirection,
-    newDirection,
+    newDirection
   );
   return { direction: newDirection, cosmeticTemplate };
 }
@@ -66,7 +67,7 @@ export function reflect(
 export function getSplitTemplateName(
   strength: number,
   direction: Direction,
-  splitterType: string,
+  splitterType: string
 ): TemplateName {
   if (splitterType === "advanced") {
     return "LASER_4SPLIT";
@@ -77,7 +78,7 @@ export function getSplitTemplateName(
 function getReflectedTemplateName(
   strength: number,
   from: Direction,
-  to: Direction,
+  to: Direction
 ): TemplateName {
   return `LASER_REFLECTED_${getReflectedOrientation(from, to)}` as TemplateName;
 }

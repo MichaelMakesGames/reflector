@@ -1,12 +1,13 @@
-import nanoid from "nanoid";
-import templates from "~/data/templates";
-import { Entity } from "~/types/Entity";
-import WrappedState from "~types/WrappedState";
+import { nanoid } from "nanoid";
+import templates from "../data/templates";
+import { Entity } from "../types/Entity";
+import { TemplateName } from "../types/TemplateName";
+import WrappedState from "../types/WrappedState";
 import { getPosKey } from "./geometry";
 
 export function createEntityFromTemplate(
   templateId: TemplateName,
-  additionalComps?: Partial<Entity>,
+  additionalComps?: Partial<Entity>
 ) {
   const template = templates[templateId];
   const parent: Entity = template.parentTemplate

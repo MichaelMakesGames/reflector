@@ -1,6 +1,6 @@
-import WrappedState from "~types/WrappedState";
-import { areConditionsMet } from "~lib/conditions";
-import renderer from "~renderer";
+import WrappedState from "../../types/WrappedState";
+import { areConditionsMet } from "../../lib/conditions";
+import renderer from "../../renderer";
 
 export default function emitterSystem(state: WrappedState): void {
   state.select.entitiesWithComps("smokeEmitter", "pos").forEach((entity) => {

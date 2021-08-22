@@ -1,8 +1,8 @@
 import Tippy from "@tippyjs/react";
 import React from "react";
 import { useSelector } from "react-redux";
-import { MINUTES_PER_TURN, NEW_COLONISTS_PER_DAY } from "~constants";
-import selectors from "~state/selectors";
+import { MINUTES_PER_TURN, NEW_COLONISTS_PER_DAY } from "../constants";
+import selectors from "../state/selectors";
 
 export default function Status() {
   const day = useSelector(selectors.day);
@@ -10,7 +10,7 @@ export default function Status() {
   const turnOfDay = useSelector(selectors.turnOfDay);
   const turnOfNight = useSelector(selectors.turnOfNight);
   const turnsUntilSunriseOrSunset = useSelector(
-    selectors.turnsUntilSunriseOrSunset,
+    selectors.turnsUntilSunriseOrSunset
   );
   const population = useSelector(selectors.population);
   const housingCapacity = useSelector(selectors.housingCapacity);

@@ -1,15 +1,15 @@
 /* global navigator */
-import actions from "~state/actions";
-import selectors from "~state/selectors";
-import wrapState from "~state/wrapState";
-import { Action, Pos, RawState } from "~types";
-import { ControlCode } from "~types/ControlCode";
+import actions from "../state/actions";
+import selectors from "../state/selectors";
+import wrapState from "../state/wrapState";
+import { Action, Pos, RawState } from "../types";
+import { ControlCode } from "../types/ControlCode";
 import { canPlaceReflector } from "./building";
 import { createEntityFromTemplate } from "./entities";
 
 export function getQuickAction(
   state: RawState,
-  pos: Pos | null,
+  pos: Pos | null
 ): null | { action: Action; label: string } {
   if (!pos) {
     return null;
@@ -21,7 +21,7 @@ export function getQuickAction(
   if (wrappedState.select.hasActiveBlueprint()) {
     const blueprint = wrappedState.select.blueprint();
     const entityToPlace = createEntityFromTemplate(
-      blueprint ? blueprint.template : "NONE",
+      blueprint ? blueprint.template : "NONE"
     );
     return {
       action: actions.blueprintBuild(),
@@ -76,7 +76,7 @@ export function getQuickAction(
   if (canPlaceReflector(wrappedState, pos)) {
     return {
       action: actions.addEntity(
-        createEntityFromTemplate("REFLECTOR_UP_RIGHT", { pos }),
+        createEntityFromTemplate("REFLECTOR_UP_RIGHT", { pos })
       ),
       label: "Place / Reflector",
     };
@@ -110,7 +110,7 @@ export interface ActionControl {
 
 export function getActionsAvailableAtPos(
   state: RawState,
-  pos: Pos,
+  pos: Pos
 ): ActionControl[] {
   if (selectors.hasActiveBlueprint(state)) return [];
   const results: ActionControl[] = [];
@@ -136,7 +136,7 @@ function addRebuildAction(state: RawState, pos: Pos, results: ActionControl[]) {
 function addDisableBuildingActions(
   state: RawState,
   pos: Pos,
-  results: ActionControl[],
+  results: ActionControl[]
 ) {
   const entitiesAtPos = selectors.entitiesAtPosition(state, pos);
   if (entitiesAtPos.some((e) => e.jobProvider)) {
@@ -153,7 +153,7 @@ function addDisableBuildingActions(
 function addRemoveBuildingAction(
   state: RawState,
   pos: Pos,
-  results: ActionControl[],
+  results: ActionControl[]
 ) {
   const entitiesAtPos = selectors.entitiesAtPosition(state, pos);
   if (entitiesAtPos.some((e) => e.building)) {
@@ -168,7 +168,7 @@ function addRemoveBuildingAction(
 function addReflectorActions(
   state: RawState,
   pos: Pos,
-  results: ActionControl[],
+  results: ActionControl[]
 ) {
   const wrappedState = wrapState(state);
   const player = selectors.player(state);
@@ -184,7 +184,7 @@ function addReflectorActions(
         action: reflectorAtPos
           ? actions.rotateEntity(reflectorAtPos)
           : actions.addEntity(
-              createEntityFromTemplate("REFLECTOR_UP_RIGHT", { pos }),
+              createEntityFromTemplate("REFLECTOR_UP_RIGHT", { pos })
             ),
       },
       {
@@ -193,9 +193,9 @@ function addReflectorActions(
         action: reflectorAtPos
           ? actions.rotateEntity(reflectorAtPos)
           : actions.addEntity(
-              createEntityFromTemplate("REFLECTOR_DOWN_RIGHT", { pos }),
+              createEntityFromTemplate("REFLECTOR_DOWN_RIGHT", { pos })
             ),
-      },
+      }
     );
   }
 
@@ -215,7 +215,7 @@ export function isMac() {
 }
 
 export function noFocusOnClick(
-  callback: (e: React.MouseEvent) => void,
+  callback: (e: React.MouseEvent) => void
 ): (e: React.MouseEvent) => void {
   return (e: React.MouseEvent) => {
     const target = e.currentTarget as HTMLElement | null;

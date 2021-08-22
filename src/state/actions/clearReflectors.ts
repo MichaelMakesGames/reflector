@@ -1,13 +1,13 @@
-import { createStandardAction } from "typesafe-actions";
-import { registerHandler } from "~state/handleAction";
-import WrappedState from "~types/WrappedState";
+import { createAction } from "typesafe-actions";
+import { registerHandler } from "../handleAction";
+import WrappedState from "../../types/WrappedState";
 
-const clearReflectors = createStandardAction("CLEAR_REFLECTORS")();
+const clearReflectors = createAction("CLEAR_REFLECTORS")();
 export default clearReflectors;
 
 function clearReflectorsHandler(
   state: WrappedState,
-  action: ReturnType<typeof clearReflectors>,
+  action: ReturnType<typeof clearReflectors>
 ): void {
   const reflectors = state.select.entitiesWithComps("reflector", "pos");
   reflectors.forEach((reflector) => {

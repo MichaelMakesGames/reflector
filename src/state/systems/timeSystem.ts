@@ -1,9 +1,9 @@
-import { TURNS_PER_DAY, TURNS_PER_NIGHT } from "~constants";
-import WrappedState from "~types/WrappedState";
-import { choose } from "~lib/rng";
-import renderer from "~renderer";
-import colors from "~colors";
-import audio from "~lib/audio";
+import { TURNS_PER_DAY, TURNS_PER_NIGHT } from "../../constants";
+import WrappedState from "../../types/WrappedState";
+import { choose } from "../../lib/rng";
+import renderer from "../../renderer";
+import colors from "../../colors";
+import audio from "../../lib/audio";
 
 export default function timeSystem(state: WrappedState): void {
   state.setRaw({

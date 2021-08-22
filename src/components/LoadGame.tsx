@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import renderer from "~renderer";
-import actions from "~state/actions";
-import selectors from "~state/selectors";
-import { RawState } from "~types";
-import { ControlCode } from "~types/ControlCode";
-import { load } from "~lib/gameSave";
+import renderer from "../renderer";
+import actions from "../state/actions";
+import selectors from "../state/selectors";
+import { RawState } from "../types";
+import { ControlCode } from "../types/ControlCode";
+import { load } from "../lib/gameSave";
 import HotkeyButton from "./HotkeyButton";
 import { HotkeyGroup } from "./HotkeysProvider";
 import Modal from "./Modal";

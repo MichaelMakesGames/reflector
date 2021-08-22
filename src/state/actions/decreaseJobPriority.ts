@@ -1,16 +1,16 @@
-import { createStandardAction } from "typesafe-actions";
-import { JobTypeCode } from "~data/jobTypes";
-import { registerHandler } from "~state/handleAction";
-import WrappedState from "~types/WrappedState";
+import { createAction } from "typesafe-actions";
+import { JobTypeCode } from "../../data/jobTypes";
+import { registerHandler } from "../handleAction";
+import WrappedState from "../../types/WrappedState";
 
-const decreaseJobPriority = createStandardAction("DECREASE_JOB_PRIORITY")<
-  JobTypeCode
->();
+const decreaseJobPriority = createAction(
+  "DECREASE_JOB_PRIORITY"
+)<JobTypeCode>();
 export default decreaseJobPriority;
 
 function decreaseJobPriorityHandler(
   state: WrappedState,
-  action: ReturnType<typeof decreaseJobPriority>,
+  action: ReturnType<typeof decreaseJobPriority>
 ) {
   const previousPriority = state.select.jobPriority(action.payload);
   const newPriority = previousPriority + 1;

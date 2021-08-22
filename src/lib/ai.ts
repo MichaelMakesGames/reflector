@@ -1,10 +1,10 @@
 /* eslint-disable import/prefer-default-export */
-import { Required } from "Object/_api";
+import { Required } from "ts-toolbelt/out/Object/Required";
 import PriorityQueue from "priorityqueuejs";
 import * as ROT from "rot-js";
-import { Direction, Entity, Pos } from "~/types";
-import renderer from "~renderer";
-import WrappedState from "~types/WrappedState";
+import { Direction, Entity, Pos } from "../types";
+import renderer from "../renderer";
+import WrappedState from "../types/WrappedState";
 import audio from "./audio";
 import { createEntityFromTemplate } from "./entities";
 import {
@@ -87,7 +87,7 @@ function aStar({
 function calculateTargetPriority(
   state: WrappedState,
   actor: Required<Entity, "ai" | "pos">,
-  targetPos: Pos,
+  targetPos: Pos
 ): number | null {
   const distance = getDistance(actor.pos, targetPos, true);
   const numberOfOtherAttackers = state.select
@@ -96,36 +96,36 @@ function calculateTargetPriority(
       (e) =>
         e.id !== actor.id &&
         e.ai.target &&
-        arePositionsEqual(e.ai.target, targetPos),
+        arePositionsEqual(e.ai.target, targetPos)
     ).length;
   const targetsAtPos = state.select
     .entitiesAtPosition(targetPos)
     .filter(
-      (e) => e.destructible && Number.isFinite(e.destructible.attackPriority),
+      (e) => e.destructible && Number.isFinite(e.destructible.attackPriority)
     );
   if (!targetsAtPos.length) return null;
   const prioritySum = sum(
     ...targetsAtPos.map(
-      (e) => (e.destructible && e.destructible.attackPriority) || 0,
-    ),
+      (e) => (e.destructible && e.destructible.attackPriority) || 0
+    )
   );
   return prioritySum - distance - numberOfOtherAttackers;
 }
 
 function findTarget(
   state: WrappedState,
-  actor: Required<Entity, "ai" | "pos">,
+  actor: Required<Entity, "ai" | "pos">
 ): Pos | null {
   const potentialTargets = state.select
     .entitiesWithComps("pos", "destructible")
     .filter(
-      (e) => e.destructible && Number.isFinite(e.destructible.attackPriority),
+      (e) => e.destructible && Number.isFinite(e.destructible.attackPriority)
     )
     .map((e) => e.pos);
   potentialTargets.sort(
     (a, b) =>
       (calculateTargetPriority(state, actor, b) as number) -
-      (calculateTargetPriority(state, actor, a) as number),
+      (calculateTargetPriority(state, actor, a) as number)
   );
   return potentialTargets[0] || null;
 }
@@ -133,7 +133,7 @@ function findTarget(
 function isPassable(
   state: WrappedState,
   actor: Entity,
-  entityAtDestination: Entity,
+  entityAtDestination: Entity
 ) {
   return (
     !entityAtDestination.blocking ||
@@ -145,10 +145,10 @@ function isPassable(
 function isDestructibleNonEnemy(
   state: WrappedState,
   actor: Entity,
-  entity: Entity,
+  entity: Entity
 ) {
   return Boolean(
-    entity.destructible && entity.destructible.attackPriority !== undefined,
+    entity.destructible && entity.destructible.attackPriority !== undefined
   );
 }
 
@@ -156,7 +156,7 @@ export function getDirectionTowardTarget(
   from: Pos,
   to: Pos,
   actor: Entity,
-  state: WrappedState,
+  state: WrappedState
 ): Direction | null {
   const aiEntities = state.select.entitiesWithComps("ai", "pos");
   const aiEntityIds = new Set(aiEntities.map((e) => e.id));
@@ -165,9 +165,9 @@ export function getDirectionTowardTarget(
       .map((e) =>
         e.ai.plannedActionDirection
           ? getPositionToDirection(e.pos, e.ai.plannedActionDirection)
-          : e.pos,
+          : e.pos
       )
-      .map(getPosKey),
+      .map(getPosKey)
   );
   const getCost = (pos: Pos) => {
     const nonAiEntitiesPosition = state.select
@@ -180,7 +180,7 @@ export function getDirectionTowardTarget(
         nonAiEntitiesPosition.every(
           (e) =>
             isPassable(state, actor, e) ||
-            isDestructibleNonEnemy(state, actor, e),
+            isDestructibleNonEnemy(state, actor, e)
         ));
 
     if (!passable) return Infinity;
@@ -188,8 +188,8 @@ export function getDirectionTowardTarget(
       (1 +
         Math.max(
           ...nonAiEntitiesPosition.map((e) =>
-            e.destructible ? e.destructible.movementCost || 1 : 0,
-          ),
+            e.destructible ? e.destructible.movementCost || 1 : 0
+          )
         )) *
       (actor.colonist && !nonAiEntitiesPosition.some((e) => e.road) ? 2 : 1)
     );
@@ -211,7 +211,7 @@ export function getPath(
   to: Pos,
   actor: Entity,
   state: WrappedState,
-  passableFunc = isPassable,
+  passableFunc = isPassable
 ): Pos[] | null {
   const passable = (x: number, y: number) =>
     arePositionsEqual(from, { x, y }) ||
@@ -232,7 +232,7 @@ export function getPath(
 
 export function executePlan(
   state: WrappedState,
-  entity: Required<Entity, "ai" | "pos">,
+  entity: Required<Entity, "ai" | "pos">
 ): void {
   const { ai, pos, id: entityId } = entity;
   if (ai.plannedAction === "MOVE_OR_ATTACK" && ai.plannedActionDirection) {
@@ -240,7 +240,7 @@ export function executePlan(
     const targets = state.select
       .entitiesAtPosition(targetPos)
       .filter(
-        (e) => e.destructible && e.destructible.attackPriority !== undefined,
+        (e) => e.destructible && e.destructible.attackPriority !== undefined
       );
     if (targets.length && ai.type !== "BURROWED") {
       audio.playAtPos(
@@ -251,7 +251,7 @@ export function executePlan(
           "alien_attack_4",
         ]) || "",
         pos,
-        { volume: 2 },
+        { volume: 2 }
       );
       renderer.bump(entityId, targetPos);
       targets.forEach((e) => state.act.destroy(e.id));
@@ -271,7 +271,7 @@ export function executePlan(
 
 export function clearPlan(
   state: WrappedState,
-  entity: Required<Entity, "ai">,
+  entity: Required<Entity, "ai">
 ): void {
   if (state.select.entityById(entity.id)) {
     state.act.updateEntity({
@@ -283,7 +283,7 @@ export function clearPlan(
 
 export function makePlan(
   state: WrappedState,
-  entity: Required<Entity, "ai" | "pos">,
+  entity: Required<Entity, "ai" | "pos">
 ): void {
   const { ai, pos } = entity;
   const target = findTarget(state, entity);

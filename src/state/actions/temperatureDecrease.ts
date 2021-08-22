@@ -1,16 +1,14 @@
-import { createStandardAction } from "typesafe-actions";
-import { registerHandler } from "~state/handleAction";
-import WrappedState from "~types/WrappedState";
-import effects from "~data/effects";
+import { createAction } from "typesafe-actions";
+import { registerHandler } from "../handleAction";
+import WrappedState from "../../types/WrappedState";
+import effects from "../../data/effects";
 
-const temperatureDecrease = createStandardAction("temperatureDecrease")<
-  string
->();
+const temperatureDecrease = createAction("temperatureDecrease")<string>();
 export default temperatureDecrease;
 
 function temperatureDecreaseHandler(
   state: WrappedState,
-  action: ReturnType<typeof temperatureDecrease>,
+  action: ReturnType<typeof temperatureDecrease>
 ): void {
   const entity = state.select.entityById(action.payload);
   if (!entity || !entity.temperature) return;

@@ -1,14 +1,15 @@
-import WrappedState from "~types/WrappedState";
-import { Entity } from "~types";
-import { getPositionToDirection } from "~lib/geometry";
-import { UP, RIGHT, DOWN, LEFT } from "~constants";
-import { EffectId } from "~types/EffectId";
-import { createEntityFromTemplate } from "~lib/entities";
+import WrappedState from "../types/WrappedState";
+import { Entity } from "../types";
+import { getPositionToDirection } from "../lib/geometry";
+import { UP, RIGHT, DOWN, LEFT } from "../constants";
+import { EffectId } from "../types/EffectId";
+import { createEntityFromTemplate } from "../lib/entities";
+import { TemplateName } from "../types/TemplateName";
 
 export type Effect = (
   state: WrappedState,
   actor?: Entity,
-  target?: Entity,
+  target?: Entity
 ) => void;
 
 const effects: Record<EffectId, Effect> = {
@@ -18,7 +19,7 @@ const effects: Record<EffectId, Effect> = {
       state.select
         .entitiesAtPosition(target.pos)
         .filter((e) => e.template === "UI_OVERHEATING")
-        .map((e) => e.id),
+        .map((e) => e.id)
     );
   },
 

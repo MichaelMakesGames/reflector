@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useBoolean } from "~hooks";
-import { useControl, HotkeyGroup } from "~components/HotkeysProvider";
-import selectors from "~state/selectors";
+import { useBoolean } from "../hooks";
+import { useControl, HotkeyGroup } from "./HotkeysProvider";
+import selectors from "../state/selectors";
 import Modal from "./Modal";
-import { ControlCode } from "~types/ControlCode";
+import { ControlCode } from "../types/ControlCode";
 import Kbd from "./Kbd";
 import HotkeyButton from "./HotkeyButton";
 

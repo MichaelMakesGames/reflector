@@ -1,6 +1,6 @@
-import actions from "~state/actions";
-import { Action, Entity } from "~types";
-import WrappedState from "~types/WrappedState";
+import actions from "../state/actions";
+import { Action, Entity } from "../types";
+import WrappedState from "../types/WrappedState";
 import { createEntityFromTemplate } from "./entities";
 
 const onDestroyEffects: {
@@ -21,7 +21,7 @@ const onDestroyEffects: {
               ...residence.housing,
               occupancy: residence.housing.occupancy - 1,
             },
-          }),
+          })
         );
       }
     }
@@ -35,7 +35,7 @@ const onDestroyEffects: {
               ...employment.jobProvider,
               numberEmployed: employment.jobProvider.numberEmployed - 1,
             },
-          }),
+          })
         );
       }
     }
@@ -45,7 +45,7 @@ const onDestroyEffects: {
   wall(state: WrappedState, entity: Entity) {
     return [
       actions.addEntity(
-        createEntityFromTemplate("BUILDING_WALL_DAMAGED", { pos: entity.pos }),
+        createEntityFromTemplate("BUILDING_WALL_DAMAGED", { pos: entity.pos })
       ),
     ];
   },
@@ -55,7 +55,7 @@ const onDestroyEffects: {
       actions.addEntity(
         createEntityFromTemplate("PLAYER_CORPSE", {
           pos: entity.pos,
-        }),
+        })
       ),
     ];
   },

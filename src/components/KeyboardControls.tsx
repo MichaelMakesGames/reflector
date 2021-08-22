@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
-import { SettingsContext } from "~contexts";
-import { ControlCode } from "~types/ControlCode";
+import { SettingsContext } from "../contexts";
+import { ControlCode } from "../types/ControlCode";
 import Kbd from "./Kbd";
 import Modal from "./Modal";
-import { useControl, HotkeyGroup } from "~components/HotkeysProvider";
+import { useControl, HotkeyGroup } from "./HotkeysProvider";
 import HotkeyButton from "./HotkeyButton";
 
 export default function KeyboardControls({ onClose }: { onClose: () => void }) {

@@ -1,13 +1,14 @@
-import { Required } from "Object/_api";
-import { PLAYER_ID } from "~constants";
-import { JobTypeCode } from "~data/jobTypes";
-import { Entity, Pos, RawState } from "~types";
+import { Required } from "ts-toolbelt/out/Object/Required";
+import { PLAYER_ID } from "../../constants";
+import { JobTypeCode } from "../../data/jobTypes";
+import { Entity, Pos, RawState } from "../../types";
 import {
   arePositionsEqual,
   getAdjacentPositions,
   getPosKey,
-} from "~lib/geometry";
-import { sum } from "~lib/math";
+} from "../../lib/geometry";
+import { sum } from "../../lib/math";
+import { TemplateName } from "../../types/TemplateName";
 
 export function entityList(state: RawState) {
   return Object.values(state.entities);
@@ -21,9 +22,11 @@ export function entitiesWithComps<C extends keyof Entity>(
     .map((comp) => state.entitiesByComp[comp] || new Set())
     .sort((a, b) => a.size - b.size);
   const [smallest, ...rest] = byComps;
-  return Array.from(smallest)
-    .filter((id) => rest.every((idSet) => idSet.has(id)))
-    .map((id) => state.entities[id]) as Required<Entity, C>[];
+  const ids = Array.from(smallest).filter((id) =>
+    rest.every((idSet) => idSet.has(id))
+  );
+  const entities = ids.map((id) => state.entities[id]);
+  return entities as unknown as Required<Entity, C>[];
 }
 
 export function entitiesWithTemplate(state: RawState, template: TemplateName) {
@@ -49,7 +52,7 @@ export function playerPos(state: RawState) {
 export function entitiesAtPosition(state: RawState, position: Pos) {
   const key = getPosKey(position);
   return Array.from(state.entitiesByPosition[key] || []).map(
-    (id) => state.entities[id],
+    (id) => state.entities[id]
   ) as Required<Entity, "pos">[];
 }
 
@@ -62,20 +65,20 @@ export function adjacentEntities(state: RawState, position: Pos) {
   return getAdjacentPositions(position).reduce<Entity[]>(
     (entities, adjacentPosition) =>
       entities.concat(entitiesAtPosition(state, adjacentPosition)),
-    [],
+    []
   );
 }
 
 export function isPositionBlocked(
   state: RawState,
   position: Pos,
-  exceptEntities: Entity[] = [],
+  exceptEntities: Entity[] = []
 ) {
   return entitiesAtPosition(state, position).some(
     (entity) =>
       entity.blocking &&
       entity.blocking.moving &&
-      !exceptEntities.includes(entity),
+      !exceptEntities.includes(entity)
   );
 }
 
@@ -85,16 +88,16 @@ export function colonists(state: RawState) {
 
 export function residence(
   state: RawState,
-  colonist: Required<Entity, "colonist">,
+  colonist: Required<Entity, "colonist">
 ) {
   return entitiesWithComps(state, "pos", "housing").find(
-    (e) => e.id === colonist.colonist.residence,
+    (e) => e.id === colonist.colonist.residence
   );
 }
 
 export function residents(state: RawState, entity: Entity) {
   return colonists(state).filter(
-    (colonist) => colonist.colonist.residence === entity.id,
+    (colonist) => colonist.colonist.residence === entity.id
   );
 }
 
@@ -116,13 +119,13 @@ export function homelessColonists(state: RawState) {
 
 export function residencesUnderCapacity(state: RawState) {
   return entitiesWithComps(state, "housing", "pos").filter(
-    (e) => e.housing.occupancy < e.housing.capacity,
+    (e) => e.housing.occupancy < e.housing.capacity
   );
 }
 
 export function employment(
   state: RawState,
-  colonist: Required<Entity, "colonist">,
+  colonist: Required<Entity, "colonist">
 ) {
   if (
     colonist.colonist.employment &&
@@ -139,7 +142,7 @@ export function employment(
 
 export function employees(state: RawState, jobProvider: Entity) {
   return colonists(state).filter(
-    (colonist) => colonist.colonist.employment === jobProvider.id,
+    (colonist) => colonist.colonist.employment === jobProvider.id
   );
 }
 
@@ -149,29 +152,29 @@ export function jobDisablers(state: RawState) {
 
 export function jobProviders(state: RawState, jobType?: JobTypeCode) {
   return entitiesWithComps(state, "jobProvider", "pos").filter(
-    (e) => !jobType || e.jobProvider.jobType === jobType,
+    (e) => !jobType || e.jobProvider.jobType === jobType
   );
 }
 
 export function enabledJobProviders(state: RawState, jobType?: JobTypeCode) {
   const disablers = jobDisablers(state);
   return jobProviders(state, jobType).filter((e) =>
-    disablers.map((d) => d.pos).every((pos) => !arePositionsEqual(pos, e.pos)),
+    disablers.map((d) => d.pos).every((pos) => !arePositionsEqual(pos, e.pos))
   );
 }
 
 export function disabledJobProviders(state: RawState, jobType?: JobTypeCode) {
   const disablers = jobDisablers(state);
   return jobProviders(state, jobType).filter((e) =>
-    disablers.map((d) => d.pos).some((pos) => arePositionsEqual(pos, e.pos)),
+    disablers.map((d) => d.pos).some((pos) => arePositionsEqual(pos, e.pos))
   );
 }
 
 export function numberOfDisabledJobs(state: RawState, jobType: JobTypeCode) {
   return sum(
     ...disabledJobProviders(state, jobType).map(
-      (e) => e.jobProvider.maxNumberEmployed,
-    ),
+      (e) => e.jobProvider.maxNumberEmployed
+    )
   );
 }
 
@@ -179,7 +182,7 @@ export function maxNumberEmployed(state: RawState, jobType?: JobTypeCode) {
   const providers = enabledJobProviders(state, jobType);
   return providers.reduce(
     (acc, cur) => acc + cur.jobProvider.maxNumberEmployed,
-    0,
+    0
   );
 }
 
@@ -187,13 +190,13 @@ export function numberEmployed(state: RawState, jobType: JobTypeCode) {
   const providers = jobProviders(state, jobType);
   return providers.reduce(
     (acc, cur) => acc + cur.jobProvider.numberEmployed,
-    0,
+    0
   );
 }
 
 export function colonistsEmployedInJobType(
   state: RawState,
-  jobType: JobTypeCode,
+  jobType: JobTypeCode
 ) {
   const providers = enabledJobProviders(state, jobType);
 

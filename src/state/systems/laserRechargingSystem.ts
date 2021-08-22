@@ -1,4 +1,4 @@
-import WrappedState from "~types/WrappedState";
+import WrappedState from "../../types/WrappedState";
 
 export default function laserRechargingSystem(state: WrappedState): void {
   const laserState = state.select.laserState();

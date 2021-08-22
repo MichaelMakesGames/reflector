@@ -1,8 +1,8 @@
-import { createStandardAction } from "typesafe-actions";
-import { registerHandler } from "~state/handleAction";
-import WrappedState from "~types/WrappedState";
+import { createAction } from "typesafe-actions";
+import { registerHandler } from "../handleAction";
+import WrappedState from "../../types/WrappedState";
 
-const resetTutorials = createStandardAction("RESET_TUTORIALS")();
+const resetTutorials = createAction("RESET_TUTORIALS")();
 export default resetTutorials;
 
 function resetTutorialsHandler(state: WrappedState): void {

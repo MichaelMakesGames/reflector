@@ -1,20 +1,20 @@
-import { Required } from "Object/_api";
+import { Required } from "ts-toolbelt/out/Object/Required";
 import React, { useCallback, useContext, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { HotkeyGroup, useControl } from "~components/HotkeysProvider";
-import { SettingsContext } from "~contexts";
-import colonistStatuses, { ColonistStatusCode } from "~data/colonistStatuses";
-import resources, { ResourceCode } from "~data/resources";
-import selectors from "~state/selectors";
-import wrapState from "~state/wrapState";
-import { Entity, RawState } from "~types";
-import { areConditionsMet } from "~lib/conditions";
+import { HotkeyGroup, useControl } from "./HotkeysProvider";
+import { SettingsContext } from "../contexts";
+import colonistStatuses, { ColonistStatusCode } from "../data/colonistStatuses";
+import resources, { ResourceCode } from "../data/resources";
+import selectors from "../state/selectors";
+import wrapState from "../state/wrapState";
+import { Entity, RawState } from "../types";
+import { areConditionsMet } from "../lib/conditions";
 import {
   ActionControl,
   getActionsAvailableAtPos,
   getQuickAction,
-} from "~lib/controls";
-import { getHumanReadablePosition } from "~lib/geometry";
+} from "../lib/controls";
+import { getHumanReadablePosition } from "../lib/geometry";
 import ResourceAmount from "./ResourceAmount";
 import Warning from "./Warning";
 
@@ -22,10 +22,12 @@ export default function Inspector() {
   const entitiesAtCursor = useSelector(selectors.entitiesAtCursor);
   const entitiesWithDescription =
     entitiesAtCursor &&
-    (entitiesAtCursor.filter((e) => e.description) as Required<
-      Entity,
-      "description"
-    >[]).sort((a, b) => {
+    (
+      entitiesAtCursor.filter((e) => e.description) as Required<
+        Entity,
+        "description"
+      >[]
+    ).sort((a, b) => {
       const aSortValue = a.display ? a.display.priority : Infinity;
       const bSortValue = b.display ? b.display.priority : Infinity;
       return bSortValue - aSortValue;
@@ -34,7 +36,7 @@ export default function Inspector() {
   const state = useSelector(selectors.state);
   const actions = useMemo(
     () => (cursorPos ? getActionsAvailableAtPos(state, cursorPos) : []),
-    [state, cursorPos],
+    [state, cursorPos]
   );
   const quickAction = getQuickAction(state, cursorPos);
   const warnings = entitiesAtCursor
@@ -46,7 +48,7 @@ export default function Inspector() {
   const blueprintFailedConditions =
     blueprint && blueprint.blueprint
       ? blueprint.blueprint.validityConditions.filter(
-          (vc) => !areConditionsMet(wrapState(state), blueprint, vc.condition),
+          (vc) => !areConditionsMet(wrapState(state), blueprint, vc.condition)
         )
       : [];
 
@@ -82,16 +84,16 @@ export default function Inspector() {
       )}
 
       {warnings.map((e) => (
-        <p key={e.id} className="text-yellow text-sm">
+        <div key={e.id} className="text-yellow text-sm">
           <Warning className="bg-yellow" /> {e.warning && e.warning.text}
-        </p>
+        </div>
       ))}
 
       {blueprintFailedConditions.length > 0 && (
-        <p className="text-red text-sm">
+        <div className="text-red text-sm">
           <Warning className="bg-red" />{" "}
           {blueprintFailedConditions[0].invalidMessage}
-        </p>
+        </div>
       )}
 
       {cursorPos && (
@@ -165,13 +167,13 @@ function InspectorEntity({
     entity.colonist
       ? (state: RawState) =>
           selectors.residence(state, entity as Required<Entity, "colonist">)
-      : selectors.nothing,
+      : selectors.nothing
   );
   const employment = useSelector(
     entity.colonist
       ? (state: RawState) =>
           selectors.employment(state, entity as Required<Entity, "colonist">)
-      : selectors.nothing,
+      : selectors.nothing
   );
   return (
     <li>

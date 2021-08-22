@@ -1,19 +1,19 @@
-import { Required } from "Object/_api";
-import { createStandardAction } from "typesafe-actions";
-import renderer from "~/renderer";
-import { registerHandler } from "~state/handleAction";
-import { Entity } from "~types";
-import WrappedState from "~types/WrappedState";
-import { getPosKey } from "~lib/geometry";
-import { retargetLaserOnReflectorChange } from "~lib/lasers";
-import audio from "~lib/audio";
+import { Required } from "ts-toolbelt/out/Object/Required";
+import { createAction } from "typesafe-actions";
+import renderer from "../../renderer";
+import { registerHandler } from "../handleAction";
+import { Entity } from "../../types";
+import WrappedState from "../../types/WrappedState";
+import { getPosKey } from "../../lib/geometry";
+import { retargetLaserOnReflectorChange } from "../../lib/lasers";
+import audio from "../../lib/audio";
 
-const removeEntities = createStandardAction("REMOVE_ENTITIES")<string[]>();
+const removeEntities = createAction("REMOVE_ENTITIES")<string[]>();
 export default removeEntities;
 
 function removeEntitiesHandler(
   wrappedState: WrappedState,
-  action: ReturnType<typeof removeEntities>,
+  action: ReturnType<typeof removeEntities>
 ): void {
   const { raw: state } = wrappedState;
   const entityIds = action.payload.filter((id) => state.entities[id]);
@@ -43,14 +43,13 @@ function removeEntitiesHandler(
       isRemovingReflector = true;
     }
     if (entity.pos && entity.smokeEmitter) {
-      (entity as Required<
-        Entity,
-        "smokeEmitter"
-      >).smokeEmitter.emitters.forEach((emitter) =>
+      (
+        entity as Required<Entity, "smokeEmitter">
+      ).smokeEmitter.emitters.forEach((emitter) =>
         renderer.removeSmoke(
           (entity as Required<Entity, "pos">).pos,
-          emitter.offset,
-        ),
+          emitter.offset
+        )
       );
     }
     if (entity.pos && entity.audioToggle) {

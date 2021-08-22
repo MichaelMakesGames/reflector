@@ -1,6 +1,6 @@
-import WrappedState from "~types/WrappedState";
-import { areConditionsMet } from "~lib/conditions";
-import { getDistance } from "~lib/geometry";
+import WrappedState from "../../types/WrappedState";
+import { areConditionsMet } from "../../lib/conditions";
+import { getDistance } from "../../lib/geometry";
 
 export default function reflectorSystem(state: WrappedState): void {
   const reflectors = state.select.entitiesWithComps("reflector", "pos");
@@ -13,12 +13,12 @@ export default function reflectorSystem(state: WrappedState): void {
     if (
       projectors
         .filter((projector) =>
-          areConditionsMet(state, projector, projector.projector.condition),
+          areConditionsMet(state, projector, projector.projector.condition)
         )
         .every(
           (projector) =>
             getDistance(projector.pos, reflector.pos) >
-            projector.projector.range,
+            projector.projector.range
         )
     ) {
       state.act.removeEntity(reflector.id);

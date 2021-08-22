@@ -1,4 +1,4 @@
-import WrappedState from "~types/WrappedState";
+import WrappedState from "../../types/WrappedState";
 import aimingSystem from "./aimingSystem";
 import aiSystem from "./aiSystem";
 import animationToggleSystem from "./animationToggleSystem";

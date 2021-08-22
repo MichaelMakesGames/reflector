@@ -1,9 +1,10 @@
 import React from "react";
-import templates from "~data/templates";
-import { createEntityFromTemplate } from "~lib/entities";
 // @ts-ignore
-import tiles from "../assets/tiles/*.png";
+import tiles from "url:../assets/tiles/*.png";
+import templates from "../data/templates";
+import { createEntityFromTemplate } from "../lib/entities";
 import colors from "../data/colors.json";
+import { TemplateName } from "../types/TemplateName";
 
 interface Props {
   templateName: TemplateName;

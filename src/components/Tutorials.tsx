@@ -4,18 +4,19 @@ import React, { useContext, useEffect, useState } from "react";
 import Draggable from "react-draggable";
 import { useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
-import { SettingsContext } from "~contexts";
-import tutorials from "~data/tutorials";
-import { useBoolean } from "~hooks";
-import actions from "~state/actions";
-import selectors from "~state/selectors";
-import { ControlCode } from "~types/ControlCode";
-import { TutorialId } from "~types/TutorialId";
-import { noFocusOnClick } from "~lib/controls";
+import { SettingsContext } from "../contexts";
+import tutorials from "../data/tutorials";
+import { useBoolean } from "../hooks";
+import actions from "../state/actions";
+import selectors from "../state/selectors";
+import { ControlCode } from "../types/ControlCode";
+import { TutorialId } from "../types/TutorialId";
+import { noFocusOnClick } from "../lib/controls";
 import EntityPreview from "./EntityPreview";
 import { HotkeyGroup, useControl } from "./HotkeysProvider";
 import Icons from "./Icons";
 import Kbd from "./Kbd";
+import { TemplateName } from "../types/TemplateName";
 
 export default function Tutorials() {
   const activeTutorials = useSelector(selectors.activeTutorials);
@@ -68,7 +69,7 @@ export default function Tutorials() {
     code: ControlCode.Up,
     callback: () =>
       setFocusedTutorialIndex(
-        (focusedTutorialIndex !== null ? focusedTutorialIndex : 1) - 1,
+        (focusedTutorialIndex !== null ? focusedTutorialIndex : 1) - 1
       ),
     group: HotkeyGroup.Tutorial,
     disabled: !isSomeTutorialFocused || focusedTutorialIndex === 0,
@@ -78,7 +79,7 @@ export default function Tutorials() {
     code: ControlCode.Down,
     callback: () =>
       setFocusedTutorialIndex(
-        (focusedTutorialIndex !== null ? focusedTutorialIndex : -1) + 1,
+        (focusedTutorialIndex !== null ? focusedTutorialIndex : -1) + 1
       ),
     group: HotkeyGroup.Tutorial,
     disabled:
@@ -281,7 +282,7 @@ function Tutorial({
               type="button"
               disabled={selectedStepIndex <= 0}
               onClick={noFocusOnClick(() =>
-                setSelectedStepIndex(selectedStepIndex - 1),
+                setSelectedStepIndex(selectedStepIndex - 1)
               )}
             >
               <Icons.ChevronLeft />
@@ -294,7 +295,7 @@ function Tutorial({
               type="button"
               disabled={selectedStepIndex >= stepIndex}
               onClick={noFocusOnClick(() =>
-                setSelectedStepIndex(selectedStepIndex + 1),
+                setSelectedStepIndex(selectedStepIndex + 1)
               )}
             >
               <Icons.ChevronRight />
@@ -305,7 +306,7 @@ function Tutorial({
               className="w-6 h-6 ml-1"
               type="button"
               onClick={noFocusOnClick(() =>
-                dispatch(actions.completeTutorial(tutorialId)),
+                dispatch(actions.completeTutorial(tutorialId))
               )}
             >
               <Icons.X />
@@ -376,6 +377,6 @@ function ElementHighlighter({
     };
 
     return cleanup;
-  }, elementSelectors);
+  }, [elementSelectors.join("|")]);
   return null;
 }

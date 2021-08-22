@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
-import { ControlCode } from "~types/ControlCode";
+import { ControlCode } from "../types/ControlCode";
 import { HotkeyGroup, useControl } from "./HotkeysProvider";
-import { SettingsContext } from "~contexts";
+import { SettingsContext } from "../contexts";
 import Kbd from "./Kbd";
-import { noFocusOnClick } from "~lib/controls";
-import audio from "~lib/audio";
+import { noFocusOnClick } from "../lib/controls";
+import audio from "../lib/audio";
 
 interface Props {
   label: string;

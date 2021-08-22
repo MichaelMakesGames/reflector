@@ -1,7 +1,7 @@
-import { Action } from "./Action";
-import { RawState } from "./RawState";
-import { TutorialId } from "./TutorialId";
-import WrappedState from "./WrappedState";
+import type { Action } from "./Action";
+import type { RawState } from "./RawState";
+import type { TutorialId } from "./TutorialId";
+import type WrappedState from "./WrappedState";
 
 export interface Tutorial {
   id: TutorialId;
@@ -15,7 +15,7 @@ export interface TutorialStep {
   checkForCompletion: (
     prevState: WrappedState,
     nextState: WrappedState,
-    action: Action,
+    action: Action
   ) => boolean;
   elementHighlightSelectors?: string[];
   isDismissible?: boolean;

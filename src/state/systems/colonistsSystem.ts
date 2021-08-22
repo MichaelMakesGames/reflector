@@ -1,24 +1,24 @@
-import { Required } from "Object/_api";
+import { Required } from "ts-toolbelt/out/Object/Required";
 import {
   PRIORITY_BUILDING_DETAIL,
   PRIORITY_UNIT,
   TURNS_PER_NIGHT,
-} from "~constants";
-import { ColonistStatusCode } from "~data/colonistStatuses";
-import resources, { ResourceCode } from "~data/resources";
-import { getDirectionTowardTarget } from "~lib/ai";
-import { createEntityFromTemplate } from "~lib/entities";
+} from "../../constants";
+import { ColonistStatusCode } from "../../data/colonistStatuses";
+import resources, { ResourceCode } from "../../data/resources";
+import { getDirectionTowardTarget } from "../../lib/ai";
+import { createEntityFromTemplate } from "../../lib/entities";
 import {
   arePositionsEqual,
   getAdjacentPositions,
   getClosest,
   getDistance,
-} from "~lib/geometry";
-import { rangeTo } from "~lib/math";
-import { choose } from "~lib/rng";
-import { Entity, Pos, JobProvider } from "~types";
-import WrappedState from "~types/WrappedState";
-import renderer from "~renderer";
+} from "../../lib/geometry";
+import { rangeTo } from "../../lib/math";
+import { choose } from "../../lib/rng";
+import { Entity, Pos, JobProvider } from "../../types";
+import WrappedState from "../../types/WrappedState";
+import renderer from "../../renderer";
 
 export default function colonistsSystem(state: WrappedState): void {
   if (!state.select.isNight() || state.select.isFirstTurnOfNight()) {
@@ -79,13 +79,13 @@ export default function colonistsSystem(state: WrappedState): void {
       .filter(
         (e) =>
           !jobDisablers.some((disabler) =>
-            arePositionsEqual(e.pos, disabler.pos),
-          ),
+            arePositionsEqual(e.pos, disabler.pos)
+          )
       )
       .sort(
         (a, b) =>
           state.select.jobPriority(a.jobProvider.jobType) -
-          state.select.jobPriority(b.jobProvider.jobType),
+          state.select.jobPriority(b.jobProvider.jobType)
       );
     for (let workPlace of workPlaces) {
       workPlace = state.select.entityById(workPlace.id) as typeof workPlace;
@@ -93,16 +93,16 @@ export default function colonistsSystem(state: WrappedState): void {
         workPlace.jobProvider.maxNumberEmployed -
         workPlace.jobProvider.numberEmployed;
       if (numEmptyJobs > 0) {
-        for (const _ of rangeTo(numEmptyJobs)) {
+        rangeTo(numEmptyJobs).forEach(() => {
           assignColonistToWorkPlace(state, workPlace);
-        }
+        });
       }
     }
 
     state.select.colonists().forEach((colonist) => {
       if (colonist.colonist.employment) {
         const employment = state.select.entityById(
-          colonist.colonist.employment,
+          colonist.colonist.employment
         ) as Required<Entity, "pos" | "jobProvider">;
         if (arePositionsEqual(employment.pos, colonist.pos)) {
           doWork(state, colonist);
@@ -123,7 +123,7 @@ export default function colonistsSystem(state: WrappedState): void {
 
 function clearResidence(
   state: WrappedState,
-  colonist: Required<Entity, "colonist" | "pos">,
+  colonist: Required<Entity, "colonist" | "pos">
 ) {
   if (
     colonist.colonist.residence &&
@@ -152,7 +152,7 @@ function clearResidence(
 
 function cleanEmployment(
   state: WrappedState,
-  colonist: Required<Entity, "colonist" | "pos">,
+  colonist: Required<Entity, "colonist" | "pos">
 ) {
   if (colonist.colonist.employment) {
     const employment = state.select.employment(colonist);
@@ -160,7 +160,7 @@ function cleanEmployment(
       const jobDisablers = state.select.jobDisablers();
       if (
         jobDisablers.some((disabler) =>
-          arePositionsEqual(disabler.pos, employment.pos),
+          arePositionsEqual(disabler.pos, employment.pos)
         )
       ) {
         state.act.updateEntity({
@@ -192,7 +192,7 @@ function cleanEmployment(
 
 function assignResidence(
   state: WrappedState,
-  colonist: Required<Entity, "colonist" | "pos">,
+  colonist: Required<Entity, "colonist" | "pos">
 ) {
   if (!colonist.colonist.residence) {
     const availableResidences = state.select
@@ -221,25 +221,25 @@ function assignResidence(
 function tryToMove(
   state: WrappedState,
   colonist: Required<Entity, "colonist" | "pos">,
-  pos: Pos,
+  pos: Pos
 ): boolean {
   const direction = getDirectionTowardTarget(
     colonist.pos,
     pos,
     colonist,
-    state,
+    state
   );
   if (direction) {
     state.act.move({ entityId: colonist.id, ...direction });
     const updatedColonist = state.select.entityById(
-      colonist.id,
+      colonist.id
     ) as typeof colonist;
     if (state.select.hasRoad(updatedColonist.pos)) {
       const secondDirection = getDirectionTowardTarget(
         updatedColonist.pos,
         pos,
         colonist,
-        state,
+        state
       );
       if (secondDirection)
         state.act.move({ entityId: colonist.id, ...secondDirection });
@@ -251,13 +251,13 @@ function tryToMove(
 
 function goHomeOrSleep(
   state: WrappedState,
-  colonist: Required<Entity, "colonist" | "pos">,
+  colonist: Required<Entity, "colonist" | "pos">
 ) {
   if (colonist.colonist.residence) {
     if (
       arePositionsEqual(
         colonist.pos,
-        state.select.entityById(colonist.colonist.residence).pos as Pos,
+        state.select.entityById(colonist.colonist.residence).pos as Pos
       )
     ) {
       state.act.updateEntity({
@@ -291,13 +291,13 @@ function goHomeOrSleep(
 
 function goToWork(
   state: WrappedState,
-  colonist: Required<Entity, "colonist" | "pos">,
+  colonist: Required<Entity, "colonist" | "pos">
 ) {
   if (
     colonist.colonist.employment &&
     !arePositionsEqual(
       colonist.pos,
-      state.select.entityById(colonist.colonist.employment).pos as Pos,
+      state.select.entityById(colonist.colonist.employment).pos as Pos
     )
   ) {
     const employment = state.select.entityById(colonist.colonist.employment);
@@ -325,10 +325,10 @@ function goToWork(
 
 function doWork(
   state: WrappedState,
-  colonist: Required<Entity, "colonist" | "pos">,
+  colonist: Required<Entity, "colonist" | "pos">
 ) {
   const employment = state.select.entityById(
-    colonist.colonist.employment as string,
+    colonist.colonist.employment as string
   ) as Required<Entity, "jobProvider">;
   if (
     Object.entries(employment.jobProvider.consumes)
@@ -342,7 +342,7 @@ function doWork(
           resource,
           amount: -cost,
           reason: employment.jobProvider.resourceChangeReason,
-        }),
+        })
       );
 
     const updatedJobProvider: JobProvider = { ...employment.jobProvider };
@@ -372,11 +372,11 @@ function doWork(
     });
   } else {
     const missingResources: ResourceCode[] = Object.entries(
-      employment.jobProvider.consumes,
+      employment.jobProvider.consumes
     )
       .filter((entry): entry is [ResourceCode, number] => Boolean(entry[1]))
       .filter(
-        ([resource, cost]) => !state.select.canAffordToPay(resource, cost),
+        ([resource, cost]) => !state.select.canAffordToPay(resource, cost)
       )
       .map(([resource, _]) => resource);
     state.act.updateEntity({
@@ -392,10 +392,10 @@ function doWork(
 
 function wander(
   state: WrappedState,
-  colonist: Required<Entity, "colonist" | "pos">,
+  colonist: Required<Entity, "colonist" | "pos">
 ) {
   const newPosOptions = getAdjacentPositions(colonist.pos, true).filter(
-    (pos) => !state.select.isPositionBlocked(pos),
+    (pos) => !state.select.isPositionBlocked(pos)
   );
   if (newPosOptions.length >= 1) {
     const newPos = choose(newPosOptions);
@@ -416,7 +416,7 @@ function wander(
 
 function pitchTent(
   state: WrappedState,
-  colonist: Required<Entity, "colonist" | "pos">,
+  colonist: Required<Entity, "colonist" | "pos">
 ) {
   const tent = createEntityFromTemplate("BUILDING_TENT", { pos: colonist.pos });
   state.act.addEntity(tent);
@@ -432,7 +432,7 @@ function pitchTent(
 
 function updateColonistTile(
   state: WrappedState,
-  colonist: Required<Entity, "colonist" | "pos" | "display">,
+  colonist: Required<Entity, "colonist" | "pos" | "display">
 ) {
   const numColonistsAtPos = state.select
     .entitiesAtPosition(colonist.pos)
@@ -482,7 +482,7 @@ function updateColonistTile(
 }
 
 function groupColonistsByJobPriority(
-  state: WrappedState,
+  state: WrappedState
 ): Record<number, Required<Entity, "colonist" | "pos" | "display">[]> {
   const results: Record<
     number,
@@ -502,11 +502,11 @@ function groupColonistsByJobPriority(
 
 function findColonistsWithLowestPriorityJob(
   state: WrappedState,
-  maximumPriority: number,
+  maximumPriority: number
 ): null | Required<Entity, "colonist" | "pos" | "display">[] {
   const colonistsByJobPriority = groupColonistsByJobPriority(state);
   const lowestPriority = Math.max(
-    ...Object.keys(colonistsByJobPriority).map(parseFloat),
+    ...Object.keys(colonistsByJobPriority).map(parseFloat)
   );
   if (lowestPriority > maximumPriority) {
     return colonistsByJobPriority[lowestPriority];
@@ -517,15 +517,15 @@ function findColonistsWithLowestPriorityJob(
 
 function assignColonistToWorkPlace(
   state: WrappedState,
-  workPlace: Required<Entity, "pos" | "jobProvider">,
+  workPlace: Required<Entity, "pos" | "jobProvider">
 ) {
   const workPlaceCopy = state.select.entityById(
-    workPlace.id,
+    workPlace.id
   ) as typeof workPlace;
 
   const colonists = findColonistsWithLowestPriorityJob(
     state,
-    state.select.jobPriority(workPlaceCopy.jobProvider.jobType),
+    state.select.jobPriority(workPlaceCopy.jobProvider.jobType)
   );
   if (colonists) {
     const colonist = getClosest(colonists, workPlaceCopy.pos);
@@ -592,13 +592,13 @@ function checkForEmptyHomesAndHomelessColonists(state: WrappedState) {
   let homelessColonists = state.select.homelessColonists();
 
   while (residencesUnderCapacity.length && homelessColonists.length) {
-    // eslint-disable-next-line no-loop-func
+    // eslint-disable-next-line @typescript-eslint/no-loop-func
     homelessColonists.sort((a, b) => {
       const aValue = Math.min(
-        ...residencesUnderCapacity.map((e) => getDistance(a.pos, e.pos)),
+        ...residencesUnderCapacity.map((e) => getDistance(a.pos, e.pos))
       );
       const bValue = Math.min(
-        ...residencesUnderCapacity.map((e) => getDistance(b.pos, e.pos)),
+        ...residencesUnderCapacity.map((e) => getDistance(b.pos, e.pos))
       );
       return aValue - bValue;
     });

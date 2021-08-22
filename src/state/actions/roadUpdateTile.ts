@@ -1,16 +1,16 @@
-import { createStandardAction } from "typesafe-actions";
-import { registerHandler } from "~state/handleAction";
-import WrappedState from "~types/WrappedState";
-import { Pos } from "~types";
-import { getPositionToDirection } from "~lib/geometry";
-import { UP, RIGHT, DOWN, LEFT } from "~constants";
+import { createAction } from "typesafe-actions";
+import { registerHandler } from "../handleAction";
+import WrappedState from "../../types/WrappedState";
+import { Pos } from "../../types";
+import { getPositionToDirection } from "../../lib/geometry";
+import { UP, RIGHT, DOWN, LEFT } from "../../constants";
 
-const roadUpdateTile = createStandardAction("roadUpdateTile")<Pos>();
+const roadUpdateTile = createAction("roadUpdateTile")<Pos>();
 export default roadUpdateTile;
 
 function roadUpdateTileHandler(
   state: WrappedState,
-  action: ReturnType<typeof roadUpdateTile>,
+  action: ReturnType<typeof roadUpdateTile>
 ): void {
   const pos = action.payload;
   const road = state.select.entitiesAtPosition(pos).find((e) => e.road);

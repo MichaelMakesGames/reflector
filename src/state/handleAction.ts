@@ -1,6 +1,6 @@
 import { ActionCreator, getType } from "typesafe-actions";
-import { Action } from "~types";
-import WrappedState from "~types/WrappedState";
+import { Action } from "../types";
+import WrappedState from "../types/WrappedState";
 
 type ActionHandler = (state: WrappedState, action: any) => void;
 
@@ -10,14 +10,14 @@ const handlers: {
 
 export function registerHandler(
   handler: ActionHandler,
-  actionCreator: ActionCreator<string>,
+  actionCreator: ActionCreator<string>
 ) {
   handlers[getType(actionCreator)] = handler;
 }
 
 export default function handleAction(
   state: WrappedState,
-  action: Action,
+  action: Action
 ): WrappedState {
   const handler = handlers[action.type];
   if (handler) {

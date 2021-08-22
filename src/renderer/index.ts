@@ -1,7 +1,7 @@
 import * as PIXI from "pixi.js";
-import colors from "~colors";
 // @ts-ignore
-import tiles from "../assets/tiles/*.png"; // eslint-disable-line import/no-unresolved
+import tiles from "url:../assets/tiles/*.png"; // eslint-disable-line import/no-unresolved
+import colors from "../colors";
 import { MAP_HEIGHT, MAP_WIDTH, TILE_SIZE } from "../constants";
 import Renderer from "./Renderer";
 

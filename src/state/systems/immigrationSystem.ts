@@ -1,15 +1,15 @@
-import { Pos } from "~/types";
+import { Pos } from "../../types";
 import {
   BASE_IMMIGRATION_RATE,
   NEW_COLONISTS_PER_DAY,
   MAP_HEIGHT,
   MAP_WIDTH,
-} from "~constants";
-import WrappedState from "~types/WrappedState";
-import { createEntityFromTemplate } from "~lib/entities";
-import { getPositionsWithinRange } from "~lib/geometry";
-import { rangeTo } from "~lib/math";
-import { choose } from "~lib/rng";
+} from "../../constants";
+import WrappedState from "../../types/WrappedState";
+import { createEntityFromTemplate } from "../../lib/entities";
+import { getPositionsWithinRange } from "../../lib/geometry";
+import { rangeTo } from "../../lib/math";
+import { choose } from "../../lib/rng";
 
 export default function immigrationSystem(state: WrappedState): void {
   if (state.select.isLastTurnOfNight()) {
@@ -18,14 +18,14 @@ export default function immigrationSystem(state: WrappedState): void {
       console.warn("No player");
     } else {
       const sourcePositions = [player.pos];
-      for (const _ of rangeTo(NEW_COLONISTS_PER_DAY)) {
+      rangeTo(NEW_COLONISTS_PER_DAY).forEach(() => {
         const pos = findNewColonistPosition(state, sourcePositions);
         if (!pos) {
           console.warn("no position for new immigrant found");
         } else {
           state.act.addEntity(createEntityFromTemplate("COLONIST", { pos }));
         }
-      }
+      });
       state.act.logMessage({
         message: `${NEW_COLONISTS_PER_DAY} new colonists have arrived!`,
         type: "success",
@@ -36,7 +36,7 @@ export default function immigrationSystem(state: WrappedState): void {
 
 function findNewColonistPosition(
   state: WrappedState,
-  sourcePositions: Pos[],
+  sourcePositions: Pos[]
 ): Pos {
   const positions = sourcePositions
     .reduce<Pos[]>((acc, pos) => {
@@ -46,7 +46,7 @@ function findNewColonistPosition(
     .filter((pos) => !state.select.isPositionBlocked(pos))
     .filter(
       (pos) =>
-        pos.x >= 0 && pos.x < MAP_WIDTH && pos.y >= 0 && pos.y < MAP_HEIGHT,
+        pos.x >= 0 && pos.x < MAP_WIDTH && pos.y >= 0 && pos.y < MAP_HEIGHT
     );
   return choose(positions);
 }

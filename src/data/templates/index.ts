@@ -1,4 +1,5 @@
-import { Entity } from "~types";
+import { Entity } from "../../types";
+import { TemplateName } from "../../types/TemplateName";
 import blueprints from "./blueprints";
 import buildings from "./buildings";
 import enemies from "./enemies";

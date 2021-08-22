@@ -1,4 +1,4 @@
-type ConditionName =
+export type ConditionName =
   | "doesNotHaveTallNeighbors"
   | "hasOneActiveWorker"
   | "hasThreeActiveWorkers"

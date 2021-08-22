@@ -1,5 +1,5 @@
-import colors from "~colors";
-import { FOOD_PER_COLONIST } from "~constants";
+import colors from "../colors";
+import { FOOD_PER_COLONIST } from "../constants";
 
 export enum ResourceCode {
   Food = "FOOD",

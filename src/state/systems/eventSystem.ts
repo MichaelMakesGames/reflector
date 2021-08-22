@@ -1,4 +1,4 @@
-import WrappedState from "~types/WrappedState";
+import WrappedState from "../../types/WrappedState";
 
 export default function eventSystem(state: WrappedState): void {
   if (state.raw.events.COLONIST_DIED) {

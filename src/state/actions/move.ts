@@ -1,12 +1,12 @@
 import { RNG } from "rot-js";
-import { createStandardAction } from "typesafe-actions";
-import { PLAYER_ID } from "~/constants";
-import audio from "~lib/audio";
-import renderer from "~renderer";
-import { registerHandler } from "~state/handleAction";
-import WrappedState from "~types/WrappedState";
+import { createAction } from "typesafe-actions";
+import { PLAYER_ID } from "../../constants";
+import audio from "../../lib/audio";
+import renderer from "../../renderer";
+import { registerHandler } from "../handleAction";
+import WrappedState from "../../types/WrappedState";
 
-const move = createStandardAction("MOVE")<{
+const move = createAction("MOVE")<{
   entityId: string;
   dx: number;
   dy: number;
@@ -15,7 +15,7 @@ export default move;
 
 function moveHandler(
   state: WrappedState,
-  action: ReturnType<typeof move>,
+  action: ReturnType<typeof move>
 ): void {
   const entity = state.select.entityById(action.payload.entityId);
   const { pos } = entity;
@@ -60,7 +60,7 @@ function moveHandler(
         "colonist_move_4",
       ]) || "",
       newPosition,
-      { rollOff: 0.75 },
+      { rollOff: 0.75 }
     );
   } else if (entity.id === PLAYER_ID) {
     audio.setListenerPos(newPosition);
@@ -71,7 +71,7 @@ function moveHandler(
         "player_move_3",
         "player_move_4",
       ]) || "",
-      { volume: 0.1 },
+      { volume: 0.1 }
     );
   } else if (entity.ai) {
     audio.playAtPos(
@@ -82,7 +82,7 @@ function moveHandler(
         "alien_move_4",
       ]) || "",
       newPosition,
-      { rollOff: 0.1 },
+      { rollOff: 0.1 }
     );
   }
 }

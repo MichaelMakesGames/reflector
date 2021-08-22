@@ -1,14 +1,14 @@
-import { createStandardAction } from "typesafe-actions";
-import { registerHandler } from "~state/handleAction";
-import { Pos } from "~types";
-import WrappedState from "~types/WrappedState";
+import { createAction } from "typesafe-actions";
+import { registerHandler } from "../handleAction";
+import { Pos } from "../../types";
+import WrappedState from "../../types/WrappedState";
 
-const removeReflector = createStandardAction("REMOVE_REFLECTOR")<Pos>();
+const removeReflector = createAction("REMOVE_REFLECTOR")<Pos>();
 export default removeReflector;
 
 function removeReflectorHandler(
   state: WrappedState,
-  action: ReturnType<typeof removeReflector>,
+  action: ReturnType<typeof removeReflector>
 ): void {
   const pos = action.payload;
   const entitiesAtPosition = state.select.entitiesAtPosition(pos);

@@ -1,6 +1,6 @@
 import React from "react";
 import Menu from "./Menu";
-import { HEADER_CSS_WIDTH } from "~constants";
+import { HEADER_CSS_WIDTH } from "../constants";
 
 export default function Header() {
   return (

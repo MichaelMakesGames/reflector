@@ -1,9 +1,10 @@
-import WrappedState from "~types/WrappedState";
-import { Entity } from "~types";
+import WrappedState from "../types/WrappedState";
+import { Entity } from "../types";
 import { getAdjacentPositions, getDistance } from "./geometry";
-import { ColonistStatusCode } from "~data/colonistStatuses";
-import { MAP_WIDTH, MAP_HEIGHT, BUILDING_RANGE } from "~constants";
-import { ResourceCode } from "~data/resources";
+import { ColonistStatusCode } from "../data/colonistStatuses";
+import { MAP_WIDTH, MAP_HEIGHT, BUILDING_RANGE } from "../constants";
+import { ResourceCode } from "../data/resources";
+import { ConditionName } from "../types/ConditionName";
 
 const conditions: Record<
   ConditionName,
@@ -14,7 +15,7 @@ const conditions: Record<
     return getAdjacentPositions(entity.pos).every((pos) =>
       state.select
         .entitiesAtPosition(pos)
-        .every((neighbor) => !neighbor.blocking || !neighbor.blocking.windmill),
+        .every((neighbor) => !neighbor.blocking || !neighbor.blocking.windmill)
     );
   },
 
@@ -26,7 +27,7 @@ const conditions: Record<
         (e) =>
           entity.blueprint &&
           entity.blueprint.canReplace &&
-          entity.blueprint.canReplace.includes(e.template),
+          entity.blueprint.canReplace.includes(e.template)
       );
     return !state.select.isPositionBlocked(entity.pos, [
       entity,
@@ -77,8 +78,8 @@ const conditions: Record<
           !e.building ||
           e === entity ||
           (entity.blueprint ? entity.blueprint.canReplace || [] : []).includes(
-            e.template,
-          ),
+            e.template
+          )
       );
   },
 
@@ -95,7 +96,7 @@ const conditions: Record<
       state.select
         .employees(entity)
         .filter(
-          (employee) => employee.colonist.status === ColonistStatusCode.Working,
+          (employee) => employee.colonist.status === ColonistStatusCode.Working
         ).length >= 1
     );
   },
@@ -105,7 +106,7 @@ const conditions: Record<
       state.select
         .employees(entity)
         .filter(
-          (employee) => employee.colonist.status === ColonistStatusCode.Working,
+          (employee) => employee.colonist.status === ColonistStatusCode.Working
         ).length >= 2
     );
   },
@@ -115,7 +116,7 @@ const conditions: Record<
       state.select
         .employees(entity)
         .filter(
-          (employee) => employee.colonist.status === ColonistStatusCode.Working,
+          (employee) => employee.colonist.status === ColonistStatusCode.Working
         ).length >= 3
     );
   },
@@ -127,6 +128,6 @@ export function areConditionsMet(
   ...conditionNames: (ConditionName | null)[]
 ) {
   return conditionNames.every(
-    (name) => !name || conditions[name](state, entity),
+    (name) => !name || conditions[name](state, entity)
   );
 }

@@ -1,5 +1,4 @@
 /* global document */
-import "@babel/polyfill";
 import "notyf/notyf.min.css";
 import React from "react";
 import ReactDOM from "react-dom";

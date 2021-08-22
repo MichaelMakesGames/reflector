@@ -1,14 +1,14 @@
-import WrappedState from "~types/WrappedState";
-import { Entity } from "~types";
-import { createEntityFromTemplate } from "~lib/entities";
-import { ColonistStatusCode } from "~data/colonistStatuses";
-import { ResourceCode } from "~data/resources";
+import WrappedState from "../../types/WrappedState";
+import { Entity } from "../../types";
+import { createEntityFromTemplate } from "../../lib/entities";
+import { ColonistStatusCode } from "../../data/colonistStatuses";
+import { ResourceCode } from "../../data/resources";
 
 export default function missingResourceIndicatorSystem(
-  state: WrappedState,
+  state: WrappedState
 ): void {
   const missingResourceIndicators = state.select.entitiesWithComps(
-    "missingResourceIndicator",
+    "missingResourceIndicator"
   );
   state.act.removeEntities(missingResourceIndicators.map((e) => e.id));
 
@@ -18,14 +18,14 @@ export default function missingResourceIndicatorSystem(
     .filter((e) => !e.powered.hasPower);
   entitiesToAdd.push(
     ...unpoweredEntities.map(({ pos }) =>
-      createEntityFromTemplate("UI_NO_POWER", { pos }),
-    ),
+      createEntityFromTemplate("UI_NO_POWER", { pos })
+    )
   );
 
   const colonistsWithMissingResources = state.select
     .colonists()
     .filter(
-      ({ colonist }) => colonist.status === ColonistStatusCode.MissingResources,
+      ({ colonist }) => colonist.status === ColonistStatusCode.MissingResources
     );
   colonistsWithMissingResources.forEach(({ colonist, pos }) => {
     colonist.missingResources.forEach((resource) => {

@@ -1,6 +1,7 @@
-import { PRIORITY_LASER, UP } from "~/constants";
-import colors from "~colors";
-import { Entity } from "~types";
+import { PRIORITY_LASER, UP } from "../../constants";
+import colors from "../../colors";
+import { Entity } from "../../types";
+import { TemplateName } from "../../types/TemplateName";
 
 const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   LASER_BASE: {

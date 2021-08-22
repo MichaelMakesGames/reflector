@@ -1,17 +1,17 @@
-import { Required } from "Object/_api";
-import { createStandardAction } from "typesafe-actions";
-import { CURSOR_ID } from "~constants";
-import { registerHandler } from "~state/handleAction";
-import { Entity, Pos } from "~types";
-import WrappedState from "~types/WrappedState";
-import { createEntityFromTemplate } from "~lib/entities";
+import { Required } from "ts-toolbelt/out/Object/Required";
+import { createAction } from "typesafe-actions";
+import { CURSOR_ID } from "../../constants";
+import { registerHandler } from "../handleAction";
+import { Entity, Pos } from "../../types";
+import WrappedState from "../../types/WrappedState";
+import { createEntityFromTemplate } from "../../lib/entities";
 
-const setCursorPos = createStandardAction("SET_CURSOR_POS")<Pos | null>();
+const setCursorPos = createAction("SET_CURSOR_POS")<Pos | null>();
 export default setCursorPos;
 
 function setCursorPosHandler(
   state: WrappedState,
-  action: ReturnType<typeof setCursorPos>,
+  action: ReturnType<typeof setCursorPos>
 ): void {
   const newCursorPos = action.payload;
   state.setRaw({
@@ -44,10 +44,10 @@ function setCursorPosHandler(
     state.select.entitiesAtPosition(newCursorPos).forEach((entity) => {
       if (entity.colonist) {
         const residence = state.select.residence(
-          entity as Required<Entity, "colonist">,
+          entity as Required<Entity, "colonist">
         );
         const employment = state.select.employment(
-          entity as Required<Entity, "colonist">,
+          entity as Required<Entity, "colonist">
         );
         if (residence) positionsToHighlight.push(residence.pos);
         if (employment) positionsToHighlight.push(employment.pos);
@@ -62,7 +62,7 @@ function setCursorPosHandler(
       }
     });
     positionsToHighlight.forEach((pos) =>
-      state.act.addEntity(createEntityFromTemplate("UI_HIGHLIGHT", { pos })),
+      state.act.addEntity(createEntityFromTemplate("UI_HIGHLIGHT", { pos }))
     );
 
     state.act.setAutoMovePathToCursor();

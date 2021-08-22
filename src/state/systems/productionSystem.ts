@@ -1,5 +1,5 @@
-import WrappedState from "~types/WrappedState";
-import { areConditionsMet } from "~lib/conditions";
+import WrappedState from "../../types/WrappedState";
+import { areConditionsMet } from "../../lib/conditions";
 
 export default function productionSystem(state: WrappedState): void {
   const producers = state.select.entitiesWithComps("production");

@@ -1,6 +1,6 @@
 import { set, get } from "idb-keyval";
-import { RawState } from "~types";
-import WrappedState from "~types/WrappedState";
+import { RawState } from "../types";
+import WrappedState from "../types/WrappedState";
 
 export function save(state: RawState): void {
   set("save", state);

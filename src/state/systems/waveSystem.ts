@@ -1,4 +1,5 @@
 import { RNG } from "rot-js";
+import { TemplateName } from "../../types/TemplateName";
 import {
   END_OF_NIGHT_ENEMY_SPAWNING_BUFFER,
   ENEMIES_PER_TURN_DAY_MULTIPLIER,
@@ -6,12 +7,12 @@ import {
   MAP_HEIGHT,
   MAP_WIDTH,
   TURNS_PER_DAY,
-} from "~constants";
-import { createEntityFromTemplate } from "~lib/entities";
-import { rangeTo } from "~lib/math";
-import { choose, pickWeighted } from "~lib/rng";
-import { Pos } from "~types";
-import WrappedState from "~types/WrappedState";
+} from "../../constants";
+import { createEntityFromTemplate } from "../../lib/entities";
+import { rangeTo } from "../../lib/math";
+import { choose, pickWeighted } from "../../lib/rng";
+import { Pos } from "../../types";
+import WrappedState from "../../types/WrappedState";
 
 export default function waveSystem(state: WrappedState): void {
   if (
@@ -32,9 +33,7 @@ export default function waveSystem(state: WrappedState): void {
     if (state.select.turnOfNight() === 1 && numberOfSpawns < 1) {
       numberOfSpawns = 1;
     }
-    for (const _ of rangeTo(numberOfSpawns)) {
-      spawnEnemy(state);
-    }
+    rangeTo(numberOfSpawns).forEach(() => spawnEnemy(state));
   }
 }
 
@@ -51,8 +50,8 @@ function spawnEnemy(state: WrappedState): void {
           ENEMY_BURROWER: 1,
           ENEMY_VOLATILE: 1,
         }) as TemplateName,
-        { pos },
-      ),
+        { pos }
+      )
     );
   } else {
     console.warn("Unable to find spawn position");
@@ -63,7 +62,7 @@ function getPossibleSpawnPositions(state: WrappedState): Pos[] {
   const unfilteredPositions: Pos[] = [];
 
   const direction = pickWeighted(
-    Object.entries(state.raw.time.directionWeights),
+    Object.entries(state.raw.time.directionWeights)
   );
 
   if (direction === "n") {
@@ -95,6 +94,6 @@ function getPossibleSpawnPositions(state: WrappedState): Pos[] {
   }
 
   return unfilteredPositions.filter(
-    (pos) => !state.select.isPositionBlocked(pos),
+    (pos) => !state.select.isPositionBlocked(pos)
   );
 }

@@ -1,8 +1,8 @@
-import { createStandardAction } from "typesafe-actions";
-import { registerHandler } from "~state/handleAction";
-import WrappedState from "~types/WrappedState";
+import { createAction } from "typesafe-actions";
+import { registerHandler } from "../handleAction";
+import WrappedState from "../../types/WrappedState";
 
-const continueVictory = createStandardAction("CONTINUE_VICTORY")();
+const continueVictory = createAction("CONTINUE_VICTORY")();
 export default continueVictory;
 
 function continueVictoryHandler(state: WrappedState): void {

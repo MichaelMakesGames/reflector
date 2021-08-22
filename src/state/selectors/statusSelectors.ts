@@ -5,11 +5,11 @@ import {
   TURNS_PER_DAY,
   TURNS_PER_NIGHT,
   VICTORY_ON_TURN,
-} from "~constants";
-import { JobTypeCode } from "~data/jobTypes";
-import { ResourceCode } from "~data/resources";
-import { Pos, RawState } from "~types";
-import { getDistance } from "~lib/geometry";
+} from "../../constants";
+import { JobTypeCode } from "../../data/jobTypes";
+import { ResourceCode } from "../../data/resources";
+import { Pos, RawState } from "../../types";
+import { getDistance } from "../../lib/geometry";
 import { entitiesWithComps } from "./entitySelectors";
 
 export function population(state: RawState): number {
@@ -99,7 +99,7 @@ export function resourceChange(state: RawState, resourceCode: ResourceCode) {
 export function canAffordToPay(
   state: RawState,
   resourceCode: ResourceCode,
-  cost: number,
+  cost: number
 ) {
   return resource(state, resourceCode) >= cost;
 }
@@ -140,6 +140,6 @@ export function isInProjectorRange(state: RawState, pos?: Pos | null): boolean {
 export function storage(state: RawState, resourceCode: ResourceCode): number {
   return entitiesWithComps(state, "storage").reduce(
     (acc, cur) => acc + (cur.storage.resources[resourceCode] || 0),
-    0,
+    0
   );
 }

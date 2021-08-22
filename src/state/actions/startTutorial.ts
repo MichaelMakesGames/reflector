@@ -1,14 +1,14 @@
-import { createStandardAction } from "typesafe-actions";
-import { registerHandler } from "~state/handleAction";
-import { TutorialId } from "~types/TutorialId";
-import WrappedState from "~types/WrappedState";
+import { createAction } from "typesafe-actions";
+import { registerHandler } from "../handleAction";
+import { TutorialId } from "../../types/TutorialId";
+import WrappedState from "../../types/WrappedState";
 
-const startTutorial = createStandardAction("START_TUTORIAL")<TutorialId>();
+const startTutorial = createAction("START_TUTORIAL")<TutorialId>();
 export default startTutorial;
 
 function startTutorialHandler(
   state: WrappedState,
-  action: ReturnType<typeof startTutorial>,
+  action: ReturnType<typeof startTutorial>
 ): void {
   const tutorialId = action.payload;
   const tutorialsState = state.raw.tutorials;

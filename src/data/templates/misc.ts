@@ -3,10 +3,11 @@ import {
   PROJECTOR_RANGE,
   PRIORITY_UNIT,
   PRIORITY_MARKER,
-} from "~/constants";
-import colors from "~colors";
-import { Entity } from "~types";
-import { ColonistStatusCode } from "~data/colonistStatuses";
+} from "../../constants";
+import colors from "../../colors";
+import { Entity } from "../../types";
+import { ColonistStatusCode } from "../colonistStatuses";
+import { TemplateName } from "../../types/TemplateName";
 
 const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   PLAYER: {

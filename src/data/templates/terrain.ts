@@ -1,7 +1,8 @@
-import { PRIORITY_TERRAIN } from "~/constants";
-import colors from "~colors";
-import { Entity } from "~types";
-import { ResourceCode } from "~data/resources";
+import { PRIORITY_TERRAIN } from "../../constants";
+import colors from "../../colors";
+import { Entity } from "../../types";
+import { ResourceCode } from "../resources";
+import { TemplateName } from "../../types/TemplateName";
 
 const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   TERRAIN_GROUND: {

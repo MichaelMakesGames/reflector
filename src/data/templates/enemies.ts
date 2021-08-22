@@ -1,6 +1,7 @@
-import colors from "~colors";
-import { Entity } from "~types";
-import { PRIORITY_UNIT } from "~constants";
+import colors from "../../colors";
+import { Entity } from "../../types";
+import { PRIORITY_UNIT } from "../../constants";
+import { TemplateName } from "../../types/TemplateName";
 
 const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   ENEMY_BASE: {

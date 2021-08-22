@@ -1,6 +1,6 @@
-import WrappedState from "~types/WrappedState";
-import { ResourceCode } from "~data/resources";
-import audio from "~lib/audio";
+import WrappedState from "../../types/WrappedState";
+import { ResourceCode } from "../../data/resources";
+import audio from "../../lib/audio";
 
 export default function poweredSystem(state: WrappedState): void {
   const poweredEntities = state.select.entitiesWithComps("powered");
@@ -8,7 +8,7 @@ export default function poweredSystem(state: WrappedState): void {
     if (
       state.select.canAffordToPay(
         ResourceCode.Power,
-        entity.powered.powerNeeded,
+        entity.powered.powerNeeded
       )
     ) {
       state.act.modifyResource({

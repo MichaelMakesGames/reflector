@@ -1,22 +1,21 @@
 import has from "has";
-import { Required } from "Object/_api";
+import { Required } from "ts-toolbelt/out/Object/Required";
 import { Object } from "ts-toolbelt";
-import { createStandardAction } from "typesafe-actions";
-import renderer from "~/renderer";
-import selectors from "~/state/selectors";
-import { Entity } from "~/types";
-import { getPosKey } from "~lib/geometry";
-import { registerHandler } from "~state/handleAction";
-import WrappedState from "~types/WrappedState";
+import { createAction } from "typesafe-actions";
+import renderer from "../../renderer";
+import selectors from "../selectors";
+import { Entity } from "../../types";
+import { getPosKey } from "../../lib/geometry";
+import { registerHandler } from "../handleAction";
+import WrappedState from "../../types/WrappedState";
 
-const updateEntity = createStandardAction("UPDATE_ENTITY")<
-  Object.Required<Partial<Entity>, "id">
->();
+const updateEntity =
+  createAction("UPDATE_ENTITY")<Object.Required<Partial<Entity>, "id">>();
 export default updateEntity;
 
 function updateEntityHandler(
   wrappedState: WrappedState,
-  action: ReturnType<typeof updateEntity>,
+  action: ReturnType<typeof updateEntity>
 ): void {
   const { raw: state } = wrappedState;
   const partial = action.payload;

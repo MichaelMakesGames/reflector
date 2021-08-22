@@ -1,4 +1,4 @@
-import { ControlCode } from "~types/ControlCode";
+import type { ControlCode } from "./ControlCode";
 
 export default interface Settings {
   aimInSameDirectionToFire: boolean;

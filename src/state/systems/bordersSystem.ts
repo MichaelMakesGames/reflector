@@ -1,13 +1,13 @@
-import { Pos } from "types/Entity";
-import { DOWN, LEFT, RIGHT, UP } from "~constants";
-import WrappedState from "~types/WrappedState";
-import { areConditionsMet } from "~lib/conditions";
-import { createEntityFromTemplate } from "~lib/entities";
+import { Pos } from "../../types/Entity";
+import { DOWN, LEFT, RIGHT, UP } from "../../constants";
+import WrappedState from "../../types/WrappedState";
+import { areConditionsMet } from "../../lib/conditions";
+import { createEntityFromTemplate } from "../../lib/entities";
 import {
   getPositionsWithinRange,
   getPositionToDirection,
   getPosKey,
-} from "~lib/geometry";
+} from "../../lib/geometry";
 
 export default function bordersSystem(state: WrappedState): void {
   const borders = state.select.entitiesWithComps("border");
@@ -21,7 +21,7 @@ export default function bordersSystem(state: WrappedState): void {
     positionsInRange[getPosKey(entity.pos)] = entity.pos;
     for (const pos of getPositionsWithinRange(
       entity.pos,
-      entity.projector.range,
+      entity.projector.range
     )) {
       positionsInRange[getPosKey(pos)] = pos;
     }

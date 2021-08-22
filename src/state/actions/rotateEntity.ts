@@ -1,16 +1,16 @@
-import { createStandardAction } from "typesafe-actions";
-import { registerHandler } from "~state/handleAction";
-import { Entity } from "~types";
-import WrappedState from "~types/WrappedState";
-import { createEntityFromTemplate } from "~lib/entities";
-import { retargetLaserOnReflectorChange } from "~lib/lasers";
+import { createAction } from "typesafe-actions";
+import { registerHandler } from "../handleAction";
+import { Entity } from "../../types";
+import WrappedState from "../../types/WrappedState";
+import { createEntityFromTemplate } from "../../lib/entities";
+import { retargetLaserOnReflectorChange } from "../../lib/lasers";
 
-const rotateEntity = createStandardAction("ROTATE_ENTITY")<Entity>();
+const rotateEntity = createAction("ROTATE_ENTITY")<Entity>();
 export default rotateEntity;
 
 function rotateEntityHandler(
   state: WrappedState,
-  action: ReturnType<typeof rotateEntity>,
+  action: ReturnType<typeof rotateEntity>
 ): void {
   const entity = action.payload;
   if (!entity.rotatable) return;

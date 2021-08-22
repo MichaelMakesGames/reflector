@@ -2,15 +2,15 @@ import Tippy from "@tippyjs/react";
 import React, { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "tippy.js/dist/tippy.css";
-import { HotkeyGroup, useControl } from "~components/HotkeysProvider";
-import { DOWN, LEFT, RIGHT, UP } from "~constants";
-import { SettingsContext } from "~contexts";
-import actions from "~state/actions";
-import selectors from "~state/selectors";
-import { Direction } from "~types";
-import { ControlCode } from "~types/ControlCode";
-import { noFocusOnClick } from "~lib/controls";
-import { getConstDir } from "~lib/geometry";
+import { HotkeyGroup, useControl } from "./HotkeysProvider";
+import { DOWN, LEFT, RIGHT, UP } from "../constants";
+import { SettingsContext } from "../contexts";
+import actions from "../state/actions";
+import selectors from "../state/selectors";
+import { Direction } from "../types";
+import { ControlCode } from "../types/ControlCode";
+import { noFocusOnClick } from "../lib/controls";
+import { getConstDir } from "../lib/geometry";
 import HotkeyButton from "./HotkeyButton";
 
 export default function Laser() {
@@ -30,18 +30,17 @@ export default function Laser() {
     code: ControlCode.Back,
     group: HotkeyGroup.Main,
     callback: cancel,
+    disabled: !isWeaponActive,
   });
 
-  const makeAimHandler = (
-    direction: Direction,
-    aimInSameDirectionToFire: boolean,
-  ) => () => {
-    if (aimInSameDirectionToFire && isAimingInDirection(direction)) {
-      fire();
-    } else {
-      dispatch(actions.targetWeapon(direction));
-    }
-  };
+  const makeAimHandler =
+    (direction: Direction, aimInSameDirectionToFire: boolean) => () => {
+      if (aimInSameDirectionToFire && isAimingInDirection(direction)) {
+        fire();
+      } else {
+        dispatch(actions.targetWeapon(direction));
+      }
+    };
 
   useControl({
     code: ControlCode.Up,
@@ -131,7 +130,7 @@ export default function Laser() {
               } ${isAimingInDirection(LEFT) ? "text-red" : ""}`}
               type="button"
               onClick={noFocusOnClick(
-                makeAimHandler(LEFT, settings.aimInSameDirectionToFire),
+                makeAimHandler(LEFT, settings.aimInSameDirectionToFire)
               )}
             >
               ◀
@@ -147,7 +146,7 @@ export default function Laser() {
               } ${isAimingInDirection(UP) ? "text-red" : ""}`}
               type="button"
               onClick={noFocusOnClick(
-                makeAimHandler(UP, settings.aimInSameDirectionToFire),
+                makeAimHandler(UP, settings.aimInSameDirectionToFire)
               )}
             >
               ▲
@@ -161,7 +160,7 @@ export default function Laser() {
               } ${isAimingInDirection(DOWN) ? "text-red" : ""}`}
               type="button"
               onClick={noFocusOnClick(
-                makeAimHandler(DOWN, settings.aimInSameDirectionToFire),
+                makeAimHandler(DOWN, settings.aimInSameDirectionToFire)
               )}
             >
               ▼
@@ -177,7 +176,7 @@ export default function Laser() {
               } ${isAimingInDirection(RIGHT) ? "text-red" : ""}`}
               type="button"
               onClick={noFocusOnClick(
-                makeAimHandler(RIGHT, settings.aimInSameDirectionToFire),
+                makeAimHandler(RIGHT, settings.aimInSameDirectionToFire)
               )}
             >
               ▶

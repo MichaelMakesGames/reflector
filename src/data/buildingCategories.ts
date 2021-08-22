@@ -1,3 +1,5 @@
+import { TemplateName } from "../types/TemplateName";
+
 export enum BuildingCategoryCode {
   Production = "PRODUCTION",
   Laser = "LASER",

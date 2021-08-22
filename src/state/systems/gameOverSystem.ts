@@ -1,5 +1,5 @@
-import { VICTORY_POPULATION, VICTORY_ON_TURN } from "~constants";
-import WrappedState from "~types/WrappedState";
+import { VICTORY_POPULATION, VICTORY_ON_TURN } from "../../constants";
+import WrappedState from "../../types/WrappedState";
 
 export default function gameOverSystem(state: WrappedState): void {
   if (!state.select.player() || state.select.morale() <= 0) {

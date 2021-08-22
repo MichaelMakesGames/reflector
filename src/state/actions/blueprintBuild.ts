@@ -1,18 +1,18 @@
-import { createStandardAction } from "typesafe-actions";
-import resources from "~data/resources";
-import { registerHandler } from "~state/handleAction";
-import WrappedState from "~types/WrappedState";
-import { areConditionsMet } from "~lib/conditions";
-import { createEntityFromTemplate } from "~lib/entities";
-import audio from "~lib/audio";
-import effects from "~data/effects";
+import { createAction } from "typesafe-actions";
+import resources from "../../data/resources";
+import { registerHandler } from "../handleAction";
+import WrappedState from "../../types/WrappedState";
+import { areConditionsMet } from "../../lib/conditions";
+import { createEntityFromTemplate } from "../../lib/entities";
+import audio from "../../lib/audio";
+import effects from "../../data/effects";
 
-const blueprintBuild = createStandardAction("BLUEPRINT_BUILD")();
+const blueprintBuild = createAction("BLUEPRINT_BUILD")();
 export default blueprintBuild;
 
 function blueprintBuildHandler(
   state: WrappedState,
-  action: ReturnType<typeof blueprintBuild>,
+  action: ReturnType<typeof blueprintBuild>
 ): void {
   const blueprint = state.select.blueprint();
   if (!blueprint) return;
@@ -27,7 +27,7 @@ function blueprintBuildHandler(
   if (!isPosValid) {
     const failedConditions = blueprint.blueprint.validityConditions.filter(
       (validityCondition) =>
-        !areConditionsMet(state, blueprint, validityCondition.condition),
+        !areConditionsMet(state, blueprint, validityCondition.condition)
     );
     const message = failedConditions[0]
       ? failedConditions[0].invalidMessage
@@ -55,7 +55,7 @@ function blueprintBuildHandler(
   }
 
   const entitiesToReplace = entitiesAtPosition.filter((e) =>
-    (blueprint.blueprint.canReplace || []).includes(e.template),
+    (blueprint.blueprint.canReplace || []).includes(e.template)
   );
 
   state.act.removeEntity(blueprint.id);

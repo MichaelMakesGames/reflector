@@ -1,10 +1,10 @@
-import { createStandardAction } from "typesafe-actions";
-import { registerHandler } from "~state/handleAction";
-import WrappedState from "~types/WrappedState";
-import notifications from "~lib/notifications";
-import audio from "~lib/audio";
+import { createAction } from "typesafe-actions";
+import { registerHandler } from "../handleAction";
+import WrappedState from "../../types/WrappedState";
+import notifications from "../../lib/notifications";
+import audio from "../../lib/audio";
 
-const logMessage = createStandardAction("LOG_MESSAGE")<{
+const logMessage = createAction("LOG_MESSAGE")<{
   message: string;
   type?: string;
 }>();
@@ -12,7 +12,7 @@ export default logMessage;
 
 function logMessageHandler(
   state: WrappedState,
-  action: ReturnType<typeof logMessage>,
+  action: ReturnType<typeof logMessage>
 ): void {
   const { message, type } = action.payload;
   const turn = state.select.turn();

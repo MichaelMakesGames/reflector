@@ -1,8 +1,8 @@
-import { JobTypeCode } from "~data/jobTypes";
-import { ResourceCode } from "~data/resources";
-import { Direction } from "./Direction";
-import { Entity, Pos } from "./Entity";
-import { TutorialId } from "./TutorialId";
+import type { JobTypeCode } from "../data/jobTypes";
+import type { ResourceCode } from "../data/resources";
+import type { Direction } from "./Direction";
+import type { Entity, Pos } from "./Entity";
+import type { TutorialId } from "./TutorialId";
 
 export interface RawState {
   version: string;

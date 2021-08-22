@@ -5,12 +5,9 @@
     "strict": true,
     "target": "esnext",
     "module": "commonjs",
-    "baseUrl": "./src",
     "resolveJsonModule": true,
-    "paths": {
-      "~*": ["./*"]
-    },
-    "noEmit": true
+    "noEmit": true,
+    "skipLibCheck": true
   },
   "include": ["src/**/*"]
 }

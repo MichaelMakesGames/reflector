@@ -1,9 +1,9 @@
 /* eslint-disable import/prefer-default-export */
-import { RawState, Pos } from "~/types";
+import { RawState, Pos } from "../types";
 import { rangeFromTo } from "./math";
 import { arePositionsEqual, getDistance } from "./geometry";
-import { MAP_WIDTH, MAP_HEIGHT } from "~constants";
-import WrappedState from "~types/WrappedState";
+import { MAP_WIDTH, MAP_HEIGHT } from "../constants";
+import WrappedState from "../types/WrappedState";
 import { areConditionsMet } from "./conditions";
 
 export function findValidPositions(
@@ -12,7 +12,7 @@ export function findValidPositions(
     pos: Pos;
     range: number;
   }[],
-  canPlace: (state: RawState, pos: Pos) => boolean,
+  canPlace: (state: RawState, pos: Pos) => boolean
 ): Pos[] {
   const results: Pos[] = [];
   for (const buildFrom of buildFroms) {
@@ -42,7 +42,7 @@ export function canPlaceReflector(state: WrappedState, pos: Pos) {
     !isPositionBlocked &&
     activeProjectors.some(
       (projector) =>
-        getDistance(pos, projector.pos) <= projector.projector.range,
+        getDistance(pos, projector.pos) <= projector.projector.range
     )
   );
 }

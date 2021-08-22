@@ -1,12 +1,12 @@
-import tutorials from "~data/tutorials";
-import { Action } from "~types";
-import WrappedState from "~types/WrappedState";
-import { save } from "~lib/gameSave";
+import tutorials from "../data/tutorials";
+import { Action } from "../types";
+import WrappedState from "../types/WrappedState";
+import { save } from "./gameSave";
 
 export function processTutorials(
   prevState: WrappedState,
   nextState: WrappedState,
-  action: Action,
+  action: Action
 ): void {
   let isDirty = false;
 

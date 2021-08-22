@@ -1,20 +1,21 @@
 import { RNG } from "rot-js";
-import { createStandardAction } from "typesafe-actions";
-import templates from "~data/templates";
-import audio from "~lib/audio";
-import { createEntityFromTemplate } from "~lib/entities";
-import { getAdjacentPositions } from "~lib/geometry";
-import renderer from "~renderer";
-import { registerHandler } from "~state/handleAction";
-import WrappedState from "~types/WrappedState";
-import effects from "~data/effects";
+import { createAction } from "typesafe-actions";
+import templates from "../../data/templates";
+import audio from "../../lib/audio";
+import { createEntityFromTemplate } from "../../lib/entities";
+import { getAdjacentPositions } from "../../lib/geometry";
+import renderer from "../../renderer";
+import { registerHandler } from "../handleAction";
+import WrappedState from "../../types/WrappedState";
+import effects from "../../data/effects";
+import { TemplateName } from "../../types/TemplateName";
 
-const destroy = createStandardAction("DESTROY")<string>();
+const destroy = createAction("DESTROY")<string>();
 export default destroy;
 
 function destroyHandler(
   state: WrappedState,
-  action: ReturnType<typeof destroy>,
+  action: ReturnType<typeof destroy>
 ): void {
   const entityId = action.payload;
   const entity = state.select.entityById(entityId);
@@ -34,7 +35,7 @@ function destroyHandler(
         });
         const blueprint = entity.template.replace(
           "BUILDING",
-          "BLUEPRINT",
+          "BLUEPRINT"
         ) as TemplateName;
         if (Object.keys(templates).includes(blueprint)) {
           rubble.rebuildable = { blueprint };
@@ -55,7 +56,7 @@ function destroyHandler(
         audio.playAtPos(
           RNG.getItem(["alien_death_1", "alien_death_2", "alien_death_3"]) ||
             "",
-          entity.pos,
+          entity.pos
         );
       }
 
@@ -72,14 +73,14 @@ function destroyHandler(
             "explosion_7",
           ]) || "",
           entity.pos,
-          { rollOff: 0.1, volume: 2 },
+          { rollOff: 0.1, volume: 2 }
         );
         for (const adjacentPos of [
           entity.pos,
           ...getAdjacentPositions(entity.pos),
         ]) {
           for (const adjacentEntity of state.select.entitiesAtPosition(
-            adjacentPos,
+            adjacentPos
           )) {
             if (adjacentEntity.destructible)
               state.act.destroy(adjacentEntity.id);

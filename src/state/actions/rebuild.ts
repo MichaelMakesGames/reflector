@@ -1,16 +1,16 @@
-import { createStandardAction } from "typesafe-actions";
-import { registerHandler } from "~state/handleAction";
-import WrappedState from "~types/WrappedState";
-import { createEntityFromTemplate } from "~lib/entities";
-import resources from "~data/resources";
-import audio from "~lib/audio";
+import { createAction } from "typesafe-actions";
+import { registerHandler } from "../handleAction";
+import WrappedState from "../../types/WrappedState";
+import { createEntityFromTemplate } from "../../lib/entities";
+import resources from "../../data/resources";
+import audio from "../../lib/audio";
 
-const rebuild = createStandardAction("rebuild")<string>();
+const rebuild = createAction("rebuild")<string>();
 export default rebuild;
 
 function rebuildHandler(
   state: WrappedState,
-  action: ReturnType<typeof rebuild>,
+  action: ReturnType<typeof rebuild>
 ): void {
   const entity = state.select.entityById(action.payload);
   if (!entity || !entity.rebuildable || !entity.pos) return;
@@ -20,7 +20,7 @@ function rebuildHandler(
   if (state.select.canAffordToPay(cost.resource, cost.amount)) {
     state.act.removeEntity(entity.id);
     state.act.addEntity(
-      createEntityFromTemplate(blueprint.blueprint.builds, { pos: entity.pos }),
+      createEntityFromTemplate(blueprint.blueprint.builds, { pos: entity.pos })
     );
     state.act.modifyResource({
       resource: cost.resource,

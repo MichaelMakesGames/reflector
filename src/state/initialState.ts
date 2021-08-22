@@ -5,9 +5,9 @@ import {
   VERSION,
   NEW_COLONISTS_PER_DAY,
   FOOD_PER_COLONIST,
-} from "~constants";
-import { RawState } from "~types";
-import { TutorialId } from "~types/TutorialId";
+} from "../constants";
+import { RawState } from "../types";
+import { TutorialId } from "../types/TutorialId";
 
 export function createInitialState({
   completedTutorials,

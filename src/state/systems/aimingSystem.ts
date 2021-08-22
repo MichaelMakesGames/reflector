@@ -1,4 +1,4 @@
-import WrappedState from "~types/WrappedState";
+import WrappedState from "../../types/WrappedState";
 
 export default function aimingSystem(state: WrappedState) {
   if (state.select.isWeaponActive()) {

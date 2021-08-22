@@ -1,16 +1,16 @@
-import { createStandardAction } from "typesafe-actions";
-import systems from "~state/systems";
-import { ResourceCode } from "~data/resources";
-import { registerHandler } from "~state/handleAction";
-import WrappedState from "~types/WrappedState";
-import { save } from "~lib/gameSave";
+import { createAction } from "typesafe-actions";
+import systems from "../systems";
+import { ResourceCode } from "../../data/resources";
+import { registerHandler } from "../handleAction";
+import WrappedState from "../../types/WrappedState";
+import { save } from "../../lib/gameSave";
 
-const playerTookTurn = createStandardAction("PLAYER_TOOK_TURN")();
+const playerTookTurn = createAction("PLAYER_TOOK_TURN")();
 export default playerTookTurn;
 
 function playerTookTurnHandler(
   state: WrappedState,
-  action: ReturnType<typeof playerTookTurn>,
+  action: ReturnType<typeof playerTookTurn>
 ): void {
   systems.forEach((system) => system(state));
   state.act.setAutoMovePathToCursor();

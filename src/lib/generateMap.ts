@@ -1,12 +1,13 @@
-import { Required } from "Object/_api";
+import { Required } from "ts-toolbelt/out/Object/Required";
 import { Noise } from "rot-js";
 import {
   MAP_HEIGHT,
   MAP_WIDTH,
   NEW_COLONISTS_PER_DAY,
   PLAYER_ID,
-} from "~/constants";
-import { Entity } from "~/types/Entity";
+} from "../constants";
+import { Entity } from "../types/Entity";
+import { TemplateName } from "../types/TemplateName";
 import { createEntityFromTemplate } from "./entities";
 import { arePositionsEqual, getDistance } from "./geometry";
 import { calcPercentile, rangeTo } from "./math";
@@ -37,7 +38,7 @@ export default function generateMap(): Entity[] {
           createEntityFromTemplate("BUILDING_WALL", {
             pos: { x, y },
             destructible: undefined,
-          }),
+          })
         );
       } else {
         const localNoise = noise[x][y];
@@ -96,36 +97,36 @@ export default function generateMap(): Entity[] {
     .sort((a, b) => getDistance(a, centerPos) - getDistance(b, centerPos));
 
   const waterEntities = (results as Required<Entity, "pos">[]).filter(
-    (entity) => entity.template === "TERRAIN_WATER_BASE",
+    (entity) => entity.template === "TERRAIN_WATER_BASE"
   );
   results = results.filter(
-    (e) => !waterEntities.includes(e as Required<Entity, "pos">),
+    (e) => !waterEntities.includes(e as Required<Entity, "pos">)
   );
   waterEntities.forEach((waterEntity) => {
     const { pos } = waterEntity;
     const nIsWater = waterEntities.some((e) =>
-      arePositionsEqual(e.pos, { x: pos.x, y: pos.y - 1 }),
+      arePositionsEqual(e.pos, { x: pos.x, y: pos.y - 1 })
     );
     const neIsWater = waterEntities.some((e) =>
-      arePositionsEqual(e.pos, { x: pos.x + 1, y: pos.y - 1 }),
+      arePositionsEqual(e.pos, { x: pos.x + 1, y: pos.y - 1 })
     );
     const eIsWater = waterEntities.some((e) =>
-      arePositionsEqual(e.pos, { x: pos.x + 1, y: pos.y }),
+      arePositionsEqual(e.pos, { x: pos.x + 1, y: pos.y })
     );
     const seIsWater = waterEntities.some((e) =>
-      arePositionsEqual(e.pos, { x: pos.x + 1, y: pos.y + 1 }),
+      arePositionsEqual(e.pos, { x: pos.x + 1, y: pos.y + 1 })
     );
     const sIsWater = waterEntities.some((e) =>
-      arePositionsEqual(e.pos, { x: pos.x, y: pos.y + 1 }),
+      arePositionsEqual(e.pos, { x: pos.x, y: pos.y + 1 })
     );
     const swIsWater = waterEntities.some((e) =>
-      arePositionsEqual(e.pos, { x: pos.x - 1, y: pos.y + 1 }),
+      arePositionsEqual(e.pos, { x: pos.x - 1, y: pos.y + 1 })
     );
     const wIsWater = waterEntities.some((e) =>
-      arePositionsEqual(e.pos, { x: pos.x - 1, y: pos.y }),
+      arePositionsEqual(e.pos, { x: pos.x - 1, y: pos.y })
     );
     const nwIsWater = waterEntities.some((e) =>
-      arePositionsEqual(e.pos, { x: pos.x - 1, y: pos.y - 1 }),
+      arePositionsEqual(e.pos, { x: pos.x - 1, y: pos.y - 1 })
     );
     const waterNumber =
       0 +
@@ -136,26 +137,26 @@ export default function generateMap(): Entity[] {
     results.push(
       createEntityFromTemplate(`TERRAIN_WATER_${waterNumber}` as TemplateName, {
         pos,
-      }),
+      })
     );
     if (nIsWater && eIsWater && neIsWater) {
       results.push(
-        createEntityFromTemplate("TERRAIN_WATER_CORNER_NE", { pos }),
+        createEntityFromTemplate("TERRAIN_WATER_CORNER_NE", { pos })
       );
     }
     if (sIsWater && eIsWater && seIsWater) {
       results.push(
-        createEntityFromTemplate("TERRAIN_WATER_CORNER_SE", { pos }),
+        createEntityFromTemplate("TERRAIN_WATER_CORNER_SE", { pos })
       );
     }
     if (sIsWater && wIsWater && swIsWater) {
       results.push(
-        createEntityFromTemplate("TERRAIN_WATER_CORNER_SW", { pos }),
+        createEntityFromTemplate("TERRAIN_WATER_CORNER_SW", { pos })
       );
     }
     if (nIsWater && wIsWater && nwIsWater) {
       results.push(
-        createEntityFromTemplate("TERRAIN_WATER_CORNER_NW", { pos }),
+        createEntityFromTemplate("TERRAIN_WATER_CORNER_NW", { pos })
       );
     }
   });
@@ -164,7 +165,7 @@ export default function generateMap(): Entity[] {
     results.push(
       createEntityFromTemplate("COLONIST", {
         pos: floorPositions[i],
-      }),
+      })
     );
   });
 

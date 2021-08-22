@@ -1,5 +1,5 @@
 import { Notyf } from "notyf";
-import colors from "~colors";
+import colors from "../colors";
 
 const notifications = new Notyf({
   position: { x: "right", y: "bottom" },

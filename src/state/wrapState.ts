@@ -1,7 +1,7 @@
 import selectors from "./selectors";
 import actions from "./actions";
-import { RawState, Action } from "~types";
-import WrappedState from "~types/WrappedState";
+import { RawState, Action } from "../types";
+import WrappedState from "../types/WrappedState";
 import handleAction from "./handleAction";
 
 export default function wrapState(state: RawState): WrappedState {
@@ -9,6 +9,7 @@ export default function wrapState(state: RawState): WrappedState {
     raw: state,
     select: {},
     act: {},
+    actions,
   };
   wrappedState.setRaw = (newState: RawState) => {
     wrappedState.raw = newState;
