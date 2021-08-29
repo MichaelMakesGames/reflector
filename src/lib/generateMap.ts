@@ -1,5 +1,5 @@
 import { Required } from "ts-toolbelt/out/Object/Required";
-import { Noise } from "rot-js";
+import { Noise, RNG } from "rot-js";
 import {
   MAP_HEIGHT,
   MAP_WIDTH,
@@ -10,26 +10,130 @@ import { Entity } from "../types/Entity";
 import { TemplateName } from "../types/TemplateName";
 import { createEntityFromTemplate } from "./entities";
 import { arePositionsEqual, getDistance } from "./geometry";
-import { calcPercentile, rangeTo } from "./math";
+import { calcPercentile, rangeTo, sum } from "./math";
 import { choose } from "./rng";
+
+interface MapConfig {
+  terrainWeights: {
+    water: number;
+    fertile: number;
+    ground: number;
+    ore: number;
+    mountain: number;
+  };
+  smoothness: number;
+}
+
+const MAP_CONFIGS: Record<string, MapConfig> = {
+  standard: {
+    terrainWeights: {
+      water: 15,
+      fertile: 10,
+      ground: 60,
+      ore: 1.5,
+      mountain: 13.5,
+    },
+    smoothness: 12,
+  },
+  marsh: {
+    terrainWeights: {
+      water: 30,
+      fertile: 33,
+      ground: 35,
+      ore: 1,
+      mountain: 1,
+    },
+    smoothness: 6,
+  },
+  badlands: {
+    terrainWeights: {
+      water: 1,
+      fertile: 1.5,
+      ground: 65.5,
+      ore: 5,
+      mountain: 27,
+    },
+    smoothness: 6,
+  },
+  plains: {
+    terrainWeights: {
+      water: 5,
+      fertile: 10,
+      ground: 80,
+      ore: 1.5,
+      mountain: 3.5,
+    },
+    smoothness: 15,
+  },
+  mesa: {
+    terrainWeights: {
+      water: 1,
+      fertile: 1.5,
+      ground: 65.5,
+      ore: 5,
+      mountain: 27,
+    },
+    smoothness: 15,
+  },
+  lakes: {
+    terrainWeights: {
+      water: 30,
+      fertile: 33,
+      ground: 35,
+      ore: 1,
+      mountain: 1,
+    },
+    smoothness: 15,
+  },
+};
 
 export default function generateMap(): Entity[] {
   let results: Entity[] = [];
+
+  const config: MapConfig =
+    RNG.getItem(Object.values(MAP_CONFIGS)) || MAP_CONFIGS.standard;
 
   const noiseGenerator = new Noise.Simplex();
   const noise: number[][] = [];
   for (const x of rangeTo(MAP_WIDTH)) {
     noise.push([]);
     for (const y of rangeTo(MAP_HEIGHT)) {
-      noise[x].push(noiseGenerator.get(x / 12, y / 12));
+      noise[x].push(
+        noiseGenerator.get(x / config.smoothness, y / config.smoothness)
+      );
     }
   }
 
   const flatNoise = noise.flat().sort((a, b) => a - b);
-  const waterFertileThreshold = calcPercentile(flatNoise, 15);
-  const fertileFloorThreshold = calcPercentile(flatNoise, 25);
-  const floorOreThreshold = calcPercentile(flatNoise, 85);
-  const oreMountainThreshold = calcPercentile(flatNoise, 86.5);
+
+  const totalWeight = sum(...Object.values(config.terrainWeights));
+  const waterFertileThreshold = calcPercentile(
+    flatNoise,
+    (config.terrainWeights.water / totalWeight) * 100
+  );
+  const fertileFloorThreshold = calcPercentile(
+    flatNoise,
+    ((config.terrainWeights.water + config.terrainWeights.fertile) /
+      totalWeight) *
+      100
+  );
+  const floorOreThreshold = calcPercentile(
+    flatNoise,
+    ((config.terrainWeights.water +
+      config.terrainWeights.fertile +
+      config.terrainWeights.ground) /
+      totalWeight) *
+      100
+  );
+  const oreMountainThreshold = calcPercentile(
+    flatNoise,
+    ((config.terrainWeights.water +
+      config.terrainWeights.fertile +
+      config.terrainWeights.ground +
+      config.terrainWeights.ore) /
+      totalWeight) *
+      100
+  );
 
   for (let y = -1; y < MAP_HEIGHT + 1; y++) {
     for (let x = -1; x < MAP_WIDTH + 1; x++) {
