@@ -27,8 +27,9 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       tile: "reflector",
       color: colors.activeBuilding,
       priority: PRIORITY_BUILDING_HIGH,
+      speed: 0.1,
     },
-    reflector: { type: "/" },
+    reflector: { type: "/", outOfRange: false },
     rotatable: { rotatesTo: "REFLECTOR_DOWN_RIGHT" },
   },
   REFLECTOR_DOWN_RIGHT: {
@@ -38,8 +39,9 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       rotation: 90,
       color: colors.activeBuilding,
       priority: PRIORITY_BUILDING_HIGH,
+      speed: 0.1,
     },
-    reflector: { type: "\\" },
+    reflector: { type: "\\", outOfRange: false },
     rotatable: { rotatesTo: "REFLECTOR_UP_RIGHT" },
   },
   BUILDING_SPLITTER_BASE: {

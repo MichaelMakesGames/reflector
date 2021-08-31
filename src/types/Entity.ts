@@ -86,6 +86,7 @@ export interface Rotatable {
 
 export interface Reflector {
   type: "\\" | "/";
+  outOfRange: boolean;
 }
 
 export interface Splitter {

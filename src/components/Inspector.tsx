@@ -83,6 +83,14 @@ export default function Inspector() {
         </div>
       )}
 
+      {entitiesAtCursor?.some?.(
+        (e) => e.reflector && e.reflector.outOfRange
+      ) && (
+        <div className="text-yellow text-sm">
+          <Warning className="bg-yellow" /> Reflector out of range
+        </div>
+      )}
+
       {warnings.map((e) => (
         <div key={e.id} className="text-yellow text-sm">
           <Warning className="bg-yellow" /> {e.warning && e.warning.text}
@@ -206,6 +214,9 @@ function InspectorEntity({
               {entity.jobProvider.workRequired} work
             </div>
           </>
+        )}
+        {entity.reflector && entity.reflector.outOfRange && (
+          <span className="text-lightGray text-sm">{" - out of range"}</span>
         )}
         {entity.housing && (
           <span className="text-lightGray text-sm">

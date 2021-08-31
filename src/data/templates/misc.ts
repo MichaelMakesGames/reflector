@@ -111,7 +111,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   },
   UI_OVERHEATING: {
     display: {
-      tile: ["outline_exclamation", "blank"],
+      tile: ["exclamation", "blank"],
       speed: 0.05,
       color: colors.laser,
       priority: PRIORITY_MARKER,
