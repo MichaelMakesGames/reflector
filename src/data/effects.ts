@@ -68,7 +68,8 @@ const effects: Record<EffectId, Effect> = {
   },
 
   SPAWN_PLAYER_CORPSE: createSpawnEffect("PLAYER_CORPSE"),
-  SPAWN_BUILDING_WALL_DAMAGED: createSpawnEffect("BUILDING_WALL_DAMAGED"),
+  SPAWN_BUILDING_WALL_CRACKED: createSpawnEffect("BUILDING_WALL_CRACKED"),
+  SPAWN_BUILDING_WALL_CRUMBLING: createSpawnEffect("BUILDING_WALL_CRUMBLING"),
   SPAWN_ENEMY_DRONE: createSpawnEffect("ENEMY_DRONE"),
 };
 

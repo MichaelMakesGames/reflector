@@ -468,21 +468,45 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       windmill: true,
     },
     destructible: {
-      onDestroy: "SPAWN_BUILDING_WALL_DAMAGED",
+      onDestroy: "SPAWN_BUILDING_WALL_CRACKED",
       attackPriority: 0,
-      movementCost: 5,
+      movementCost: 3,
     },
     stopsLaser: {},
     description: {
       name: "Wall",
       description:
-        "The most basic defense. Can take 2 hits, unlike other buildings which are destroyed in one hit.",
+        "The most basic defense. Can take 3 hits, unlike other buildings which are destroyed in one hit.",
     },
   },
-  BUILDING_WALL_DAMAGED: {
+  BUILDING_WALL_CRACKED: {
     building: {},
     display: {
       tile: "wall_damaged",
+      color: colors.inactiveBuilding,
+      priority: PRIORITY_BUILDING_HIGH,
+      hasBackground: true,
+    },
+    blocking: {
+      moving: true,
+      lasers: true,
+      windmill: true,
+    },
+    destructible: {
+      onDestroy: "SPAWN_BUILDING_WALL_CRUMBLING",
+      attackPriority: 0,
+      movementCost: 2,
+    },
+    stopsLaser: {},
+    description: {
+      name: "Damaged Wall",
+      description: "This wall can take 2 more hits.",
+    },
+  },
+  BUILDING_WALL_CRUMBLING: {
+    building: {},
+    display: {
+      tile: "wall_crumbling",
       color: colors.inactiveBuilding,
       priority: PRIORITY_BUILDING_HIGH,
       hasBackground: true,
