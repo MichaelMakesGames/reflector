@@ -162,6 +162,10 @@ templates.BLUEPRINT_SPLITTER_ADVANCED = makeBlueprint({
   cost: { resource: ResourceCode.Machinery, amount: 8 },
   canReplace: ["BUILDING_SPLITTER_HORIZONTAL", "BUILDING_SPLITTER_VERTICAL"],
 });
+templates.BLUEPRINT_ABSORBER = makeBlueprint({
+  builds: "BUILDING_ABSORBER",
+  cost: { resource: ResourceCode.Machinery, amount: 3 },
+});
 templates.BLUEPRINT_RESIDENCE = makeBlueprint({
   builds: "BUILDING_RESIDENCE",
   cost: { resource: ResourceCode.Metal, amount: 3 },

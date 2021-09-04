@@ -2,6 +2,7 @@ import { createAction } from "typesafe-actions";
 import { registerHandler } from "../handleAction";
 import WrappedState from "../../types/WrappedState";
 import audio from "../../lib/audio";
+import { PLAYER_ID } from "../../constants";
 
 const deactivateWeapon = createAction("DEACTIVATE_WEAPON")();
 export default deactivateWeapon;
@@ -13,9 +14,14 @@ function deactivateWeaponHandler(
   const laserState = state.select.laserState();
   if (["ACTIVE", "FIRING"].includes(laserState)) {
     state.act.removeEntities(
-      state.select.entitiesWithComps("laser").map((e) => e.id)
+      state.select
+        .entitiesWithComps("laser")
+        .filter((e) => e.laser.source === PLAYER_ID)
+        .map((e) => e.id)
     );
-    audio.stop("laser_active");
+    if (state.select.entitiesWithComps("laser").length === 0) {
+      audio.stop("laser_active");
+    }
     if (laserState === "ACTIVE") {
       state.setRaw({
         ...state.raw,

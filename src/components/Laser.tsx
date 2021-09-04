@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "tippy.js/dist/tippy.css";
 import { HotkeyGroup, useControl } from "./HotkeysProvider";
-import { DOWN, LEFT, RIGHT, UP } from "../constants";
+import { DOWN, LEFT, PLAYER_ID, RIGHT, UP } from "../constants";
 import { SettingsContext } from "../contexts";
 import actions from "../state/actions";
 import selectors from "../state/selectors";
@@ -23,7 +23,7 @@ export default function Laser() {
     isWeaponActive && getConstDir(d) === getConstDir(aimingDirection);
 
   const fire = () => {
-    dispatch(actions.fireWeapon());
+    dispatch(actions.fireWeapon({ source: PLAYER_ID }));
   };
   const cancel = () => dispatch(actions.deactivateWeapon());
   useControl({
@@ -38,7 +38,7 @@ export default function Laser() {
       if (aimInSameDirectionToFire && isAimingInDirection(direction)) {
         fire();
       } else {
-        dispatch(actions.targetWeapon(direction));
+        dispatch(actions.targetWeapon({ source: PLAYER_ID, direction }));
       }
     };
 
@@ -198,7 +198,12 @@ export default function Laser() {
               if (laserState === "ACTIVE") {
                 fire();
               } else {
-                dispatch(actions.targetWeapon(aimingDirection));
+                dispatch(
+                  actions.targetWeapon({
+                    source: PLAYER_ID,
+                    direction: aimingDirection,
+                  })
+                );
               }
             }}
           />

@@ -62,8 +62,13 @@ export interface Laser {
   strength: number;
   direction: Direction;
   hit: boolean;
+  source: string;
 }
 
+export interface Absorber {
+  charged: boolean;
+  aimingDirection: Direction | null;
+}
 export interface Destructible {
   onDestroy?: EffectId;
   explosive?: boolean;
@@ -195,6 +200,7 @@ export interface Entity {
   parentTemplate?: TemplateName;
   template: TemplateName;
 
+  absorber?: Absorber;
   ai?: AI;
   animationToggle?: AnimationToggle;
   audioToggle?: AudioToggle;

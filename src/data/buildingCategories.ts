@@ -37,6 +37,7 @@ const buildingCategories: BuildingCategory[] = [
       "BLUEPRINT_SPLITTER_HORIZONTAL",
       "BLUEPRINT_PROJECTOR_ADVANCED",
       "BLUEPRINT_SPLITTER_ADVANCED",
+      "BLUEPRINT_ABSORBER",
     ],
   },
   {

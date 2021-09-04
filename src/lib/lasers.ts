@@ -1,5 +1,5 @@
 import { Required } from "ts-toolbelt/out/Object/Required";
-import { DOWN, LEFT, RIGHT, UP } from "../constants";
+import { DOWN, LEFT, PLAYER_ID, RIGHT, UP } from "../constants";
 import { Direction, Entity, Pos } from "../types";
 import colors from "../colors";
 import WrappedState from "../types/WrappedState";
@@ -11,7 +11,8 @@ export function createLaser(
   direction: Direction,
   strength: number,
   hit: boolean,
-  pos: Pos
+  pos: Pos,
+  source: string
 ): Entity {
   const color = colors.laser;
 
@@ -34,6 +35,7 @@ export function createLaser(
       direction: { dx: direction.dx, dy: direction.dy },
       hit,
       strength,
+      source,
     },
   };
 }
@@ -131,14 +133,42 @@ function getSplitOrientation(direction: Direction) {
 }
 
 export function retargetLaserOnReflectorChange(state: WrappedState, pos?: Pos) {
-  if (state.select.isWeaponActive()) {
+  if (state.select.entitiesWithComps("laser").length > 0) {
     if (pos) {
       const entitiesAtPos = state.select.entitiesAtPosition(pos);
       if (entitiesAtPos.some((e) => e.laser)) {
-        state.act.targetWeapon(state.select.lastAimingDirection());
+        if (state.select.laserState() === "ACTIVE") {
+          state.act.targetWeapon({
+            direction: state.select.lastAimingDirection(),
+            source: PLAYER_ID,
+          });
+        }
+        state.select
+          .entitiesWithComps("absorber", "pos")
+          .filter((e) => e.absorber.aimingDirection)
+          .forEach((absorber) =>
+            state.act.targetWeapon({
+              direction: absorber.absorber.aimingDirection as Direction,
+              source: absorber.id,
+            })
+          );
       }
     } else {
-      state.act.targetWeapon(state.select.lastAimingDirection());
+      if (state.select.laserState() === "ACTIVE") {
+        state.act.targetWeapon({
+          direction: state.select.lastAimingDirection(),
+          source: PLAYER_ID,
+        });
+      }
+      state.select
+        .entitiesWithComps("absorber", "pos")
+        .filter((e) => e.absorber.aimingDirection)
+        .forEach((absorber) =>
+          state.act.targetWeapon({
+            direction: absorber.absorber.aimingDirection as Direction,
+            source: absorber.id,
+          })
+        );
     }
   }
 }

@@ -107,6 +107,27 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       resourceChangeReason: "Adv. Splitters",
     },
   },
+  BUILDING_ABSORBER: {
+    display: {
+      tile: "absorber",
+      color: colors.activeBuilding,
+      priority: PRIORITY_BUILDING_HIGH,
+    },
+    building: {},
+    absorber: { charged: false, aimingDirection: null },
+    destructible: { attackPriority: 3, onDestroy: "CLEAR_UI_ABSORBER_CHARGE" },
+    description: {
+      name: "Absorber",
+      description:
+        "Can absorb a laser shot. Automatically fires absorbed shot at adjacent enemies.",
+    },
+    blocking: {
+      lasers: true,
+      windmill: true,
+      moving: true,
+    },
+    stopsLaser: {},
+  },
   BUILDING_TENT: {
     building: {},
     display: {

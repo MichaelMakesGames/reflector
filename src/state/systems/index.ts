@@ -1,4 +1,6 @@
 import WrappedState from "../../types/WrappedState";
+import absorberSystem from "./absorberSystem";
+import absorberTriggerSystem from "./absorberTriggerSystem";
 import aimingSystem from "./aimingSystem";
 import aiSystem from "./aiSystem";
 import animationToggleSystem from "./animationToggleSystem";
@@ -23,8 +25,10 @@ import timeSystem from "./timeSystem";
 import waveSystem from "./waveSystem";
 
 const systems: ((state: WrappedState) => void)[] = [
+  absorberSystem,
   waveSystem,
   aiSystem,
+  absorberTriggerSystem,
   productionSystem,
   immigrationSystem,
   colonistsSystem,

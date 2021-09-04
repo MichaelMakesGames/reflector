@@ -218,6 +218,11 @@ function InspectorEntity({
         {entity.reflector && entity.reflector.outOfRange && (
           <span className="text-lightGray text-sm">{" - out of range"}</span>
         )}
+        {entity.absorber && (
+          <span className="text-lightGray text-sm">
+            {entity.absorber.charged ? " - charged" : " - uncharged"}
+          </span>
+        )}
         {entity.housing && (
           <span className="text-lightGray text-sm">
             {` - ${entity.housing.occupancy}/${entity.housing.capacity} units filled`}

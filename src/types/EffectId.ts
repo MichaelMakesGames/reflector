@@ -1,4 +1,5 @@
 export type EffectId =
+  | "CLEAR_UI_ABSORBER_CHARGE"
   | "CLEAR_UI_OVERHEAT"
   | "DESTROY"
   | "ON_COLONIST_DESTROYED"

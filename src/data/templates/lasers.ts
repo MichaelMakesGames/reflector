@@ -1,4 +1,4 @@
-import { PRIORITY_LASER, UP } from "../../constants";
+import { PLAYER_ID, PRIORITY_LASER, UP } from "../../constants";
 import colors from "../../colors";
 import { Entity } from "../../types";
 import { TemplateName } from "../../types/TemplateName";
@@ -10,6 +10,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       hit: false,
       strength: 1,
       direction: UP,
+      source: PLAYER_ID,
     },
   },
   LASER_COSMETIC_BASE: {
@@ -18,6 +19,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       hit: false,
       strength: 1,
       direction: UP,
+      source: PLAYER_ID,
     },
   },
   LASER_PLAYER_UP: {

@@ -117,6 +117,13 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       priority: PRIORITY_MARKER,
     },
   },
+  UI_ABSORBER_CHARGE: {
+    display: {
+      tile: "absorber_charge",
+      color: colors.laser,
+      priority: PRIORITY_MARKER,
+    },
+  },
   COLONIST: {
     display: {
       tile: "colonists1",

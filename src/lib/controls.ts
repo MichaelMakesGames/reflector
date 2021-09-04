@@ -38,6 +38,35 @@ export function getQuickAction(
     };
   }
 
+  const reflectorAtPos = entitiesAtPos.find((e) => e.reflector);
+  if (
+    reflectorAtPos &&
+    reflectorAtPos.reflector &&
+    reflectorAtPos.reflector.type === "\\"
+  ) {
+    return {
+      action: actions.removeReflector(pos),
+      label: "Remove Reflector",
+    };
+  } else if (reflectorAtPos) {
+    return {
+      action: actions.rotateEntity(reflectorAtPos),
+      label: "Rotate Reflector",
+    };
+  }
+
+  if (
+    canPlaceReflector(wrappedState, pos) &&
+    entitiesAtPos.some((e) => e.laser)
+  ) {
+    return {
+      action: actions.addEntity(
+        createEntityFromTemplate("REFLECTOR_UP_RIGHT", { pos })
+      ),
+      label: "Place / Reflector",
+    };
+  }
+
   const rubble = entitiesAtPos.find((e) => e.rebuildable);
   if (rubble) {
     return {
@@ -53,23 +82,6 @@ export function getQuickAction(
     return {
       action: actions.autoMove(),
       label: "Move Here",
-    };
-  }
-
-  const reflectorAtPos = entitiesAtPos.find((e) => e.reflector);
-  if (
-    reflectorAtPos &&
-    reflectorAtPos.reflector &&
-    reflectorAtPos.reflector.type === "\\"
-  ) {
-    return {
-      action: actions.removeReflector(pos),
-      label: "Remove Reflector",
-    };
-  } else if (reflectorAtPos) {
-    return {
-      action: actions.rotateEntity(reflectorAtPos),
-      label: "Rotate Reflector",
     };
   }
 

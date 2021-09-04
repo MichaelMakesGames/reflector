@@ -3,25 +3,39 @@ import { createAction } from "typesafe-actions";
 import audio from "../../lib/audio";
 import { registerHandler } from "../handleAction";
 import WrappedState from "../../types/WrappedState";
+import { PLAYER_ID } from "../../constants";
 
-const fireWeapon = createAction("FIRE_WEAPON")();
+const fireWeapon = createAction("FIRE_WEAPON")<{ source: string }>();
 export default fireWeapon;
 
 function fireWeaponHandler(
   state: WrappedState,
   action: ReturnType<typeof fireWeapon>
 ): void {
-  if (!state.select.isWeaponActive()) return;
-  if (!state.select.player()) return;
+  const isPlayer = action.payload.source === PLAYER_ID;
+  if (isPlayer) {
+    if (!state.select.isWeaponActive()) return;
+    if (!state.select.player()) return;
+  }
 
-  const lasers = state.select.entitiesWithComps("laser", "pos");
+  const lasers = state.select
+    .entitiesWithComps("laser", "pos")
+    .filter((e) => e.laser.source === action.payload.source);
 
   const entitiesToDestroy: string[] = [];
   for (const laser of lasers.filter((entity) => !entity.laser.cosmetic)) {
     const { pos } = laser;
     const entitiesAtPos = state.select.entitiesAtPosition(pos);
     for (const entity of entitiesAtPos) {
-      if (
+      if (entity.absorber) {
+        state.act.updateEntity({
+          id: entity.id,
+          absorber: {
+            ...entity.absorber,
+            charged: true,
+          },
+        });
+      } else if (
         entity.destructible &&
         entitiesAtPos.some((e) => e.blocking && e.blocking.lasers)
       ) {
@@ -34,13 +48,19 @@ function fireWeaponHandler(
     state.act.destroy(id);
   }
 
-  state.setRaw({
-    ...state.raw,
-    laserState: "FIRING",
-  });
-  state.act.deactivateWeapon();
+  if (isPlayer) {
+    state.setRaw({
+      ...state.raw,
+      laserState: "FIRING",
+    });
+    state.act.deactivateWeapon();
+  } else {
+    state.act.removeEntities(lasers.map((e) => e.id));
+  }
 
-  audio.stop("laser_active");
+  if (state.select.entitiesWithComps("laser").length === 0) {
+    audio.stop("laser_active");
+  }
   audio.play(
     RNG.getItem([
       "laser_shot_1",
@@ -52,7 +72,9 @@ function fireWeaponHandler(
     ]) || ""
   );
 
-  state.act.playerTookTurn();
+  if (isPlayer) {
+    state.act.playerTookTurn();
+  }
 }
 
 registerHandler(fireWeaponHandler, fireWeapon);

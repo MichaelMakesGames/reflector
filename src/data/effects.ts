@@ -13,15 +13,9 @@ export type Effect = (
 ) => void;
 
 const effects: Record<EffectId, Effect> = {
-  CLEAR_UI_OVERHEAT: (state, actor, target) => {
-    if (!target || !target.pos) return;
-    state.act.removeEntities(
-      state.select
-        .entitiesAtPosition(target.pos)
-        .filter((e) => e.template === "UI_OVERHEATING")
-        .map((e) => e.id)
-    );
-  },
+  CLEAR_UI_ABSORBER_CHARGE: createClearEffect("UI_ABSORBER_CHARGE"),
+
+  CLEAR_UI_OVERHEAT: createClearEffect("UI_OVERHEATING"),
 
   DESTROY: (state, actor, target) => {
     if (!target) return;
@@ -89,6 +83,18 @@ function createSpawnEffect(template: TemplateName): Effect {
       };
     }
     state.act.addEntity(entityToSpawn);
+  };
+}
+
+function createClearEffect(template: TemplateName): Effect {
+  return function clearEffect(state, actor, target) {
+    if (!target || !target.pos) return;
+    state.act.removeEntities(
+      state.select
+        .entitiesAtPosition(target.pos)
+        .filter((e) => e.template === template)
+        .map((e) => e.id)
+    );
   };
 }
 

@@ -44,6 +44,9 @@ function loadGameHandler(
 
   audio.stopAll();
   audio.playMusic(state.select.isNight() ? "night" : "day");
+  if (state.select.entitiesWithComps("laser").length > 0) {
+    audio.loop("laser_active", { volume: 0.5 });
+  }
 }
 
 registerHandler(loadGameHandler, loadGame);
