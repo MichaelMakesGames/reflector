@@ -1,4 +1,3 @@
-import activateWeapon from "./activateWeapon";
 import addEntity from "./addEntity";
 import autoMove from "./autoMove";
 import blueprintBuild from "./blueprintBuild";
@@ -50,7 +49,6 @@ import undoTurn from "./undoTurn";
 import updateEntity from "./updateEntity";
 
 export default {
-  activateWeapon,
   addEntity,
   autoMove,
   blueprintBuild,
