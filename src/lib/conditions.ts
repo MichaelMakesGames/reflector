@@ -120,6 +120,14 @@ const conditions: Record<
         ).length >= 3
     );
   },
+
+  willNotHaveAdjacentShields(state, entity) {
+    const { pos } = entity;
+    if (!pos) return false;
+    return state.select
+      .entitiesWithComps("shieldGenerator", "pos")
+      .every((generator) => getDistance(pos, generator.pos) > 3);
+  },
 };
 
 export function areConditionsMet(

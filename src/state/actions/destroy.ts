@@ -22,11 +22,11 @@ function destroyHandler(
   if (!entity) return;
 
   if (entity.destructible) {
+    state.act.removeEntity(entityId);
+
     if (entity.destructible.onDestroy) {
       effects[entity.destructible.onDestroy](state, undefined, entity);
     }
-
-    state.act.removeEntity(entityId);
 
     if (entity.pos) {
       if (entity.building) {
@@ -79,12 +79,7 @@ function destroyHandler(
           entity.pos,
           ...getAdjacentPositions(entity.pos),
         ]) {
-          for (const adjacentEntity of state.select.entitiesAtPosition(
-            adjacentPos
-          )) {
-            if (adjacentEntity.destructible)
-              state.act.destroy(adjacentEntity.id);
-          }
+          state.act.destroyPos({ target: adjacentPos, from: entity.pos });
         }
       }
     }

@@ -254,7 +254,7 @@ export function executePlan(
         { volume: 2 }
       );
       renderer.bump(entityId, targetPos);
-      targets.forEach((e) => state.act.destroy(e.id));
+      state.act.destroyPos({ target: targetPos, from: pos });
     } else {
       state.act.move({ entityId, ...ai.plannedActionDirection });
     }

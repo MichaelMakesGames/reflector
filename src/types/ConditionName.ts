@@ -10,4 +10,5 @@ export type ConditionName =
   | "isNotOnOtherBuilding"
   | "isOnFertile"
   | "isOnOre"
-  | "isPowered";
+  | "isPowered"
+  | "willNotHaveAdjacentShields";

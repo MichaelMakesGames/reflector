@@ -233,6 +233,13 @@ function InspectorEntity({
             {entity.powered.hasPower ? " - Powered" : " - No power"}
           </span>
         )}
+        {entity.shieldGenerator &&
+          entity.powered &&
+          entity.powered.hasPower && (
+            <span className="text-lightGray text-sm">
+              {` ${entity.shieldGenerator.strength}/3`}
+            </span>
+          )}
         {entity.production && (
           <span className="text-lightGray text-sm">
             {entity.production.producedLastTurn ? " - Active" : " - Inactive"}

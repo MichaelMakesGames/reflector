@@ -3,6 +3,8 @@ import {
   PROJECTOR_RANGE,
   PRIORITY_UNIT,
   PRIORITY_MARKER,
+  TILE_SIZE,
+  PRIORITY_BUILDING_DETAIL,
 } from "../../constants";
 import colors from "../../colors";
 import { Entity } from "../../types";
@@ -242,6 +244,57 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       rotation: 270,
     },
     directionIndicator: {},
+  },
+  UI_SHIELD_1: {
+    display: {
+      tile: ["shield_1_0", "shield_1_1"],
+      color: colors.secondary,
+      priority: PRIORITY_BUILDING_DETAIL,
+      offsetX: -TILE_SIZE,
+      offsetY: -TILE_SIZE,
+      width: 3,
+      height: 3,
+      speed: 0.05,
+    },
+  },
+  UI_SHIELD_2: {
+    display: {
+      tile: ["shield_2_0", "shield_2_1", "shield_2_2", "shield_2_3"],
+      color: colors.secondary,
+      priority: PRIORITY_BUILDING_DETAIL,
+      offsetX: -TILE_SIZE,
+      offsetY: -TILE_SIZE,
+      width: 3,
+      height: 3,
+      speed: 0.075,
+    },
+  },
+  UI_SHIELD_3: {
+    display: {
+      tile: [
+        "shield_3_0",
+        "shield_3_1",
+        "shield_3_2",
+        "shield_3_3",
+        "shield_3_4",
+        "shield_3_5",
+      ],
+      color: colors.secondary,
+      priority: PRIORITY_BUILDING_DETAIL,
+      offsetX: -TILE_SIZE,
+      offsetY: -TILE_SIZE,
+      width: 3,
+      height: 3,
+      speed: 0.1,
+    },
+  },
+  SHIELD: {
+    description: {
+      name: "Shield",
+      shortDescription: "blocks attacks and lasers",
+      description: "blocks attacks and lasers",
+    },
+    // shield component added at time of creation, so generator can be linked
   },
   NONE: {},
 };

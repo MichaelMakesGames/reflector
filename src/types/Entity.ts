@@ -21,6 +21,10 @@ export interface Display {
   hasBackground?: boolean;
   flashWhenVisible?: boolean;
   discreteMovement?: boolean;
+  offsetX?: number;
+  offsetY?: number;
+  height?: number;
+  width?: number;
 }
 
 export interface AnimationToggle {
@@ -63,6 +67,14 @@ export interface Laser {
   direction: Direction;
   hit: boolean;
   source: string;
+}
+
+export interface Shield {
+  generator: string;
+}
+
+export interface ShieldGenerator {
+  strength: number;
 }
 
 export interface Absorber {
@@ -231,6 +243,8 @@ export interface Entity {
   reflector?: Reflector;
   road?: Road;
   rotatable?: Rotatable;
+  shield?: Shield;
+  shieldGenerator?: ShieldGenerator;
   smokeEmitter?: SmokeEmitter;
   splitter?: Splitter;
   stopsLaser?: StopsLaser;

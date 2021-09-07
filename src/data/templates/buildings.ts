@@ -128,6 +128,38 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     stopsLaser: {},
   },
+  BUILDING_SHIELD_GENERATOR: {
+    display: {
+      tile: "shield_generator",
+      color: colors.activeBuilding,
+      priority: PRIORITY_BUILDING_HIGH,
+    },
+    colorToggle: {
+      conditions: ["isPowered"],
+      trueColor: colors.activeBuilding,
+      falseColor: colors.inactiveBuilding,
+    },
+    powered: {
+      hasPower: false,
+      powerNeeded: 5,
+      resourceChangeReason: "Shield Generator",
+    },
+    shieldGenerator: {
+      strength: 0,
+    },
+    destructible: { attackPriority: 0, onDestroy: "SHIELD_DISCHARGE" },
+    building: {},
+    blocking: {
+      windmill: true,
+      lasers: true,
+      moving: true,
+    },
+    description: {
+      name: "Shield Generator",
+      description:
+        "Blocks enemies and lasers. Needs 10 power per turn while charging, and 5 power once charged.",
+    },
+  },
   BUILDING_TENT: {
     building: {},
     display: {

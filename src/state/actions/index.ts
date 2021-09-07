@@ -14,6 +14,7 @@ import cycleReflector from "./cycleReflector";
 import deactivateWeapon from "./deactivateWeapon";
 import decreaseJobPriority from "./decreaseJobPriority";
 import destroy from "./destroy";
+import destroyPos from "./destroyPos";
 import executeRemoveBuilding from "./executeRemoveBuilding";
 import fireWeapon from "./fireWeapon";
 import increaseJobPriority from "./increaseJobPriority";
@@ -38,6 +39,8 @@ import setAutoMovePath from "./setAutoMovePath";
 import setAutoMovePathToCursor from "./setAutoMovePathToCursor";
 import setCursorPos from "./setCursorPos";
 import setJobPriority from "./setJobPriority";
+import shieldCharge from "./shieldCharge";
+import shieldDischarge from "./shieldDischarge";
 import startTutorial from "./startTutorial";
 import targetWeapon from "./targetWeapon";
 import temperatureDecrease from "./temperatureDecrease";
@@ -63,6 +66,7 @@ export default {
   deactivateWeapon,
   decreaseJobPriority,
   destroy,
+  destroyPos,
   executeRemoveBuilding,
   fireWeapon,
   increaseJobPriority,
@@ -87,6 +91,8 @@ export default {
   setAutoMovePathToCursor,
   setCursorPos,
   setJobPriority,
+  shieldCharge,
+  shieldDischarge,
   startTutorial,
   targetWeapon,
   temperatureDecrease,

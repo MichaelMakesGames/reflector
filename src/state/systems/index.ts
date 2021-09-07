@@ -20,6 +20,7 @@ import missingResourceIndicatorSystem from "./missingResourceIndicatorSystem";
 import poweredSystem from "./poweredSystem";
 import productionSystem from "./productionSystem";
 import reflectorSystem from "./reflectorSystem";
+import shieldSystem from "./shieldSystem";
 import storageSystem from "./storageSystem";
 import timeSystem from "./timeSystem";
 import waveSystem from "./waveSystem";
@@ -34,6 +35,7 @@ const systems: ((state: WrappedState) => void)[] = [
   colonistsSystem,
   hungerSystem,
   poweredSystem,
+  shieldSystem,
   storageSystem,
   reflectorSystem,
   laserRechargingSystem,

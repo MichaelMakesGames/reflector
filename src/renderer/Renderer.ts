@@ -273,8 +273,8 @@ export default class Renderer {
     sprite.pivot.set(this.tileWidth / 2, this.tileHeight / 2);
     sprite.angle = display.rotation || 0;
     this.setSpritePosition(sprite, pos, display);
-    sprite.width = this.tileWidth;
-    sprite.height = this.tileHeight;
+    sprite.width = this.tileWidth * (display.width || 1);
+    sprite.height = this.tileHeight * (display.height || 1);
     sprite.tint = parseInt((display.color || "#FFFFFF").substr(1), 16);
 
     return sprite;
@@ -288,8 +288,8 @@ export default class Renderer {
   private calcAppPos(pos: Pos, display: Display): Pos {
     const { x, y } = pos;
     return {
-      x: x * this.tileWidth + this.tileWidth / 2,
-      y: y * this.tileHeight + this.tileHeight / 2,
+      x: x * this.tileWidth + this.tileWidth / 2 + (display.offsetX || 0),
+      y: y * this.tileHeight + this.tileHeight / 2 + (display.offsetY || 0),
     };
   }
 

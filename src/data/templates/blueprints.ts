@@ -166,6 +166,17 @@ templates.BLUEPRINT_ABSORBER = makeBlueprint({
   builds: "BUILDING_ABSORBER",
   cost: { resource: ResourceCode.Machinery, amount: 3 },
 });
+templates.BLUEPRINT_SHIELD_GENERATOR = makeBlueprint({
+  builds: "BUILDING_SHIELD_GENERATOR",
+  cost: { resource: ResourceCode.Machinery, amount: 5 },
+  validityConditions: [
+    ...DEFAULT_VALIDITY_CONDITIONS,
+    {
+      condition: "willNotHaveAdjacentShields",
+      invalidMessage: "Must be at 4 spaces from any other shield generators.",
+    },
+  ],
+});
 templates.BLUEPRINT_RESIDENCE = makeBlueprint({
   builds: "BUILDING_RESIDENCE",
   cost: { resource: ResourceCode.Metal, amount: 3 },

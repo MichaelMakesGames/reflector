@@ -43,11 +43,17 @@ function executeRemoveBuildingHandler(
     .entitiesAtPosition(action.payload)
     .filter((e) => e.jobDisabler)
     .forEach((e) => state.act.removeEntity(e.id));
+
   // remove absorber charge
   state.select
     .entitiesAtPosition(action.payload)
     .filter((e) => e.template === "UI_ABSORBER_CHARGE")
     .forEach((e) => state.act.removeEntity(e.id));
+
+  // discharge shield
+  if (removingTarget.shieldGenerator) {
+    state.act.shieldDischarge(removingTarget.id);
+  }
 }
 
 registerHandler(executeRemoveBuildingHandler, executeRemoveBuilding);

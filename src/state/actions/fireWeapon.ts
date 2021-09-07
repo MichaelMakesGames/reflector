@@ -4,6 +4,7 @@ import audio from "../../lib/audio";
 import { registerHandler } from "../handleAction";
 import WrappedState from "../../types/WrappedState";
 import { PLAYER_ID } from "../../constants";
+import { fromPosKey, getPosKey } from "../../lib/geometry";
 
 const fireWeapon = createAction("FIRE_WEAPON")<{ source: string }>();
 export default fireWeapon;
@@ -22,7 +23,7 @@ function fireWeaponHandler(
     .entitiesWithComps("laser", "pos")
     .filter((e) => e.laser.source === action.payload.source);
 
-  const entitiesToDestroy: string[] = [];
+  const positionsToDestroy: string[] = [];
   for (const laser of lasers.filter((entity) => !entity.laser.cosmetic)) {
     const { pos } = laser;
     const entitiesAtPos = state.select.entitiesAtPosition(pos);
@@ -39,13 +40,16 @@ function fireWeaponHandler(
         entity.destructible &&
         entitiesAtPos.some((e) => e.blocking && e.blocking.lasers)
       ) {
-        entitiesToDestroy.push(entity.id);
+        positionsToDestroy.push(getPosKey(entity.pos));
       }
     }
   }
 
-  for (const id of new Set(entitiesToDestroy)) {
-    state.act.destroy(id);
+  for (const posKey of new Set(positionsToDestroy)) {
+    state.act.destroyPos({
+      target: fromPosKey(posKey),
+      from: fromPosKey(posKey),
+    });
   }
 
   if (isPlayer) {

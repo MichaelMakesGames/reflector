@@ -61,6 +61,11 @@ const effects: Record<EffectId, Effect> = {
     state.act.roadUpdateTile(getPositionToDirection(target.pos, LEFT));
   },
 
+  SHIELD_DISCHARGE: (state, actor, target) => {
+    if (!target) return;
+    state.act.shieldDischarge(target.id);
+  },
+
   SPAWN_PLAYER_CORPSE: createSpawnEffect("PLAYER_CORPSE"),
   SPAWN_BUILDING_WALL_CRACKED: createSpawnEffect("BUILDING_WALL_CRACKED"),
   SPAWN_BUILDING_WALL_CRUMBLING: createSpawnEffect("BUILDING_WALL_CRUMBLING"),
