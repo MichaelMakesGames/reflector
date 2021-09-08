@@ -297,29 +297,41 @@ export function makePlan(
       });
       return;
     } else {
+      const direction: Direction = {
+        dx: target.x - pos.x,
+        dy: target.y - pos.y,
+      };
       state.act.updateEntity({
         id: entity.id,
         ai: {
           ...ai,
           plannedAction: "MOVE_OR_ATTACK",
-          plannedActionDirection: {
-            dx: target.x - pos.x,
-            dy: target.y - pos.y,
-          },
+          plannedActionDirection: direction,
         },
       });
       return;
     }
-  } else if (ai.type === "BURROWER") {
-    state.act.updateEntity({
-      id: entity.id,
-      ai: { ...ai, plannedAction: "DIG" },
-    });
-    return;
   }
 
   const direction = getDirectionTowardTarget(entity.pos, target, entity, state);
   if (!direction) return;
+
+  if (ai.type === "BURROWER") {
+    const targetPos = getPositionToDirection(pos, direction);
+    const targets = state.select
+      .entitiesAtPosition(targetPos)
+      .filter(
+        (e) => e.destructible && e.destructible.attackPriority !== undefined
+      );
+    if (!targets.length && getDistance(pos, target, true) > 2) {
+      state.act.updateEntity({
+        id: entity.id,
+        ai: { ...ai, plannedAction: "DIG" },
+      });
+      return;
+    }
+  }
+
   state.act.updateEntity({
     id: entity.id,
     ai: {
