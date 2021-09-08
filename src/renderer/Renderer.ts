@@ -52,6 +52,18 @@ export default class Renderer {
 
   private movementPaths: Map<string, Pos[]> = new Map();
 
+  private previousStage: { scale: number; x: number; y: number } = {
+    scale: 1,
+    x: 0,
+    y: 0,
+  };
+
+  private desiredStage: { scale: number; x: number; y: number } = {
+    scale: 1,
+    x: 0,
+    y: 0,
+  };
+
   public constructor({
     gridWidth,
     gridHeight,
@@ -95,19 +107,31 @@ export default class Renderer {
     const x = Math.max(Math.min(pos.x - this.gridWidth / 4, X_MAX), X_MIN);
     const y = Math.max(Math.min(pos.y - this.gridHeight / 4, Y_MAX), Y_MIN);
     this.zoomedIn = true;
-    this.app.stage.scale.x = 2;
-    this.app.stage.scale.y = 2;
-    this.app.stage.position.x = -x * this.tileWidth * 2;
-    this.app.stage.position.y = -y * this.tileHeight * 2;
+    this.previousStage = {
+      scale: this.app.stage.scale.x,
+      x: this.app.stage.position.x,
+      y: this.app.stage.position.y,
+    };
+    this.desiredStage = {
+      scale: 2,
+      x: -x * this.tileWidth * 2,
+      y: -y * this.tileHeight * 2,
+    };
     Object.values(this.renderEntities).forEach((e) => this.updateVisibility(e));
   }
 
   public zoomOut(): void {
     this.zoomedIn = false;
-    this.app.stage.scale.x = 1;
-    this.app.stage.scale.y = 1;
-    this.app.stage.position.x = 0;
-    this.app.stage.position.y = 0;
+    this.previousStage = {
+      scale: this.app.stage.scale.x,
+      x: this.app.stage.position.x,
+      y: this.app.stage.position.y,
+    };
+    this.desiredStage = {
+      scale: 1,
+      x: 0,
+      y: 0,
+    };
     Object.values(this.renderEntities).forEach((e) => this.updateVisibility(e));
   }
 
@@ -321,8 +345,8 @@ export default class Renderer {
 
   private isPosVisible(pos: Pos) {
     if (this.zoomedIn) {
-      const xMin = this.app.stage.position.x / (this.tileWidth * -2);
-      const yMin = this.app.stage.position.y / (this.tileHeight * -2);
+      const xMin = this.desiredStage.x / (this.tileWidth * -2);
+      const yMin = this.desiredStage.y / (this.tileHeight * -2);
       const xMax = xMin + this.gridWidth / 2;
       const yMax = yMin + this.gridHeight / 2;
       return pos.x >= xMin && pos.x < xMax && pos.y >= yMin && pos.y < yMax;
@@ -626,6 +650,7 @@ export default class Renderer {
         )
       );
       this.app.ticker.add((delta: number) => this.handleMovement(delta));
+      this.app.ticker.add((delta: number) => this.handleStageTransition(delta));
     });
   }
 
@@ -685,6 +710,59 @@ export default class Renderer {
     }
   }
 
+  private handleStageTransition(delta: number) {
+    const DURATION = 8;
+    const speedScale =
+      Math.abs(this.previousStage.scale - this.desiredStage.scale) / DURATION;
+    const speedX =
+      Math.abs(this.previousStage.x - this.desiredStage.x) / DURATION;
+    const speedY =
+      Math.abs(this.previousStage.y - this.desiredStage.y) / DURATION;
+
+    const oldScale = this.app.stage.scale.x;
+    const oldX = this.app.stage.x;
+    const oldY = this.app.stage.y;
+
+    // const { x: destX, y: destY } = this.calcAppPos(
+    //   path[0],
+    //   entity.displayComp
+    // );
+    const deltaScale = this.desiredStage.scale - oldScale;
+    const deltaX = this.desiredStage.x - oldX;
+    const deltaY = this.desiredStage.y - oldY;
+
+    let newScale = oldScale;
+    let newX = oldX;
+    let newY = oldY;
+
+    if (Math.abs(deltaScale) <= speedScale * delta) {
+      newScale = this.desiredStage.scale;
+    } else if (deltaScale > 0) {
+      newScale = oldScale + speedScale * delta;
+    } else {
+      newScale = oldScale - speedScale * delta;
+    }
+    if (Math.abs(deltaX) <= speedX * delta) {
+      newX = this.desiredStage.x;
+    } else if (deltaX > 0) {
+      newX = oldX + speedX * delta;
+    } else {
+      newX = oldX - speedX * delta;
+    }
+    if (Math.abs(deltaY) <= speedY * delta) {
+      newY = this.desiredStage.y;
+    } else if (deltaY > 0) {
+      newY = oldY + speedY * delta;
+    } else {
+      newY = oldY - speedY * delta;
+    }
+
+    this.app.stage.scale.x = newScale;
+    this.app.stage.scale.y = newScale;
+    this.app.stage.position.x = newX;
+    this.app.stage.position.y = newY;
+  }
+
   public getClientRectFromPos(gamePos: Pos): ClientRect {
     const canvas = this.app.view;
     const canvasParent = canvas.parentElement;
@@ -705,8 +783,8 @@ export default class Renderer {
       const bottom = top + height;
       return { width, height, left, right, top, bottom };
     } else {
-      const stageX = this.app.stage.position.x / this.tileWidth / -2;
-      const stageY = this.app.stage.position.y / this.tileHeight / -2;
+      const stageX = this.desiredStage.x / this.tileWidth / -2;
+      const stageY = this.desiredStage.y / this.tileHeight / -2;
       const width = (this.tileWidth * 2) / scaleX;
       const height = (this.tileHeight * 2) / scaleY;
       const left =
@@ -738,8 +816,8 @@ export default class Renderer {
     } else {
       const offsetX = Math.floor(scaledMouseX / this.tileWidth / 2);
       const offsetY = Math.floor(scaledMouseY / this.tileHeight / 2);
-      const stageX = this.app.stage.position.x / this.tileWidth / -2;
-      const stageY = this.app.stage.position.y / this.tileHeight / -2;
+      const stageX = this.desiredStage.x / this.tileWidth / -2;
+      const stageY = this.desiredStage.y / this.tileHeight / -2;
       return {
         x: stageX + offsetX,
         y: stageY + offsetY,
