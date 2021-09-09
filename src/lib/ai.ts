@@ -316,14 +316,20 @@ export function makePlan(
   const direction = getDirectionTowardTarget(entity.pos, target, entity, state);
   if (!direction) return;
 
-  if (ai.type === "BURROWER") {
+  if (ai.type === "BURROWER" || ai.type === "BURROWED") {
     const targetPos = getPositionToDirection(pos, direction);
     const targets = state.select
       .entitiesAtPosition(targetPos)
       .filter(
         (e) => e.destructible && e.destructible.attackPriority !== undefined
       );
-    if (!targets.length && getDistance(pos, target, true) > 2) {
+
+    if (
+      (ai.type === "BURROWER" &&
+        !targets.length &&
+        getDistance(pos, target, true) > 2) ||
+      (ai.type === "BURROWED" && targets.length)
+    ) {
       state.act.updateEntity({
         id: entity.id,
         ai: { ...ai, plannedAction: "DIG" },
