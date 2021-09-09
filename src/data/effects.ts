@@ -2,20 +2,21 @@ import WrappedState from "../types/WrappedState";
 import { Entity } from "../types";
 import { getPositionToDirection } from "../lib/geometry";
 import { UP, RIGHT, DOWN, LEFT } from "../constants";
-import { EffectId } from "../types/EffectId";
+import { EffectId, Effect, AllEffect } from "../types/Effect";
 import { createEntityFromTemplate } from "../lib/entities";
 import { TemplateName } from "../types/TemplateName";
 
-export type Effect = (
+export type EffectExecutor = (
   state: WrappedState,
   actor?: Entity,
   target?: Entity
 ) => void;
 
-const effects: Record<EffectId, Effect> = {
+const baseEffects: Record<EffectId, EffectExecutor> = {
   CLEAR_UI_ABSORBER_CHARGE: createClearEffect("UI_ABSORBER_CHARGE"),
-
-  CLEAR_UI_OVERHEAT: createClearEffect("UI_OVERHEATING"),
+  CLEAR_UI_OVERHEATING_CRITICAL: createClearEffect("UI_OVERHEATING_CRITICAL"),
+  CLEAR_UI_OVERHEATING_HOT: createClearEffect("UI_OVERHEATING_HOT"),
+  CLEAR_UI_OVERHEATING_VERY_HOT: createClearEffect("UI_OVERHEATING_VERY_HOT"),
 
   DESTROY: (state, actor, target) => {
     if (!target) return;
@@ -70,9 +71,12 @@ const effects: Record<EffectId, Effect> = {
   SPAWN_BUILDING_WALL_CRACKED: createSpawnEffect("BUILDING_WALL_CRACKED"),
   SPAWN_BUILDING_WALL_CRUMBLING: createSpawnEffect("BUILDING_WALL_CRUMBLING"),
   SPAWN_ENEMY_DRONE: createSpawnEffect("ENEMY_DRONE"),
+  SPAWN_UI_OVERHEATING_CRITICAL: createSpawnEffect("UI_OVERHEATING_CRITICAL"),
+  SPAWN_UI_OVERHEATING_HOT: createSpawnEffect("UI_OVERHEATING_HOT"),
+  SPAWN_UI_OVERHEATING_VERY_HOT: createSpawnEffect("UI_OVERHEATING_VERY_HOT"),
 };
 
-function createSpawnEffect(template: TemplateName): Effect {
+function createSpawnEffect(template: TemplateName): EffectExecutor {
   return function spawnEffect(state, actor, target) {
     let entityToSpawn = createEntityFromTemplate(template, {
       pos: target ? target.pos : undefined,
@@ -91,7 +95,7 @@ function createSpawnEffect(template: TemplateName): Effect {
   };
 }
 
-function createClearEffect(template: TemplateName): Effect {
+function createClearEffect(template: TemplateName): EffectExecutor {
   return function clearEffect(state, actor, target) {
     if (!target || !target.pos) return;
     state.act.removeEntities(
@@ -103,4 +107,17 @@ function createClearEffect(template: TemplateName): Effect {
   };
 }
 
-export default effects;
+function isAllEffect(effect: Effect): effect is AllEffect {
+  return Boolean((effect as any).ALL);
+}
+
+export function executeEffect(
+  effect: Effect,
+  ...args: Parameters<EffectExecutor>
+) {
+  if (isAllEffect(effect)) {
+    effect.ALL.forEach((e) => executeEffect(e, ...args));
+  } else {
+    baseEffects[effect](...args);
+  }
+}

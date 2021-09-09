@@ -354,7 +354,13 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     destructible: {
       attackPriority: 3,
       explosive: true,
-      onDestroy: "CLEAR_UI_OVERHEAT",
+      onDestroy: {
+        ALL: [
+          "CLEAR_UI_OVERHEATING_HOT",
+          "CLEAR_UI_OVERHEATING_VERY_HOT",
+          "CLEAR_UI_OVERHEATING_CRITICAL",
+        ],
+      },
     },
     production: {
       resource: ResourceCode.Power,

@@ -7,7 +7,7 @@ import { getAdjacentPositions } from "../../lib/geometry";
 import renderer from "../../renderer";
 import { registerHandler } from "../handleAction";
 import WrappedState from "../../types/WrappedState";
-import effects from "../../data/effects";
+import { executeEffect } from "../../data/effects";
 import { TemplateName } from "../../types/TemplateName";
 
 const destroy = createAction("DESTROY")<string>();
@@ -25,7 +25,7 @@ function destroyHandler(
     state.act.removeEntity(entityId);
 
     if (entity.destructible.onDestroy) {
-      effects[entity.destructible.onDestroy](state, undefined, entity);
+      executeEffect(entity.destructible.onDestroy, state, undefined, entity);
     }
 
     if (entity.pos) {

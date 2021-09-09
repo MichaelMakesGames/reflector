@@ -111,12 +111,31 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     missingResourceIndicator: {},
   },
-  UI_OVERHEATING: {
+  UI_OVERHEATING_HOT: {
     display: {
-      tile: ["exclamation", "blank"],
+      tile: ["exclamation_single", "blank"],
       speed: 0.05,
       color: colors.laser,
       priority: PRIORITY_MARKER,
+      flashWhenVisible: true,
+    },
+  },
+  UI_OVERHEATING_VERY_HOT: {
+    display: {
+      tile: ["exclamation_double", "blank"],
+      speed: 0.05,
+      color: colors.laser,
+      priority: PRIORITY_MARKER,
+      flashWhenVisible: true,
+    },
+  },
+  UI_OVERHEATING_CRITICAL: {
+    display: {
+      tile: ["exclamation_triple", "blank"],
+      speed: 0.05,
+      color: colors.laser,
+      priority: PRIORITY_MARKER,
+      flashWhenVisible: true,
     },
   },
   UI_ABSORBER_CHARGE: {

@@ -1,10 +1,10 @@
-import type { Direction } from "./Direction";
-import type { ResourceCode } from "../data/resources";
-import type { JobTypeCode } from "../data/jobTypes";
 import type { ColonistStatusCode } from "../data/colonistStatuses";
+import type { JobTypeCode } from "../data/jobTypes";
+import type { ResourceCode } from "../data/resources";
 import type { SoundOptions } from "../lib/audio/Audio";
-import type { EffectId } from "./EffectId";
 import { ConditionName } from "./ConditionName";
+import type { Direction } from "./Direction";
+import type { Effect } from "./Effect";
 import { TemplateName } from "./TemplateName";
 
 export interface Pos {
@@ -82,7 +82,7 @@ export interface Absorber {
   aimingDirection: Direction | null;
 }
 export interface Destructible {
-  onDestroy?: EffectId;
+  onDestroy?: Effect;
   explosive?: boolean;
   attackPriority?: number;
   movementCost?: number;
@@ -161,7 +161,7 @@ export interface Powered {
 
 export interface Temperature {
   status: "normal" | "hot" | "very hot" | "critical";
-  onOverheat: EffectId;
+  onOverheat: Effect;
 }
 
 export interface Building {}
@@ -175,7 +175,7 @@ export interface Blueprint {
   canReplace?: TemplateName[];
   cost: { resource: ResourceCode; amount: number };
   validityConditions: { condition: ConditionName; invalidMessage: string }[];
-  onBuild?: EffectId;
+  onBuild?: Effect;
 }
 
 export interface JobDisabler {}

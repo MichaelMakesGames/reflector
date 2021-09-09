@@ -5,7 +5,7 @@ import WrappedState from "../../types/WrappedState";
 import { areConditionsMet } from "../../lib/conditions";
 import { createEntityFromTemplate } from "../../lib/entities";
 import audio from "../../lib/audio";
-import effects from "../../data/effects";
+import { executeEffect } from "../../data/effects";
 
 const blueprintBuild = createAction("BLUEPRINT_BUILD")();
 export default blueprintBuild;
@@ -70,7 +70,7 @@ function blueprintBuildHandler(
   ]);
 
   if (blueprint.blueprint.onBuild) {
-    effects[blueprint.blueprint.onBuild](state, blueprint, building);
+    executeEffect(blueprint.blueprint.onBuild, state, blueprint, building);
   }
 
   state.act.playerTookTurn();

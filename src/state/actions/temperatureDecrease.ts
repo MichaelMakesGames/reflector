@@ -1,7 +1,7 @@
 import { createAction } from "typesafe-actions";
 import { registerHandler } from "../handleAction";
 import WrappedState from "../../types/WrappedState";
-import effects from "../../data/effects";
+import { executeEffect } from "../../data/effects";
 
 const temperatureDecrease = createAction("temperatureDecrease")<string>();
 export default temperatureDecrease;
@@ -18,17 +18,21 @@ function temperatureDecreaseHandler(
       id: entity.id,
       temperature: { ...entity.temperature, status: "normal" },
     });
-    effects.CLEAR_UI_OVERHEAT(state, undefined, entity);
+    executeEffect("CLEAR_UI_OVERHEATING_HOT", state, undefined, entity);
   } else if (status === "very hot") {
     state.act.updateEntity({
       id: entity.id,
       temperature: { ...entity.temperature, status: "hot" },
     });
+    executeEffect("CLEAR_UI_OVERHEATING_VERY_HOT", state, undefined, entity);
+    executeEffect("SPAWN_UI_OVERHEATING_HOT", state, undefined, entity);
   } else if (status === "critical") {
     state.act.updateEntity({
       id: entity.id,
       temperature: { ...entity.temperature, status: "very hot" },
     });
+    executeEffect("CLEAR_UI_OVERHEATING_CRITICAL", state, undefined, entity);
+    executeEffect("SPAWN_UI_OVERHEATING_VERY_HOT", state, undefined, entity);
   }
 }
 

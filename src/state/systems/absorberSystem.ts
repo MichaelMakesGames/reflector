@@ -1,5 +1,5 @@
 import { Required } from "ts-toolbelt/out/Object/Required";
-import effects from "../../data/effects";
+import { executeEffect } from "../../data/effects";
 import { createEntityFromTemplate } from "../../lib/entities";
 import { Entity } from "../../types";
 import WrappedState from "../../types/WrappedState";
@@ -20,7 +20,7 @@ export default function absorberSystem(state: WrappedState): void {
         id: absorber.id,
         absorber: { aimingDirection: null, charged: false },
       });
-      effects.CLEAR_UI_ABSORBER_CHARGE(state, undefined, absorber);
+      executeEffect("CLEAR_UI_ABSORBER_CHARGE", state, undefined, absorber);
     });
 
   // create charge indicators

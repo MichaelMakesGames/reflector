@@ -3,7 +3,7 @@ import { BUILDING_RANGE, PRIORITY_BUILDING_HIGH } from "../../constants";
 import { ResourceCode } from "../resources";
 import { Description, Entity } from "../../types";
 import buildings from "./buildings";
-import { EffectId } from "../../types/EffectId";
+import { EffectId } from "../../types/Effect";
 import { ConditionName } from "../../types/ConditionName";
 import { TemplateName } from "../../types/TemplateName";
 
