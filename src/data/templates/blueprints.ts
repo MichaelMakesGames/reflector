@@ -29,6 +29,11 @@ const DEFAULT_VALIDITY_CONDITIONS: {
   },
 ];
 
+const DEFAULT_VALIDITY_CONDITIONS_NON_BLOCKING: {
+  condition: ConditionName;
+  invalidMessage: string;
+}[] = DEFAULT_VALIDITY_CONDITIONS.filter((c) => c.condition !== "isNotBlocked");
+
 interface MakeBlueprintConfig {
   builds: TemplateName;
   cost?: { resource: ResourceCode; amount: number };
@@ -90,14 +95,14 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {};
 templates.BLUEPRINT_FARM = makeBlueprint({
   builds: "BUILDING_FARM",
   validityConditions: [
-    ...DEFAULT_VALIDITY_CONDITIONS,
+    ...DEFAULT_VALIDITY_CONDITIONS_NON_BLOCKING,
     { condition: "isOnFertile", invalidMessage: "Must build on fertile land." },
   ],
 });
 templates.BLUEPRINT_MINING_SPOT = makeBlueprint({
   builds: "BUILDING_MINING_SPOT",
   validityConditions: [
-    ...DEFAULT_VALIDITY_CONDITIONS,
+    ...DEFAULT_VALIDITY_CONDITIONS_NON_BLOCKING,
     { condition: "isOnOre", invalidMessage: "Must build on ore." },
   ],
 });
@@ -137,6 +142,7 @@ templates.BLUEPRINT_ROAD = makeBlueprint({
   builds: "BUILDING_ROAD",
   cost: { resource: ResourceCode.Metal, amount: 1 },
   onBuild: "ON_ROAD_BUILD",
+  validityConditions: DEFAULT_VALIDITY_CONDITIONS_NON_BLOCKING,
 });
 templates.BLUEPRINT_PROJECTOR_BASIC = makeBlueprint({
   builds: "BUILDING_PROJECTOR_BASIC",

@@ -20,7 +20,7 @@ export function findValidPositions(
       for (const dy of rangeFromTo(-buildFrom.range, buildFrom.range + 1)) {
         const pos = { x: buildFrom.pos.x + dx, y: buildFrom.pos.y + dy };
         if (
-          !results.some((other) => arePositionsEqual(pos, other)) &&
+          // !results.some((other) => arePositionsEqual(pos, other)) &&
           canPlace(state.raw, pos)
         ) {
           results.push(pos);
