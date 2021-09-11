@@ -28,6 +28,15 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       tile: "laser_player_up",
       color: colors.laser,
       priority: PRIORITY_LASER,
+      group: {
+        id: "LASER",
+        glow: {
+          color: colors.laser,
+          baseStrength: 1.5,
+          sinMultiplier: 0.5,
+          deltaDivisor: 10,
+        },
+      },
     },
   },
   LASER_PLAYER_DOWN: {
@@ -36,6 +45,15 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       tile: "laser_player_down",
       color: colors.laser,
       priority: PRIORITY_LASER,
+      group: {
+        id: "LASER",
+        glow: {
+          color: colors.laser,
+          baseStrength: 1.5,
+          sinMultiplier: 0.5,
+          deltaDivisor: 10,
+        },
+      },
     },
   },
   LASER_PLAYER_LEFT: {
@@ -44,6 +62,15 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       tile: "laser_player_left",
       color: colors.laser,
       priority: PRIORITY_LASER,
+      group: {
+        id: "LASER",
+        glow: {
+          color: colors.laser,
+          baseStrength: 1.5,
+          sinMultiplier: 0.5,
+          deltaDivisor: 10,
+        },
+      },
     },
   },
   LASER_PLAYER_RIGHT: {
@@ -52,6 +79,15 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       tile: "laser_player_right",
       color: colors.laser,
       priority: PRIORITY_LASER,
+      group: {
+        id: "LASER",
+        glow: {
+          color: colors.laser,
+          baseStrength: 1.5,
+          sinMultiplier: 0.5,
+          deltaDivisor: 10,
+        },
+      },
     },
   },
   LASER_BURST: {
@@ -60,6 +96,15 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       tile: "laser_burst",
       color: colors.laser,
       priority: PRIORITY_LASER,
+      group: {
+        id: "LASER",
+        glow: {
+          color: colors.laser,
+          baseStrength: 1.5,
+          sinMultiplier: 0.5,
+          deltaDivisor: 10,
+        },
+      },
     },
   },
   LASER_HORIZONTAL: {
@@ -68,15 +113,33 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       tile: "laser",
       color: colors.laser,
       priority: PRIORITY_LASER,
+      group: {
+        id: "LASER",
+        glow: {
+          color: colors.laser,
+          baseStrength: 1.5,
+          sinMultiplier: 0.5,
+          deltaDivisor: 10,
+        },
+      },
     },
   },
   LASER_VERTICAL: {
     parentTemplate: "LASER_BASE",
     display: {
       tile: "laser",
+      rotation: 90,
       color: colors.laser,
       priority: PRIORITY_LASER,
-      rotation: 90,
+      group: {
+        id: "LASER",
+        glow: {
+          color: colors.laser,
+          baseStrength: 1.5,
+          sinMultiplier: 0.5,
+          deltaDivisor: 10,
+        },
+      },
     },
   },
   LASER_REFLECTED_UP_LEFT: {
@@ -86,6 +149,15 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       rotation: 180,
       color: colors.laser,
       priority: PRIORITY_LASER,
+      group: {
+        id: "LASER",
+        glow: {
+          color: colors.laser,
+          baseStrength: 1.5,
+          sinMultiplier: 0.5,
+          deltaDivisor: 10,
+        },
+      },
     },
   },
   LASER_REFLECTED_UP_RIGHT: {
@@ -95,6 +167,15 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       rotation: 270,
       color: colors.laser,
       priority: PRIORITY_LASER,
+      group: {
+        id: "LASER",
+        glow: {
+          color: colors.laser,
+          baseStrength: 1.5,
+          sinMultiplier: 0.5,
+          deltaDivisor: 10,
+        },
+      },
     },
   },
   LASER_REFLECTED_DOWN_LEFT: {
@@ -104,6 +185,15 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       rotation: 90,
       color: colors.laser,
       priority: PRIORITY_LASER,
+      group: {
+        id: "LASER",
+        glow: {
+          color: colors.laser,
+          baseStrength: 1.5,
+          sinMultiplier: 0.5,
+          deltaDivisor: 10,
+        },
+      },
     },
   },
   LASER_REFLECTED_DOWN_RIGHT: {
@@ -113,6 +203,15 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       rotation: 0,
       color: colors.laser,
       priority: PRIORITY_LASER,
+      group: {
+        id: "LASER",
+        glow: {
+          color: colors.laser,
+          baseStrength: 1.5,
+          sinMultiplier: 0.5,
+          deltaDivisor: 10,
+        },
+      },
     },
   },
   LASER_4SPLIT: {
@@ -122,6 +221,15 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       rotation: 0,
       color: colors.laser,
       priority: PRIORITY_LASER,
+      group: {
+        id: "LASER",
+        glow: {
+          color: colors.laser,
+          baseStrength: 1.5,
+          sinMultiplier: 0.5,
+          deltaDivisor: 10,
+        },
+      },
     },
   },
   LASER_SPLIT_UP: {
@@ -131,6 +239,15 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       rotation: 0,
       color: colors.laser,
       priority: PRIORITY_LASER,
+      group: {
+        id: "LASER",
+        glow: {
+          color: colors.laser,
+          baseStrength: 1.5,
+          sinMultiplier: 0.5,
+          deltaDivisor: 10,
+        },
+      },
     },
   },
   LASER_SPLIT_RIGHT: {
@@ -140,6 +257,15 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       rotation: 90,
       color: colors.laser,
       priority: PRIORITY_LASER,
+      group: {
+        id: "LASER",
+        glow: {
+          color: colors.laser,
+          baseStrength: 1.5,
+          sinMultiplier: 0.5,
+          deltaDivisor: 10,
+        },
+      },
     },
   },
   LASER_SPLIT_DOWN: {
@@ -149,6 +275,15 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       rotation: 180,
       color: colors.laser,
       priority: PRIORITY_LASER,
+      group: {
+        id: "LASER",
+        glow: {
+          color: colors.laser,
+          baseStrength: 1.5,
+          sinMultiplier: 0.5,
+          deltaDivisor: 10,
+        },
+      },
     },
   },
   LASER_SPLIT_LEFT: {
@@ -158,6 +293,15 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       rotation: 270,
       color: colors.laser,
       priority: PRIORITY_LASER,
+      group: {
+        id: "LASER",
+        glow: {
+          color: colors.laser,
+          baseStrength: 1.5,
+          sinMultiplier: 0.5,
+          deltaDivisor: 10,
+        },
+      },
     },
   },
 };

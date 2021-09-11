@@ -143,6 +143,15 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       tile: "absorber_charge",
       color: colors.laser,
       priority: PRIORITY_MARKER,
+      group: {
+        id: "UI_ABSORBER_CHARGE",
+        glow: {
+          color: colors.laser,
+          baseStrength: 1.5,
+          sinMultiplier: 0.5,
+          deltaDivisor: 10,
+        },
+      },
     },
   },
   COLONIST: {

@@ -25,6 +25,15 @@ export interface Display {
   offsetY?: number;
   height?: number;
   width?: number;
+  group?: {
+    id: string;
+    glow?: {
+      color: string;
+      baseStrength: number;
+      sinMultiplier: number;
+      deltaDivisor: number;
+    };
+  };
 }
 
 export interface AnimationToggle {

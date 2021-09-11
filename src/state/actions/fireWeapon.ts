@@ -5,6 +5,7 @@ import { registerHandler } from "../handleAction";
 import WrappedState from "../../types/WrappedState";
 import { PLAYER_ID } from "../../constants";
 import { fromPosKey, getPosKey } from "../../lib/geometry";
+import renderer from "../../renderer";
 
 const fireWeapon = createAction("FIRE_WEAPON")<{ source: string }>();
 export default fireWeapon;
@@ -22,6 +23,8 @@ function fireWeaponHandler(
   const lasers = state.select
     .entitiesWithComps("laser", "pos")
     .filter((e) => e.laser.source === action.payload.source);
+
+  renderer.flashGlowAndRemoveGroup(lasers[0].display?.group?.id || "");
 
   const positionsToDestroy: string[] = [];
   for (const laser of lasers.filter((entity) => !entity.laser.cosmetic)) {

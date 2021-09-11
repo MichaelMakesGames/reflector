@@ -1,9 +1,15 @@
 import { nanoid } from "nanoid";
+import { GlowFilter } from "pixi-filters";
 import * as particles from "pixi-particles";
 import * as PIXI from "pixi.js";
 import { Required } from "ts-toolbelt/out/Object/Required";
 import colors from "../colors";
-import { PLAYER_ID, PRIORITY_BUILDING_DETAIL, UP } from "../constants";
+import {
+  PLAYER_ID,
+  PRIORITY_BUILDING_DETAIL,
+  PRIORITY_LASER,
+  UP,
+} from "../constants";
 import { arePositionsEqual, getPositionToDirection } from "../lib/geometry";
 import { Display, Entity, Pos } from "../types";
 
@@ -23,6 +29,17 @@ interface RenderEntity {
   sprite: PIXI.Sprite;
   background?: PIXI.Graphics;
   isVisible?: boolean;
+}
+
+interface RenderGroup {
+  id: string;
+  config: Pick<Required<Display>, "group">["group"];
+  container: PIXI.Container;
+  filters: PIXI.Filter[];
+  tickers: ((delta: number) => void)[];
+  entities: Set<string>;
+  willRemove?: boolean;
+  removing?: boolean;
 }
 
 export default class Renderer {
@@ -49,6 +66,8 @@ export default class Renderer {
   private zoomedIn: boolean = false;
 
   private layers: Record<number, PIXI.Container> = {};
+
+  private groups: Record<string, RenderGroup> = {};
 
   private movementPaths: Map<string, Pos[]> = new Map();
 
@@ -177,9 +196,14 @@ export default class Renderer {
       background.position.y = pos.y * this.tileHeight;
 
       this.renderEntities[entity.id].background = background;
-      this.getLayer(display.priority).addChild(background);
+      this.getContainer(display).addChild(background);
     }
-    this.getLayer(display.priority).addChild(sprite);
+    this.getContainer(display).addChild(sprite);
+
+    const group = display.group ? this.groups[display.group.id] : null;
+    if (group) {
+      group.entities.add(entity.id);
+    }
 
     this.updateVisibility(this.renderEntities[entity.id]);
   }
@@ -230,6 +254,10 @@ export default class Renderer {
     const renderEntity = this.renderEntities[entityId];
     if (renderEntity) {
       delete this.renderEntities[entityId];
+      const group = renderEntity.displayComp.group
+        ? this.groups[renderEntity.displayComp.group.id]
+        : null;
+      if (group && group.willRemove) return;
       if (renderEntity.background) {
         renderEntity.background.parent.removeChild(renderEntity.background);
       }
@@ -238,6 +266,12 @@ export default class Renderer {
       }
       if (this.movementPaths.has(entityId)) {
         this.movementPaths.delete(entityId);
+      }
+      if (group) {
+        group.entities.delete(entityId);
+        if (group.entities.size === 0 && !group.removing) {
+          this.removeGroup(group.id);
+        }
       }
     }
   }
@@ -317,10 +351,52 @@ export default class Renderer {
     };
   }
 
-  private getLayer(priority: number) {
+  private getContainer({ priority, group: groupConfig }: Display) {
+    const layer = this.getOrCreateLayer(priority);
+    if (!groupConfig) return layer;
+
+    if (this.groups[groupConfig.id]) {
+      return this.groups[groupConfig.id].container;
+    }
+
+    const group: RenderGroup = {
+      id: groupConfig.id,
+      config: groupConfig,
+      container: new PIXI.Container(),
+      filters: [],
+      tickers: [],
+      entities: new Set(),
+    };
+    layer.addChild(group.container);
+    this.groups[groupConfig.id] = group;
+    if (group.config.glow) {
+      const { glow } = group.config;
+      const filter = new GlowFilter({
+        color: hexToNumber(glow.color),
+        innerStrength: 0,
+        outerStrength: 0,
+        distance: 20,
+      });
+      let t = 0;
+      const ticker = (delta: number) => {
+        t += delta;
+        filter.outerStrength =
+          glow.baseStrength +
+          glow.sinMultiplier * Math.sin(t / glow.deltaDivisor);
+      };
+      this.app.ticker.add(ticker);
+      group.tickers.push(ticker);
+      group.filters.push(filter);
+    }
+    group.container.filters = group.filters;
+    return group.container;
+  }
+
+  private getOrCreateLayer(priority: number): PIXI.Container {
     if (this.layers[priority]) {
       return this.layers[priority];
     }
+
     const layer = new PIXI.Container();
     layer.name = priority.toString();
     this.layers[priority] = layer;
@@ -331,6 +407,39 @@ export default class Renderer {
       return aPriority - bPriority;
     });
     return layer;
+  }
+
+  public flashGlowAndRemoveGroup(groupId: string) {
+    if (!this.groups[groupId]) return;
+    const group = this.groups[groupId];
+    group.tickers.forEach((ticker) => this.app.ticker.remove(ticker));
+    group.tickers = [];
+    const glowFilter = group.filters.find(
+      (filter): filter is GlowFilter => filter instanceof GlowFilter
+    );
+    if (glowFilter) {
+      const ticker = (delta: number) => {
+        glowFilter.outerStrength += delta;
+      };
+      group.tickers.push(ticker);
+      this.app.ticker.add(ticker);
+    }
+    group.willRemove = true;
+    setTimeout(() => this.removeGroup(groupId), 200);
+  }
+
+  private removeGroup(groupId: string) {
+    if (!this.groups[groupId]) return;
+    const group = this.groups[groupId];
+    group.willRemove = false;
+    group.removing = true;
+    group.tickers.forEach((ticker) => this.app.ticker.remove(ticker));
+    group.filters.forEach((filter) => filter.destroy());
+    for (const entityId of group.entities.values()) {
+      this.removeEntity(entityId);
+    }
+    group.container.destroy();
+    delete this.groups[groupId];
   }
 
   private updateVisibility(renderEntity: RenderEntity): void {

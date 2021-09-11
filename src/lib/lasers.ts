@@ -12,13 +12,18 @@ export function createLaser(
   strength: number,
   hit: boolean,
   pos: Pos,
-  source: string
+  source: string,
+  turn: number,
+  cosmeticTemplate?: TemplateName
 ): Entity {
   const color = colors.laser;
 
   let templateName = `LASER_${getOrientation(direction)}`;
   if (hit) {
     templateName = "LASER_BURST";
+  }
+  if (cosmeticTemplate) {
+    templateName = cosmeticTemplate;
   }
 
   const template = createEntityFromTemplate(templateName as TemplateName, {
@@ -29,6 +34,12 @@ export function createLaser(
     display: {
       ...template.display,
       color,
+      group: template.display.group
+        ? {
+            ...template.display.group,
+            id: `LASER_${source}_${turn}`,
+          }
+        : undefined,
     },
     laser: {
       ...template.laser,

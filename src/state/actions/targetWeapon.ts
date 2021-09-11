@@ -9,7 +9,6 @@ import {
 } from "../../constants";
 import audio from "../../lib/audio";
 import { areConditionsMet } from "../../lib/conditions";
-import { createEntityFromTemplate } from "../../lib/entities";
 import { areDirectionsEqual, getConstDir } from "../../lib/geometry";
 import { createLaser, getSplitTemplateName, reflect } from "../../lib/lasers";
 import { Direction, Pos } from "../../types";
@@ -31,6 +30,7 @@ function targetWeaponHandler(
   if (!sourceEntity || !sourceEntity.pos) return;
   const sourcePos = sourceEntity.pos;
   const isPlayer = source === PLAYER_ID;
+  const turn = state.select.turn();
 
   if (isPlayer) {
     if (state.select.laserState() === "RECHARGING") {
@@ -62,21 +62,49 @@ function targetWeaponHandler(
 
   if (isPlayer) {
     if (getConstDir(direction) === UP) {
-      state.act.addEntity(
-        createEntityFromTemplate("LASER_PLAYER_UP", { pos: sourcePos })
+      const playerLaser = createLaser(
+        direction,
+        1,
+        false,
+        sourcePos,
+        source,
+        turn,
+        "LASER_PLAYER_UP"
       );
+      state.act.addEntity(playerLaser);
     } else if (getConstDir(direction) === DOWN) {
-      state.act.addEntity(
-        createEntityFromTemplate("LASER_PLAYER_DOWN", { pos: sourcePos })
+      const playerLaser = createLaser(
+        direction,
+        1,
+        false,
+        sourcePos,
+        source,
+        turn,
+        "LASER_PLAYER_DOWN"
       );
+      state.act.addEntity(playerLaser);
     } else if (getConstDir(direction) === LEFT) {
-      state.act.addEntity(
-        createEntityFromTemplate("LASER_PLAYER_LEFT", { pos: sourcePos })
+      const playerLaser = createLaser(
+        direction,
+        1,
+        false,
+        sourcePos,
+        source,
+        turn,
+        "LASER_PLAYER_LEFT"
       );
+      state.act.addEntity(playerLaser);
     } else if (getConstDir(direction) === RIGHT) {
-      state.act.addEntity(
-        createEntityFromTemplate("LASER_PLAYER_RIGHT", { pos: sourcePos })
+      const playerLaser = createLaser(
+        direction,
+        1,
+        false,
+        sourcePos,
+        source,
+        turn,
+        "LASER_PLAYER_RIGHT"
       );
+      state.act.addEntity(playerLaser);
     }
   }
 
@@ -136,7 +164,7 @@ function targetWeaponHandler(
         beam.strength = 0;
       } else if (!solidEntity && !reflectorEntity) {
         state.act.addEntity(
-          createLaser(beam, beam.strength, false, nextPos, source)
+          createLaser(beam, beam.strength, false, nextPos, source, turn)
         );
       } else if (
         splitterEntity &&
@@ -152,15 +180,15 @@ function targetWeaponHandler(
           beam,
           splitter.type
         );
-        let cosmeticEntity = createEntityFromTemplate(cosmeticTemplate, {
-          pos: nextPos,
-        });
-        cosmeticEntity = {
-          ...cosmeticEntity,
-          laser: cosmeticEntity.laser
-            ? { ...cosmeticEntity.laser, source }
-            : undefined,
-        };
+        const cosmeticEntity = createLaser(
+          beam,
+          beam.strength,
+          false,
+          nextPos,
+          source,
+          turn,
+          cosmeticTemplate
+        );
         state.act.addEntity(cosmeticEntity);
         if (splitter.type === "advanced") {
           const oppositeDir = getConstDir({
@@ -197,15 +225,15 @@ function targetWeaponHandler(
           reflectorEntity.reflector.type,
           beam.strength
         );
-        let cosmeticEntity = createEntityFromTemplate(cosmeticTemplate, {
-          pos: nextPos,
-        });
-        cosmeticEntity = {
-          ...cosmeticEntity,
-          laser: cosmeticEntity.laser
-            ? { ...cosmeticEntity.laser, source }
-            : undefined,
-        };
+        const cosmeticEntity = createLaser(
+          beam,
+          beam.strength,
+          false,
+          nextPos,
+          source,
+          turn,
+          cosmeticTemplate
+        );
         state.act.addEntity(cosmeticEntity);
         beam.dx = newDirection.dx;
         beam.dy = newDirection.dy;
@@ -215,7 +243,8 @@ function targetWeaponHandler(
           beam.strength,
           true,
           nextPos,
-          source
+          source,
+          turn
         );
         if (absorberEntity && laserEntity.display) {
           laserEntity = {
