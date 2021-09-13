@@ -275,45 +275,62 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   },
   UI_SHIELD_1: {
     display: {
-      tile: ["shield_1_0", "shield_1_1"],
+      tile: "shield_1",
       color: colors.secondary,
       priority: PRIORITY_BUILDING_DETAIL,
       offsetX: -TILE_SIZE,
       offsetY: -TILE_SIZE,
       width: 3,
       height: 3,
-      speed: 0.05,
+      group: {
+        id: "UI_SHIELD",
+        glow: {
+          baseStrength: 1,
+          sinMultiplier: 0.25,
+          deltaDivisor: 20,
+          color: colors.secondary,
+        },
+      },
     },
   },
   UI_SHIELD_2: {
     display: {
-      tile: ["shield_2_0", "shield_2_1", "shield_2_2", "shield_2_3"],
+      tile: "shield_2",
       color: colors.secondary,
       priority: PRIORITY_BUILDING_DETAIL,
       offsetX: -TILE_SIZE,
       offsetY: -TILE_SIZE,
       width: 3,
       height: 3,
-      speed: 0.075,
+      group: {
+        id: "UI_SHIELD",
+        glow: {
+          baseStrength: 1,
+          sinMultiplier: 0.25,
+          deltaDivisor: 20,
+          color: colors.secondary,
+        },
+      },
     },
   },
   UI_SHIELD_3: {
     display: {
-      tile: [
-        "shield_3_0",
-        "shield_3_1",
-        "shield_3_2",
-        "shield_3_3",
-        "shield_3_4",
-        "shield_3_5",
-      ],
+      tile: "shield_3",
       color: colors.secondary,
       priority: PRIORITY_BUILDING_DETAIL,
       offsetX: -TILE_SIZE,
       offsetY: -TILE_SIZE,
       width: 3,
       height: 3,
-      speed: 0.1,
+      group: {
+        id: "UI_SHIELD",
+        glow: {
+          baseStrength: 1,
+          sinMultiplier: 0.25,
+          deltaDivisor: 20,
+          color: colors.secondary,
+        },
+      },
     },
   },
   SHIELD: {
