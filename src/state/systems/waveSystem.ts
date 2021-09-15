@@ -2,14 +2,16 @@ import { RNG } from "rot-js";
 import { TemplateName } from "../../types/TemplateName";
 import {
   END_OF_NIGHT_ENEMY_SPAWNING_BUFFER,
-  ENEMIES_PER_TURN_DAY_MULTIPLIER,
-  ENEMIES_PER_TURN_POPULATION_MULTIPLIER,
+  WAVE_SIZE_DAY_MULTIPLIER,
+  WAVE_SIZE_POPULATION_MULTIPLIER,
   MAP_HEIGHT,
   MAP_WIDTH,
   TURNS_PER_DAY,
+  WAVE_SIZE_CONSTANT,
+  TURNS_PER_NIGHT,
 } from "../../constants";
 import { createEntityFromTemplate } from "../../lib/entities";
-import { rangeTo } from "../../lib/math";
+import { distribute, rangeTo } from "../../lib/math";
 import { choose, pickWeighted } from "../../lib/rng";
 import { Pos } from "../../types";
 import WrappedState from "../../types/WrappedState";
@@ -21,37 +23,38 @@ export default function waveSystem(state: WrappedState): void {
       TURNS_PER_DAY - END_OF_NIGHT_ENEMY_SPAWNING_BUFFER &&
     state.select.turnOfDay() !== 0
   ) {
-    let numberOfSpawns =
-      ENEMIES_PER_TURN_POPULATION_MULTIPLIER * state.select.population() +
-      ENEMIES_PER_TURN_DAY_MULTIPLIER * state.select.day();
-    if (Math.floor(numberOfSpawns) !== numberOfSpawns) {
-      numberOfSpawns =
-        Math.floor(numberOfSpawns) +
-        (Math.random() < numberOfSpawns % 1 ? 1 : 0);
-    }
-    // always spawn at least 1 enemy on the first turn of night
-    if (state.select.turnOfNight() === 1 && numberOfSpawns < 1) {
-      numberOfSpawns = 1;
-    }
-    rangeTo(numberOfSpawns).forEach(() => spawnEnemy(state));
+    const day = state.select.day();
+    const waveSize =
+      WAVE_SIZE_CONSTANT +
+      WAVE_SIZE_POPULATION_MULTIPLIER * state.select.population() +
+      WAVE_SIZE_DAY_MULTIPLIER * day;
+    const numberOfSpawnTurns =
+      TURNS_PER_NIGHT - END_OF_NIGHT_ENEMY_SPAWNING_BUFFER;
+    const spawnsThisTurn =
+      distribute(waveSize, numberOfSpawnTurns)[state.select.turnOfNight()] || 0;
+    rangeTo(spawnsThisTurn).forEach(() =>
+      spawnEnemy(state, {
+        ENEMY_DRONE: 5,
+        ENEMY_ARMORED: Math.max(0, 0 + 0.25 * day),
+        ENEMY_FLYER: Math.max(0, 0 + 0.25 * day),
+        ENEMY_BURROWER: Math.max(0, 0 + 0.25 * day),
+        ENEMY_VOLATILE: Math.max(0, 0 + 0.25 * day),
+      })
+    );
   }
 }
 
-function spawnEnemy(state: WrappedState): void {
+function spawnEnemy(
+  state: WrappedState,
+  weights: Record<string, number>
+): void {
   const positions = getPossibleSpawnPositions(state);
   if (positions.length) {
     const pos = choose(positions);
     state.act.addEntity(
-      createEntityFromTemplate(
-        RNG.getWeightedValue({
-          // ENEMY_DRONE: 1,
-          // ENEMY_ARMORED: 1,
-          // ENEMY_FLYER: 1,
-          ENEMY_BURROWER: 1,
-          // ENEMY_VOLATILE: 1,
-        }) as TemplateName,
-        { pos }
-      )
+      createEntityFromTemplate(RNG.getWeightedValue(weights) as TemplateName, {
+        pos,
+      })
     );
   } else {
     console.warn("Unable to find spawn position");

@@ -28,3 +28,11 @@ export function sum(...numbers: number[]) {
 export function round(value: number, precision: number = 0) {
   return Math.round(value * 10 ** precision) / 10 ** precision;
 }
+
+export function distribute(value: number, buckets: number) {
+  return rangeTo(buckets).map((i) =>
+    i < value % buckets
+      ? Math.ceil(value / buckets)
+      : Math.floor(value / buckets)
+  );
+}

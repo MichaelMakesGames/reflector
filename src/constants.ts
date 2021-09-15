@@ -7,9 +7,11 @@ export const PROJECTOR_RANGE = 2;
 export const STARTING_MORALE = 10;
 export const VICTORY_POPULATION = 30;
 export const NEW_COLONISTS_PER_DAY = 3;
-export const ENEMIES_PER_TURN_POPULATION_MULTIPLIER = 0.05;
-export const ENEMIES_PER_TURN_DAY_MULTIPLIER = 0.1;
 export const BASE_LASER_STRENGTH = 100;
+
+export const WAVE_SIZE_CONSTANT = 2;
+export const WAVE_SIZE_POPULATION_MULTIPLIER = 1;
+export const WAVE_SIZE_DAY_MULTIPLIER = 3;
 
 export const MAP_WIDTH = 32;
 export const MAP_HEIGHT = MAP_WIDTH;
