@@ -160,6 +160,7 @@ export interface JobProvider {
   maxNumberEmployed: number;
   jobType: JobTypeCode;
   resourceChangeReason: string;
+  onWorked?: Effect;
 }
 
 export interface Powered {

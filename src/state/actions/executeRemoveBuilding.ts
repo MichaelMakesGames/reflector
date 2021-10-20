@@ -3,6 +3,7 @@ import { registerHandler } from "../handleAction";
 import { Pos } from "../../types";
 import WrappedState from "../../types/WrappedState";
 import { arePositionsEqual } from "../../lib/geometry";
+import { executeEffect } from "../../data/effects";
 
 const executeRemoveBuilding = createAction("EXECUTE_REMOVE_BUILDING")<Pos>();
 export default executeRemoveBuilding;
@@ -49,6 +50,9 @@ function executeRemoveBuildingHandler(
     .entitiesAtPosition(action.payload)
     .filter((e) => e.template === "UI_ABSORBER_CHARGE")
     .forEach((e) => state.act.removeEntity(e.id));
+
+  // remove farm growth
+  executeEffect("CLEAR_BUILDING_FARM_GROWTH", state, undefined, removingTarget);
 
   // discharge shield
   if (removingTarget.shieldGenerator) {

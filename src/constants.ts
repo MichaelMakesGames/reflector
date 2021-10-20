@@ -40,11 +40,12 @@ export const MINE_WORK = 4;
 export const FACTORY_WORK = 6;
 export const REACTOR_PRODUCTION = 10;
 
-export const PRIORITY_MARKER = 30;
-export const PRIORITY_LASER = 25;
-export const PRIORITY_BUILDING_DETAIL = 20;
-export const PRIORITY_BUILDING_HIGH = 15;
-export const PRIORITY_UNIT = 10;
+export const PRIORITY_MARKER = 35;
+export const PRIORITY_LASER = 30;
+export const PRIORITY_BUILDING_HIGH_DETAIL = 25;
+export const PRIORITY_BUILDING_HIGH = 20;
+export const PRIORITY_UNIT = 15;
+export const PRIORITY_BUILDING_LOW_DETAIL = 10;
 export const PRIORITY_BUILDING_LOW = 5;
 export const PRIORITY_TERRAIN = 0;
 

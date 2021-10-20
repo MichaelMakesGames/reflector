@@ -1,10 +1,7 @@
 import { Required } from "ts-toolbelt/out/Object/Required";
-import {
-  PRIORITY_BUILDING_DETAIL,
-  PRIORITY_UNIT,
-  TURNS_PER_NIGHT,
-} from "../../constants";
+import { PRIORITY_BUILDING_HIGH_DETAIL, PRIORITY_UNIT } from "../../constants";
 import { ColonistStatusCode } from "../../data/colonistStatuses";
+import { executeEffect } from "../../data/effects";
 import resources, { ResourceCode } from "../../data/resources";
 import { getDirectionTowardTarget } from "../../lib/ai";
 import { createEntityFromTemplate } from "../../lib/entities";
@@ -16,9 +13,9 @@ import {
 } from "../../lib/geometry";
 import { rangeTo } from "../../lib/math";
 import { choose } from "../../lib/rng";
-import { Entity, Pos, JobProvider } from "../../types";
-import WrappedState from "../../types/WrappedState";
 import renderer from "../../renderer";
+import { Entity, JobProvider, Pos } from "../../types";
+import WrappedState from "../../types/WrappedState";
 
 export default function colonistsSystem(state: WrappedState): void {
   if (!state.select.isNight() || state.select.isFirstTurnOfNight()) {
@@ -366,6 +363,13 @@ function doWork(
       jobProvider: updatedJobProvider,
     });
 
+    executeEffect(
+      updatedJobProvider.onWorked,
+      state,
+      state.select.entityById(colonist.id),
+      state.select.entityById(employment.id)
+    );
+
     state.act.updateEntity({
       id: colonist.id,
       colonist: { ...colonist.colonist, status: ColonistStatusCode.Working },
@@ -448,7 +452,7 @@ function updateColonistTile(
       display: {
         ...colonist.display,
         tile,
-        priority: PRIORITY_BUILDING_DETAIL,
+        priority: PRIORITY_BUILDING_HIGH_DETAIL,
       },
     });
   } else if (numColonistsAtPos === 1) {

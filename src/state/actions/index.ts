@@ -15,6 +15,7 @@ import decreaseJobPriority from "./decreaseJobPriority";
 import destroy from "./destroy";
 import destroyPos from "./destroyPos";
 import executeRemoveBuilding from "./executeRemoveBuilding";
+import farmGrowthUpdateTile from "./farmGrowthUpdateTile";
 import fireWeapon from "./fireWeapon";
 import increaseJobPriority from "./increaseJobPriority";
 import loadGame from "./loadGame";
@@ -66,6 +67,7 @@ export default {
   destroy,
   destroyPos,
   executeRemoveBuilding,
+  farmGrowthUpdateTile,
   fireWeapon,
   increaseJobPriority,
   loadGame,

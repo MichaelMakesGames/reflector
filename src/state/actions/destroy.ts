@@ -24,9 +24,7 @@ function destroyHandler(
   if (entity.destructible) {
     state.act.removeEntity(entityId);
 
-    if (entity.destructible.onDestroy) {
-      executeEffect(entity.destructible.onDestroy, state, undefined, entity);
-    }
+    executeEffect(entity.destructible.onDestroy, state, undefined, entity);
 
     if (entity.pos) {
       if (entity.building) {

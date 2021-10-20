@@ -4,7 +4,7 @@ import {
   PRIORITY_UNIT,
   PRIORITY_MARKER,
   TILE_SIZE,
-  PRIORITY_BUILDING_DETAIL,
+  PRIORITY_BUILDING_HIGH_DETAIL,
 } from "../../constants";
 import colors from "../../colors";
 import { Entity } from "../../types";
@@ -277,7 +277,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     display: {
       tile: "shield_1",
       color: colors.secondary,
-      priority: PRIORITY_BUILDING_DETAIL,
+      priority: PRIORITY_BUILDING_HIGH_DETAIL,
       offsetX: -TILE_SIZE,
       offsetY: -TILE_SIZE,
       width: 3,
@@ -297,7 +297,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     display: {
       tile: "shield_2",
       color: colors.secondary,
-      priority: PRIORITY_BUILDING_DETAIL,
+      priority: PRIORITY_BUILDING_HIGH_DETAIL,
       offsetX: -TILE_SIZE,
       offsetY: -TILE_SIZE,
       width: 3,
@@ -317,7 +317,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     display: {
       tile: "shield_3",
       color: colors.secondary,
-      priority: PRIORITY_BUILDING_DETAIL,
+      priority: PRIORITY_BUILDING_HIGH_DETAIL,
       offsetX: -TILE_SIZE,
       offsetY: -TILE_SIZE,
       width: 3,

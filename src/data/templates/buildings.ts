@@ -7,6 +7,7 @@ import {
   FARM_PRODUCTION,
   FACTORY_WORK,
   REACTOR_PRODUCTION,
+  PRIORITY_BUILDING_LOW_DETAIL,
 } from "../../constants";
 import { JobTypeCode } from "../jobTypes";
 import { ResourceCode } from "../resources";
@@ -303,7 +304,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     display: {
       tile: "farm",
-      color: colors.food,
+      color: colors.mountain,
       priority: PRIORITY_BUILDING_LOW,
       hasBackground: true,
     },
@@ -318,13 +319,22 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       maxNumberEmployed: 1,
       jobType: JobTypeCode.Farming,
       resourceChangeReason: "Farming",
-    },
-    destructible: {
-      attackPriority: 2,
+      onWorked: "ON_FARM_WORKED",
     },
     description: {
       name: "Farm",
       description: `Produces ${FARM_PRODUCTION} Food after being worked a whole day. This building is VERY LOW (you can shoot and walk over it).`,
+    },
+  },
+  BUILDING_FARM_GROWTH: {
+    destructible: {
+      attackPriority: 2,
+      onDestroy: "RESET_WORK_CONTRIBUTED",
+    },
+    display: {
+      tile: "farm_growth_1",
+      color: colors.food,
+      priority: PRIORITY_BUILDING_LOW_DETAIL,
     },
   },
   BUILDING_REACTOR: {
@@ -688,7 +698,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     blocking: { moving: true, lasers: true, windmill: true },
     description: {
       name: "Battery",
-      description: "Stored power. Explodes when destroyed.",
+      description: "Stores power. Explodes when destroyed.",
     },
     storage: {
       resources: { POWER: 100 },

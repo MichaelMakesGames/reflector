@@ -13,6 +13,7 @@ export type EffectExecutor = (
 ) => void;
 
 const baseEffects: Record<EffectId, EffectExecutor> = {
+  CLEAR_BUILDING_FARM_GROWTH: createClearEffect("BUILDING_FARM_GROWTH"),
   CLEAR_UI_ABSORBER_CHARGE: createClearEffect("UI_ABSORBER_CHARGE"),
   CLEAR_UI_OVERHEATING_CRITICAL: createClearEffect("UI_OVERHEATING_CRITICAL"),
   CLEAR_UI_OVERHEATING_HOT: createClearEffect("UI_OVERHEATING_HOT"),
@@ -53,6 +54,11 @@ const baseEffects: Record<EffectId, EffectExecutor> = {
     }
   },
 
+  ON_FARM_WORKED: (state, actor, target) => {
+    if (!target || !target.pos) return;
+    state.act.farmGrowthUpdateTile(target.pos);
+  },
+
   ON_ROAD_BUILD: (state, actor, target) => {
     if (!target || !target.pos) return;
     state.act.roadUpdateTile(target.pos);
@@ -60,6 +66,21 @@ const baseEffects: Record<EffectId, EffectExecutor> = {
     state.act.roadUpdateTile(getPositionToDirection(target.pos, RIGHT));
     state.act.roadUpdateTile(getPositionToDirection(target.pos, DOWN));
     state.act.roadUpdateTile(getPositionToDirection(target.pos, LEFT));
+  },
+
+  RESET_WORK_CONTRIBUTED: (state, actor, target) => {
+    if (!target || !target.pos) return;
+    const workPlace = state.select
+      .entitiesAtPosition(target.pos)
+      .find((e) => e.jobProvider);
+    if (!workPlace || !workPlace.jobProvider) return;
+    state.act.updateEntity({
+      id: workPlace.id,
+      jobProvider: {
+        ...workPlace.jobProvider,
+        workContributed: 0,
+      },
+    });
   },
 
   SHIELD_DISCHARGE: (state, actor, target) => {
@@ -112,9 +133,10 @@ function isAllEffect(effect: Effect): effect is AllEffect {
 }
 
 export function executeEffect(
-  effect: Effect,
+  effect?: Effect | null,
   ...args: Parameters<EffectExecutor>
 ) {
+  if (!effect) return;
   if (isAllEffect(effect)) {
     effect.ALL.forEach((e) => executeEffect(e, ...args));
   } else {

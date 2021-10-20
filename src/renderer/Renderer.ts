@@ -4,12 +4,7 @@ import * as particles from "pixi-particles";
 import * as PIXI from "pixi.js";
 import { Required } from "ts-toolbelt/out/Object/Required";
 import colors from "../colors";
-import {
-  PLAYER_ID,
-  PRIORITY_BUILDING_DETAIL,
-  PRIORITY_LASER,
-  UP,
-} from "../constants";
+import { PLAYER_ID, PRIORITY_BUILDING_HIGH_DETAIL, UP } from "../constants";
 import { arePositionsEqual, getPositionToDirection } from "../lib/geometry";
 import { Display, Entity, Pos } from "../types";
 
@@ -125,32 +120,51 @@ export default class Renderer {
     const Y_MAX = this.gridHeight / 2;
     const x = Math.max(Math.min(pos.x - this.gridWidth / 4, X_MAX), X_MIN);
     const y = Math.max(Math.min(pos.y - this.gridHeight / 4, Y_MAX), Y_MIN);
+
+    const desiredStage = {
+      scale: 2,
+      x: -x * this.tileWidth * 2,
+      y: -y * this.tileHeight * 2,
+    };
+    if (
+      desiredStage.scale === this.desiredStage.scale &&
+      desiredStage.x === this.desiredStage.x &&
+      desiredStage.y === this.desiredStage.y
+    ) {
+      return;
+    }
+
     this.zoomedIn = true;
     this.previousStage = {
       scale: this.app.stage.scale.x,
       x: this.app.stage.position.x,
       y: this.app.stage.position.y,
     };
-    this.desiredStage = {
-      scale: 2,
-      x: -x * this.tileWidth * 2,
-      y: -y * this.tileHeight * 2,
-    };
+    this.desiredStage = desiredStage;
     Object.values(this.renderEntities).forEach((e) => this.updateVisibility(e));
   }
 
   public zoomOut(): void {
+    const desiredStage = {
+      scale: 1,
+      x: 0,
+      y: 0,
+    };
+    if (
+      desiredStage.scale === this.desiredStage.scale &&
+      desiredStage.x === this.desiredStage.x &&
+      desiredStage.y === this.desiredStage.y
+    ) {
+      return;
+    }
+
     this.zoomedIn = false;
     this.previousStage = {
       scale: this.app.stage.scale.x,
       x: this.app.stage.position.x,
       y: this.app.stage.position.y,
     };
-    this.desiredStage = {
-      scale: 1,
-      x: 0,
-      y: 0,
-    };
+    this.desiredStage = desiredStage;
     Object.values(this.renderEntities).forEach((e) => this.updateVisibility(e));
   }
 
@@ -872,7 +886,7 @@ export default class Renderer {
     this.app.stage.position.y = newY;
   }
 
-  public getClientRectFromPos(gamePos: Pos): ClientRect {
+  public getClientRectFromPos(gamePos: Pos): DOMRect {
     const canvas = this.app.view;
     const canvasParent = canvas.parentElement;
     if (!canvasParent) throw new Error("App canvas is not in document");
@@ -882,29 +896,25 @@ export default class Renderer {
     if (!this.zoomedIn) {
       const width = this.tileWidth / scaleX;
       const height = this.tileHeight / scaleY;
-      const left =
+      const x =
         canvasParent.getBoundingClientRect().left +
         (gamePos.x * this.tileWidth) / scaleX;
-      const right = left + width;
-      const top =
+      const y =
         canvasParent.getBoundingClientRect().top +
         (gamePos.y * this.tileHeight) / scaleY;
-      const bottom = top + height;
-      return { width, height, left, right, top, bottom };
+      return new DOMRect(x, y, width, height);
     } else {
       const stageX = this.desiredStage.x / this.tileWidth / -2;
       const stageY = this.desiredStage.y / this.tileHeight / -2;
       const width = (this.tileWidth * 2) / scaleX;
       const height = (this.tileHeight * 2) / scaleY;
-      const left =
+      const x =
         canvasParent.getBoundingClientRect().left +
         ((gamePos.x - stageX) * this.tileWidth * 2) / scaleX;
-      const right = left + width;
-      const top =
+      const y =
         canvasParent.getBoundingClientRect().top +
         ((gamePos.y - stageY) * this.tileHeight * 2) / scaleY;
-      const bottom = top + height;
-      return { width, height, left, right, top, bottom };
+      return new DOMRect(x, y, width, height);
     }
   }
 
@@ -953,7 +963,7 @@ export default class Renderer {
         display: {
           tile,
           color,
-          priority: PRIORITY_BUILDING_DETAIL,
+          priority: PRIORITY_BUILDING_HIGH_DETAIL,
         },
       });
       this.movementPaths.set(id, [getPositionToDirection(pos, UP)]);
