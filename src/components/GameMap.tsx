@@ -191,19 +191,23 @@ export default function GameMap() {
     callback: () => renderer.zoomOut(),
   });
 
-  const performDefaultAction = (pos: Pos | null) => {
-    // if (playerPos) audio.setListenerPos(playerPos);
-    // if (pos) audio.playAtPos("explosion", pos);
-    // return;
-    const quickAction = getQuickAction(state, pos);
+  const performDefaultAction = (pos: Pos | null, modified?: boolean) => {
+    const quickAction = getQuickAction(state, pos, modified);
     if (quickAction) {
       dispatch(quickAction.action);
     }
   };
   useControl({
     code: ControlCode.QuickAction,
+    shift: false,
     group: HotkeyGroup.Main,
     callback: () => performDefaultAction(cursorPos),
+  });
+  useControl({
+    code: ControlCode.QuickAction,
+    shift: true,
+    group: HotkeyGroup.Main,
+    callback: () => performDefaultAction(cursorPos, true),
   });
 
   const autoMove = useCallback(() => {
@@ -292,7 +296,7 @@ export default function GameMap() {
             if (!cursorPos || !arePositionsEqual(cursorPos, gamePos)) {
               dispatch(actions.setCursorPos(gamePos));
             }
-            performDefaultAction(gamePos);
+            performDefaultAction(gamePos, e.shiftKey);
           })}
         />
       </section>

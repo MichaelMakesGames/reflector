@@ -9,7 +9,8 @@ import { createEntityFromTemplate } from "./entities";
 
 export function getQuickAction(
   state: RawState,
-  pos: Pos | null
+  pos: Pos | null,
+  modified?: boolean
 ): null | { action: Action; label: string } {
   if (!pos) {
     return null;
@@ -24,7 +25,7 @@ export function getQuickAction(
       blueprint ? blueprint.template : "NONE"
     );
     return {
-      action: actions.blueprintBuild(),
+      action: actions.blueprintBuild({ buildAnother: modified }),
       label: `Build ${
         entityToPlace.description ? entityToPlace.description.name : ""
       }`,

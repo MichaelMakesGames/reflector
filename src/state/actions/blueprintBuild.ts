@@ -7,7 +7,8 @@ import { createEntityFromTemplate } from "../../lib/entities";
 import audio from "../../lib/audio";
 import { executeEffect } from "../../data/effects";
 
-const blueprintBuild = createAction("BLUEPRINT_BUILD")();
+const blueprintBuild =
+  createAction("BLUEPRINT_BUILD")<{ buildAnother?: boolean }>();
 export default blueprintBuild;
 
 function blueprintBuildHandler(
@@ -75,7 +76,9 @@ function blueprintBuildHandler(
 
   state.act.playerTookTurn();
 
-  state.act.blueprintSelect(blueprint.template);
+  if (action.payload.buildAnother) {
+    state.act.blueprintSelect(blueprint.template);
+  }
 
   audio.playAtPos("building_built", blueprint.pos);
 }

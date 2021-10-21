@@ -1,10 +1,9 @@
 /* eslint-disable import/prefer-default-export */
-import { RawState, Pos } from "../types";
-import { rangeFromTo } from "./math";
-import { arePositionsEqual, getDistance } from "./geometry";
-import { MAP_WIDTH, MAP_HEIGHT } from "../constants";
+import { Pos, RawState } from "../types";
 import WrappedState from "../types/WrappedState";
 import { areConditionsMet } from "./conditions";
+import { getDistance } from "./geometry";
+import { rangeFromTo } from "./math";
 
 export function findValidPositions(
   state: WrappedState,
@@ -19,10 +18,7 @@ export function findValidPositions(
     for (const dx of rangeFromTo(-buildFrom.range, buildFrom.range + 1)) {
       for (const dy of rangeFromTo(-buildFrom.range, buildFrom.range + 1)) {
         const pos = { x: buildFrom.pos.x + dx, y: buildFrom.pos.y + dy };
-        if (
-          // !results.some((other) => arePositionsEqual(pos, other)) &&
-          canPlace(state.raw, pos)
-        ) {
+        if (canPlace(state.raw, pos)) {
           results.push(pos);
         }
       }
