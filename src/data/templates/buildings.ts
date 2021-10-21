@@ -177,16 +177,13 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     housing: {
       capacity: 1,
       occupancy: 1,
-      desirability: -1,
-      removeOnVacancy: true,
     },
     destructible: {
       attackPriority: 1,
     },
     description: {
       name: "Tent",
-      description:
-        "Temporary housing for 1 colonist. Colonists will move to residences if able.",
+      description: "Provides housing for 1 colonist.",
     },
   },
   BUILDING_RESIDENCE: {
@@ -205,15 +202,13 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     housing: {
       occupancy: 0,
       capacity: 3,
-      desirability: 0,
     },
     destructible: {
       attackPriority: 1,
     },
     description: {
       name: "Residence",
-      description:
-        "Provides housing for up to 3 colonists. Colonists will otherwise pitch tents wherever they are at sunset.",
+      description: "Provides housing for up to 3 colonists.",
     },
   },
   BUILDING_MINE: {

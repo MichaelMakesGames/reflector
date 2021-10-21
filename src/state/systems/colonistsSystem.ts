@@ -4,7 +4,6 @@ import { ColonistStatusCode } from "../../data/colonistStatuses";
 import { executeEffect } from "../../data/effects";
 import resources, { ResourceCode } from "../../data/resources";
 import { getDirectionTowardTarget } from "../../lib/ai";
-import { createEntityFromTemplate } from "../../lib/entities";
 import {
   arePositionsEqual,
   getAdjacentPositions,
@@ -44,7 +43,7 @@ export default function colonistsSystem(state: WrappedState): void {
   ) {
     state.act.logMessage({
       message:
-        "You do not have enough housing, so some colonists are pitching tents.",
+        "You do not have enough housing. Build some tents or residences for your colonists to sleep in.",
     });
   }
 
@@ -54,18 +53,11 @@ export default function colonistsSystem(state: WrappedState): void {
     for (const colonist of state.select.colonists()) {
       if (colonist.colonist.residence) {
         goHomeOrSleep(state, colonist);
-      } else if (state.select.isPositionBlocked(colonist.pos)) {
-        wander(state, colonist);
       } else {
-        pitchTent(state, colonist);
+        wander(state, colonist);
       }
     }
   } else {
-    state.select
-      .entitiesWithComps("housing")
-      .filter((entity) => entity.housing.removeOnVacancy)
-      .forEach((tent) => state.act.removeEntity(tent.id));
-
     for (const colonist of state.select.colonists()) {
       cleanEmployment(state, colonist);
     }
@@ -418,22 +410,6 @@ function wander(
   });
 }
 
-function pitchTent(
-  state: WrappedState,
-  colonist: Required<Entity, "colonist" | "pos">
-) {
-  const tent = createEntityFromTemplate("BUILDING_TENT", { pos: colonist.pos });
-  state.act.addEntity(tent);
-  state.act.updateEntity({
-    id: colonist.id,
-    colonist: {
-      ...colonist.colonist,
-      residence: tent.id,
-      status: ColonistStatusCode.Sleeping,
-    },
-  });
-}
-
 function updateColonistTile(
   state: WrappedState,
   colonist: Required<Entity, "colonist" | "pos" | "display">
@@ -615,10 +591,6 @@ function checkForEmptyHomesAndHomelessColonists(state: WrappedState) {
     });
     const residenceToAssign = residencesUnderCapacity[0];
 
-    if (colonistToAssign.colonist.residence) {
-      // residence must be a tent
-      state.act.removeEntity(colonistToAssign.colonist.residence);
-    }
     state.act.updateEntity({
       id: colonistToAssign.id,
       colonist: {

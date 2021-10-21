@@ -102,9 +102,10 @@ export function residents(state: RawState, entity: Entity) {
 }
 
 export function housingCapacity(state: RawState) {
-  return entitiesWithComps(state, "housing")
-    .filter((entity) => !entity.housing.removeOnVacancy)
-    .reduce((acc, entity) => acc + entity.housing.capacity, 0);
+  return entitiesWithComps(state, "housing").reduce(
+    (acc, entity) => acc + entity.housing.capacity,
+    0
+  );
 }
 
 export function homelessColonists(state: RawState) {
@@ -112,7 +113,6 @@ export function homelessColonists(state: RawState) {
     if (!eColonist.colonist.residence) return true;
     const eResidence = residence(state, eColonist);
     if (!eResidence) return true;
-    if (eResidence.housing.removeOnVacancy) return true;
     return false;
   });
 }

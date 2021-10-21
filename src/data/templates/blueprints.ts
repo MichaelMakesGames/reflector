@@ -187,6 +187,9 @@ templates.BLUEPRINT_RESIDENCE = makeBlueprint({
   builds: "BUILDING_RESIDENCE",
   cost: { resource: ResourceCode.Metal, amount: 3 },
 });
+templates.BLUEPRINT_TENT = makeBlueprint({
+  builds: "BUILDING_TENT",
+});
 templates.BLUEPRINT_WALL = makeBlueprint({
   builds: "BUILDING_WALL",
   cost: { resource: ResourceCode.Metal, amount: 1 },

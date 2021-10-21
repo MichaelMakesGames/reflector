@@ -45,6 +45,7 @@ const buildingCategories: BuildingCategory[] = [
     label: "Misc",
     description: "Miscellaneous buildings.",
     blueprints: [
+      "BLUEPRINT_TENT",
       "BLUEPRINT_RESIDENCE",
       "BLUEPRINT_ROAD",
       "BLUEPRINT_BATTERY",

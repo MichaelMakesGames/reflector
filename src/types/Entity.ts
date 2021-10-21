@@ -124,8 +124,6 @@ export interface ValidMarker {}
 export interface Housing {
   occupancy: number;
   capacity: number;
-  desirability: number;
-  removeOnVacancy?: boolean;
 }
 
 export interface Production {
