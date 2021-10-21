@@ -27,6 +27,7 @@ export interface RawState {
   isAutoMoving: boolean;
   events: Record<string, number>;
   tutorials: TutorialsState;
+  lastMoveWasFast: boolean;
 
   startOfThisTurn: RawState | null;
   startOfLastTurn: RawState | null;

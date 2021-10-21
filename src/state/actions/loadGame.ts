@@ -1,16 +1,13 @@
 import { createAction } from "typesafe-actions";
 import colors from "../../colors";
 import { VERSION } from "../../constants";
+import audio from "../../lib/audio";
+import { resetEntitiesByCompAndPos } from "../../lib/entities";
 import renderer from "../../renderer";
-import { registerHandler } from "../handleAction";
-import animationToggleSystem from "../systems/animationToggleSystem";
-import bordersSystem from "../systems/bordersSystem";
-import emitterSystem from "../systems/emitterSystem";
 import { RawState } from "../../types";
 import WrappedState from "../../types/WrappedState";
-import { resetEntitiesByCompAndPos } from "../../lib/entities";
-import audio from "../../lib/audio";
-import audioToggleSystem from "../systems/audioToggleSystem";
+import { registerHandler } from "../handleAction";
+import { cosmeticSystems } from "../systems";
 
 const loadGame = createAction("LOAD_GAME")<{
   state: RawState;
@@ -32,10 +29,7 @@ function loadGameHandler(
   state.select
     .entitiesWithComps("pos", "display")
     .forEach((entity) => renderer.addEntity(entity));
-  emitterSystem(state);
-  animationToggleSystem(state);
-  audioToggleSystem(state);
-  bordersSystem(state);
+  cosmeticSystems.forEach((system) => system(state));
   if (state.select.isNight()) {
     renderer.setBackgroundColor(colors.backgroundNight);
   } else {

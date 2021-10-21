@@ -684,7 +684,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     description: {
       name: "Road",
-      description: "Lets colonists move 2 spaces per turn.",
+      description: "Lets you and your colonists move 2 spaces per turn.",
     },
   },
   BUILDING_BATTERY: {

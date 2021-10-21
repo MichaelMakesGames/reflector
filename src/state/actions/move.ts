@@ -3,8 +3,9 @@ import { createAction } from "typesafe-actions";
 import { PLAYER_ID } from "../../constants";
 import audio from "../../lib/audio";
 import renderer from "../../renderer";
-import { registerHandler } from "../handleAction";
 import WrappedState from "../../types/WrappedState";
+import { registerHandler } from "../handleAction";
+import { cosmeticSystems } from "../systems";
 
 const move = createAction("MOVE")<{
   entityId: string;
@@ -49,7 +50,24 @@ function moveHandler(
     if (state.select.cursorPos() && renderer.isZoomedIn()) {
       state.act.moveCursor({ dx: action.payload.dx, dy: action.payload.dy });
     }
-    state.act.playerTookTurn();
+    const isFastMove =
+      !state.raw.lastMoveWasFast &&
+      state.select.entitiesAtPosition(newPosition).some((e) => e.road) &&
+      state.select.entitiesAtPosition(pos).some((e) => e.road);
+    state.setRaw({
+      ...state.raw,
+      lastMoveWasFast: isFastMove,
+    });
+    if (isFastMove) {
+      state.act.logMessage({
+        message:
+          "You move fast on the road. You can move again this turn, or take another action.",
+        type: "success",
+      });
+      cosmeticSystems.forEach((system) => system(state));
+    } else {
+      state.act.playerTookTurn();
+    }
   }
 
   if (entity.colonist) {

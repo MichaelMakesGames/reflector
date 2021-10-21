@@ -58,6 +58,7 @@ export function createInitialState({
     isAutoMoving: false,
     startOfThisTurn: null,
     startOfLastTurn: null,
+    lastMoveWasFast: false,
     tutorials: {
       completed: completedTutorials,
       active: completedTutorials.includes(TutorialId.Basics)

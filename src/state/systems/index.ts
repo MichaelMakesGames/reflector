@@ -25,7 +25,7 @@ import storageSystem from "./storageSystem";
 import timeSystem from "./timeSystem";
 import waveSystem from "./waveSystem";
 
-const systems: ((state: WrappedState) => void)[] = [
+export const turnEndSystems: ((state: WrappedState) => void)[] = [
   absorberSystem,
   waveSystem,
   aiSystem,
@@ -39,11 +39,14 @@ const systems: ((state: WrappedState) => void)[] = [
   storageSystem,
   reflectorSystem,
   laserRechargingSystem,
-  aimingSystem,
-  buildingSystem,
   eventSystem,
   timeSystem,
   gameOverSystem,
+];
+
+export const cosmeticSystems: ((state: WrappedState) => void)[] = [
+  aimingSystem,
+  buildingSystem,
   emitterSystem,
   bordersSystem,
   directionIndicationSystem,
@@ -52,5 +55,3 @@ const systems: ((state: WrappedState) => void)[] = [
   animationToggleSystem,
   audioToggleSystem,
 ];
-
-export default systems;
