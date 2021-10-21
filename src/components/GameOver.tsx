@@ -13,6 +13,7 @@ export default function GameOver() {
   const victory = useSelector(selectors.victory);
   const player = useSelector(selectors.player);
   const morale = useSelector(selectors.morale);
+  const population = useSelector(selectors.population);
 
   if (!gameOver) return null;
 
@@ -26,6 +27,9 @@ export default function GameOver() {
         <p>
           You ran out of morale. Every time a colonist dies, you lose morale.
         </p>
+      )}
+      {population === 0 && (
+        <p>All of your colonists died. Keep them defended!</p>
       )}
       <div className="mt-1">
         <HotkeyButton
