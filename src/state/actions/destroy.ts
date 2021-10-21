@@ -1,14 +1,13 @@
 import { RNG } from "rot-js";
 import { createAction } from "typesafe-actions";
+import { executeEffect } from "../../data/effects";
 import templates from "../../data/templates";
 import audio from "../../lib/audio";
 import { createEntityFromTemplate } from "../../lib/entities";
 import { getAdjacentPositions } from "../../lib/geometry";
 import renderer from "../../renderer";
-import { registerHandler } from "../handleAction";
 import WrappedState from "../../types/WrappedState";
-import { executeEffect } from "../../data/effects";
-import { TemplateName } from "../../types/TemplateName";
+import { registerHandler } from "../handleAction";
 
 const destroy = createAction("DESTROY")<string>();
 export default destroy;
@@ -28,24 +27,29 @@ function destroyHandler(
 
     if (entity.pos) {
       if (entity.building) {
-        const rubble = createEntityFromTemplate("BUILDING_RUBBLE", {
-          pos: entity.pos,
-        });
-        const blueprint = entity.template.replace(
-          "BUILDING",
-          "BLUEPRINT"
-        ) as TemplateName;
-        if (Object.keys(templates).includes(blueprint)) {
+        const blueprint =
+          entity.building.rubbleBlueprint ||
+          Object.values(templates).find(
+            (template) =>
+              template.blueprint &&
+              template.blueprint.builds === entity.template
+          )?.blueprint?.builds;
+        if (!entity.building.noRubble && blueprint) {
+          const rubble = createEntityFromTemplate("BUILDING_RUBBLE", {
+            pos: entity.pos,
+          });
           rubble.rebuildable = { blueprint };
+          const blueprintEntity = createEntityFromTemplate(blueprint);
+          const rebuiltEntity = blueprintEntity?.blueprint
+            ? createEntityFromTemplate(blueprintEntity.blueprint.builds)
+            : undefined;
           rubble.description = {
-            name: entity.description
-              ? `${entity.description.name} Rubble`
+            name: rebuiltEntity?.description
+              ? `${rebuiltEntity.description.name} Rubble`
               : "Rubble",
             description: "",
           };
           state.act.addEntity(rubble);
-        } else {
-          console.error(`Failed to find rubble blueprint: ${blueprint}`);
         }
 
         renderer.dustCloud(entity.pos);

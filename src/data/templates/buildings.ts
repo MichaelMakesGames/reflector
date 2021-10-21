@@ -519,7 +519,9 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
   },
   BUILDING_WALL: {
-    building: {},
+    building: {
+      noRubble: true,
+    },
     display: {
       tile: "wall",
       color: colors.inactiveBuilding,
@@ -544,7 +546,9 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
   },
   BUILDING_WALL_CRACKED: {
-    building: {},
+    building: {
+      noRubble: true,
+    },
     display: {
       tile: "wall_damaged",
       color: colors.inactiveBuilding,
@@ -563,12 +567,14 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     stopsLaser: {},
     description: {
-      name: "Damaged Wall",
+      name: "Cracked Wall",
       description: "This wall can take 2 more hits.",
     },
   },
   BUILDING_WALL_CRUMBLING: {
-    building: {},
+    building: {
+      rubbleBlueprint: "BLUEPRINT_WALL",
+    },
     display: {
       tile: "wall_crumbling",
       color: colors.inactiveBuilding,
@@ -584,7 +590,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       attackPriority: 0,
     },
     description: {
-      name: "Damaged Wall",
+      name: "Crumbling Wall",
       description: "This wall will be destroyed if hit again.",
     },
   },

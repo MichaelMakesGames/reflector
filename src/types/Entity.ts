@@ -172,7 +172,10 @@ export interface Temperature {
   onOverheat: Effect;
 }
 
-export interface Building {}
+export interface Building {
+  noRubble?: boolean;
+  rubbleBlueprint?: TemplateName;
+}
 
 export interface Rebuildable {
   blueprint: TemplateName;
