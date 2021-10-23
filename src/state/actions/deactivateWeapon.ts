@@ -30,6 +30,7 @@ function deactivateWeaponHandler(
       audio.play("laser_cancel");
     }
   }
+  state.act.bordersUpdate();
 }
 
 registerHandler(deactivateWeaponHandler, deactivateWeapon);

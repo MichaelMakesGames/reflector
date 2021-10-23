@@ -78,6 +78,8 @@ function blueprintSelectHandler(
 
   // clear automove path
   state.act.setAutoMovePath([]);
+
+  state.act.bordersUpdate();
 }
 
 registerHandler(blueprintSelectHandler, blueprintSelect);

@@ -187,6 +187,7 @@ export interface Blueprint {
   cost: { resource: ResourceCode; amount: number };
   validityConditions: { condition: ConditionName; invalidMessage: string }[];
   onBuild?: Effect;
+  showBorders?: boolean;
 }
 
 export interface JobDisabler {}

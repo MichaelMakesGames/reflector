@@ -266,6 +266,8 @@ function targetWeaponHandler(
       beam.lastPos = nextPos;
     }
   }
+
+  state.act.bordersUpdate();
 }
 
 registerHandler(targetWeaponHandler, targetWeapon);

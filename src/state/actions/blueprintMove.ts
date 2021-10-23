@@ -32,6 +32,8 @@ function blueprintMoveHandler(
       color: isValid ? colors.blueprint : colors.invalid,
     },
   });
+
+  state.act.bordersUpdate();
 }
 
 registerHandler(blueprintMoveHandler, blueprintMove);

@@ -10,6 +10,10 @@ const conditions: Record<
   ConditionName,
   (state: WrappedState, entity: Entity) => boolean
 > = {
+  always() {
+    return true;
+  },
+
   doesNotHaveTallNeighbors(state, entity) {
     if (!entity.pos) return false;
     return getAdjacentPositions(entity.pos).every((pos) =>

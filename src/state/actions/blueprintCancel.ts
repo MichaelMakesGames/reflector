@@ -18,6 +18,7 @@ function blueprintCancelHandler(
   const entity = state.select.blueprint();
   if (!entity) return;
   state.act.removeEntities([entity.id]);
+  state.act.bordersUpdate();
 }
 
 registerHandler(blueprintCancelHandler, blueprintCancel);

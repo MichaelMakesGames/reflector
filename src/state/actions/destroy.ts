@@ -6,6 +6,7 @@ import audio from "../../lib/audio";
 import { createEntityFromTemplate } from "../../lib/entities";
 import { getAdjacentPositions } from "../../lib/geometry";
 import renderer from "../../renderer";
+import { TemplateName } from "../../types/TemplateName";
 import WrappedState from "../../types/WrappedState";
 import { registerHandler } from "../handleAction";
 
@@ -29,11 +30,11 @@ function destroyHandler(
       if (entity.building) {
         const blueprint =
           entity.building.rubbleBlueprint ||
-          Object.values(templates).find(
-            (template) =>
-              template.blueprint &&
-              template.blueprint.builds === entity.template
-          )?.blueprint?.builds;
+          (Object.entries(templates).find(
+            ([templateName, template]) =>
+              template?.blueprint?.builds === entity.template
+          )?.[0] as TemplateName | undefined);
+        console.warn(blueprint);
         if (!entity.building.noRubble && blueprint) {
           const rubble = createEntityFromTemplate("BUILDING_RUBBLE", {
             pos: entity.pos,

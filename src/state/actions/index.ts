@@ -4,6 +4,9 @@ import blueprintBuild from "./blueprintBuild";
 import blueprintCancel from "./blueprintCancel";
 import blueprintMove from "./blueprintMove";
 import blueprintSelect from "./blueprintSelect";
+import bordersDraw from "./bordersDraw";
+import bordersRemove from "./bordersRemove";
+import bordersUpdate from "./bordersUpdate";
 import cancelAutoMove from "./cancelAutoMove";
 import clearReflectors from "./clearReflectors";
 import completeTutorial from "./completeTutorial";
@@ -56,6 +59,9 @@ export default {
   blueprintCancel,
   blueprintMove,
   blueprintSelect,
+  bordersDraw,
+  bordersRemove,
+  bordersUpdate,
   cancelAutoMove,
   clearReflectors,
   completeTutorial,

@@ -1,4 +1,5 @@
 export type ConditionName =
+  | "always"
   | "doesNotHaveTallNeighbors"
   | "hasOneActiveWorker"
   | "hasThreeActiveWorkers"

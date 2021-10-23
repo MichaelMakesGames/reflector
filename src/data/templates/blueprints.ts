@@ -41,6 +41,7 @@ interface MakeBlueprintConfig {
   rotatesTo?: TemplateName;
   canReplace?: TemplateName[];
   onBuild?: EffectId;
+  showBorders?: boolean;
 }
 
 function makeBlueprint({
@@ -50,6 +51,7 @@ function makeBlueprint({
   rotatesTo,
   canReplace,
   onBuild,
+  showBorders,
 }: MakeBlueprintConfig): Partial<Entity> {
   const buildsTemplate = buildings[builds];
   const buildsTemplateParent =
@@ -64,6 +66,12 @@ function makeBlueprint({
   } else if (buildsTemplateParent && buildsTemplateParent.description) {
     description = buildsTemplateParent.description;
   }
+
+  let projector: Entity["projector"];
+  if (buildsTemplate?.projector) {
+    projector = { ...buildsTemplate.projector, condition: "always" };
+  }
+
   return {
     blueprint: {
       builds,
@@ -71,6 +79,7 @@ function makeBlueprint({
       validityConditions,
       canReplace: ["BUILDING_RUBBLE", ...(canReplace || [])],
       onBuild,
+      showBorders,
     },
     display:
       buildsTemplate && buildsTemplate.display
@@ -86,6 +95,7 @@ function makeBlueprint({
             discreteMovement: true,
           },
     description,
+    projector,
     ...(rotatesTo ? { rotatable: { rotatesTo } } : {}),
   };
 }
@@ -147,30 +157,36 @@ templates.BLUEPRINT_ROAD = makeBlueprint({
 templates.BLUEPRINT_PROJECTOR_BASIC = makeBlueprint({
   builds: "BUILDING_PROJECTOR_BASIC",
   cost: { resource: ResourceCode.Metal, amount: 3 },
+  showBorders: true,
 });
 templates.BLUEPRINT_SPLITTER_HORIZONTAL = makeBlueprint({
   builds: "BUILDING_SPLITTER_HORIZONTAL",
   cost: { resource: ResourceCode.Metal, amount: 5 },
   rotatesTo: "BLUEPRINT_SPLITTER_VERTICAL",
+  showBorders: true,
 });
 templates.BLUEPRINT_SPLITTER_VERTICAL = makeBlueprint({
   builds: "BUILDING_SPLITTER_VERTICAL",
   cost: { resource: ResourceCode.Metal, amount: 5 },
   rotatesTo: "BLUEPRINT_SPLITTER_HORIZONTAL",
+  showBorders: true,
 });
 templates.BLUEPRINT_PROJECTOR_ADVANCED = makeBlueprint({
   builds: "BUILDING_PROJECTOR_ADVANCED",
   cost: { resource: ResourceCode.Machinery, amount: 5 },
   canReplace: ["BUILDING_PROJECTOR_BASIC"],
+  showBorders: true,
 });
 templates.BLUEPRINT_SPLITTER_ADVANCED = makeBlueprint({
   builds: "BUILDING_SPLITTER_ADVANCED",
   cost: { resource: ResourceCode.Machinery, amount: 8 },
   canReplace: ["BUILDING_SPLITTER_HORIZONTAL", "BUILDING_SPLITTER_VERTICAL"],
+  showBorders: true,
 });
 templates.BLUEPRINT_ABSORBER = makeBlueprint({
   builds: "BUILDING_ABSORBER",
   cost: { resource: ResourceCode.Machinery, amount: 3 },
+  showBorders: true,
 });
 templates.BLUEPRINT_SHIELD_GENERATOR = makeBlueprint({
   builds: "BUILDING_SHIELD_GENERATOR",

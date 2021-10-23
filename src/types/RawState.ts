@@ -28,6 +28,7 @@ export interface RawState {
   events: Record<string, number>;
   tutorials: TutorialsState;
   lastMoveWasFast: boolean;
+  bordersKey: string | null;
 
   startOfThisTurn: RawState | null;
   startOfLastTurn: RawState | null;
