@@ -24,6 +24,7 @@ import shieldSystem from "./shieldSystem";
 import storageSystem from "./storageSystem";
 import timeSystem from "./timeSystem";
 import waveSystem from "./waveSystem";
+import windowsSystem from "./windowsSystem";
 
 export const turnEndSystems: ((state: WrappedState) => void)[] = [
   absorberSystem,
@@ -49,6 +50,7 @@ export const cosmeticSystems: ((state: WrappedState) => void)[] = [
   buildingSystem,
   emitterSystem,
   bordersSystem,
+  windowsSystem,
   directionIndicationSystem,
   missingResourceIndicatorSystem,
   colorToggleSystem,

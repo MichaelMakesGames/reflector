@@ -132,6 +132,30 @@ const conditions: Record<
       .entitiesWithComps("shieldGenerator", "pos")
       .every((generator) => getDistance(pos, generator.pos) > 3);
   },
+
+  hasOneOrMoreColonists(state, entity) {
+    const { pos } = entity;
+    if (!pos) return false;
+    return (
+      state.select.entitiesAtPosition(pos).filter((e) => e.colonist).length >= 1
+    );
+  },
+
+  hasTwoOrMoreColonists(state, entity) {
+    const { pos } = entity;
+    if (!pos) return false;
+    return (
+      state.select.entitiesAtPosition(pos).filter((e) => e.colonist).length >= 2
+    );
+  },
+
+  hasThreeOrMoreColonists(state, entity) {
+    const { pos } = entity;
+    if (!pos) return false;
+    return (
+      state.select.entitiesAtPosition(pos).filter((e) => e.colonist).length >= 3
+    );
+  },
 };
 
 export function areConditionsMet(

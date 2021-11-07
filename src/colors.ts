@@ -12,7 +12,7 @@ const colors = {
   blueprint: palette.lightBlue,
   player: palette.white,
   inactiveBuilding: palette.gray,
-  activeBuilding: palette.lightGray,
+  activeBuilding: palette.lessLightGray,
   mineral: palette.brown,
   mountain: palette.darkBrown,
   enemyUnit: palette.purple,

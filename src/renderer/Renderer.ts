@@ -389,7 +389,7 @@ export default class Renderer {
         color: hexToNumber(glow.color),
         innerStrength: 0,
         outerStrength: 0,
-        distance: 20,
+        distance: glow.distance || 20,
       });
       let t = 0;
       const ticker = (delta: number) => {

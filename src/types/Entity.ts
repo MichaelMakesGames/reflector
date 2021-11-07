@@ -32,6 +32,7 @@ export interface Display {
       baseStrength: number;
       sinMultiplier: number;
       deltaDivisor: number;
+      distance?: number;
     };
   };
 }
@@ -125,6 +126,12 @@ export interface Housing {
   occupancy: number;
   capacity: number;
 }
+
+export interface Windowed {
+  windowConditions: { condition: ConditionName; tile: string }[];
+}
+
+export interface Window {}
 
 export interface Production {
   resource: ResourceCode;
@@ -264,4 +271,6 @@ export interface Entity {
   temperature?: Temperature;
   validMarker?: ValidMarker;
   warning?: Warning;
+  window?: Window;
+  windowed?: Windowed;
 }

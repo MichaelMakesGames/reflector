@@ -103,11 +103,6 @@ export default function colonistsSystem(state: WrappedState): void {
       }
     });
   }
-
-  // update tile
-  state.select
-    .entitiesWithComps("colonist", "display", "pos")
-    .forEach((colonist) => updateColonistTile(state, colonist));
 }
 
 function clearResidence(
@@ -408,57 +403,6 @@ function wander(
       status: ColonistStatusCode.Wandering,
     },
   });
-}
-
-function updateColonistTile(
-  state: WrappedState,
-  colonist: Required<Entity, "colonist" | "pos" | "display">
-) {
-  const numColonistsAtPos = state.select
-    .entitiesAtPosition(colonist.pos)
-    .filter((e) => e.colonist).length;
-
-  const residence = state.select.residence(colonist);
-  if (residence && arePositionsEqual(residence.pos, colonist.pos)) {
-    const tile = `colonists_${numColonistsAtPos}_${residence.template
-      .substring("BUILDING_".length)
-      .toLowerCase()}`;
-    state.act.updateEntity({
-      id: colonist.id,
-      display: {
-        ...colonist.display,
-        tile,
-        priority: PRIORITY_BUILDING_HIGH_DETAIL,
-      },
-    });
-  } else if (numColonistsAtPos === 1) {
-    state.act.updateEntity({
-      id: colonist.id,
-      display: {
-        ...colonist.display,
-        tile: "colonists1",
-        priority: PRIORITY_UNIT,
-      },
-    });
-  } else if (numColonistsAtPos === 2) {
-    state.act.updateEntity({
-      id: colonist.id,
-      display: {
-        ...colonist.display,
-        tile: "colonists2",
-        priority: PRIORITY_UNIT,
-      },
-    });
-  } else {
-    state.act.updateEntity({
-      id: colonist.id,
-      display: {
-        ...colonist.display,
-        tile: "colonists3",
-        priority: PRIORITY_UNIT,
-      },
-    });
-  }
 }
 
 function groupColonistsByJobPriority(

@@ -54,6 +54,9 @@ function executeRemoveBuildingHandler(
   // remove farm growth
   executeEffect("CLEAR_BUILDING_FARM_GROWTH", state, undefined, removingTarget);
 
+  // remove window
+  executeEffect("CLEAR_UI_WINDOW", state, undefined, removingTarget);
+
   // discharge shield
   if (removingTarget.shieldGenerator) {
     state.act.shieldDischarge(removingTarget.id);

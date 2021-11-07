@@ -26,9 +26,19 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     parentTemplate: "REFLECTOR_BASE",
     display: {
       tile: "reflector",
-      color: colors.activeBuilding,
+      color: colors.player,
       priority: PRIORITY_BUILDING_HIGH,
       speed: 0.1,
+      group: {
+        id: "REFLECTOR",
+        glow: {
+          baseStrength: 1,
+          sinMultiplier: 0.25,
+          deltaDivisor: 10,
+          distance: 10,
+          color: colors.player,
+        },
+      },
     },
     reflector: { type: "/", outOfRange: false },
     rotatable: { rotatesTo: "REFLECTOR_DOWN_RIGHT" },
@@ -38,9 +48,19 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     display: {
       tile: "reflector",
       rotation: 90,
-      color: colors.activeBuilding,
+      color: colors.player,
       priority: PRIORITY_BUILDING_HIGH,
       speed: 0.1,
+      group: {
+        id: "REFLECTOR",
+        glow: {
+          baseStrength: 1,
+          sinMultiplier: 0.25,
+          deltaDivisor: 10,
+          distance: 10,
+          color: colors.player,
+        },
+      },
     },
     reflector: { type: "\\", outOfRange: false },
     rotatable: { rotatesTo: "REFLECTOR_UP_RIGHT" },
@@ -169,6 +189,11 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       priority: PRIORITY_BUILDING_HIGH,
       hasBackground: false,
     },
+    windowed: {
+      windowConditions: [
+        { condition: "hasOneOrMoreColonists", tile: "windows_tent_1" },
+      ],
+    },
     blocking: {
       moving: true,
       lasers: false,
@@ -193,6 +218,13 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       color: colors.activeBuilding,
       priority: PRIORITY_BUILDING_HIGH,
       hasBackground: true,
+    },
+    windowed: {
+      windowConditions: [
+        { condition: "hasThreeOrMoreColonists", tile: "windows_residence_3" },
+        { condition: "hasTwoOrMoreColonists", tile: "windows_residence_2" },
+        { condition: "hasOneOrMoreColonists", tile: "windows_residence_1" },
+      ],
     },
     blocking: {
       moving: true,
@@ -222,6 +254,12 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       color: colors.activeBuilding,
       priority: PRIORITY_BUILDING_HIGH,
       hasBackground: true,
+    },
+    windowed: {
+      windowConditions: [
+        { condition: "hasTwoOrMoreColonists", tile: "windows_mine_2" },
+        { condition: "hasOneOrMoreColonists", tile: "windows_mine_1" },
+      ],
     },
     smokeEmitter: {
       emitters: [
@@ -473,6 +511,13 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       priority: PRIORITY_BUILDING_HIGH,
       hasBackground: true,
     },
+    windowed: {
+      windowConditions: [
+        { condition: "hasThreeOrMoreColonists", tile: "windows_factory_3" },
+        { condition: "hasTwoOrMoreColonists", tile: "windows_factory_2" },
+        { condition: "hasOneOrMoreColonists", tile: "windows_factory_1" },
+      ],
+    },
     smokeEmitter: {
       emitters: [
         {
@@ -713,6 +758,12 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       color: colors.activeBuilding,
       priority: PRIORITY_BUILDING_LOW,
       hasBackground: true,
+    },
+    windowed: {
+      windowConditions: [
+        { condition: "hasTwoOrMoreColonists", tile: "windows_warehouse_2" },
+        { condition: "hasOneOrMoreColonists", tile: "windows_warehouse_1" },
+      ],
     },
     blocking: { moving: true, lasers: true, windmill: true },
     description: {

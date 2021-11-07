@@ -126,4 +126,5 @@ export type TemplateName =
   | "UI_SHIELD_2"
   | "UI_SHIELD_3"
   | "UI_VALID_WITH_WARNING"
-  | "UI_VALID";
+  | "UI_VALID"
+  | "UI_WINDOW";

@@ -26,6 +26,10 @@ function destroyHandler(
 
     executeEffect(entity.destructible.onDestroy, state, undefined, entity);
 
+    if (entity.windowed) {
+      executeEffect("CLEAR_UI_WINDOW", state, undefined, entity);
+    }
+
     if (entity.pos) {
       if (entity.building) {
         const blueprint =

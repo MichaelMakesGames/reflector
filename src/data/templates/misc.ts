@@ -154,6 +154,24 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       },
     },
   },
+  UI_WINDOW: {
+    display: {
+      tile: "blank",
+      color: colors.player,
+      priority: PRIORITY_BUILDING_HIGH_DETAIL,
+      group: {
+        id: "UI_WINDOPW",
+        glow: {
+          color: colors.player,
+          baseStrength: 1,
+          sinMultiplier: 0,
+          deltaDivisor: 10,
+          distance: 5,
+        },
+      },
+    },
+    window: {},
+  },
   COLONIST: {
     display: {
       tile: "colonists1",

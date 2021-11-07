@@ -18,6 +18,7 @@ const baseEffects: Record<EffectId, EffectExecutor> = {
   CLEAR_UI_OVERHEATING_CRITICAL: createClearEffect("UI_OVERHEATING_CRITICAL"),
   CLEAR_UI_OVERHEATING_HOT: createClearEffect("UI_OVERHEATING_HOT"),
   CLEAR_UI_OVERHEATING_VERY_HOT: createClearEffect("UI_OVERHEATING_VERY_HOT"),
+  CLEAR_UI_WINDOW: createClearEffect("UI_WINDOW"),
 
   DESTROY: (state, actor, target) => {
     if (!target) return;
