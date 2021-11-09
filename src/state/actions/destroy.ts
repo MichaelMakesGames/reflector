@@ -1,5 +1,6 @@
 import { RNG } from "rot-js";
 import { createAction } from "typesafe-actions";
+import colors from "../../colors";
 import { executeEffect } from "../../data/effects";
 import templates from "../../data/templates";
 import audio from "../../lib/audio";
@@ -64,6 +65,10 @@ function destroyHandler(
           RNG.getItem(["alien_death_1", "alien_death_2", "alien_death_3"]) ||
             "",
           entity.pos
+        );
+        renderer.splatter(
+          entity.pos,
+          entity.display?.color ?? colors.enemyUnit
         );
       }
 

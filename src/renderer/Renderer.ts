@@ -4,7 +4,14 @@ import * as particles from "pixi-particles";
 import * as PIXI from "pixi.js";
 import { Required } from "ts-toolbelt/out/Object/Required";
 import colors from "../colors";
-import { PLAYER_ID, PRIORITY_BUILDING_HIGH_DETAIL, UP } from "../constants";
+import {
+  PLAYER_ID,
+  PRIORITY_BUILDING_HIGH,
+  PRIORITY_BUILDING_HIGH_DETAIL,
+  PRIORITY_MARKER,
+  PRIORITY_UNIT,
+  UP,
+} from "../constants";
 import { arePositionsEqual, getPositionToDirection } from "../lib/geometry";
 import { Display, Entity, Pos } from "../types";
 
@@ -506,55 +513,59 @@ export default class Renderer {
         return;
       }
       const texture = PIXI.Texture.WHITE;
-      const emitter = new particles.Emitter(this.app.stage, [texture], {
-        alpha: {
-          start: 0.5,
-          end: 0.0,
-        },
-        scale: {
-          start: 1 / 8,
-          end: 3 / 4,
-          minimumScaleMultiplier: 1,
-        },
-        color: {
-          start: colors.ground,
-          end: colors.ground,
-        },
-        speed: {
-          start: 5,
-          end: 3,
-          minimumSpeedMultiplier: 1,
-        },
-        acceleration: {
-          x: 1,
-          y: 0,
-        },
-        maxSpeed: 0,
-        startRotation: {
-          min: 270,
-          max: 300,
-        },
-        noRotation: true,
-        rotationSpeed: {
-          min: 0,
-          max: 0,
-        },
-        lifetime: {
-          min: 3,
-          max: 6,
-        },
-        blendMode: "normal",
-        frequency: 0.25,
-        emitterLifetime: -1,
-        maxParticles: 1000,
-        particlesPerWave: 3,
-        pos: {
-          x: pos.x * this.tileWidth + offset.x,
-          y: pos.y * this.tileHeight + offset.y,
-        },
-        addAtBack: false,
-        spawnType: "point",
-      });
+      const emitter = new particles.Emitter(
+        this.getOrCreateLayer(PRIORITY_BUILDING_HIGH_DETAIL),
+        [texture],
+        {
+          alpha: {
+            start: 0.5,
+            end: 0.0,
+          },
+          scale: {
+            start: 1 / 8,
+            end: 3 / 4,
+            minimumScaleMultiplier: 1,
+          },
+          color: {
+            start: colors.ground,
+            end: colors.ground,
+          },
+          speed: {
+            start: 5,
+            end: 3,
+            minimumSpeedMultiplier: 1,
+          },
+          acceleration: {
+            x: 1,
+            y: 0,
+          },
+          maxSpeed: 0,
+          startRotation: {
+            min: 270,
+            max: 300,
+          },
+          noRotation: true,
+          rotationSpeed: {
+            min: 0,
+            max: 0,
+          },
+          lifetime: {
+            min: 3,
+            max: 6,
+          },
+          blendMode: "normal",
+          frequency: 0.25,
+          emitterLifetime: -1,
+          maxParticles: 1000,
+          particlesPerWave: 3,
+          pos: {
+            x: pos.x * this.tileWidth + offset.x,
+            y: pos.y * this.tileHeight + offset.y,
+          },
+          addAtBack: false,
+          spawnType: "point",
+        }
+      );
       this.emitters[key] = emitter;
     });
   }
@@ -580,7 +591,7 @@ export default class Renderer {
     if (!this.loadPromise) return;
     this.loadPromise.then(() => {
       const texture = PIXI.Texture.WHITE;
-      new particles.Emitter(this.app.stage, [texture], {
+      new particles.Emitter(this.getOrCreateLayer(PRIORITY_MARKER), [texture], {
         alpha: {
           start: 1,
           end: 0,
@@ -699,6 +710,73 @@ export default class Renderer {
     });
   }
 
+  public splatter(pos: Pos, color: string): void {
+    if (!this.loadPromise) return;
+    this.loadPromise.then(() => {
+      const texture = PIXI.Texture.WHITE;
+      const config: particles.EmitterConfig = {
+        alpha: {
+          list: [
+            { value: 0.8, time: 0 },
+            { value: 0.8, time: 0.5 },
+            { value: 0.5, time: 0.75 },
+            { value: 0, time: 1 },
+          ],
+        },
+
+        scale: {
+          list: [
+            { value: 1 / 2, time: 0 },
+            { value: 1 / 2, time: 0.75 },
+            { value: 1 / 4, time: 1 },
+          ],
+        },
+        color: {
+          list: [
+            { value: color, time: 0 },
+            // { value: color, time: 1 },
+          ],
+        },
+        speed: {
+          list: [
+            { value: 200, time: 0 },
+            { value: 5, time: 0.25 },
+            { value: 0, time: 1 },
+          ],
+        },
+        acceleration: {
+          x: 0,
+          y: 0,
+        },
+        maxSpeed: 0,
+        startRotation: {
+          min: 0,
+          max: 360,
+        },
+        noRotation: true,
+        lifetime: {
+          min: 0.5,
+          max: 0.8,
+        },
+        frequency: 0.02,
+        emitterLifetime: 0.1,
+        maxParticles: 1000,
+        particlesPerWave: 3,
+        pos: {
+          x: pos.x * this.tileWidth + this.tileWidth / 2,
+          y: pos.y * this.tileHeight + this.tileHeight / 2,
+        },
+        addAtBack: false,
+        spawnType: "point",
+      };
+      new particles.Emitter(
+        this.getOrCreateLayer(PRIORITY_UNIT),
+        [texture],
+        config
+      ).playOnceAndDestroy();
+    });
+  }
+
   public dustCloud(pos: Pos): void {
     if (!this.loadPromise) return;
     this.loadPromise.then(() => {
@@ -757,7 +835,7 @@ export default class Renderer {
         },
       };
       new particles.Emitter(
-        this.app.stage,
+        this.getOrCreateLayer(PRIORITY_BUILDING_HIGH_DETAIL),
         [texture],
         config
       ).playOnceAndDestroy();
