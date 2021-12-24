@@ -23,6 +23,13 @@ const conditions: Record<
     );
   },
 
+  isNotBuildingBlocked(state, entity) {
+    if (!entity.pos) return true;
+    return state.select
+      .entitiesAtPosition(entity.pos)
+      .every((e) => !e.blocking || !e.blocking.building);
+  },
+
   isNotBlocked(state, entity) {
     if (!entity.pos) return true;
     const replaceableEntities = state.select

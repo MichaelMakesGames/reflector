@@ -10,6 +10,7 @@ export type ConditionName =
   | "isDay"
   | "isInBuildRange"
   | "isNotBlocked"
+  | "isNotBuildingBlocked"
   | "isNotOnEdgeOfMap"
   | "isNotOnOtherBuilding"
   | "isOnFertile"

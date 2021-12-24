@@ -16,12 +16,16 @@ const DEFAULT_VALIDITY_CONDITIONS: {
     invalidMessage: "Cannot build on edge of map.",
   },
   {
+    condition: "isNotBuildingBlocked",
+    invalidMessage: "This position is blocked by terrain.",
+  },
+  {
     condition: "isNotOnOtherBuilding",
     invalidMessage: "There is already another building here.",
   },
   {
     condition: "isNotBlocked",
-    invalidMessage: "This position is blocked by a building, unit, or terrain.",
+    invalidMessage: "This position is blocked by something else.",
   },
   {
     condition: "isInBuildRange",

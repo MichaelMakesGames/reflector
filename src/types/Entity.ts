@@ -77,6 +77,7 @@ export interface Blocking {
   moving: boolean;
   lasers: boolean;
   windmill: boolean;
+  building?: boolean;
 }
 
 export interface Laser {
