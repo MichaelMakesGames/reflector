@@ -57,3 +57,7 @@ export const RIGHT = { dx: 1, dy: 0 };
 export const DOWN = { dx: 0, dy: 1 };
 export const LEFT = { dx: -1, dy: 0 };
 export const UP = { dx: 0, dy: -1 };
+
+export const DEMO_PAUSE_MICRO = 10;
+export const DEMO_PAUSE_SHORT = 500;
+export const DEMO_PAUSE_LONG = 1000;

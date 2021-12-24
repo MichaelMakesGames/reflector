@@ -1,8 +1,6 @@
 import { RNG } from "rot-js";
 import { createAction } from "typesafe-actions";
 import { PLAYER_ID } from "../../constants";
-import audio from "../../lib/audio";
-import renderer from "../../renderer";
 import WrappedState from "../../types/WrappedState";
 import { registerHandler } from "../handleAction";
 import { cosmeticSystems } from "../systems";
@@ -47,7 +45,7 @@ function moveHandler(
     pos: newPosition,
   });
   if (entity.id === PLAYER_ID) {
-    if (state.select.cursorPos() && renderer.isZoomedIn()) {
+    if (state.select.cursorPos() && state.renderer.isZoomedIn()) {
       state.act.moveCursor({ dx: action.payload.dx, dy: action.payload.dy });
     }
     const isFastMove =
@@ -71,7 +69,7 @@ function moveHandler(
   }
 
   if (entity.colonist) {
-    audio.playAtPos(
+    state.audio.playAtPos(
       RNG.getItem([
         "colonist_move_1",
         "colonist_move_2",
@@ -82,8 +80,8 @@ function moveHandler(
       { rollOff: 0.75 }
     );
   } else if (entity.id === PLAYER_ID) {
-    audio.setListenerPos(newPosition);
-    audio.play(
+    state.audio.setListenerPos(newPosition);
+    state.audio.play(
       RNG.getItem([
         "player_move_1",
         "player_move_2",
@@ -93,7 +91,7 @@ function moveHandler(
       { volume: 0.1 }
     );
   } else if (entity.ai) {
-    audio.playAtPos(
+    state.audio.playAtPos(
       RNG.getItem([
         "alien_move_1",
         "alien_move_2",

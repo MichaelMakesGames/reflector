@@ -1,6 +1,5 @@
 import { createAction } from "typesafe-actions";
 import { ResourceCode } from "../../data/resources";
-import { save } from "../../lib/gameSave";
 import WrappedState from "../../types/WrappedState";
 import { registerHandler } from "../handleAction";
 import { cosmeticSystems, turnEndSystems } from "../systems";
@@ -41,7 +40,7 @@ function playerTookTurnHandler(
       startOfLastTurn: null,
     },
   });
-  save(state.raw);
+  state.save(state.raw);
 }
 
 registerHandler(playerTookTurnHandler, playerTookTurn);

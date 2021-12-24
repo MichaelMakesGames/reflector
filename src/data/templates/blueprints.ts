@@ -96,6 +96,7 @@ function makeBlueprint({
           },
     description,
     projector,
+    demo: buildsTemplate?.demo ?? buildsTemplateParent?.demo,
     ...(rotatesTo ? { rotatable: { rotatesTo } } : {}),
   };
 }

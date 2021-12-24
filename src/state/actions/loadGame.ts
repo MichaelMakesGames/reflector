@@ -1,9 +1,7 @@
 import { createAction } from "typesafe-actions";
 import colors from "../../colors";
 import { VERSION } from "../../constants";
-import audio from "../../lib/audio";
 import { resetEntitiesByCompAndPos } from "../../lib/entities";
-import renderer from "../../renderer";
 import { RawState } from "../../types";
 import WrappedState from "../../types/WrappedState";
 import { registerHandler } from "../handleAction";
@@ -25,21 +23,21 @@ function loadGameHandler(
   });
   resetEntitiesByCompAndPos(state);
   state.act.setCursorPos(null);
-  renderer.clear();
+  state.renderer.clear();
   state.select
     .entitiesWithComps("pos", "display")
-    .forEach((entity) => renderer.addEntity(entity));
+    .forEach((entity) => state.renderer.addEntity(entity));
   cosmeticSystems.forEach((system) => system(state));
   if (state.select.isNight()) {
-    renderer.setBackgroundColor(colors.backgroundNight);
+    state.renderer.setBackgroundColor(colors.backgroundNight);
   } else {
-    renderer.setBackgroundColor(colors.backgroundDay);
+    state.renderer.setBackgroundColor(colors.backgroundDay);
   }
 
-  audio.stopAll();
-  audio.playMusic(state.select.isNight() ? "night" : "day");
+  state.audio.stopAll();
+  state.audio.playMusic(state.select.isNight() ? "night" : "day");
   if (state.select.entitiesWithComps("laser").length > 0) {
-    audio.loop("laser_active", { volume: 0.5 });
+    state.audio.loop("laser_active", { volume: 0.5 });
   }
 }
 

@@ -1,7 +1,6 @@
 import tutorials from "../data/tutorials";
 import { Action } from "../types";
 import WrappedState from "../types/WrappedState";
-import { save } from "./gameSave";
 
 export function processTutorials(
   prevState: WrappedState,
@@ -34,6 +33,6 @@ export function processTutorials(
   }
 
   if (isDirty) {
-    save(nextState.raw);
+    nextState.save(nextState.raw);
   }
 }

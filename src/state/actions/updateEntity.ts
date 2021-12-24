@@ -2,7 +2,6 @@ import has from "has";
 import { Required } from "ts-toolbelt/out/Object/Required";
 import { Object } from "ts-toolbelt";
 import { createAction } from "typesafe-actions";
-import renderer from "../../renderer";
 import selectors from "../selectors";
 import { Entity } from "../../types";
 import { getPosKey } from "../../lib/geometry";
@@ -53,12 +52,16 @@ function updateEntityHandler(
   if (has(partial, "pos") || has(partial, "display")) {
     if (entity.pos && entity.display) {
       if (!prev.pos || !prev.display) {
-        renderer.addEntity(entity as Required<Entity, "pos" | "display">);
+        wrappedState.renderer.addEntity(
+          entity as Required<Entity, "pos" | "display">
+        );
       } else {
-        renderer.updateEntity(entity as Required<Entity, "pos" | "display">);
+        wrappedState.renderer.updateEntity(
+          entity as Required<Entity, "pos" | "display">
+        );
       }
     } else {
-      renderer.removeEntity(entity.id);
+      wrappedState.renderer.removeEntity(entity.id);
     }
   }
 

@@ -4,7 +4,6 @@ import { registerHandler } from "../handleAction";
 import WrappedState from "../../types/WrappedState";
 import { areConditionsMet } from "../../lib/conditions";
 import { createEntityFromTemplate } from "../../lib/entities";
-import audio from "../../lib/audio";
 import { executeEffect } from "../../data/effects";
 
 const blueprintBuild =
@@ -80,7 +79,7 @@ function blueprintBuildHandler(
     state.act.blueprintSelect(blueprint.template);
   }
 
-  audio.playAtPos("building_built", blueprint.pos);
+  state.audio.playAtPos("building_built", blueprint.pos);
 }
 
 registerHandler(blueprintBuildHandler, blueprintBuild);

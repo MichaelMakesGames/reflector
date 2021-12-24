@@ -3,9 +3,7 @@ import { Required } from "ts-toolbelt/out/Object/Required";
 import PriorityQueue from "priorityqueuejs";
 import * as ROT from "rot-js";
 import { Direction, Entity, Pos } from "../types";
-import renderer from "../renderer";
 import WrappedState from "../types/WrappedState";
-import audio from "./audio";
 import { createEntityFromTemplate } from "./entities";
 import {
   arePositionsEqual,
@@ -67,6 +65,7 @@ function aStar({
         distance[current] + getCost(neighbor, distance[current] + 1);
       if (
         tentativeScore < maxCost &&
+        Number.isFinite(tentativeScore) &&
         tentativeScore <
           (Number.isFinite(distance[neighborKey])
             ? distance[neighborKey]
@@ -169,15 +168,15 @@ export function getDirectionTowardTarget(
       )
       .map(getPosKey)
   );
-  const getCost = (pos: Pos) => {
-    const nonAiEntitiesPosition = state.select
+  const getCost = (pos: Pos): number => {
+    const nonAiEntitiesAtPosition = state.select
       .entitiesAtPosition(pos)
       .filter((e) => !aiEntityIds.has(e.id));
     const passable =
       !aiPlannedPositions.has(getPosKey(pos)) &&
       (arePositionsEqual(pos, from) ||
         arePositionsEqual(pos, to) ||
-        nonAiEntitiesPosition.every(
+        nonAiEntitiesAtPosition.every(
           (e) =>
             isPassable(state, actor, e) ||
             isDestructibleNonEnemy(state, actor, e)
@@ -187,11 +186,12 @@ export function getDirectionTowardTarget(
     return (
       (1 +
         Math.max(
-          ...nonAiEntitiesPosition.map((e) =>
+          0,
+          ...nonAiEntitiesAtPosition.map((e) =>
             e.destructible ? e.destructible.movementCost || 1 : 0
           )
         )) *
-      (actor.colonist && !nonAiEntitiesPosition.some((e) => e.road) ? 2 : 1)
+      (actor.colonist && !nonAiEntitiesAtPosition.some((e) => e.road) ? 2 : 1)
     );
   };
   const path = aStar({
@@ -239,11 +239,9 @@ export function executePlan(
     const targetPos = getPositionToDirection(pos, ai.plannedActionDirection);
     const targets = state.select
       .entitiesAtPosition(targetPos)
-      .filter(
-        (e) => e.destructible && e.destructible.attackPriority !== undefined
-      );
+      .filter((e) => e.shield || e.destructible?.attackPriority !== undefined);
     if (targets.length && ai.type !== "BURROWED") {
-      audio.playAtPos(
+      state.audio.playAtPos(
         ROT.RNG.getItem([
           "alien_attack_1",
           "alien_attack_2",
@@ -253,7 +251,7 @@ export function executePlan(
         pos,
         { volume: 2 }
       );
-      renderer.bump(entityId, targetPos);
+      state.renderer.bump(entityId, targetPos);
       state.act.destroyPos({ target: targetPos, from: pos });
     } else {
       state.act.move({ entityId, ...ai.plannedActionDirection });

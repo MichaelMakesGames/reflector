@@ -1,6 +1,5 @@
 import { createAction } from "typesafe-actions";
 import makeLevel from "../../lib/makeLevel";
-import renderer from "../../renderer";
 import { registerHandler } from "../handleAction";
 import { createInitialState } from "../initialState";
 import colonistsSystem from "../systems/colonistsSystem";
@@ -18,7 +17,7 @@ function newGameHandler(
       completedTutorials: state.select.completedTutorials(),
     })
   );
-  renderer.clear();
+  state.renderer.clear();
   makeLevel(state);
   state.act.loadGame({ state: state.raw });
   state.setRaw({

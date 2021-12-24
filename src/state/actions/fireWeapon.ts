@@ -1,11 +1,9 @@
 import { RNG } from "rot-js";
 import { createAction } from "typesafe-actions";
-import audio from "../../lib/audio";
 import { registerHandler } from "../handleAction";
 import WrappedState from "../../types/WrappedState";
 import { PLAYER_ID } from "../../constants";
 import { fromPosKey, getPosKey } from "../../lib/geometry";
-import renderer from "../../renderer";
 
 const fireWeapon = createAction("FIRE_WEAPON")<{ source: string }>();
 export default fireWeapon;
@@ -24,7 +22,7 @@ function fireWeaponHandler(
     .entitiesWithComps("laser", "pos")
     .filter((e) => e.laser.source === action.payload.source);
 
-  renderer.flashGlowAndRemoveGroup(lasers[0].display?.group?.id || "");
+  state.renderer.flashGlowAndRemoveGroup(lasers[0].display?.group?.id || "");
 
   const positionsToDestroy: string[] = [];
   for (const laser of lasers.filter((entity) => !entity.laser.cosmetic)) {
@@ -66,9 +64,9 @@ function fireWeaponHandler(
   }
 
   if (state.select.entitiesWithComps("laser").length === 0) {
-    audio.stop("laser_active");
+    state.audio.stop("laser_active");
   }
-  audio.play(
+  state.audio.play(
     RNG.getItem([
       "laser_shot_1",
       "laser_shot_2",

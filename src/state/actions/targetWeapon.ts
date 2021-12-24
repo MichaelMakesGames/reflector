@@ -7,7 +7,6 @@ import {
   RIGHT,
   UP,
 } from "../../constants";
-import audio from "../../lib/audio";
 import { areConditionsMet } from "../../lib/conditions";
 import { areDirectionsEqual, getConstDir } from "../../lib/geometry";
 import { createLaser, getSplitTemplateName, reflect } from "../../lib/lasers";
@@ -53,10 +52,10 @@ function targetWeaponHandler(
     .entitiesWithComps("laser", "pos")
     .filter((e) => e.laser.source === source);
   if (lasers.length === 0) {
-    audio.loop("laser_active", { volume: 0.5 });
+    state.audio.loop("laser_active", { volume: 0.5 });
   }
   if (lasers.filter((e) => e.laser.source === source).length === 0) {
-    audio.play("laser_activate");
+    state.audio.play("laser_activate");
   }
   state.act.removeEntities(lasers.map((e) => e.id));
 

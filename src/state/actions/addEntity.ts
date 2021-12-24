@@ -1,6 +1,5 @@
 import { Required } from "ts-toolbelt/out/Object/Required";
 import { createAction } from "typesafe-actions";
-import renderer from "../../renderer";
 import { Entity } from "../../types";
 import { getPosKey } from "../../lib/geometry";
 import { registerHandler } from "../handleAction";
@@ -38,7 +37,9 @@ function addEntityHandler(
   }
 
   if (entity.pos && entity.display) {
-    renderer.addEntity(entity as Required<Entity, "pos" | "display">);
+    wrappedState.renderer.addEntity(
+      entity as Required<Entity, "pos" | "display">
+    );
   }
 
   state = {

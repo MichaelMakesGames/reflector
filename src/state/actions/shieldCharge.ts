@@ -5,9 +5,7 @@ import { ResourceCode } from "../../data/resources";
 import { getAdjacentPositions } from "../../lib/geometry";
 import { createEntityFromTemplate } from "../../lib/entities";
 import { TemplateName } from "../../types/TemplateName";
-import renderer from "../../renderer";
 import colors from "../../colors";
-import audio from "../../lib/audio";
 
 const shieldCharge = createAction("shieldCharge")<string>();
 export default shieldCharge;
@@ -39,8 +37,8 @@ function shieldChargeHandler(
         strength: newStrength,
       },
     });
-    renderer.flash(entity.pos, colors.secondary);
-    audio.playAtPos("power_on", entity.pos);
+    state.renderer.flash(entity.pos, colors.secondary);
+    state.audio.playAtPos("power_on", entity.pos);
     if (newStrength === 1) {
       for (const pos of getAdjacentPositions(entity.pos, false)) {
         state.act.addEntity(

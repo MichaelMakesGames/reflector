@@ -1,6 +1,12 @@
 import colors from "../../colors";
+import {
+  DEMO_PAUSE_LONG,
+  DEMO_PAUSE_SHORT,
+  LEFT,
+  PLAYER_ID,
+  PRIORITY_UNIT,
+} from "../../constants";
 import { Entity } from "../../types";
-import { PRIORITY_UNIT } from "../../constants";
 import { TemplateName } from "../../types/TemplateName";
 
 const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
@@ -29,6 +35,31 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
         "The most basic enemy. It targets the player or nearest building.",
       shortDescription: "basic enemy",
     },
+    demo: {
+      width: 6,
+      height: 3,
+      entities: {
+        [PLAYER_ID]: ["PLAYER", { pos: { x: 6, y: 1 }, projector: undefined }],
+        enemy: ["ENEMY_DRONE", { pos: { x: 1, y: 1 } }],
+      },
+      actions: [
+        { type: "PLAYER_TOOK_TURN" },
+        DEMO_PAUSE_LONG,
+        {
+          type: "PLAYER_TOOK_TURN",
+        },
+        DEMO_PAUSE_SHORT,
+        { type: "PLAYER_TOOK_TURN" },
+        DEMO_PAUSE_SHORT,
+        {
+          type: "TARGET_WEAPON",
+          payload: { direction: LEFT, source: PLAYER_ID },
+        },
+        DEMO_PAUSE_LONG,
+        { type: "FIRE_WEAPON", payload: { source: PLAYER_ID } },
+        DEMO_PAUSE_LONG,
+      ],
+    },
   },
   ENEMY_VOLATILE: {
     parentTemplate: "ENEMY_BASE",
@@ -50,6 +81,39 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       name: "Volatile",
       description: "Explodes when killed, damaging everything adjacent.",
       shortDescription: "explosive enemy",
+    },
+    demo: {
+      width: 6,
+      height: 3,
+      entities: {
+        [PLAYER_ID]: ["PLAYER", { pos: { x: 6, y: 1 }, projector: undefined }],
+        enemy: ["ENEMY_VOLATILE", { pos: { x: 1, y: 1 } }],
+        windmill: [
+          "BUILDING_WINDMILL",
+          { pos: { x: 3, y: 0 }, destructible: { attackPriority: undefined } },
+        ],
+        factory: [
+          "BUILDING_FACTORY",
+          { pos: { x: 3, y: 2 }, destructible: { attackPriority: undefined } },
+        ],
+      },
+      actions: [
+        { type: "PLAYER_TOOK_TURN" },
+        DEMO_PAUSE_LONG,
+        {
+          type: "PLAYER_TOOK_TURN",
+        },
+        DEMO_PAUSE_SHORT,
+        { type: "PLAYER_TOOK_TURN" },
+        DEMO_PAUSE_SHORT,
+        {
+          type: "TARGET_WEAPON",
+          payload: { direction: LEFT, source: PLAYER_ID },
+        },
+        DEMO_PAUSE_LONG,
+        { type: "FIRE_WEAPON", payload: { source: PLAYER_ID } },
+        DEMO_PAUSE_LONG,
+      ],
     },
   },
   ENEMY_ARMORED: {
@@ -74,6 +138,37 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       description: "A bug with a thick armored shell that blocks 1 attack.",
       shortDescription: "armored enemy",
     },
+    demo: {
+      width: 6,
+      height: 3,
+      entities: {
+        [PLAYER_ID]: ["PLAYER", { pos: { x: 6, y: 1 }, projector: undefined }],
+        ARMORED: ["ENEMY_ARMORED", { pos: { x: 1, y: 1 } }],
+      },
+      actions: [
+        { type: "PLAYER_TOOK_TURN" },
+        DEMO_PAUSE_LONG,
+        {
+          type: "TARGET_WEAPON",
+          payload: { direction: LEFT, source: PLAYER_ID },
+        },
+        DEMO_PAUSE_LONG,
+        {
+          type: "FIRE_WEAPON",
+          payload: { source: PLAYER_ID },
+        },
+        DEMO_PAUSE_SHORT,
+        { type: "PLAYER_TOOK_TURN" },
+        DEMO_PAUSE_SHORT,
+        {
+          type: "TARGET_WEAPON",
+          payload: { direction: LEFT, source: PLAYER_ID },
+        },
+        DEMO_PAUSE_LONG,
+        { type: "FIRE_WEAPON", payload: { source: PLAYER_ID } },
+        DEMO_PAUSE_LONG,
+      ],
+    },
   },
   ENEMY_FLYER: {
     parentTemplate: "ENEMY_BASE",
@@ -95,6 +190,51 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       description: "A winged bug that can fly over water.",
       shortDescription: "flying enemy",
     },
+    demo: {
+      width: 6,
+      height: 3,
+      entities: {
+        [PLAYER_ID]: ["PLAYER", { pos: { x: 6, y: 1 }, projector: undefined }],
+        enemy: ["ENEMY_FLYER", { pos: { x: 1, y: 1 } }],
+        water1: ["TERRAIN_WATER_7", { pos: { x: 2, y: 0 } }],
+        water2: ["TERRAIN_WATER_7", { pos: { x: 2, y: 1 } }],
+        water3: ["TERRAIN_WATER_7", { pos: { x: 2, y: 2 } }],
+        water4: ["TERRAIN_WATER_13", { pos: { x: 3, y: 0 } }],
+        water5: ["TERRAIN_WATER_13", { pos: { x: 3, y: 1 } }],
+        water6: ["TERRAIN_WATER_13", { pos: { x: 3, y: 2 } }],
+        corner1: ["TERRAIN_WATER_CORNER_NE", { pos: { x: 2, y: 0 } }],
+        corner2: ["TERRAIN_WATER_CORNER_NE", { pos: { x: 2, y: 1 } }],
+        corner3: ["TERRAIN_WATER_CORNER_NE", { pos: { x: 2, y: 2 } }],
+        corner4: ["TERRAIN_WATER_CORNER_SE", { pos: { x: 2, y: 0 } }],
+        corner5: ["TERRAIN_WATER_CORNER_SE", { pos: { x: 2, y: 1 } }],
+        corner6: ["TERRAIN_WATER_CORNER_SE", { pos: { x: 2, y: 2 } }],
+        corner7: ["TERRAIN_WATER_CORNER_NW", { pos: { x: 3, y: 0 } }],
+        corner8: ["TERRAIN_WATER_CORNER_NW", { pos: { x: 3, y: 1 } }],
+        corner9: ["TERRAIN_WATER_CORNER_NW", { pos: { x: 3, y: 2 } }],
+        cornerA: ["TERRAIN_WATER_CORNER_SW", { pos: { x: 3, y: 0 } }],
+        cornerB: ["TERRAIN_WATER_CORNER_SW", { pos: { x: 3, y: 1 } }],
+        cornerC: ["TERRAIN_WATER_CORNER_SW", { pos: { x: 3, y: 2 } }],
+      },
+      actions: [
+        { type: "PLAYER_TOOK_TURN" },
+        DEMO_PAUSE_LONG,
+        {
+          type: "PLAYER_TOOK_TURN",
+        },
+        DEMO_PAUSE_SHORT,
+        { type: "PLAYER_TOOK_TURN" },
+        DEMO_PAUSE_SHORT,
+        { type: "PLAYER_TOOK_TURN" },
+        DEMO_PAUSE_SHORT,
+        {
+          type: "TARGET_WEAPON",
+          payload: { direction: LEFT, source: PLAYER_ID },
+        },
+        DEMO_PAUSE_LONG,
+        { type: "FIRE_WEAPON", payload: { source: PLAYER_ID } },
+        DEMO_PAUSE_LONG,
+      ],
+    },
   },
   ENEMY_BURROWER: {
     parentTemplate: "ENEMY_BASE",
@@ -113,12 +253,49 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     description: {
       name: "Burrower",
-      description: "A bug that digs underground until ready to attack.",
+      description: "Digs underground until ready to attack.",
       shortDescription: "digging enemy",
+    },
+    demo: {
+      width: 6,
+      height: 3,
+      entities: {
+        [PLAYER_ID]: ["PLAYER", { pos: { x: 6, y: 1 }, projector: undefined }],
+        enemy: ["ENEMY_BURROWED", { pos: { x: 1, y: 1 } }],
+        building: ["BUILDING_FACTORY", { pos: { x: 4, y: 2 } }],
+      },
+      actions: [
+        { type: "PLAYER_TOOK_TURN" },
+        DEMO_PAUSE_LONG,
+        {
+          type: "PLAYER_TOOK_TURN",
+        },
+        DEMO_PAUSE_SHORT,
+        { type: "PLAYER_TOOK_TURN" },
+        DEMO_PAUSE_SHORT,
+        { type: "PLAYER_TOOK_TURN" },
+        DEMO_PAUSE_SHORT,
+        {
+          type: "TARGET_WEAPON",
+          payload: { direction: LEFT, source: PLAYER_ID },
+        },
+        DEMO_PAUSE_LONG,
+        { type: "FIRE_WEAPON", payload: { source: PLAYER_ID } },
+        DEMO_PAUSE_LONG,
+        { type: "PLAYER_TOOK_TURN" },
+        DEMO_PAUSE_SHORT,
+        {
+          type: "TARGET_WEAPON",
+          payload: { direction: LEFT, source: PLAYER_ID },
+        },
+        DEMO_PAUSE_LONG,
+        { type: "FIRE_WEAPON", payload: { source: PLAYER_ID } },
+        DEMO_PAUSE_LONG,
+      ],
     },
   },
   ENEMY_BURROWED: {
-    parentTemplate: "ENEMY_BASE",
+    parentTemplate: "ENEMY_BURROWER",
     display: {
       tile: ["enemy_burrowed_1", "enemy_burrowed_2"],
       speed: 0.03,

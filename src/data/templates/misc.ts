@@ -1,15 +1,15 @@
+import colors from "../../colors";
 import {
   PLAYER_ID,
-  PROJECTOR_RANGE,
-  PRIORITY_UNIT,
-  PRIORITY_MARKER,
-  TILE_SIZE,
   PRIORITY_BUILDING_HIGH_DETAIL,
+  PRIORITY_MARKER,
+  PRIORITY_UNIT,
+  PROJECTOR_RANGE,
+  TILE_SIZE,
 } from "../../constants";
-import colors from "../../colors";
 import { Entity } from "../../types";
-import { ColonistStatusCode } from "../colonistStatuses";
 import { TemplateName } from "../../types/TemplateName";
+import { ColonistStatusCode } from "../colonistStatuses";
 
 const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   PLAYER: {

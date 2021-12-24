@@ -3,10 +3,8 @@ import { createAction } from "typesafe-actions";
 import colors from "../../colors";
 import { executeEffect } from "../../data/effects";
 import templates from "../../data/templates";
-import audio from "../../lib/audio";
 import { createEntityFromTemplate } from "../../lib/entities";
 import { getAdjacentPositions } from "../../lib/geometry";
-import renderer from "../../renderer";
 import { TemplateName } from "../../types/TemplateName";
 import WrappedState from "../../types/WrappedState";
 import { registerHandler } from "../handleAction";
@@ -39,7 +37,6 @@ function destroyHandler(
             ([templateName, template]) =>
               template?.blueprint?.builds === entity.template
           )?.[0] as TemplateName | undefined);
-        console.warn(blueprint);
         if (!entity.building.noRubble && blueprint) {
           const rubble = createEntityFromTemplate("BUILDING_RUBBLE", {
             pos: entity.pos,
@@ -58,23 +55,25 @@ function destroyHandler(
           state.act.addEntity(rubble);
         }
 
-        renderer.dustCloud(entity.pos);
-        audio.playAtPos("building_destroyed", entity.pos);
+        state.renderer.dustCloud(entity.pos);
+        state.audio.playAtPos("building_destroyed", entity.pos);
       } else if (entity.ai) {
-        audio.playAtPos(
+        state.audio.playAtPos(
           RNG.getItem(["alien_death_1", "alien_death_2", "alien_death_3"]) ||
             "",
           entity.pos
         );
-        renderer.splatter(
-          entity.pos,
-          entity.display?.color ?? colors.enemyUnit
-        );
+        if (!entity.stopsLaser) {
+          state.renderer.splatter(
+            entity.pos,
+            entity.display?.color ?? colors.enemyUnit
+          );
+        }
       }
 
       if (entity.destructible.explosive) {
-        renderer.explode(entity.pos);
-        audio.playAtPos(
+        state.renderer.explode(entity.pos);
+        state.audio.playAtPos(
           RNG.getItem([
             "explosion_1",
             "explosion_2",

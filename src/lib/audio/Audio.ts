@@ -9,7 +9,7 @@ export interface SoundOptions {
   volume?: number;
 }
 
-const DEFAULT_OPTIONS: Required<SoundOptions> = {
+export const DEFAULT_OPTIONS: Required<SoundOptions> = {
   rollOff: 0.5,
   volume: 1,
 };

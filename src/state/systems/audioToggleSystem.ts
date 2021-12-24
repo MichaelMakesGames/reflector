@@ -1,6 +1,5 @@
 import WrappedState from "../../types/WrappedState";
 import { areConditionsMet } from "../../lib/conditions";
-import audio from "../../lib/audio";
 
 export default function audioToggleSystem(state: WrappedState): void {
   for (const entity of state.select.entitiesWithComps("audioToggle", "pos")) {
@@ -10,13 +9,13 @@ export default function audioToggleSystem(state: WrappedState): void {
       ...entity.audioToggle.conditions
     );
     if (conditionsMet) {
-      audio.loopAtPos(
+      state.audio.loopAtPos(
         entity.audioToggle.soundName,
         entity.pos,
         entity.audioToggle.soundOptions
       );
     } else {
-      audio.stopAtPos(entity.audioToggle.soundName, entity.pos);
+      state.audio.stopAtPos(entity.audioToggle.soundName, entity.pos);
     }
   }
 }

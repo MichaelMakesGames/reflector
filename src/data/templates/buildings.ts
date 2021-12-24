@@ -1,18 +1,23 @@
 import colors from "../../colors";
 import {
+  DEMO_PAUSE_LONG,
+  DEMO_PAUSE_MICRO,
+  DEMO_PAUSE_SHORT,
+  FACTORY_WORK,
+  FARM_PRODUCTION,
+  FARM_WORK,
+  MINE_WORK,
+  PLAYER_ID,
   PRIORITY_BUILDING_HIGH,
   PRIORITY_BUILDING_LOW,
-  MINE_WORK,
-  FARM_WORK,
-  FARM_PRODUCTION,
-  FACTORY_WORK,
-  REACTOR_PRODUCTION,
   PRIORITY_BUILDING_LOW_DETAIL,
+  REACTOR_PRODUCTION,
+  RIGHT,
 } from "../../constants";
-import { JobTypeCode } from "../jobTypes";
-import { ResourceCode } from "../resources";
 import { Entity } from "../../types";
 import { TemplateName } from "../../types/TemplateName";
+import { JobTypeCode } from "../jobTypes";
+import { ResourceCode } from "../resources";
 
 const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   REFLECTOR_BASE: {
@@ -78,6 +83,35 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       description:
         "Splits one laser beam into 2 more beams. Needs 2 power per turn.",
     },
+    demo: {
+      width: 6,
+      height: 3,
+      entities: {
+        [PLAYER_ID]: [
+          "PLAYER",
+          {
+            pos: { x: 0, y: 1 },
+            projector: { range: 10, condition: "always" },
+          },
+        ],
+        SPLITTER: ["BUILDING_SPLITTER_VERTICAL", { pos: { x: 2, y: 1 } }],
+        UPPER_REFLECTOR: ["REFLECTOR_UP_RIGHT", { pos: { x: 2, y: 0 } }],
+        LOWER_REFLECTOR: ["REFLECTOR_DOWN_RIGHT", { pos: { x: 2, y: 2 } }],
+        UPPER_ENEMY: ["ENEMY_DRONE", { pos: { x: 5, y: 0 } }],
+        LOWER_ENEMY: ["ENEMY_DRONE", { pos: { x: 5, y: 2 } }],
+      },
+      actions: [
+        { type: "MAKE_ME_RICH" },
+        DEMO_PAUSE_LONG,
+        {
+          type: "TARGET_WEAPON",
+          payload: { direction: RIGHT, source: PLAYER_ID },
+        },
+        DEMO_PAUSE_LONG,
+        { type: "FIRE_WEAPON", payload: { source: PLAYER_ID } },
+        DEMO_PAUSE_LONG,
+      ],
+    },
     colorToggle: {
       conditions: ["isPowered"],
       trueColor: colors.activeBuilding,
@@ -122,6 +156,36 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       description:
         "Splits one laser beam into 3 more beams. Needs 5 power per turn.",
     },
+    demo: {
+      width: 6,
+      height: 3,
+      entities: {
+        [PLAYER_ID]: [
+          "PLAYER",
+          {
+            pos: { x: 0, y: 1 },
+            projector: { range: 10, condition: "always" },
+          },
+        ],
+        SPLITTER: ["BUILDING_SPLITTER_ADVANCED", { pos: { x: 2, y: 1 } }],
+        UPPER_REFLECTOR: ["REFLECTOR_UP_RIGHT", { pos: { x: 2, y: 0 } }],
+        LOWER_REFLECTOR: ["REFLECTOR_DOWN_RIGHT", { pos: { x: 2, y: 2 } }],
+        UPPER_ENEMY: ["ENEMY_DRONE", { pos: { x: 5, y: 0 } }],
+        MIDDLE_ENEMY: ["ENEMY_DRONE", { pos: { x: 5, y: 1 } }],
+        LOWER_ENEMY: ["ENEMY_DRONE", { pos: { x: 5, y: 2 } }],
+      },
+      actions: [
+        { type: "MAKE_ME_RICH" },
+        DEMO_PAUSE_LONG,
+        {
+          type: "TARGET_WEAPON",
+          payload: { direction: RIGHT, source: PLAYER_ID },
+        },
+        DEMO_PAUSE_LONG,
+        { type: "FIRE_WEAPON", payload: { source: PLAYER_ID } },
+        DEMO_PAUSE_LONG,
+      ],
+    },
     powered: {
       hasPower: true,
       powerNeeded: 5,
@@ -137,17 +201,43 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     building: {},
     absorber: { charged: false, aimingDirection: null },
     destructible: { attackPriority: 3, onDestroy: "CLEAR_UI_ABSORBER_CHARGE" },
-    description: {
-      name: "Absorber",
-      description:
-        "Can absorb a laser shot. Automatically fires absorbed shot at adjacent enemies.",
-    },
     blocking: {
       lasers: true,
       windmill: true,
       moving: true,
     },
     stopsLaser: {},
+    description: {
+      name: "Absorber",
+      description:
+        "Absorbs a laser shot which is later fired at an adjacent enemy.",
+    },
+    demo: {
+      width: 6,
+      height: 3,
+      entities: {
+        [PLAYER_ID]: ["PLAYER", { pos: { x: 0, y: 1 }, projector: undefined }],
+        ABSORBER: ["BUILDING_ABSORBER", { pos: { x: 2, y: 1 } }],
+        DRONE: ["ENEMY_DRONE", { pos: { x: 5, y: 1 } }],
+      },
+      actions: [
+        { type: "PLAYER_TOOK_TURN" },
+        DEMO_PAUSE_LONG,
+        {
+          type: "TARGET_WEAPON",
+          payload: { direction: RIGHT, source: PLAYER_ID },
+        },
+        DEMO_PAUSE_SHORT,
+        { type: "FIRE_WEAPON", payload: { source: PLAYER_ID } },
+        DEMO_PAUSE_SHORT,
+        { type: "PLAYER_TOOK_TURN" },
+        DEMO_PAUSE_SHORT,
+        { type: "PLAYER_TOOK_TURN" },
+        DEMO_PAUSE_SHORT,
+        { type: "PLAYER_TOOK_TURN" },
+        DEMO_PAUSE_SHORT,
+      ],
+    },
   },
   BUILDING_SHIELD_GENERATOR: {
     display: {
@@ -161,7 +251,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       falseColor: colors.inactiveBuilding,
     },
     powered: {
-      hasPower: false,
+      hasPower: true,
       powerNeeded: 5,
       resourceChangeReason: "Shield Generator",
     },
@@ -180,6 +270,82 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       description:
         "Blocks enemies and lasers. Needs 10 power per turn while charging, and 5 power once charged.",
     },
+    demo: {
+      width: 6,
+      height: 3,
+      entities: {
+        [PLAYER_ID]: ["PLAYER", { pos: { x: 0, y: 0 }, projector: undefined }],
+        shieldGenerator: [
+          "BUILDING_SHIELD_GENERATOR",
+          {
+            pos: { x: 1, y: 1 },
+            shieldGenerator: { strength: 3 },
+          },
+        ],
+        shield1: [
+          "SHIELD",
+          { pos: { x: 0, y: 0 }, shield: { generator: "shieldGenerator" } },
+        ],
+        shield2: [
+          "SHIELD",
+          { pos: { x: 1, y: 0 }, shield: { generator: "shieldGenerator" } },
+        ],
+        shield3: [
+          "SHIELD",
+          { pos: { x: 2, y: 0 }, shield: { generator: "shieldGenerator" } },
+        ],
+        shield4: [
+          "SHIELD",
+          { pos: { x: 0, y: 1 }, shield: { generator: "shieldGenerator" } },
+        ],
+        shield5: [
+          "UI_SHIELD_3",
+          { pos: { x: 1, y: 1 }, shield: { generator: "shieldGenerator" } },
+        ],
+        shield6: [
+          "SHIELD",
+          { pos: { x: 2, y: 1 }, shield: { generator: "shieldGenerator" } },
+        ],
+        shield7: [
+          "SHIELD",
+          { pos: { x: 0, y: 2 }, shield: { generator: "shieldGenerator" } },
+        ],
+        shield8: [
+          "SHIELD",
+          { pos: { x: 1, y: 2 }, shield: { generator: "shieldGenerator" } },
+        ],
+        shield9: [
+          "SHIELD",
+          { pos: { x: 2, y: 2 }, shield: { generator: "shieldGenerator" } },
+        ],
+        enemy2: ["ENEMY_DRONE", { pos: { x: 5, y: 1 } }],
+      },
+      actions: [
+        {
+          type: "MODIFY_RESOURCE",
+          payload: { resource: ResourceCode.Power, amount: 40, reason: "DEMO" },
+        },
+        DEMO_PAUSE_MICRO,
+        { type: "PLAYER_TOOK_TURN" },
+        DEMO_PAUSE_LONG,
+        { type: "PLAYER_TOOK_TURN" },
+        DEMO_PAUSE_SHORT,
+        { type: "PLAYER_TOOK_TURN" },
+        DEMO_PAUSE_SHORT,
+        { type: "PLAYER_TOOK_TURN" },
+        DEMO_PAUSE_SHORT,
+        { type: "PLAYER_TOOK_TURN" },
+        DEMO_PAUSE_SHORT,
+        { type: "PLAYER_TOOK_TURN" },
+        DEMO_PAUSE_SHORT,
+        { type: "PLAYER_TOOK_TURN" },
+        DEMO_PAUSE_SHORT,
+        { type: "PLAYER_TOOK_TURN" },
+        DEMO_PAUSE_SHORT,
+        { type: "PLAYER_TOOK_TURN" },
+        DEMO_PAUSE_LONG,
+      ],
+    },
   },
   BUILDING_TENT: {
     building: {},
@@ -187,7 +353,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       tile: "tent",
       color: colors.activeBuilding,
       priority: PRIORITY_BUILDING_HIGH,
-      hasBackground: false,
+      hasBackground: true,
     },
     windowed: {
       windowConditions: [
@@ -422,7 +588,36 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     description: {
       name: "Reactor",
-      description: "Produces 10 power, but overheats if power isn't consumed",
+      description:
+        "Produces 10 power, but overheats if there is excess power and no available storage",
+    },
+    demo: {
+      width: 6,
+      height: 3,
+      entities: {
+        [PLAYER_ID]: [
+          "PLAYER",
+          { pos: { x: -1, y: -1 }, projector: undefined },
+        ],
+        reactor1: ["BUILDING_REACTOR", { pos: { x: 1, y: 1 } }],
+        reactor2: ["BUILDING_REACTOR", { pos: { x: 4, y: 1 } }],
+      },
+      actions: [
+        { type: "MAKE_ME_RICH" },
+        DEMO_PAUSE_LONG,
+        { type: "PLAYER_TOOK_TURN" },
+        DEMO_PAUSE_LONG,
+        DEMO_PAUSE_LONG,
+        { type: "PLAYER_TOOK_TURN" },
+        DEMO_PAUSE_LONG,
+        DEMO_PAUSE_LONG,
+        { type: "PLAYER_TOOK_TURN" },
+        DEMO_PAUSE_LONG,
+        DEMO_PAUSE_LONG,
+        { type: "PLAYER_TOOK_TURN" },
+        DEMO_PAUSE_LONG,
+        DEMO_PAUSE_LONG,
+      ],
     },
   },
   BUILDING_SOLAR_PANEL: {
@@ -678,6 +873,34 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       description:
         "Lets you place reflectors in neighboring tiles. Needs 1 power per turn.",
     },
+    demo: {
+      width: 6,
+      height: 3,
+      entities: {
+        [PLAYER_ID]: ["PLAYER", { pos: { x: 0, y: 0 }, projector: undefined }],
+        projector: ["BUILDING_PROJECTOR_BASIC", { pos: { x: 4, y: 1 } }],
+        enemy1: ["ENEMY_DRONE", { pos: { x: 4, y: 0 } }],
+        enemy2: ["ENEMY_DRONE", { pos: { x: 4, y: 2 } }],
+        enemy3: ["ENEMY_DRONE", { pos: { x: 0, y: 2 } }],
+      },
+      actions: [
+        { type: "MAKE_ME_RICH" },
+        DEMO_PAUSE_LONG,
+        {
+          type: "TARGET_WEAPON",
+          payload: { direction: RIGHT, source: PLAYER_ID },
+        },
+        DEMO_PAUSE_SHORT,
+        { type: "CYCLE_REFLECTOR", payload: { x: 5, y: 0 } },
+        DEMO_PAUSE_SHORT,
+        { type: "CYCLE_REFLECTOR", payload: { x: 5, y: 0 } },
+        DEMO_PAUSE_SHORT,
+        { type: "CYCLE_REFLECTOR", payload: { x: 5, y: 2 } },
+        DEMO_PAUSE_SHORT,
+        { type: "FIRE_WEAPON", payload: { source: PLAYER_ID } },
+        DEMO_PAUSE_LONG,
+      ],
+    },
   },
   BUILDING_PROJECTOR_ADVANCED: {
     building: {},
@@ -717,6 +940,35 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       name: "Adv. Projector",
       description:
         "Lets you place reflectors within 2 spaces. Needs 4 power per turn.",
+    },
+    demo: {
+      width: 6,
+      height: 5,
+      entities: {
+        [PLAYER_ID]: ["PLAYER", { pos: { x: 0, y: 0 }, projector: undefined }],
+        projector: ["BUILDING_PROJECTOR_ADVANCED", { pos: { x: 3, y: 2 } }],
+        enemy1: ["ENEMY_DRONE", { pos: { x: 3, y: 0 } }],
+        enemy2: ["ENEMY_DRONE", { pos: { x: 4, y: 0 } }],
+        enemy3: ["ENEMY_DRONE", { pos: { x: 5, y: 2 } }],
+        enemy4: ["ENEMY_DRONE", { pos: { x: 3, y: 3 } }],
+      },
+      actions: [
+        { type: "MAKE_ME_RICH" },
+        DEMO_PAUSE_LONG,
+        {
+          type: "TARGET_WEAPON",
+          payload: { direction: RIGHT, source: PLAYER_ID },
+        },
+        DEMO_PAUSE_SHORT,
+        { type: "CYCLE_REFLECTOR", payload: { x: 5, y: 0 } },
+        DEMO_PAUSE_SHORT,
+        { type: "CYCLE_REFLECTOR", payload: { x: 5, y: 0 } },
+        DEMO_PAUSE_SHORT,
+        { type: "CYCLE_REFLECTOR", payload: { x: 5, y: 3 } },
+        DEMO_PAUSE_SHORT,
+        { type: "FIRE_WEAPON", payload: { source: PLAYER_ID } },
+        DEMO_PAUSE_LONG,
+      ],
     },
   },
   BUILDING_ROAD: {

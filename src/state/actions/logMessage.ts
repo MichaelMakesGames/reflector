@@ -2,7 +2,6 @@ import { createAction } from "typesafe-actions";
 import { registerHandler } from "../handleAction";
 import WrappedState from "../../types/WrappedState";
 import notifications from "../../lib/notifications";
-import audio from "../../lib/audio";
 
 const logMessage = createAction("LOG_MESSAGE")<{
   message: string;
@@ -37,9 +36,9 @@ function logMessageHandler(
     message,
   });
   if (type === "success") {
-    audio.play("ui_chime");
+    state.audio.play("ui_chime");
   } else {
-    audio.play("ui_alert");
+    state.audio.play("ui_alert");
   }
 }
 

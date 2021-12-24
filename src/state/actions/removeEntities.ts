@@ -1,12 +1,10 @@
 import { Required } from "ts-toolbelt/out/Object/Required";
 import { createAction } from "typesafe-actions";
-import renderer from "../../renderer";
 import { registerHandler } from "../handleAction";
 import { Entity } from "../../types";
 import WrappedState from "../../types/WrappedState";
 import { getPosKey } from "../../lib/geometry";
 import { retargetLaserOnReflectorChange } from "../../lib/lasers";
-import audio from "../../lib/audio";
 
 const removeEntities = createAction("REMOVE_ENTITIES")<string[]>();
 export default removeEntities;
@@ -37,7 +35,7 @@ function removeEntitiesHandler(
       entitiesByPosition[getPosKey(entity.pos)].delete(id);
     }
     if (entity.pos && entity.display) {
-      renderer.removeEntity(id);
+      wrappedState.renderer.removeEntity(id);
     }
     if (entity.reflector) {
       isRemovingReflector = true;
@@ -46,14 +44,14 @@ function removeEntitiesHandler(
       (
         entity as Required<Entity, "smokeEmitter">
       ).smokeEmitter.emitters.forEach((emitter) =>
-        renderer.removeSmoke(
+        wrappedState.renderer.removeSmoke(
           (entity as Required<Entity, "pos">).pos,
           emitter.offset
         )
       );
     }
     if (entity.pos && entity.audioToggle) {
-      audio.stopAtPos(entity.audioToggle.soundName, entity.pos);
+      wrappedState.audio.stopAtPos(entity.audioToggle.soundName, entity.pos);
     }
 
     delete entities[id];

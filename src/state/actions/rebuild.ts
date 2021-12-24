@@ -3,7 +3,6 @@ import { registerHandler } from "../handleAction";
 import WrappedState from "../../types/WrappedState";
 import { createEntityFromTemplate } from "../../lib/entities";
 import resources from "../../data/resources";
-import audio from "../../lib/audio";
 import { areConditionsMet } from "../../lib/conditions";
 
 const rebuild = createAction("rebuild")<string>();
@@ -43,7 +42,7 @@ function rebuildHandler(
       amount: -cost.amount,
       reason: "Rebuild",
     });
-    audio.playAtPos("building_built", entity.pos);
+    state.audio.playAtPos("building_built", entity.pos);
     state.act.playerTookTurn();
   } else {
     state.act.logMessage({

@@ -85,6 +85,8 @@ export default class Renderer {
     y: 0,
   };
 
+  private timeouts: Set<ReturnType<typeof setTimeout>> = new Set();
+
   public constructor({
     gridWidth,
     gridHeight,
@@ -104,6 +106,11 @@ export default class Renderer {
       backgroundColor: hexToNumber(backgroundColor),
       antialias: false,
     });
+  }
+
+  public destroy() {
+    this.timeouts.forEach(clearTimeout);
+    this.app.destroy();
   }
 
   public load(assets: Record<string, string>) {
@@ -407,7 +414,7 @@ export default class Renderer {
       };
       this.app.ticker.add(ticker);
       group.tickers.push(ticker);
-      group.filters.push(filter);
+      group.filters.push(filter as unknown as PIXI.Filter);
     }
     group.container.filters = group.filters;
     return group.container;
@@ -436,17 +443,17 @@ export default class Renderer {
     group.tickers.forEach((ticker) => this.app.ticker.remove(ticker));
     group.tickers = [];
     const glowFilter = group.filters.find(
-      (filter): filter is GlowFilter => filter instanceof GlowFilter
+      (filter) => filter instanceof GlowFilter
     );
     if (glowFilter) {
       const ticker = (delta: number) => {
-        glowFilter.outerStrength += delta;
+        (glowFilter as unknown as GlowFilter).outerStrength += delta;
       };
       group.tickers.push(ticker);
       this.app.ticker.add(ticker);
     }
     group.willRemove = true;
-    setTimeout(() => this.removeGroup(groupId), 200);
+    this.timeouts.add(setTimeout(() => this.removeGroup(groupId), 200));
   }
 
   private removeGroup(groupId: string) {
@@ -455,7 +462,7 @@ export default class Renderer {
     group.willRemove = false;
     group.removing = true;
     group.tickers.forEach((ticker) => this.app.ticker.remove(ticker));
-    group.filters.forEach((filter) => filter.destroy());
+    group.filters = [];
     for (const entityId of group.entities.values()) {
       this.removeEntity(entityId);
     }
@@ -1020,6 +1027,10 @@ export default class Renderer {
         y: stageY + offsetY,
       };
     }
+  }
+
+  public setLoadPromise(promise: Promise<void>) {
+    this.loadPromise = promise;
   }
 
   public getLoadPromise() {

@@ -1,5 +1,4 @@
 import { Required } from "ts-toolbelt/out/Object/Required";
-import { PRIORITY_BUILDING_HIGH_DETAIL, PRIORITY_UNIT } from "../../constants";
 import { ColonistStatusCode } from "../../data/colonistStatuses";
 import { executeEffect } from "../../data/effects";
 import resources, { ResourceCode } from "../../data/resources";
@@ -12,7 +11,6 @@ import {
 } from "../../lib/geometry";
 import { rangeTo } from "../../lib/math";
 import { choose } from "../../lib/rng";
-import renderer from "../../renderer";
 import { Entity, JobProvider, Pos } from "../../types";
 import WrappedState from "../../types/WrappedState";
 
@@ -342,7 +340,7 @@ function doWork(
             reason: employment.jobProvider.resourceChangeReason,
           });
           const resource = resources[resourceCode];
-          renderer.flashTile(colonist.pos, resource.icon, resource.color);
+          state.renderer.flashTile(colonist.pos, resource.icon, resource.color);
         });
     }
     state.act.updateEntity({

@@ -1,15 +1,29 @@
-import selectors from "./selectors";
-import actions from "./actions";
-import { RawState, Action } from "../types";
+import Audio from "../lib/audio/Audio";
+import DummyAudio from "../lib/audio/DummyAudio";
+import Renderer from "../renderer/Renderer";
+import { Action, RawState } from "../types";
 import WrappedState from "../types/WrappedState";
+import actions from "./actions";
 import handleAction from "./handleAction";
+import selectors from "./selectors";
+import defaultRenderer from "../renderer";
+import defaultAudio from "../lib/audio";
+import { save as defaultSave } from "../lib/gameSave";
 
-export default function wrapState(state: RawState): WrappedState {
+export default function wrapState(
+  state: RawState,
+  renderer: Renderer = defaultRenderer,
+  audio: Audio | DummyAudio = defaultAudio,
+  save: (state: RawState) => void = defaultSave
+): WrappedState {
   const wrappedState: any = {
     raw: state,
     select: {},
     act: {},
     actions,
+    renderer,
+    audio,
+    save,
   };
   wrappedState.setRaw = (newState: RawState) => {
     wrappedState.raw = newState;

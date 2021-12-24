@@ -19,6 +19,9 @@ import Icons from "./Icons";
 import Kbd from "./Kbd";
 import ResourceAmount from "./ResourceAmount";
 import { TemplateName } from "../types/TemplateName";
+import Demo from "./Demo";
+import { TILE_SIZE } from "../constants";
+import { LazyTippy } from "./LazyTippy";
 
 const buttonStyle: React.CSSProperties = { margin: "-1px -1px -1px 0" };
 const buttonClassName =
@@ -395,10 +398,21 @@ function BuildingButton({
     ? blueprint.blueprint.builds
     : "NONE";
   return (
-    <Tippy
+    <LazyTippy
       placement="right"
       offset={[0, 15]}
-      content={blueprint.description ? blueprint.description.description : ""}
+      content={
+        <div
+          style={{
+            width: blueprint?.demo
+              ? blueprint.demo.width * TILE_SIZE
+              : undefined,
+          }}
+        >
+          <div>{blueprint.description?.description}</div>
+          {blueprint.demo && <Demo demoComp={blueprint.demo} />}
+        </div>
+      }
     >
       <button
         data-building={blueprintBuilds}
@@ -420,6 +434,6 @@ function BuildingButton({
           <span className="text-lightGray">Free</span>
         )}
       </button>
-    </Tippy>
+    </LazyTippy>
   );
 }

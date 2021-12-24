@@ -34,8 +34,8 @@ const buildingCategories: BuildingCategory[] = [
     description: "Buildings that manipulate lasers.",
     blueprints: [
       "BLUEPRINT_PROJECTOR_BASIC",
-      "BLUEPRINT_SPLITTER_HORIZONTAL",
       "BLUEPRINT_PROJECTOR_ADVANCED",
+      "BLUEPRINT_SPLITTER_HORIZONTAL",
       "BLUEPRINT_SPLITTER_ADVANCED",
       "BLUEPRINT_ABSORBER",
     ],

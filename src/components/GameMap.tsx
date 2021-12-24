@@ -7,26 +7,27 @@ import React, {
   useState,
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import renderer from "../renderer";
 import {
   DOWN,
   LEFT,
+  MAP_HEIGHT,
+  MAP_WIDTH,
   PLAYER_ID,
   RIGHT,
   UP,
-  MAP_WIDTH,
-  MAP_HEIGHT,
 } from "../constants";
 import { SettingsContext } from "../contexts";
-import { useControl, HotkeyGroup } from "./HotkeysProvider";
+import { useInterval } from "../hooks";
+import { getQuickAction, noFocusOnClick } from "../lib/controls";
+import { arePositionsEqual } from "../lib/geometry";
+import renderer from "../renderer";
 import actions from "../state/actions";
 import selectors from "../state/selectors";
 import { Pos, RawState } from "../types";
 import { ControlCode } from "../types/ControlCode";
-import { getQuickAction, noFocusOnClick } from "../lib/controls";
-import { arePositionsEqual } from "../lib/geometry";
 import ContextMenu from "./ContextMenu";
-import { useInterval } from "../hooks";
+import { HotkeyGroup, useControl } from "./HotkeysProvider";
+import MapTooltip from "./MapTooltip";
 
 export default function GameMap() {
   useEffect(() => {
@@ -231,75 +232,77 @@ export default function GameMap() {
 
   return (
     <ContextMenu pos={contextMenuPos} onClose={() => setContextMenuPos(null)}>
-      <section
-        className={`relative ${
-          isCursorInProjectorRange ? "cursor-pointer" : ""
-        }`}
-      >
-        {/* eslint-disable-next-line jsx-a11y/mouse-events-have-key-events, jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events */}
-        <div
-          className="w-full h-full"
-          id="map"
-          onMouseMove={onMouseMoveOrEnter}
-          onMouseEnter={onMouseMoveOrEnter}
-          onMouseOut={() => {
-            mousePosRef.current = null;
-            if (!contextMenuPos && cursorPos) {
-              dispatch(actions.setCursorPos(null));
-            }
-          }}
-          onWheel={(e) => {
-            if (e.nativeEvent.deltaY > 0) {
-              renderer.zoomOut();
-            } else if (e.nativeEvent.deltaY < 0 && playerPos) {
-              renderer.zoomTo(playerPos);
-            }
-            if (mousePosRef.current) {
-              const gamePos = renderer.getPosFromMouse(
-                mousePosRef.current.x,
-                mousePosRef.current.y
-              );
+      <MapTooltip>
+        <section
+          className={`relative ${
+            isCursorInProjectorRange ? "cursor-pointer" : ""
+          }`}
+        >
+          {/* eslint-disable-next-line jsx-a11y/mouse-events-have-key-events, jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events */}
+          <div
+            className="w-full h-full"
+            id="map"
+            onMouseMove={onMouseMoveOrEnter}
+            onMouseEnter={onMouseMoveOrEnter}
+            onMouseOut={() => {
+              mousePosRef.current = null;
+              if (!contextMenuPos && cursorPos) {
+                dispatch(actions.setCursorPos(null));
+              }
+            }}
+            onWheel={(e) => {
+              if (e.nativeEvent.deltaY > 0) {
+                renderer.zoomOut();
+              } else if (e.nativeEvent.deltaY < 0 && playerPos) {
+                renderer.zoomTo(playerPos);
+              }
+              if (mousePosRef.current) {
+                const gamePos = renderer.getPosFromMouse(
+                  mousePosRef.current.x,
+                  mousePosRef.current.y
+                );
+                if (!cursorPos || !arePositionsEqual(cursorPos, gamePos)) {
+                  dispatch(actions.setCursorPos(gamePos));
+                }
+              }
+            }}
+            onContextMenu={(e) => {
+              e.preventDefault();
+              if (state.isAutoMoving) dispatch(actions.cancelAutoMove());
+              const mousePos = {
+                x: e.nativeEvent.offsetX,
+                y: e.nativeEvent.offsetY,
+              };
+              mousePosRef.current = mousePos;
+              const gamePos = renderer.getPosFromMouse(mousePos.x, mousePos.y);
               if (!cursorPos || !arePositionsEqual(cursorPos, gamePos)) {
                 dispatch(actions.setCursorPos(gamePos));
               }
-            }
-          }}
-          onContextMenu={(e) => {
-            e.preventDefault();
-            if (state.isAutoMoving) dispatch(actions.cancelAutoMove());
-            const mousePos = {
-              x: e.nativeEvent.offsetX,
-              y: e.nativeEvent.offsetY,
-            };
-            mousePosRef.current = mousePos;
-            const gamePos = renderer.getPosFromMouse(mousePos.x, mousePos.y);
-            if (!cursorPos || !arePositionsEqual(cursorPos, gamePos)) {
-              dispatch(actions.setCursorPos(gamePos));
-            }
-            if (!contextMenuPos) {
-              setContextMenuPos(gamePos);
-            } else {
-              setContextMenuPos(null);
-            }
-          }}
-          onClick={noFocusOnClick((e) => {
-            if (contextMenuPos) {
-              setContextMenuPos(null);
-              return;
-            }
-            const mousePos = {
-              x: e.nativeEvent.offsetX,
-              y: e.nativeEvent.offsetY,
-            };
-            mousePosRef.current = mousePos;
-            const gamePos = renderer.getPosFromMouse(mousePos.x, mousePos.y);
-            if (!cursorPos || !arePositionsEqual(cursorPos, gamePos)) {
-              dispatch(actions.setCursorPos(gamePos));
-            }
-            performDefaultAction(gamePos, e.shiftKey);
-          })}
-        />
-      </section>
+              if (!contextMenuPos) {
+                setContextMenuPos(gamePos);
+              } else {
+                setContextMenuPos(null);
+              }
+            }}
+            onClick={noFocusOnClick((e) => {
+              if (contextMenuPos) {
+                setContextMenuPos(null);
+                return;
+              }
+              const mousePos = {
+                x: e.nativeEvent.offsetX,
+                y: e.nativeEvent.offsetY,
+              };
+              mousePosRef.current = mousePos;
+              const gamePos = renderer.getPosFromMouse(mousePos.x, mousePos.y);
+              if (!cursorPos || !arePositionsEqual(cursorPos, gamePos)) {
+                dispatch(actions.setCursorPos(gamePos));
+              }
+              performDefaultAction(gamePos, e.shiftKey);
+            })}
+          />
+        </section>
+      </MapTooltip>
     </ContextMenu>
   );
 }

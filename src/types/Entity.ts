@@ -1,3 +1,4 @@
+import type { Action } from ".";
 import type { ColonistStatusCode } from "../data/colonistStatuses";
 import type { JobTypeCode } from "../data/jobTypes";
 import type { ResourceCode } from "../data/resources";
@@ -35,6 +36,13 @@ export interface Display {
       distance?: number;
     };
   };
+}
+
+export interface Demo {
+  width: number;
+  height: number;
+  entities: Record<string, [TemplateName, Partial<Entity>]>;
+  actions: (Action | number)[];
 }
 
 export interface AnimationToggle {
@@ -242,6 +250,7 @@ export interface Entity {
   colonist?: Colonist;
   colorToggle?: ColorToggle;
   cursor?: Cursor;
+  demo?: Demo;
   description?: Description;
   destructible?: Destructible;
   directionIndicator?: DirectionIndicator;

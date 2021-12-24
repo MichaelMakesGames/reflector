@@ -1,7 +1,5 @@
 import { createAction } from "typesafe-actions";
 import colors from "../../colors";
-import audio from "../../lib/audio";
-import renderer from "../../renderer";
 import { Pos } from "../../types";
 import WrappedState from "../../types/WrappedState";
 import { registerHandler } from "../handleAction";
@@ -27,8 +25,8 @@ function destroyPosHandler(
     )
   ) {
     state.act.shieldDischarge(shield.generator);
-    renderer.flash(action.payload.target, colors.secondary);
-    audio.playAtPos("power_off", action.payload.target, { volume: 2 });
+    state.renderer.flash(action.payload.target, colors.secondary);
+    state.audio.playAtPos("power_off", action.payload.target, { volume: 2 });
   } else {
     entitiesAtTarget
       .filter((e) => e.destructible)

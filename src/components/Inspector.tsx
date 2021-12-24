@@ -1,13 +1,9 @@
-import { Required } from "ts-toolbelt/out/Object/Required";
 import React, { useCallback, useContext, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { HotkeyGroup, useControl } from "./HotkeysProvider";
+import { Required } from "ts-toolbelt/out/Object/Required";
 import { SettingsContext } from "../contexts";
 import colonistStatuses, { ColonistStatusCode } from "../data/colonistStatuses";
 import resources, { ResourceCode } from "../data/resources";
-import selectors from "../state/selectors";
-import wrapState from "../state/wrapState";
-import { Entity, RawState } from "../types";
 import { areConditionsMet } from "../lib/conditions";
 import {
   ActionControl,
@@ -15,6 +11,10 @@ import {
   getQuickAction,
 } from "../lib/controls";
 import { getHumanReadablePosition } from "../lib/geometry";
+import selectors from "../state/selectors";
+import wrapState from "../state/wrapState";
+import { Entity, RawState } from "../types";
+import { HotkeyGroup, useControl } from "./HotkeysProvider";
 import ResourceAmount from "./ResourceAmount";
 import Warning from "./Warning";
 

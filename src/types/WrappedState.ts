@@ -4,6 +4,9 @@ import type selectors from "../state/selectors";
 import type actions from "../state/actions";
 import type { Action } from "./Action";
 import type { Entity } from "./Entity";
+import Renderer from "../renderer/Renderer";
+import Audio from "../lib/audio/Audio";
+import DummyAudio from "../lib/audio/DummyAudio";
 
 type SelectBase = {
   [K in keyof typeof selectors]: (
@@ -30,4 +33,7 @@ export default interface WrappedState {
   act: Act;
   actions: typeof actions;
   handle: (action: Action) => WrappedState;
+  renderer: Renderer;
+  audio: Audio | DummyAudio;
+  save: (state: RawState) => void;
 }
