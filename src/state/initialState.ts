@@ -30,7 +30,7 @@ export function createInitialState({
     laserState: "READY",
     resources: {
       METAL: 0,
-      FOOD: NEW_COLONISTS_PER_DAY * FOOD_PER_COLONIST,
+      FOOD: NEW_COLONISTS_PER_DAY * FOOD_PER_COLONIST * 2,
       POWER: 0,
       MACHINERY: 0,
     },

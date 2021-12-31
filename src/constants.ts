@@ -37,7 +37,7 @@ export const FOOD_PER_COLONIST = 1;
 export const FARM_PRODUCTION = 5;
 export const FARM_WORK = TURNS_PER_DAY / 2;
 export const MINE_WORK = 4;
-export const FACTORY_WORK = 6;
+export const FACTORY_WORK = 8;
 export const REACTOR_PRODUCTION = 10;
 
 export const PRIORITY_MARKER = 35;

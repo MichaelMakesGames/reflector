@@ -123,7 +123,7 @@ templates.BLUEPRINT_MINING_SPOT = makeBlueprint({
 });
 templates.BLUEPRINT_MINE = makeBlueprint({
   builds: "BUILDING_MINE",
-  cost: { resource: ResourceCode.Metal, amount: 10 },
+  cost: { resource: ResourceCode.Metal, amount: 5 },
   validityConditions: [
     ...DEFAULT_VALIDITY_CONDITIONS,
     { condition: "isOnOre", invalidMessage: "Must build on ore." },
@@ -132,7 +132,7 @@ templates.BLUEPRINT_MINE = makeBlueprint({
 });
 templates.BLUEPRINT_FACTORY = makeBlueprint({
   builds: "BUILDING_FACTORY",
-  cost: { resource: ResourceCode.Metal, amount: 15 },
+  cost: { resource: ResourceCode.Metal, amount: 10 },
 });
 templates.BLUEPRINT_WINDMILL = makeBlueprint({
   builds: "BUILDING_WINDMILL",

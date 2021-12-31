@@ -14,10 +14,16 @@ import {
   REACTOR_PRODUCTION,
   RIGHT,
 } from "../../constants";
+import { SoundOptions } from "../../lib/audio/Audio";
 import { Entity } from "../../types";
 import { TemplateName } from "../../types/TemplateName";
 import { JobTypeCode } from "../jobTypes";
 import { ResourceCode } from "../resources";
+
+const buildingSoundOptions: SoundOptions = {
+  volume: 0.5,
+  rollOff: 2,
+};
 
 const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   REFLECTOR_BASE: {
@@ -75,6 +81,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     audioToggle: {
       soundName: "buzz",
       conditions: ["isPowered"],
+      soundOptions: buildingSoundOptions,
     },
     blocking: { moving: true, lasers: true, windmill: true },
     destructible: { attackPriority: 2 },
@@ -414,6 +421,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     audioToggle: {
       soundName: "mine_1",
       conditions: ["hasOneActiveWorker"],
+      soundOptions: buildingSoundOptions,
     },
     display: {
       tile: "mine",
@@ -472,6 +480,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     audioToggle: {
       soundName: "pickaxe_loop",
       conditions: ["hasOneActiveWorker"],
+      soundOptions: buildingSoundOptions,
     },
     display: {
       tile: "mining_spot",
@@ -500,6 +509,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     audioToggle: {
       soundName: "farm",
       conditions: ["hasOneActiveWorker"],
+      soundOptions: buildingSoundOptions,
     },
     display: {
       tile: "farm",
@@ -541,6 +551,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     audioToggle: {
       soundName: "buzz",
       conditions: ["hasOneActiveWorker"],
+      soundOptions: buildingSoundOptions,
     },
     display: {
       tile: "powerplant",
@@ -625,6 +636,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     audioToggle: {
       soundName: "buzz",
       conditions: ["isDay"],
+      soundOptions: buildingSoundOptions,
     },
     display: {
       tile: "solarpanel",
@@ -662,6 +674,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     audioToggle: {
       soundName: "buzz",
       conditions: ["doesNotHaveTallNeighbors"],
+      soundOptions: buildingSoundOptions,
     },
     display: {
       tile: ["windmill-1", "windmill-2", "windmill-3", "windmill-4"],
@@ -697,18 +710,17 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     building: {},
     audioToggle: {
       soundName: "factory",
-      soundOptions: { volume: 0.5, rollOff: 2 },
       conditions: ["hasOneActiveWorker"],
+      soundOptions: buildingSoundOptions,
     },
     display: {
-      tile: "furnace",
+      tile: "factory",
       color: colors.activeBuilding,
       priority: PRIORITY_BUILDING_HIGH,
       hasBackground: true,
     },
     windowed: {
       windowConditions: [
-        { condition: "hasThreeOrMoreColonists", tile: "windows_factory_3" },
         { condition: "hasTwoOrMoreColonists", tile: "windows_factory_2" },
         { condition: "hasOneOrMoreColonists", tile: "windows_factory_1" },
       ],
@@ -717,15 +729,19 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       emitters: [
         {
           conditions: ["hasOneActiveWorker"],
-          offset: { x: 5, y: 5 },
+          offset: { x: 5, y: 7 },
+        },
+        {
+          conditions: ["hasOneActiveWorker"],
+          offset: { x: 9, y: 7 },
         },
         {
           conditions: ["hasTwoActiveWorkers"],
-          offset: { x: 12, y: 5 },
+          offset: { x: 15, y: 7 },
         },
         {
-          conditions: ["hasThreeActiveWorkers"],
-          offset: { x: 19, y: 5 },
+          conditions: ["hasTwoActiveWorkers"],
+          offset: { x: 19, y: 7 },
         },
       ],
     },
@@ -735,7 +751,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     jobProvider: {
       consumes: {
         POWER: 1,
-        METAL: 1,
+        METAL: 0.5,
       },
       produces: {
         [ResourceCode.Machinery]: 1,
@@ -743,7 +759,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       workContributed: 0,
       workRequired: FACTORY_WORK,
       numberEmployed: 0,
-      maxNumberEmployed: 3,
+      maxNumberEmployed: 2,
       jobType: JobTypeCode.Manufacturing,
       resourceChangeReason: "Manufacturing",
     },
@@ -755,7 +771,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     description: {
       name: "Factory",
       description:
-        "Provides 3 jobs that consume power and metal, and produce Machinery in 2 turns if fully worked.",
+        "Provides 2 jobs that consume 1 Power and 0.5 Metal, and produce Machinery in 4 turns if fully worked.",
     },
   },
   BUILDING_WALL: {
@@ -839,6 +855,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     audioToggle: {
       soundName: "buzz",
       conditions: ["isPowered"],
+      soundOptions: buildingSoundOptions,
     },
     display: {
       tile: "basic_projector",
@@ -907,6 +924,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     audioToggle: {
       soundName: "buzz",
       conditions: ["isPowered"],
+      soundOptions: buildingSoundOptions,
     },
     display: {
       tile: "projector",
