@@ -1,7 +1,7 @@
 import { createAction } from "typesafe-actions";
 import { registerHandler } from "../handleAction";
 import WrappedState from "../../types/WrappedState";
-import { getPath } from "../../lib/ai";
+import { getPathWithoutCosts } from "../../lib/ai";
 
 const setAutoMovePathToCursor = createAction("SET_AUTO_MOVE_PATH_TO_CURSOR")();
 export default setAutoMovePathToCursor;
@@ -20,7 +20,7 @@ function setAutoMovePathToCursorHandler(state: WrappedState) {
   ) {
     const pathPreviews = state.select.entitiesWithComps("pathPreview", "pos");
     state.act.removeEntities(pathPreviews.map((e) => e.id));
-    const path = getPath(playerPos, cursorPos, player, state);
+    const path = getPathWithoutCosts(playerPos, cursorPos, player, state);
     if (path) {
       state.act.setAutoMovePath(path);
     }

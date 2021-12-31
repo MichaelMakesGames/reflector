@@ -129,7 +129,7 @@ function findTarget(
   return potentialTargets[0] || null;
 }
 
-function isPassable(
+function actorIsNotBlockedByEntity(
   state: WrappedState,
   actor: Entity,
   entityAtDestination: Entity
@@ -173,12 +173,12 @@ export function getDirectionTowardTarget(
       .entitiesAtPosition(pos)
       .filter((e) => !aiEntityIds.has(e.id));
     const passable =
-      !aiPlannedPositions.has(getPosKey(pos)) &&
+      (getDistance(from, pos) > 2 || !aiPlannedPositions.has(getPosKey(pos))) &&
       (arePositionsEqual(pos, from) ||
         arePositionsEqual(pos, to) ||
         nonAiEntitiesAtPosition.every(
           (e) =>
-            isPassable(state, actor, e) ||
+            actorIsNotBlockedByEntity(state, actor, e) ||
             isDestructibleNonEnemy(state, actor, e)
         ));
 
@@ -206,12 +206,12 @@ export function getDirectionTowardTarget(
   return null;
 }
 
-export function getPath(
+export function getPathWithoutCosts(
   from: Pos,
   to: Pos,
   actor: Entity,
   state: WrappedState,
-  passableFunc = isPassable
+  passableFunc = actorIsNotBlockedByEntity
 ): Pos[] | null {
   const passable = (x: number, y: number) =>
     arePositionsEqual(from, { x, y }) ||
