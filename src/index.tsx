@@ -6,7 +6,7 @@ import { IntlProvider } from "react-intl";
 import Modal from "react-modal";
 import { Provider } from "react-redux";
 import "./assets/style.css";
-import Game from "./components/Game";
+import Game from "./ui/Game";
 import store from "./state/store";
 import messages from "./messages";
 
