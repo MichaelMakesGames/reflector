@@ -29,7 +29,7 @@ export default class DummyAudio {
 
   stop(sound: string) {}
 
-  stopAll() {}
+  stopAll({ stopMusic = false }) {}
 
   playMusic(song: "night" | "day") {}
 }

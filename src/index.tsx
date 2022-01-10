@@ -6,14 +6,21 @@ import { IntlProvider } from "react-intl";
 import Modal from "react-modal";
 import { Provider } from "react-redux";
 import "./assets/style.css";
-import Game from "./ui/Game";
 import store from "./state/store";
 import messages from "./messages";
+import Router from "./ui/Router";
+import HotkeysProvider from "./ui/HotkeysProvider";
+import pages from "./ui/pages";
+import SettingsProvider from "./ui/SettingsProvider";
 
 const app = (
   <IntlProvider messages={messages} locale="en" defaultLocale="en">
     <Provider store={store}>
-      <Game />
+      <SettingsProvider>
+        <HotkeysProvider>
+          <Router defaultPage="MainMenu" pages={pages} />
+        </HotkeysProvider>
+      </SettingsProvider>
     </Provider>
   </IntlProvider>
 );

@@ -17,7 +17,7 @@ function completeTutorialStepHandler(
   const tutorialsState = state.raw.tutorials;
   const activeTutorial = tutorialsState.active.find((t) => t.id === tutorialId);
   if (!activeTutorial) {
-    console.warn(
+    console.error(
       `Tried to complete a step in an inactive tutorial: ${tutorialId}`
     );
     return;

@@ -6,6 +6,7 @@ import type { TutorialId } from "./TutorialId";
 
 export interface RawState {
   version: string;
+  mapType: string;
   entities: Record<string, Entity>;
   entitiesByPosition: Record<string, Set<string>>;
   entitiesByComp: Record<string, Set<string>>;

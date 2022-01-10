@@ -1,27 +1,27 @@
 /* global document */
 import Tippy from "@tippyjs/react";
-import React, { useCallback, useContext, useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { HotkeyGroup, useControl, ControlConfig } from "./HotkeysProvider";
-import { SettingsContext } from "../contexts";
+import { TILE_SIZE } from "../constants";
 import buildingCategories, {
   BuildingCategory,
 } from "../data/buildingCategories";
 import { useBoolean } from "../hooks";
-import actions from "../state/actions";
-import selectors from "../state/selectors";
-import { ControlCode } from "../types/ControlCode";
 import { noFocusOnClick } from "../lib/controls";
 import { createEntityFromTemplate } from "../lib/entities";
 import notifications from "../lib/notifications";
-import EntityPreview from "./EntityPreview";
-import Icons from "./Icons";
-import Kbd from "./Kbd";
-import ResourceAmount from "./ResourceAmount";
+import actions from "../state/actions";
+import selectors from "../state/selectors";
+import { ControlCode } from "../types/ControlCode";
 import { TemplateName } from "../types/TemplateName";
 import Demo from "./Demo";
-import { TILE_SIZE } from "../constants";
+import EntityPreview from "./EntityPreview";
+import { ControlConfig, HotkeyGroup, useControl } from "./HotkeysProvider";
+import Icons from "./Icons";
+import Kbd from "./Kbd";
 import { LazyTippy } from "./LazyTippy";
+import ResourceAmount from "./ResourceAmount";
+import { useSettings } from "./SettingsProvider";
 
 const buttonStyle: React.CSSProperties = { margin: "-1px -1px -1px 0" };
 const buttonClassName =
@@ -31,7 +31,7 @@ export default function BottomMenu() {
   const dispatch = useDispatch();
   const blueprint = useSelector(selectors.blueprint);
   const isWeaponActive = useSelector(selectors.isWeaponActive);
-  const settings = useContext(SettingsContext);
+  const [settings] = useSettings();
 
   const cancel = useCallback(() => {
     dispatch(actions.blueprintCancel());
@@ -177,7 +177,7 @@ export default function BottomMenu() {
           className={buttonClassName}
         >
           <kbd className="bg-darkGray px-1 rounded mr-1">
-            {settings.keyboardShortcuts[ControlCode.RotateBuilding][0]}
+            {settings.keybindings[ControlCode.RotateBuilding][0]}
           </kbd>
           Rotate
         </button>
@@ -191,7 +191,7 @@ export default function BottomMenu() {
           data-control-code={ControlCode.Back}
         >
           <kbd className="bg-darkGray px-1 rounded mr-1">
-            {settings.keyboardShortcuts[ControlCode.Back][0]}
+            {settings.keybindings[ControlCode.Back][0]}
           </kbd>
           Cancel
         </button>
@@ -243,7 +243,7 @@ function IconButton({
   icon: React.ReactElement;
   controlConfig?: Partial<ControlConfig>;
 }) {
-  const settings = useContext(SettingsContext);
+  const [settings] = useSettings();
   useControl({
     code: controlCode,
     callback,
@@ -251,7 +251,7 @@ function IconButton({
     ...controlConfig,
   });
   return (
-    <Tippy content={`${label} (${settings.keyboardShortcuts[controlCode][0]})`}>
+    <Tippy content={`${label} (${settings.keybindings[controlCode][0]})`}>
       <button
         type="button"
         className="w-6 p-0.5"
@@ -271,7 +271,7 @@ function BuildingCategoryMenu({
   category: BuildingCategory;
   index: number;
 }) {
-  const settings = useContext(SettingsContext);
+  const [settings] = useSettings();
   const dispatch = useDispatch();
   const [isOpen, open, close, toggle] = useBoolean(false);
 
@@ -340,8 +340,7 @@ function BuildingCategoryMenu({
               type="button"
               onClick={noFocusOnClick(close)}
             >
-              <Kbd light>{settings.keyboardShortcuts[ControlCode.Back][0]}</Kbd>{" "}
-              Close
+              <Kbd light>{settings.keybindings[ControlCode.Back][0]}</Kbd> Close
             </button>
           </div>
         ) : null
@@ -356,7 +355,7 @@ function BuildingCategoryMenu({
           className={buttonClassName}
         >
           <Kbd className="text-xs mr-1 pt-0">
-            {settings.keyboardShortcuts[controlCode][0]}
+            {settings.keybindings[controlCode][0]}
           </Kbd>
           {category.label}
         </button>
@@ -374,7 +373,7 @@ function BuildingButton({
   index: number;
   callback: () => void;
 }) {
-  const settings = useContext(SettingsContext);
+  const [settings] = useSettings();
   const controlCode = [
     ControlCode.Menu1,
     ControlCode.Menu2,
@@ -420,7 +419,7 @@ function BuildingButton({
         className="flex flex-no-wrap items-baseline w-full text-left mb-1"
         onClick={noFocusOnClick(callback)}
       >
-        <Kbd light>{settings.keyboardShortcuts[controlCode][0]}</Kbd>
+        <Kbd light>{settings.keybindings[controlCode][0]}</Kbd>
         <span className="flex-1 ml-1 mr-3 inline-block">
           <EntityPreview templateName={blueprintBuilds} />{" "}
           {` ${blueprint.description ? blueprint.description.name : template}`}

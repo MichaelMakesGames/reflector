@@ -22,7 +22,10 @@ const AUTO_MOVE_ALLOW_LIST: string[] = [
 
 export function makeReducer(renderer: Renderer, audio: Audio | DummyAudio) {
   return function reducer(
-    state: RawState = createInitialState({ completedTutorials: [] }),
+    state: RawState = createInitialState({
+      completedTutorials: [],
+      mapType: "standard",
+    }),
     action: Action
   ): RawState {
     const wrappedState = wrapState(state, renderer, audio, save);

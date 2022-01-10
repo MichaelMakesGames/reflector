@@ -13,7 +13,6 @@ function resetTutorialsHandler(state: WrappedState): void {
       completed: [],
     },
   });
-  state.act.newGame();
 }
 
 registerHandler(resetTutorialsHandler, resetTutorials);

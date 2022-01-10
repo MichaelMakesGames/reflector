@@ -1,22 +1,22 @@
 /* global document, MutationObserver */
 import Tippy from "@tippyjs/react";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Draggable from "react-draggable";
 import { useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
-import { SettingsContext } from "../contexts";
 import tutorials from "../data/tutorials";
 import { useBoolean } from "../hooks";
+import { noFocusOnClick } from "../lib/controls";
 import actions from "../state/actions";
 import selectors from "../state/selectors";
 import { ControlCode } from "../types/ControlCode";
+import { TemplateName } from "../types/TemplateName";
 import { TutorialId } from "../types/TutorialId";
-import { noFocusOnClick } from "../lib/controls";
 import EntityPreview from "./EntityPreview";
 import { HotkeyGroup, useControl } from "./HotkeysProvider";
 import Icons from "./Icons";
 import Kbd from "./Kbd";
-import { TemplateName } from "../types/TemplateName";
+import { useSettings } from "./SettingsProvider";
 
 export default function Tutorials() {
   const activeTutorials = useSelector(selectors.activeTutorials);
@@ -25,7 +25,7 @@ export default function Tutorials() {
     null | number
   >(null);
   const isSomeTutorialFocused = focusedTutorialIndex !== null;
-  const settings = useContext(SettingsContext);
+  const [settings] = useSettings();
 
   useControl({
     code: ControlCode.FocusTutorials,
@@ -118,12 +118,12 @@ export default function Tutorials() {
       <span>
         Tutorial{" "}
         <Kbd className="font-normal text-base">
-          {settings.keyboardShortcuts[ControlCode.FocusTutorials][0]}
+          {settings.keybindings[ControlCode.FocusTutorials][0]}
         </Kbd>
       </span>
       <Tippy
         content={`${isExpanded ? "Minimize" : "Expand"} (${
-          settings.keyboardShortcuts[ControlCode.ToggleTutorials][0]
+          settings.keybindings[ControlCode.ToggleTutorials][0]
         })`}
       >
         <button
@@ -151,13 +151,13 @@ export default function Tutorials() {
           <div className="text-sm mb-1">
             <div>
               <Kbd noPad>
-                {settings.keyboardShortcuts[ControlCode.FocusTutorials][0]}
+                {settings.keybindings[ControlCode.FocusTutorials][0]}
               </Kbd>{" "}
               to focus/unfocus tutorial interface
             </div>
             <div>
               <Kbd noPad>
-                {settings.keyboardShortcuts[ControlCode.ToggleTutorials][0]}
+                {settings.keybindings[ControlCode.ToggleTutorials][0]}
               </Kbd>{" "}
               to toggle tutorial interface
             </div>

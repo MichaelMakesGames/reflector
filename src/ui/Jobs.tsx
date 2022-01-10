@@ -1,23 +1,23 @@
 import Tippy from "@tippyjs/react";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { useDispatch, useSelector } from "react-redux";
+import colors from "../colors";
+import colonistStatuses, { ColonistStatusCode } from "../data/colonistStatuses";
 import jobTypes, { JobTypeCode } from "../data/jobTypes";
 import actions from "../state/actions";
 import selectors from "../state/selectors";
 import { RawState } from "../types";
-import Warning from "./Warning";
-import colonistStatuses, { ColonistStatusCode } from "../data/colonistStatuses";
-import Icons from "./Icons";
-import colors from "../colors";
-import { HotkeyGroup, useControl } from "./HotkeysProvider";
 import { ControlCode } from "../types/ControlCode";
+import { HotkeyGroup, useControl } from "./HotkeysProvider";
+import Icons from "./Icons";
 import Kbd from "./Kbd";
-import { SettingsContext } from "../contexts";
+import { useSettings } from "./SettingsProvider";
+import Warning from "./Warning";
 
 export default function Jobs() {
   const dispatch = useDispatch();
-  const settings = useContext(SettingsContext);
+  const [settings] = useSettings();
   const jobPriorities = useSelector(selectors.jobPriorities);
   const orderedJobTypes = Object.entries(jobPriorities)
     .sort((a, b) => a[1] - b[1])
@@ -99,7 +99,7 @@ export default function Jobs() {
         <h2 className="text-xl flex-1">
           Jobs{" "}
           <Kbd className="text-sm">
-            {settings.keyboardShortcuts[ControlCode.FocusJobPriorities][0]}
+            {settings.keybindings[ControlCode.FocusJobPriorities][0]}
           </Kbd>
         </h2>
         <span className="text-sm">Employed / Max</span>
@@ -107,18 +107,14 @@ export default function Jobs() {
       {focusedJob && (
         <div className="text-sm my-1">
           Use arrows to select job,{" "}
-          <Kbd noPad>
-            {settings.keyboardShortcuts[ControlCode.QuickAction][0]}
-          </Kbd>{" "}
-          to pick up, arrows to move, then{" "}
-          <Kbd noPad>
-            {settings.keyboardShortcuts[ControlCode.QuickAction][0]}
-          </Kbd>{" "}
+          <Kbd noPad>{settings.keybindings[ControlCode.QuickAction][0]}</Kbd> to
+          pick up, arrows to move, then{" "}
+          <Kbd noPad>{settings.keybindings[ControlCode.QuickAction][0]}</Kbd>{" "}
           gain to drop. Exit with{" "}
           <Kbd noPad>
-            {settings.keyboardShortcuts[ControlCode.FocusJobPriorities][0]}
+            {settings.keybindings[ControlCode.FocusJobPriorities][0]}
           </Kbd>{" "}
-          or <Kbd noPad>{settings.keyboardShortcuts[ControlCode.Back][0]}</Kbd>.
+          or <Kbd noPad>{settings.keybindings[ControlCode.Back][0]}</Kbd>.
         </div>
       )}
       <DragDropContext

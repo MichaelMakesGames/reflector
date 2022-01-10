@@ -7,7 +7,11 @@ import HotkeyButton from "./HotkeyButton";
 import { ControlCode } from "../types/ControlCode";
 import { HotkeyGroup } from "./HotkeysProvider";
 
-export default function GameOver() {
+export default function GameOver({
+  navigateTo,
+}: {
+  navigateTo: (page: string) => void;
+}) {
   const dispatch = useDispatch();
   const gameOver = useSelector(selectors.gameOver);
   const victory = useSelector(selectors.victory);
@@ -36,7 +40,7 @@ export default function GameOver() {
           label="New Game"
           controlCode={ControlCode.Menu1}
           hotkeyGroup={HotkeyGroup.GameOver}
-          callback={() => dispatch(actions.newGame())}
+          callback={() => navigateTo("NewGame")}
         />
         {!victory && (
           <HotkeyButton

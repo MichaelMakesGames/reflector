@@ -15,13 +15,13 @@ export default function immigrationSystem(state: WrappedState): void {
   if (state.select.isLastTurnOfNight()) {
     const player = state.select.player();
     if (!player) {
-      console.warn("No player");
+      console.error("No player");
     } else {
       const sourcePositions = [player.pos];
       rangeTo(NEW_COLONISTS_PER_DAY).forEach(() => {
         const pos = findNewColonistPosition(state, sourcePositions);
         if (!pos) {
-          console.warn("no position for new immigrant found");
+          console.error("no position for new immigrant found");
         } else {
           state.act.addEntity(createEntityFromTemplate("COLONIST", { pos }));
         }

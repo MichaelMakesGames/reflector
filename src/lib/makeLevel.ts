@@ -9,7 +9,7 @@ export default function makeLevel(state: WrappedState): WrappedState {
       .filter((e) => e.pos && e.id !== PLAYER_ID)
       .map((e) => e.id)
   );
-  for (const entity of generateMap()) {
+  for (const entity of generateMap(state.raw.mapType)) {
     state.act.addEntity(entity);
   }
   return state;

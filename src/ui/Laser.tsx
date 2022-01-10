@@ -1,21 +1,21 @@
 import Tippy from "@tippyjs/react";
-import React, { useContext } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "tippy.js/dist/tippy.css";
-import { HotkeyGroup, useControl } from "./HotkeysProvider";
 import { DOWN, LEFT, PLAYER_ID, RIGHT, UP } from "../constants";
-import { SettingsContext } from "../contexts";
+import { noFocusOnClick } from "../lib/controls";
+import { getConstDir } from "../lib/geometry";
 import actions from "../state/actions";
 import selectors from "../state/selectors";
 import { Direction } from "../types";
 import { ControlCode } from "../types/ControlCode";
-import { noFocusOnClick } from "../lib/controls";
-import { getConstDir } from "../lib/geometry";
 import HotkeyButton from "./HotkeyButton";
+import { HotkeyGroup, useControl } from "./HotkeysProvider";
+import { useSettings } from "./SettingsProvider";
 
 export default function Laser() {
   const dispatch = useDispatch();
-  const settings = useContext(SettingsContext);
+  const [settings] = useSettings();
   const isWeaponActive = useSelector(selectors.isWeaponActive);
   const laserState = useSelector(selectors.laserState);
   const aimingDirection = useSelector(selectors.lastAimingDirection);

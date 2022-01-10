@@ -5,7 +5,7 @@ import { createInitialState } from "../initialState";
 import colonistsSystem from "../systems/colonistsSystem";
 import WrappedState from "../../types/WrappedState";
 
-const newGame = createAction("NEW_GAME")();
+const newGame = createAction("NEW_GAME")<{ mapType: string }>();
 export default newGame;
 
 function newGameHandler(
@@ -15,6 +15,7 @@ function newGameHandler(
   state.setRaw(
     createInitialState({
       completedTutorials: state.select.completedTutorials(),
+      mapType: action.payload.mapType,
     })
   );
   state.renderer.clear();

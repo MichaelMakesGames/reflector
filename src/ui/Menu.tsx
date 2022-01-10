@@ -1,161 +1,92 @@
-/* global document */
-import Tippy from "@tippyjs/react";
-import React, { useContext } from "react";
-import { useDispatch } from "react-redux";
-import { SettingsContext } from "../contexts";
-import { useBoolean } from "../hooks";
-import actions from "../state/actions";
+import React, { useEffect, useRef } from "react";
 import { ControlCode } from "../types/ControlCode";
-import { noFocusOnClick } from "../lib/controls";
 import { HotkeyGroup, useControl } from "./HotkeysProvider";
-import Kbd from "./Kbd";
-import KeyboardControls from "./KeyboardControls";
 
-export default function Menu() {
-  const [isOpen, open, close, toggle] = useBoolean(false);
-  const [controlsIsOpen, openControls, closeControls] = useBoolean(false);
-  const dispatch = useDispatch();
-  const settings = useContext(SettingsContext);
-  const menuShortcuts = settings.keyboardShortcuts[ControlCode.Menu];
-
-  useControl({
-    code: ControlCode.Menu,
-    callback: open,
-    group: HotkeyGroup.Main,
-    allowedGroups: [
-      HotkeyGroup.Tutorial,
-      HotkeyGroup.BuildingSelection,
-      HotkeyGroup.JobPriorities,
-    ],
-  });
-
-  useControl({
-    code: ControlCode.Menu,
-    callback: close,
-    group: HotkeyGroup.Menu,
-    disabled: !isOpen,
-  });
-
-  useControl({
-    code: ControlCode.Back,
-    callback: close,
-    group: HotkeyGroup.Menu,
-    disabled: !isOpen,
-  });
-
-  useControl({
-    code: ControlCode.Help,
-    callback: openControls,
-    group: HotkeyGroup.Main,
-    allowedGroups: [
-      HotkeyGroup.Intro,
-      HotkeyGroup.GameOver,
-      HotkeyGroup.Menu,
-      HotkeyGroup.Tutorial,
-      HotkeyGroup.JobPriorities,
-      HotkeyGroup.BuildingSelection,
-    ],
-  });
-
-  return (
-    <Tippy
-      visible={isOpen}
-      arrow={false}
-      interactive
-      onClickOutside={close}
-      placement="bottom-end"
-      content={
-        isOpen ? (
-          <ul>
-            <MenuOption
-              index={0}
-              label="New Game"
-              callback={() => dispatch(actions.newGame())}
-              closeMenu={close}
-            />
-            <MenuOption
-              index={1}
-              label="New Game (Reset Tutorial)"
-              callback={() => dispatch(actions.resetTutorials())}
-              closeMenu={close}
-            />
-            <MenuOption
-              index={2}
-              label="Toggle Fullscreen"
-              callback={() => {
-                if (document.fullscreen) {
-                  document.exitFullscreen();
-                } else {
-                  document.body.requestFullscreen();
-                }
-              }}
-              closeMenu={close}
-            />
-            <MenuOption
-              index={3}
-              label="Controls"
-              callback={openControls}
-              closeMenu={close}
-            />
-          </ul>
-        ) : null
-      }
-    >
-      <button onClick={noFocusOnClick(toggle)} type="button">
-        <Kbd light>{menuShortcuts[0]}</Kbd> Menu
-        {controlsIsOpen && <KeyboardControls onClose={closeControls} />}
-      </button>
-    </Tippy>
-  );
-}
-
-function MenuOption({
-  callback,
-  closeMenu,
-  index,
-  label,
+export default function Menu({
+  children,
+  wide,
 }: {
-  callback: () => void;
-  closeMenu: () => void;
-  index: number;
-  label: string;
+  children: React.ReactNode;
+  wide?: boolean;
 }) {
-  const controlCode = [
-    ControlCode.Menu1,
-    ControlCode.Menu2,
-    ControlCode.Menu3,
-    ControlCode.Menu4,
-    ControlCode.Menu5,
-    ControlCode.Menu6,
-    ControlCode.Menu7,
-    ControlCode.Menu8,
-    ControlCode.Menu9,
-    ControlCode.Menu0,
-  ][index];
+  const ref = useRef<HTMLDivElement>(null);
+
+  const focusNext = () => {
+    const focusedElement = document.activeElement;
+    if (ref.current) {
+      const focusableElements = Array.from(
+        ref.current.querySelectorAll("[data-menu-control]")
+      );
+      if (focusedElement && focusableElements.includes(focusedElement)) {
+        const focusedIndex = focusableElements.indexOf(focusedElement);
+        if (focusedIndex !== -1) {
+          (
+            focusableElements[(focusedIndex + 1) % focusableElements.length] as
+              | HTMLButtonElement
+              | HTMLInputElement
+              | HTMLSelectElement
+          ).focus();
+        }
+      } else if (focusableElements.length) {
+        (
+          focusableElements[0] as
+            | HTMLButtonElement
+            | HTMLInputElement
+            | HTMLSelectElement
+        ).focus();
+      }
+    }
+  };
+
+  const focusPrevious = () => {
+    const focusedElement = document.activeElement;
+    if (ref.current) {
+      const focusableElements = Array.from(
+        ref.current.querySelectorAll("[data-menu-control]")
+      );
+      if (focusedElement && focusableElements.includes(focusedElement)) {
+        const focusedIndex = focusableElements.indexOf(focusedElement);
+        if (focusedIndex !== -1) {
+          (
+            focusableElements[
+              (focusedIndex + focusableElements.length - 1) %
+                focusableElements.length
+            ] as HTMLButtonElement | HTMLInputElement | HTMLSelectElement
+          ).focus();
+        }
+      } else if (focusableElements.length) {
+        (
+          focusableElements[focusableElements.length - 1] as
+            | HTMLButtonElement
+            | HTMLInputElement
+            | HTMLSelectElement
+        ).focus();
+      }
+    }
+  };
+
+  useEffect(focusNext, []);
 
   useControl({
-    code: controlCode,
+    code: ControlCode.Down,
     group: HotkeyGroup.Menu,
-    callback: () => {
-      closeMenu();
-      callback();
-    },
+    callback: focusNext,
   });
 
-  const settings = useContext(SettingsContext);
-  const shortcuts = settings.keyboardShortcuts[controlCode];
+  useControl({
+    code: ControlCode.Up,
+    group: HotkeyGroup.Menu,
+    callback: focusPrevious,
+  });
 
   return (
-    <li className="mb-1 last:mb-0">
-      <button
-        type="button"
-        onClick={noFocusOnClick(() => {
-          closeMenu();
-          callback();
-        })}
-      >
-        <Kbd light>{shortcuts[0]}</Kbd> {label}
-      </button>
-    </li>
+    <div
+      className={`${
+        wide ? "w-96" : "w-72"
+      } h-full overflow-y-auto overflow-x-visible pt-10 mx-auto flex flex-col`}
+      ref={ref}
+    >
+      {children}
+    </div>
   );
 }

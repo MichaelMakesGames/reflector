@@ -1,10 +1,10 @@
-import React, { useContext } from "react";
+import React from "react";
+import audio from "../lib/audio";
+import { noFocusOnClick } from "../lib/controls";
 import { ControlCode } from "../types/ControlCode";
 import { HotkeyGroup, useControl } from "./HotkeysProvider";
-import { SettingsContext } from "../contexts";
 import Kbd from "./Kbd";
-import { noFocusOnClick } from "../lib/controls";
-import audio from "../lib/audio";
+import { useSettings } from "./SettingsProvider";
 
 interface Props {
   label: string;
@@ -45,7 +45,7 @@ export default function HotkeyButton({
     alt: false,
     meta: false,
   });
-  const settings = useContext(SettingsContext);
+  const [settings] = useSettings();
   return (
     <button
       className={`btn ${disabled ? "disabled" : ""} ${className || ""}`}
@@ -55,7 +55,7 @@ export default function HotkeyButton({
       // disabled={disabled && !disabledIsCosmeticOnly}
       data-control-code={controlCode}
     >
-      <Kbd>{settings.keyboardShortcuts[controlCode][0]}</Kbd> {label}
+      <Kbd>{settings.keybindings[controlCode][0]}</Kbd> {label}
     </button>
   );
 }

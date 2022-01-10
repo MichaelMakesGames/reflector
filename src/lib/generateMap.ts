@@ -1,11 +1,12 @@
+import { Noise } from "rot-js";
 import { Required } from "ts-toolbelt/out/Object/Required";
-import { Noise, RNG } from "rot-js";
 import {
   MAP_HEIGHT,
   MAP_WIDTH,
   NEW_COLONISTS_PER_DAY,
   PLAYER_ID,
 } from "../constants";
+import mapTypes from "../data/mapTypes";
 import { Entity } from "../types/Entity";
 import { TemplateName } from "../types/TemplateName";
 import { createEntityFromTemplate } from "./entities";
@@ -13,85 +14,10 @@ import { arePositionsEqual, getDistance } from "./geometry";
 import { calcPercentile, rangeTo, sum } from "./math";
 import { choose } from "./rng";
 
-interface MapConfig {
-  terrainWeights: {
-    water: number;
-    fertile: number;
-    ground: number;
-    ore: number;
-    mountain: number;
-  };
-  smoothness: number;
-}
-
-const MAP_CONFIGS: Record<string, MapConfig> = {
-  standard: {
-    terrainWeights: {
-      water: 15,
-      fertile: 10,
-      ground: 60,
-      ore: 1.5,
-      mountain: 13.5,
-    },
-    smoothness: 12,
-  },
-  marsh: {
-    terrainWeights: {
-      water: 30,
-      fertile: 33,
-      ground: 35,
-      ore: 1,
-      mountain: 1,
-    },
-    smoothness: 6,
-  },
-  badlands: {
-    terrainWeights: {
-      water: 1,
-      fertile: 1.5,
-      ground: 65.5,
-      ore: 5,
-      mountain: 27,
-    },
-    smoothness: 6,
-  },
-  plains: {
-    terrainWeights: {
-      water: 5,
-      fertile: 10,
-      ground: 80,
-      ore: 1.5,
-      mountain: 3.5,
-    },
-    smoothness: 15,
-  },
-  mesa: {
-    terrainWeights: {
-      water: 1,
-      fertile: 1.5,
-      ground: 65.5,
-      ore: 5,
-      mountain: 27,
-    },
-    smoothness: 15,
-  },
-  lakes: {
-    terrainWeights: {
-      water: 30,
-      fertile: 33,
-      ground: 35,
-      ore: 1,
-      mountain: 1,
-    },
-    smoothness: 15,
-  },
-};
-
-export default function generateMap(): Entity[] {
+export default function generateMap(mapType: string): Entity[] {
   let results: Entity[] = [];
 
-  const config: MapConfig =
-    RNG.getItem(Object.values(MAP_CONFIGS)) || MAP_CONFIGS.standard;
+  const config = mapTypes[mapType];
 
   const noiseGenerator = new Noise.Simplex();
   const noise: number[][] = [];

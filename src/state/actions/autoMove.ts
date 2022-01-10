@@ -31,7 +31,7 @@ function autoMoveHandler(state: WrappedState): void {
   };
 
   if (Math.abs(direction.dx) + Math.abs(direction.dy) !== 1) {
-    console.warn(
+    console.error(
       `Invalid auto-move from ${player.pos.x},${player.pos.y} to ${next.pos.x},${next.pos.y}`
     );
     state.act.cancelAutoMove();

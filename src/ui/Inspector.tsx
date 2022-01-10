@@ -1,7 +1,6 @@
-import React, { useCallback, useContext, useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Required } from "ts-toolbelt/out/Object/Required";
-import { SettingsContext } from "../contexts";
 import colonistStatuses, { ColonistStatusCode } from "../data/colonistStatuses";
 import resources, { ResourceCode } from "../data/resources";
 import { areConditionsMet } from "../lib/conditions";
@@ -16,6 +15,7 @@ import wrapState from "../state/wrapState";
 import { Entity, RawState } from "../types";
 import { HotkeyGroup, useControl } from "./HotkeysProvider";
 import ResourceAmount from "./ResourceAmount";
+import { useSettings } from "./SettingsProvider";
 import Warning from "./Warning";
 
 export default function Inspector() {
@@ -142,7 +142,7 @@ export default function Inspector() {
 }
 
 function InspectorAction({ action }: { action: ActionControl }) {
-  const settings = useContext(SettingsContext);
+  const [settings] = useSettings();
   const dispatch = useDispatch();
   const callback = useCallback(() => dispatch(action.action), [action]);
   useControl({
@@ -153,7 +153,7 @@ function InspectorAction({ action }: { action: ActionControl }) {
   });
   return (
     <button type="button" className="font-normal">
-      {settings.keyboardShortcuts[action.code].map((key, index) => (
+      {settings.keybindings[action.code].map((key, index) => (
         <React.Fragment key={key}>
           {index !== 0 ? (
             <span className="text-lightGray text-xs mr-1">or</span>

@@ -11,11 +11,14 @@ import { TutorialId } from "../types/TutorialId";
 
 export function createInitialState({
   completedTutorials,
+  mapType,
 }: {
   completedTutorials: TutorialId[];
+  mapType: string;
 }) {
   const initialState: RawState = {
     version: VERSION,
+    mapType: mapType ?? "standard",
     entities: {},
     entitiesByPosition: {},
     entitiesByComp: {},

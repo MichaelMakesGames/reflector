@@ -1,11 +1,5 @@
 /* global document */
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   DOWN,
@@ -16,7 +10,6 @@ import {
   RIGHT,
   UP,
 } from "../constants";
-import { SettingsContext } from "../contexts";
 import { useInterval } from "../hooks";
 import { getQuickAction, noFocusOnClick } from "../lib/controls";
 import { arePositionsEqual } from "../lib/geometry";
@@ -28,6 +21,7 @@ import { ControlCode } from "../types/ControlCode";
 import ContextMenu from "./ContextMenu";
 import { HotkeyGroup, useControl } from "./HotkeysProvider";
 import MapTooltip from "./MapTooltip";
+import { useSettings } from "./SettingsProvider";
 
 export default function GameMap() {
   useEffect(() => {
@@ -38,7 +32,7 @@ export default function GameMap() {
   }, []);
 
   const dispatch = useDispatch();
-  const settings = useContext(SettingsContext);
+  const [settings] = useSettings();
   const cursorPos = useSelector(selectors.cursorPos);
   const [contextMenuPos, setContextMenuPos] = useState<Pos | null>(null);
   const isWeaponActive = useSelector(selectors.isWeaponActive);

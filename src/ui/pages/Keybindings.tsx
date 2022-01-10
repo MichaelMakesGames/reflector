@@ -1,45 +1,17 @@
-import React, { useContext } from "react";
-import { SettingsContext } from "../contexts";
-import { ControlCode } from "../types/ControlCode";
-import Kbd from "./Kbd";
-import Modal from "./Modal";
-import { useControl, HotkeyGroup } from "./HotkeysProvider";
-import HotkeyButton from "./HotkeyButton";
+import React from "react";
+import { ControlCode } from "../../types/ControlCode";
+import Kbd from "../Kbd";
+import Menu from "../Menu";
+import MenuTitle from "../MenuTitle";
+import { RouterPageProps } from "../Router";
+import { useSettings } from "../SettingsProvider";
 
-export default function KeyboardControls({ onClose }: { onClose: () => void }) {
-  const settings = useContext(SettingsContext);
-  useControl({
-    code: ControlCode.Back,
-    group: HotkeyGroup.Help,
-    callback: onClose,
-  });
+export default function Keybindings({ goBack }: RouterPageProps) {
+  const [settings] = useSettings();
 
   return (
-    <Modal isOpen onRequestClose={onClose}>
-      <div className="flex flex-row">
-        <h2 className="text-2xl flex-grow">Mouse Controls</h2>
-        <HotkeyButton
-          controlCode={ControlCode.Back}
-          callback={onClose}
-          hotkeyGroup={HotkeyGroup.Help}
-          label="Close"
-        />
-      </div>
-      <section className="my-3 pl-3">
-        <p>Hover over a location to see contents and contextual actions.</p>
-        <p>Click on map to move.</p>
-        <p>
-          While aiming laser, click within the blue borders to
-          place/rotate/remove reflectors.
-        </p>
-        <p>While building, click to place, right click to cancel.</p>
-        <p>Right click location for contextual actions.</p>
-        <p>Scroll to zoom in or zoom out.</p>
-        <p>Click and drag jobs to change priority.</p>
-      </section>
-      <div className="flex flex-row">
-        <h2 className="text-2xl flex-grow">Keyboard Shortcuts</h2>
-      </div>
+    <Menu wide>
+      <MenuTitle goBack={goBack}>Keybindings</MenuTitle>
       <section className="my-3">
         <h3 className="text-xl">Movement</h3>
         <Shortcut code={ControlCode.Up} label="Up" />
@@ -149,16 +121,16 @@ export default function KeyboardControls({ onClose }: { onClose: () => void }) {
         <Shortcut code={ControlCode.Help} label="Open This Menu" />
         <Shortcut code={ControlCode.Back} label="Close This Menu" />
       </section>
-    </Modal>
+    </Menu>
   );
 }
 
 function Shortcut({ code, label }: { code: ControlCode; label: string }) {
-  const settings = useContext(SettingsContext);
+  const [settings] = useSettings();
   return (
-    <div className="ml-3">
+    <div className="ml-3" tabIndex={-1} data-menu-control>
       {label}:
-      {settings.keyboardShortcuts[code].map((key) => (
+      {settings.keybindings[code].map((key) => (
         <Kbd className="ml-1" key={key}>
           {key}
         </Kbd>

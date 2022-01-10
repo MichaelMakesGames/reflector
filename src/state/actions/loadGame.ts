@@ -34,7 +34,7 @@ function loadGameHandler(
     state.renderer.setBackgroundColor(colors.backgroundDay);
   }
 
-  state.audio.stopAll();
+  state.audio.stopAll({ stopMusic: false });
   state.audio.playMusic(state.select.isNight() ? "night" : "day");
   if (state.select.entitiesWithComps("laser").length > 0) {
     state.audio.loop("laser_active", { volume: 0.5 });

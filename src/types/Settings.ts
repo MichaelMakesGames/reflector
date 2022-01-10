@@ -6,5 +6,7 @@ export default interface Settings {
   unmodifiedAiming: boolean;
   unmodifiedBuilding: boolean;
   cursorModifierKey: "alt" | "ctrl" | "meta" | "shift";
-  keyboardShortcuts: Record<ControlCode, string[]>;
+  keybindings: Record<ControlCode, string[]>;
+  musicVolume: number;
+  sfxVolume: number;
 }

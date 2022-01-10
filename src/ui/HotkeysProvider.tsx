@@ -1,14 +1,14 @@
 /* global window */
 import React, {
   createContext,
-  useRef,
   useCallback,
-  useMemo,
-  useEffect,
   useContext,
+  useEffect,
+  useMemo,
+  useRef,
 } from "react";
 import { ControlCode } from "../types/ControlCode";
-import { SettingsContext } from "../contexts";
+import { useSettings } from "./SettingsProvider";
 
 const HotkeyContext = createContext({
   register: (hotkey: Hotkey) => {},
@@ -147,42 +147,40 @@ export function useControl({
   allowedGroups = [],
   disabled,
 }: ControlConfig) {
-  const settings = useContext(SettingsContext);
+  const [settings] = useSettings();
   const { register, unregister } = useContext(HotkeyContext);
   useEffect(() => {
-    const hotkeys = settings.keyboardShortcuts[code].map<Hotkey>(
-      (unparsedKey) => {
-        let parsedKey = unparsedKey;
-        let parsedModifier: "alt" | "ctrl" | "meta" | "shift" | "" = "";
+    const hotkeys = settings.keybindings[code].map<Hotkey>((unparsedKey) => {
+      let parsedKey = unparsedKey;
+      let parsedModifier: "alt" | "ctrl" | "meta" | "shift" | "" = "";
 
-        if (unparsedKey.startsWith("alt+")) {
-          parsedKey = unparsedKey.substring(4);
-          parsedModifier = "alt";
-        } else if (unparsedKey.startsWith("ctrl+")) {
-          parsedKey = unparsedKey.substring(5);
-          parsedModifier = "ctrl";
-        } else if (unparsedKey.startsWith("meta+")) {
-          parsedKey = unparsedKey.substring(5);
-          parsedModifier = "meta";
-        } else if (unparsedKey.startsWith("shift+")) {
-          parsedKey = unparsedKey.substring(6);
-          parsedModifier = "shift";
-        }
-
-        return {
-          key: parsedKey,
-          shift,
-          alt,
-          ctrl,
-          meta,
-          callback,
-          group,
-          allowedGroups: new Set(allowedGroups),
-          disabled,
-          ...(parsedModifier ? { [parsedModifier]: true } : {}),
-        };
+      if (unparsedKey.startsWith("alt+")) {
+        parsedKey = unparsedKey.substring(4);
+        parsedModifier = "alt";
+      } else if (unparsedKey.startsWith("ctrl+")) {
+        parsedKey = unparsedKey.substring(5);
+        parsedModifier = "ctrl";
+      } else if (unparsedKey.startsWith("meta+")) {
+        parsedKey = unparsedKey.substring(5);
+        parsedModifier = "meta";
+      } else if (unparsedKey.startsWith("shift+")) {
+        parsedKey = unparsedKey.substring(6);
+        parsedModifier = "shift";
       }
-    );
+
+      return {
+        key: parsedKey,
+        shift,
+        alt,
+        ctrl,
+        meta,
+        callback,
+        group,
+        allowedGroups: new Set(allowedGroups),
+        disabled,
+        ...(parsedModifier ? { [parsedModifier]: true } : {}),
+      };
+    });
 
     hotkeys.forEach(register);
     return () => hotkeys.forEach(unregister);

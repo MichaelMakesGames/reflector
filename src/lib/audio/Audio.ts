@@ -14,17 +14,23 @@ export const DEFAULT_OPTIONS: Required<SoundOptions> = {
   volume: 1,
 };
 
-const ROLLOFF_FACTOR = 0.5;
+const MUSIC_BASE_VOLUME = 0.25;
 export default class Audio {
   private sounds: Record<string, Howl> = {};
 
   private currentMusic: null | Howl = null;
 
+  public currentMusicName: null | string = null;
+
   private howler = Howler;
 
-  private positionalLoops: Record<string, number> = {};
+  private positionalLoops: Record<string, [number, SoundOptions]> = {};
 
   private listenerPos: Pos = { x: 0, y: 0 };
+
+  private musicVolume: number = 1;
+
+  private sfxVolume: number = 1;
 
   load() {
     Object.entries(audio as Record<string, string>).forEach(([file, url]) => {
@@ -34,10 +40,26 @@ export default class Audio {
     });
   }
 
+  setMusicVolume(value: number) {
+    this.musicVolume = value;
+    if (this.currentMusic) {
+      this.currentMusic.volume(MUSIC_BASE_VOLUME * value);
+    }
+  }
+
+  setSfxVolume(value: number) {
+    this.sfxVolume = value;
+    Object.entries(this.positionalLoops).forEach(([loopKey, [id, options]]) => {
+      const [soundName, pos] = Audio.parsePositionalLoopKey(loopKey);
+      this.stopAtPos(soundName, pos);
+      this.loopAtPos(soundName, pos, options);
+    });
+  }
+
   play(soundName: string, options: SoundOptions = DEFAULT_OPTIONS) {
     const sound = this.sounds[soundName];
     const id = sound.play();
-    const volume = options.volume || DEFAULT_OPTIONS.volume;
+    const volume = (options.volume || DEFAULT_OPTIONS.volume) * this.sfxVolume;
     sound.volume(volume, id);
   }
 
@@ -49,7 +71,7 @@ export default class Audio {
     const sound = this.sounds[soundName];
     const id = sound.play();
 
-    const volume = options.volume || DEFAULT_OPTIONS.volume;
+    const volume = (options.volume || DEFAULT_OPTIONS.volume) * this.sfxVolume;
     sound.volume(volume, id);
 
     sound.pos(pos.x, pos.y, 0, id);
@@ -81,6 +103,12 @@ export default class Audio {
     return `${soundName}_${getPosKey(pos)}`;
   }
 
+  static parsePositionalLoopKey(key: string): [string, Pos] {
+    const [soundName, posKey] = key.split("_");
+    const [x, y] = posKey.split(",").map(parseFloat);
+    return [soundName, { x, y }];
+  }
+
   loopAtPos(
     soundName: string,
     pos: Pos,
@@ -90,8 +118,9 @@ export default class Audio {
     if (!this.positionalLoops[key]) {
       const sound = this.sounds[soundName];
       const id = sound.play();
-      this.positionalLoops[key] = id;
-      const volume = options.volume || DEFAULT_OPTIONS.volume;
+      this.positionalLoops[key] = [id, options];
+      const volume =
+        (options.volume || DEFAULT_OPTIONS.volume) * this.sfxVolume;
       sound.volume(volume, id);
       sound.loop(true, id);
       sound.pos(pos.x, pos.y, 0, id);
@@ -112,7 +141,7 @@ export default class Audio {
     const key = Audio.makePositionalLoopKey(soundName, pos);
     if (this.positionalLoops[key]) {
       const sound = this.sounds[soundName];
-      const id = this.positionalLoops[key];
+      const [id] = this.positionalLoops[key];
       sound.stop(id);
       delete this.positionalLoops[key];
     }
@@ -122,29 +151,35 @@ export default class Audio {
     this.sounds[sound].stop();
   }
 
-  stopAll() {
-    Object.values(this.sounds).forEach((sound) => sound.stop());
+  stopAll({ stopMusic = false }) {
+    Object.values(this.sounds)
+      .filter((sound) => stopMusic || sound !== this.currentMusic)
+      .forEach((sound) => sound.stop());
   }
 
-  playMusic(song: "night" | "day") {
-    const MUSIC_VOLUME = 0.25;
+  playMusic(musicName: "night" | "day") {
+    if (this.currentMusicName === musicName) return; // already playing
+
+    const volume = MUSIC_BASE_VOLUME * this.musicVolume;
     if (this.currentMusic) {
-      this.currentMusic.fade(MUSIC_VOLUME, 0, 1000);
+      this.currentMusic.fade(volume, 0, 1000);
       this.currentMusic.off();
       this.currentMusic.on("fade", () => {
         if (this.currentMusic) {
           this.currentMusic.stop();
           this.currentMusic = null;
+          this.currentMusicName = null;
         }
-        this.playMusic(song);
+        this.playMusic(musicName);
       });
     } else {
-      const intro = this.sounds[`${song}_intro`];
-      intro.volume(MUSIC_VOLUME);
-      const loop = this.sounds[`${song}_loop`];
-      loop.volume(MUSIC_VOLUME);
+      const intro = this.sounds[`${musicName}_intro`];
+      intro.volume(volume);
+      const loop = this.sounds[`${musicName}_loop`];
+      loop.volume(volume);
       intro.play();
       this.currentMusic = intro;
+      this.currentMusicName = musicName;
       intro.once("end", () => {
         this.currentMusic = loop;
         loop.loop(true);

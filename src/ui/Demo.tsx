@@ -67,7 +67,10 @@ export default function Demo({ demoComp }: { demoComp: DemoComp }) {
 }
 
 function setUpDemo(demoComp: DemoComp): [Renderer, WrappedState] {
-  const rawState = createInitialState({ completedTutorials: [] });
+  const rawState = createInitialState({
+    mapType: "standard",
+    completedTutorials: [],
+  });
   const renderer = new Renderer({
     gridWidth: demoComp.width,
     gridHeight: demoComp.height,
