@@ -91,10 +91,14 @@ export default function colonistsSystem(state: WrappedState): void {
         const employment = state.select.entityById(
           colonist.colonist.employment
         ) as Required<Entity, "pos" | "jobProvider">;
-        if (arePositionsEqual(employment.pos, colonist.pos)) {
-          doWork(state, colonist);
-        } else {
+        if (!arePositionsEqual(employment.pos, colonist.pos)) {
           goToWork(state, colonist);
+        }
+        const updatedColonist = state.select.entityById(
+          colonist.id
+        ) as typeof colonist;
+        if (arePositionsEqual(employment.pos, updatedColonist.pos)) {
+          doWork(state, updatedColonist);
         }
       } else {
         wander(state, colonist);
@@ -261,14 +265,15 @@ function goHomeOrSleep(
         },
       });
     }
+  } else {
+    state.act.updateEntity({
+      id: colonist.id,
+      colonist: {
+        ...colonist.colonist,
+        status: ColonistStatusCode.CannotFindPathHome,
+      },
+    });
   }
-  state.act.updateEntity({
-    id: colonist.id,
-    colonist: {
-      ...colonist.colonist,
-      status: ColonistStatusCode.CannotFindPathHome,
-    },
-  });
 }
 
 function goToWork(
@@ -295,14 +300,15 @@ function goToWork(
         },
       });
     }
+  } else {
+    state.act.updateEntity({
+      id: colonist.id,
+      colonist: {
+        ...colonist.colonist,
+        status: ColonistStatusCode.CannotFindPathToWork,
+      },
+    });
   }
-  state.act.updateEntity({
-    id: colonist.id,
-    colonist: {
-      ...colonist.colonist,
-      status: ColonistStatusCode.CannotFindPathToWork,
-    },
-  });
 }
 
 function doWork(

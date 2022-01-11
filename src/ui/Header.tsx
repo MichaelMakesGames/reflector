@@ -12,7 +12,15 @@ export default function Header({ navigateTo }: RouterPageProps) {
 
   useControl({
     code: ControlCode.Menu,
-    group: HotkeyGroup.Menu,
+    group: HotkeyGroup.Main,
+    allowedGroups: [
+      HotkeyGroup.Intro,
+      HotkeyGroup.GameOver,
+      HotkeyGroup.Menu,
+      HotkeyGroup.Tutorial,
+      HotkeyGroup.JobPriorities,
+      HotkeyGroup.BuildingSelection,
+    ],
     callback: () => navigateTo("MainMenu"),
   });
 
