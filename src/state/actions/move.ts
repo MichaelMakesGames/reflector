@@ -60,7 +60,7 @@ function moveHandler(
       state.act.logMessage({
         message:
           "You move fast on the road. You can move again this turn, or take another action.",
-        type: "success",
+        type: "info",
       });
       cosmeticSystems.forEach((system) => system(state));
     } else {

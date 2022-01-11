@@ -36,6 +36,7 @@ function targetWeaponHandler(
       state.act.logMessage({
         message:
           "Your laser needs to recharge. It will be ready again next turn.",
+        type: "error",
       });
       return;
     }

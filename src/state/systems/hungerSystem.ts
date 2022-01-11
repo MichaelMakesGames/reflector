@@ -18,7 +18,7 @@ export default function hungerSystem(state: WrappedState): void {
         } ate ${
           FOOD_PER_COLONIST * population
         } food. They won't eat again until tomorrow night.`,
-        type: "success",
+        type: "info",
       });
     } else {
       state.act.modifyResource({
@@ -29,6 +29,7 @@ export default function hungerSystem(state: WrappedState): void {
       state.act.reduceMorale({ amount: 1 });
       state.act.logMessage({
         message: `There was not enough food to go around, so your colony lost 1 morale. Each colonists needs ${FOOD_PER_COLONIST} food per night.`,
+        type: "error",
       });
     }
   }

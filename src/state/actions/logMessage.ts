@@ -5,7 +5,7 @@ import notifications from "../../lib/notifications";
 
 const logMessage = createAction("LOG_MESSAGE")<{
   message: string;
-  type?: string;
+  type: "error" | "success" | "info";
 }>();
 export default logMessage;
 
@@ -32,12 +32,12 @@ function logMessageHandler(
   // should probably find a better solution to this
   // perhaps the same subscription system I'm planning for rendering
   notifications.open({
-    type: type || "error",
+    type,
     message,
   });
   if (type === "success") {
     state.audio.play("ui_chime");
-  } else {
+  } else if (type === "error") {
     state.audio.play("ui_alert");
   }
 }

@@ -7,6 +7,7 @@ export default function eventSystem(state: WrappedState): void {
       message: `${count} ${
         count === 1 ? "colonist" : "colonists"
       } died, so you lost ${count} morale. Defend your colonists!`,
+      type: "error",
     });
   }
 

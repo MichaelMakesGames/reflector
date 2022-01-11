@@ -28,7 +28,7 @@ export default function immigrationSystem(state: WrappedState): void {
       });
       state.act.logMessage({
         message: `${NEW_COLONISTS_PER_DAY} new colonists have arrived!`,
-        type: "success",
+        type: "info",
       });
     }
   }

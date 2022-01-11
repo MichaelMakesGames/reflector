@@ -42,6 +42,7 @@ export default function colonistsSystem(state: WrappedState): void {
     state.act.logMessage({
       message:
         "You do not have enough housing. Build some tents or residences for your colonists to sleep in.",
+      type: "info",
     });
   }
 

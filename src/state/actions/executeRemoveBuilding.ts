@@ -24,6 +24,7 @@ function executeRemoveBuildingHandler(
     ) {
       state.act.logMessage({
         message: "You cannot remove houses with colonists inside",
+        type: "error",
       });
       return;
     }
@@ -34,6 +35,7 @@ function executeRemoveBuildingHandler(
   ) {
     state.act.logMessage({
       message: "You cannot remove overheating buildings",
+      type: "error",
     });
     return;
   }

@@ -44,7 +44,10 @@ function autoMoveHandler(state: WrappedState): void {
     state.act.cancelAutoMove();
   } else if (state.select.areEnemiesPresent()) {
     state.act.cancelAutoMove();
-    state.act.logMessage({ message: "Enemies present, movement canceled" });
+    state.act.logMessage({
+      message: "Enemies present, movement canceled",
+      type: "info",
+    });
   }
 }
 

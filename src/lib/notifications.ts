@@ -6,6 +6,7 @@ const notifications = new Notyf({
   types: [
     { type: "error", background: colors.invalid },
     { type: "success", background: colors.secondary },
+    { type: "info", background: colors.inactiveBuilding },
   ],
   duration: 10000,
   dismissible: true,

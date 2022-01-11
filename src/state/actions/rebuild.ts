@@ -27,7 +27,7 @@ function rebuildHandler(
     const message = failedConditions[0]
       ? failedConditions[0].invalidMessage
       : "Invalid position.";
-    state.act.logMessage({ message });
+    state.act.logMessage({ message, type: "error" });
     return;
   }
 
@@ -49,6 +49,7 @@ function rebuildHandler(
       message: `Cannot afford building (${cost.amount} ${
         resources[cost.resource].label
       })`,
+      type: "error",
     });
   }
 }

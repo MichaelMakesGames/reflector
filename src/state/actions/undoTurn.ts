@@ -26,6 +26,7 @@ function undoTurnHandler(
   } else {
     state.act.logMessage({
       message: "Cannot undo any further.",
+      type: "error",
     });
   }
 }
