@@ -11,7 +11,7 @@ export function getQuickAction(
   state: RawState,
   pos: Pos | null,
   modified?: boolean
-): null | { action: Action; label: string } {
+): null | { action: Action; label: string; cursor: string } {
   if (!pos) {
     return null;
   }
@@ -26,6 +26,7 @@ export function getQuickAction(
     );
     return {
       action: actions.blueprintBuild({ buildAnother: modified }),
+      cursor: "build",
       label: `Build ${
         entityToPlace.description ? entityToPlace.description.name : ""
       }`,
@@ -35,6 +36,7 @@ export function getQuickAction(
   if (state.isAutoMoving) {
     return {
       action: actions.cancelAutoMove(),
+      cursor: "cancel",
       label: "Cancel Movement",
     };
   }
@@ -47,11 +49,13 @@ export function getQuickAction(
   ) {
     return {
       action: actions.removeReflector(pos),
+      cursor: "reflector",
       label: "Remove Reflector",
     };
   } else if (reflectorAtPos) {
     return {
       action: actions.rotateEntity(reflectorAtPos),
+      cursor: "reflector",
       label: "Rotate Reflector",
     };
   }
@@ -64,6 +68,7 @@ export function getQuickAction(
       action: actions.addEntity(
         createEntityFromTemplate("REFLECTOR_UP_RIGHT", { pos })
       ),
+      cursor: "reflector",
       label: "Place / Reflector",
     };
   }
@@ -72,6 +77,7 @@ export function getQuickAction(
   if (rubble) {
     return {
       action: actions.rebuild(rubble.id),
+      cursor: "build",
       label: "Rebuild",
     };
   }
@@ -82,6 +88,7 @@ export function getQuickAction(
   ) {
     return {
       action: actions.autoMove(),
+      cursor: "move",
       label: "Move Here",
     };
   }
@@ -91,23 +98,8 @@ export function getQuickAction(
       action: actions.addEntity(
         createEntityFromTemplate("REFLECTOR_UP_RIGHT", { pos })
       ),
+      cursor: "reflector",
       label: "Place / Reflector",
-    };
-  }
-
-  const jobDisablerAtPos = entitiesAtPos.find((e) => e.jobDisabler);
-  if (jobDisablerAtPos) {
-    return {
-      action: actions.toggleDisabled(pos),
-      label: "Enable Jobs",
-    };
-  }
-
-  const jobProviderAtPos = entitiesAtPos.find((e) => e.jobProvider);
-  if (jobProviderAtPos) {
-    return {
-      action: actions.toggleDisabled(pos),
-      label: "Disable Jobs",
     };
   }
 

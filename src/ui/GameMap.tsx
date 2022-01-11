@@ -1,6 +1,8 @@
 /* global document */
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+// @ts-ignore
+import cursorImages from "../assets/tiles/cursor_*.png";
 import {
   DOWN,
   LEFT,
@@ -16,7 +18,7 @@ import { arePositionsEqual } from "../lib/geometry";
 import renderer from "../renderer";
 import actions from "../state/actions";
 import selectors from "../state/selectors";
-import { Pos, RawState } from "../types";
+import { Pos } from "../types";
 import { ControlCode } from "../types/ControlCode";
 import ContextMenu from "./ContextMenu";
 import { HotkeyGroup, useControl } from "./HotkeysProvider";
@@ -39,9 +41,6 @@ export default function GameMap() {
   const hasActiveBlueprint = useSelector(selectors.hasActiveBlueprint);
   const playerPos = useSelector(selectors.playerPos);
   const state = useSelector(selectors.state);
-  const isCursorInProjectorRange = useSelector((s: RawState) =>
-    selectors.isInProjectorRange(s, cursorPos)
-  );
   const mousePosRef = useRef<Pos | null>(null);
 
   useEffect(() => setContextMenuPos(null), [playerPos]);
@@ -224,13 +223,18 @@ export default function GameMap() {
     }
   };
 
+  const quickAction = getQuickAction(state, cursorPos);
+
   return (
     <ContextMenu pos={contextMenuPos} onClose={() => setContextMenuPos(null)}>
       <MapTooltip>
         <section
-          className={`relative ${
-            isCursorInProjectorRange ? "cursor-pointer" : ""
-          }`}
+          className="relative"
+          style={
+            quickAction
+              ? { cursor: `url(${cursorImages[quickAction.cursor]}), pointer` }
+              : undefined
+          }
         >
           {/* eslint-disable-next-line jsx-a11y/mouse-events-have-key-events, jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events */}
           <div
