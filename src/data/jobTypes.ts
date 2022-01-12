@@ -1,8 +1,8 @@
 export enum JobTypeCode {
-  Mining = "MINING",
-  Power = "POWER",
-  Farming = "FARMING",
-  Manufacturing = "MANUFACTURING",
+  Mines = "MINES",
+  MiningSpots = "MINING_SPOTS",
+  Farms = "FARMS",
+  Factories = "FACTORIES",
 }
 
 export interface JobType {
@@ -12,25 +12,24 @@ export interface JobType {
 }
 
 const jobTypes: Record<JobTypeCode, JobType> = {
-  [JobTypeCode.Mining]: {
-    code: JobTypeCode.Mining,
-    label: "Mining",
-    description:
-      "Jobs at mines (require power) and mining spots (unpowered) to produce metal.",
+  [JobTypeCode.MiningSpots]: {
+    code: JobTypeCode.MiningSpots,
+    label: "Mining Spots",
+    description: "Jobs at mining spots to produce metal.",
   },
-  [JobTypeCode.Power]: {
-    code: JobTypeCode.Power,
-    label: "Power",
-    description: "Jobs at reactors to produce power.",
+  [JobTypeCode.Mines]: {
+    code: JobTypeCode.Mines,
+    label: "Mines",
+    description: "Jobs at mines to produce metal while consuming power.",
   },
-  [JobTypeCode.Farming]: {
-    code: JobTypeCode.Farming,
-    label: "Farming",
+  [JobTypeCode.Farms]: {
+    code: JobTypeCode.Farms,
+    label: "Farms",
     description: "Jobs at farms to produce food.",
   },
-  [JobTypeCode.Manufacturing]: {
-    code: JobTypeCode.Manufacturing,
-    label: "Manufacturing",
+  [JobTypeCode.Factories]: {
+    code: JobTypeCode.Factories,
+    label: "Factories",
     description: "Jobs at factories to produce machinery from metal and power.",
   },
 };

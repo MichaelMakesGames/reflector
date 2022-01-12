@@ -466,8 +466,8 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       workRequired: MINE_WORK,
       numberEmployed: 0,
       maxNumberEmployed: 2,
-      jobType: JobTypeCode.Mining,
-      resourceChangeReason: "Mining",
+      jobType: JobTypeCode.Mines,
+      resourceChangeReason: "Mines",
     },
     description: {
       name: "Mine",
@@ -496,8 +496,8 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       workRequired: MINE_WORK,
       numberEmployed: 0,
       maxNumberEmployed: 1,
-      jobType: JobTypeCode.Mining,
-      resourceChangeReason: "Mining",
+      jobType: JobTypeCode.MiningSpots,
+      resourceChangeReason: "Mining Spots",
     },
     description: {
       name: "Mining Spot",
@@ -526,8 +526,8 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       workRequired: FARM_WORK,
       numberEmployed: 0,
       maxNumberEmployed: 1,
-      jobType: JobTypeCode.Farming,
-      resourceChangeReason: "Farming",
+      jobType: JobTypeCode.Farms,
+      resourceChangeReason: "Farms",
       onWorked: "ON_FARM_WORKED",
     },
     description: {
@@ -760,8 +760,8 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       workRequired: FACTORY_WORK,
       numberEmployed: 0,
       maxNumberEmployed: 2,
-      jobType: JobTypeCode.Manufacturing,
-      resourceChangeReason: "Manufacturing",
+      jobType: JobTypeCode.Factories,
+      resourceChangeReason: "Factories",
     },
     blocking: {
       moving: true,
