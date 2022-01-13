@@ -6,7 +6,7 @@ const messages = {
   "tutorials.basics.2":
     "Farms are free to build, but must be built on fertile land <entity>TERRAIN_FERTILE</entity>. <b>Click the location</b> you want to build. You might need to move if no fertile land is in range.<br></br>If you prefer keyboard controls, hold <kbd>shift</kbd> and press <kbd>wasd</kbd> or arrows to move the blueprint, then press <kbd>space</kbd> to build.",
   "tutorials.basics.3":
-    "Great! Your colonists need 10 food each per day, and 1 farm should be enough for now.<br></br>Unlike farms, most buildings require resources to build, so let's place a couple mining spots on ore for your other colonists to work at.<br></br><b>Select Production</b>, then <b>Mining Spot</b>, then place two of them on ore <entity>TERRAIN_ORE</entity>. You can hold down <b>Shift</b> when you click to place another.",
+    "Great! Your colonists need 10 food each per day, and 1 farm should be enough for now.<br></br>Unlike farms, most buildings require resources to build, so let's place a couple mining spots on ore for your other colonists to work at.<br></br><b>Select Work</b>, then <b>Mining Spot</b>, then place two of them on ore <entity>TERRAIN_ORE</entity>. You can hold down <b>Shift</b> when you click to place another.",
   "tutorials.basics.4":
     "That's one down, but one colonist still needs a job. Place another mining spot on ore <entity>ORE</entity>.",
   "tutorials.basics.5":
@@ -14,7 +14,7 @@ const messages = {
   "tutorials.basics.6":
     "You can skip your turn without moving by <b>clicking the wait button</b> at the bottom or pressing <kbd>z</kbd>.<br></br>Move or wait until you have 8 metal. It might take a few turns for your colonists to reach their work places if they haven't arrived already.",
   "tutorials.basics.7":
-    "Many buildings and jobs require power to function. To start producing power, let's build a windmill, under the <b>Production</b> category.",
+    "Many buildings and jobs require power to function. To start producing power, let's build a windmill, under the <b>Power</b> category.",
   "tutorials.basics.8":
     "Let's use that power and build a <b>Projector</b> from the <b>Defense</b> category!<br></br>Projectors let you place reflectors around them and are critical to defense.<br></br>Note the blue border while placing your projector -- that shows everywhere you can place reflectors. You can always place within 2 spaces of your character.",
   "tutorials.basics.9":
