@@ -11,6 +11,11 @@ function playerTookTurnHandler(
   state: WrappedState,
   action: ReturnType<typeof playerTookTurn>
 ): void {
+  state.setRaw({
+    ...state.raw,
+    lastMoveWasFast: false,
+  });
+
   turnEndSystems.forEach((system) => system(state));
   cosmeticSystems.forEach((system) => system(state));
   state.act.setAutoMovePathToCursor();

@@ -52,11 +52,12 @@ function moveHandler(
       !state.raw.lastMoveWasFast &&
       state.select.entitiesAtPosition(newPosition).some((e) => e.road) &&
       state.select.entitiesAtPosition(pos).some((e) => e.road);
-    state.setRaw({
-      ...state.raw,
-      lastMoveWasFast: isFastMove,
-    });
+
     if (isFastMove) {
+      state.setRaw({
+        ...state.raw,
+        lastMoveWasFast: true,
+      });
       state.act.logMessage({
         message:
           "You move fast on the road. You can move again this turn, or take another action.",
