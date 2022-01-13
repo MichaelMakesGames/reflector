@@ -125,7 +125,6 @@ function targetWeaponHandler(
         x: beam.lastPos.x + beam.dx,
         y: beam.lastPos.y + beam.dy,
       };
-      const entitiesAtLastPos = state.select.entitiesAtPosition(beam.lastPos);
       const entitiesAtNextPos = state.select.entitiesAtPosition(nextPos);
       const solidEntity = entitiesAtNextPos.find(
         (entity) => entity.blocking && entity.blocking.lasers
@@ -139,19 +138,8 @@ function targetWeaponHandler(
       const absorberEntity = entitiesAtNextPos.find(
         (entity) => entity.absorber
       );
-      const shieldEntity = entitiesAtNextPos.find((entity) => entity.shield);
-      const isShielded =
-        shieldEntity &&
-        !entitiesAtLastPos.some(
-          (e) =>
-            e.shield &&
-            shieldEntity.shield &&
-            e.shield.generator === shieldEntity.shield.generator
-        );
 
-      if (isShielded) {
-        beam.strength = 0;
-      } else if (
+      if (
         entitiesAtNextPos.some(
           (e) =>
             e.laser &&
