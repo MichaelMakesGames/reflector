@@ -9,9 +9,9 @@ export const VICTORY_POPULATION = 30;
 export const NEW_COLONISTS_PER_DAY = 3;
 export const BASE_LASER_STRENGTH = 100;
 
-export const WAVE_SIZE_CONSTANT = 2;
-export const WAVE_SIZE_POPULATION_MULTIPLIER = 1;
-export const WAVE_SIZE_DAY_MULTIPLIER = 3;
+export const WAVE_SIZE_CONSTANT = 5;
+export const WAVE_SIZE_POPULATION_MULTIPLIER = 2 / 3;
+export const WAVE_SIZE_DAY_MULTIPLIER = 2;
 
 export const MAP_WIDTH = 32;
 export const MAP_HEIGHT = MAP_WIDTH;
@@ -24,13 +24,11 @@ export const MAP_CSS_WIDTH = `min(calc(100vw - ${SIDE_BAR_CSS_WIDTH} - ${SIDE_BA
 }px)`;
 export const HEADER_CSS_WIDTH = `calc(${MAP_CSS_WIDTH} + ${SIDE_BAR_CSS_WIDTH} + ${SIDE_BAR_CSS_WIDTH})`;
 
-export const MINUTES_PER_TURN = 15;
-export const TURNS_PER_DAY = (24 * 60) / MINUTES_PER_TURN;
+export const TURNS_PER_DAY = 96;
 export const TURNS_PER_NIGHT = TURNS_PER_DAY / 2;
 export const END_OF_NIGHT_ENEMY_SPAWNING_BUFFER =
   Math.max(MAP_HEIGHT, MAP_WIDTH) / 2;
 export const BASE_IMMIGRATION_RATE = TURNS_PER_DAY;
-export const DAY_START_MINUTES = 6 * 60; // 6:00am
 export const VICTORY_ON_TURN = TURNS_PER_DAY * 10;
 
 export const FOOD_PER_COLONIST = 1;

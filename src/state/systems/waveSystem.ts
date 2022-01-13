@@ -42,7 +42,7 @@ export default function waveSystem(state: WrappedState): void {
         ENEMY_DRONE: 5 * (enemyWeightMultipliers.ENEMY_DRONE ?? 1),
         ENEMY_ARMORED: Math.max(
           0,
-          0 + 0.25 * day * (enemyWeightMultipliers.ENEMY_ARMORED ?? 1)
+          0 + 0.5 * day * (enemyWeightMultipliers.ENEMY_ARMORED ?? 1)
         ),
         ENEMY_FLYER: Math.max(
           0,
@@ -50,7 +50,7 @@ export default function waveSystem(state: WrappedState): void {
         ),
         ENEMY_BURROWER: Math.max(
           0,
-          0 + 0.25 * day * (enemyWeightMultipliers.ENEMY_BURROWER ?? 1)
+          0 + 0.5 * day * (enemyWeightMultipliers.ENEMY_BURROWER ?? 1)
         ),
         ENEMY_VOLATILE: Math.max(
           0,

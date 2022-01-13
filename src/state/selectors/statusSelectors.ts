@@ -1,6 +1,4 @@
 import {
-  DAY_START_MINUTES,
-  MINUTES_PER_TURN,
   STARTING_MORALE,
   TURNS_PER_DAY,
   TURNS_PER_NIGHT,
@@ -8,8 +6,8 @@ import {
 } from "../../constants";
 import { JobTypeCode } from "../../data/jobTypes";
 import { ResourceCode } from "../../data/resources";
-import { Pos, RawState } from "../../types";
 import { getDistance } from "../../lib/geometry";
+import { Pos, RawState } from "../../types";
 import { entitiesWithComps } from "./entitySelectors";
 
 export function population(state: RawState): number {
