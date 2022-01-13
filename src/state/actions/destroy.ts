@@ -84,7 +84,7 @@ function destroyHandler(
             "explosion_7",
           ]) || "",
           entity.pos,
-          { rollOff: 0.1, volume: 2 }
+          { rollOff: 0.1, volume: 1.5 }
         );
         for (const adjacentPos of [
           entity.pos,

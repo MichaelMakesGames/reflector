@@ -10,7 +10,7 @@ export interface SoundOptions {
 }
 
 export const DEFAULT_OPTIONS: Required<SoundOptions> = {
-  rollOff: 0.5,
+  rollOff: 0.75,
   volume: 1,
 };
 
