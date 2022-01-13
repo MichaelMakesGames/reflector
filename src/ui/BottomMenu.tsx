@@ -6,12 +6,14 @@ import { TILE_SIZE } from "../constants";
 import buildingCategories, {
   BuildingCategory,
 } from "../data/buildingCategories";
+import resources, { ResourceCode } from "../data/resources";
 import { useBoolean } from "../hooks";
 import { noFocusOnClick } from "../lib/controls";
 import { createEntityFromTemplate } from "../lib/entities";
 import notifications from "../lib/notifications";
 import actions from "../state/actions";
 import selectors from "../state/selectors";
+import { RawState } from "../types";
 import { ControlCode } from "../types/ControlCode";
 import { TemplateName } from "../types/TemplateName";
 import Demo from "./Demo";
@@ -373,6 +375,38 @@ function BuildingButton({
   index: number;
   callback: () => void;
 }) {
+  const dispatch = useDispatch();
+
+  const blueprint = createEntityFromTemplate(template);
+  const blueprintBuilds = blueprint.blueprint
+    ? blueprint.blueprint.builds
+    : "NONE";
+  const canAfford = useSelector((state: RawState) =>
+    selectors.canAffordToPay(
+      state,
+      blueprint.blueprint?.cost.resource ?? ResourceCode.Metal,
+      blueprint.blueprint?.cost.amount ?? 0
+    )
+  );
+
+  const callbackWithCostCheck = () => {
+    if (canAfford) {
+      callback();
+    } else {
+      dispatch(
+        actions.logMessage({
+          message: `Cannot afford ${blueprint.description?.name} (${
+            blueprint.blueprint?.cost.amount
+          } ${
+            resources[blueprint.blueprint?.cost.resource ?? ResourceCode.Metal]
+              .label
+          })`,
+          type: "error",
+        })
+      );
+    }
+  };
+
   const [settings] = useSettings();
   const controlCode = [
     ControlCode.Menu1,
@@ -388,14 +422,10 @@ function BuildingButton({
   ][index];
   useControl({
     code: controlCode,
-    callback,
+    callback: callbackWithCostCheck,
     group: HotkeyGroup.BuildingSelection,
   });
 
-  const blueprint = createEntityFromTemplate(template);
-  const blueprintBuilds = blueprint.blueprint
-    ? blueprint.blueprint.builds
-    : "NONE";
   return (
     <LazyTippy
       placement="right"
@@ -417,7 +447,7 @@ function BuildingButton({
         data-building={blueprintBuilds}
         type="button"
         className="flex flex-no-wrap items-baseline w-full text-left mb-1"
-        onClick={noFocusOnClick(callback)}
+        onClick={noFocusOnClick(callbackWithCostCheck)}
       >
         <Kbd light>{settings.keybindings[controlCode][0]}</Kbd>
         <span className="flex-1 ml-1 mr-3 inline-block">
@@ -426,6 +456,7 @@ function BuildingButton({
         </span>
         {blueprint.blueprint && blueprint.blueprint.cost.amount ? (
           <ResourceAmount
+            className={canAfford ? "" : "text-red"}
             resourceCode={blueprint.blueprint.cost.resource}
             amount={blueprint.blueprint.cost.amount}
           />
