@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Required } from "ts-toolbelt/out/Object/Required";
 import colonistStatuses, { ColonistStatusCode } from "../data/colonistStatuses";
 import resources, { ResourceCode } from "../data/resources";
-import { areConditionsMet } from "../lib/conditions";
 import {
   ActionControl,
   getActionsAvailableAtPos,
@@ -11,7 +10,6 @@ import {
 } from "../lib/controls";
 import { getHumanReadablePosition } from "../lib/geometry";
 import selectors from "../state/selectors";
-import wrapState from "../state/wrapState";
 import { Entity, RawState } from "../types";
 import { HotkeyGroup, useControl } from "./HotkeysProvider";
 import ResourceAmount from "./ResourceAmount";
@@ -45,12 +43,6 @@ export default function Inspector() {
 
   const blueprint = useSelector(selectors.blueprint);
   const blueprintDescription = blueprint ? blueprint.description : null;
-  const blueprintFailedConditions =
-    blueprint && blueprint.blueprint
-      ? blueprint.blueprint.validityConditions.filter(
-          (vc) => !areConditionsMet(wrapState(state), blueprint, vc.condition)
-        )
-      : [];
 
   return (
     <section className="p-2" data-section="INSPECTOR">
@@ -83,26 +75,11 @@ export default function Inspector() {
         </div>
       )}
 
-      {entitiesAtCursor?.some?.(
-        (e) => e.reflector && e.reflector.outOfRange
-      ) && (
-        <div className="text-yellow text-sm">
-          <Warning className="bg-yellow" /> Reflector out of range
-        </div>
-      )}
-
       {warnings.map((e) => (
         <div key={e.id} className="text-yellow text-sm">
           <Warning className="bg-yellow" /> {e.warning && e.warning.text}
         </div>
       ))}
-
-      {blueprintFailedConditions.length > 0 && (
-        <div className="text-red text-sm">
-          <Warning className="bg-red" />{" "}
-          {blueprintFailedConditions[0].invalidMessage}
-        </div>
-      )}
 
       {cursorPos && (
         <div className="mt-3">

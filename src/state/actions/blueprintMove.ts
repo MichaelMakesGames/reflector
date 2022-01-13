@@ -4,6 +4,7 @@ import { registerHandler } from "../handleAction";
 import { Pos } from "../../types";
 import WrappedState from "../../types/WrappedState";
 import { arePositionsEqual } from "../../lib/geometry";
+import { areConditionsMet } from "../../lib/conditions";
 
 const blueprintMove = createAction("BLUEPRINT_MOVE")<{
   to: Pos;
@@ -24,6 +25,13 @@ function blueprintMoveHandler(
   const isValid = validPositions.some((validPos) =>
     arePositionsEqual(validPos, newPos)
   );
+
+  const invalidMessage = isValid
+    ? ""
+    : blueprint.blueprint.validityConditions.filter(
+        (vc) => !areConditionsMet(state, blueprint, vc.condition)
+      )[0]?.invalidMessage ?? "";
+
   state.act.updateEntity({
     id: blueprint.id,
     pos: newPos,
@@ -31,6 +39,7 @@ function blueprintMoveHandler(
       ...blueprint.display,
       color: isValid ? colors.blueprint : colors.invalid,
     },
+    warning: invalidMessage ? { text: invalidMessage } : undefined,
   });
 
   state.act.bordersUpdate();

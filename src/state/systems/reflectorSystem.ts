@@ -33,6 +33,9 @@ export default function reflectorSystem(state: WrappedState): void {
             ...reflector.reflector,
             outOfRange: true,
           },
+          warning: {
+            text: "Reflector out of range",
+          },
           display: {
             ...reflector.display,
             tile: ["blank", "blank", "reflector", "reflector"],
@@ -47,6 +50,7 @@ export default function reflectorSystem(state: WrappedState): void {
           ...reflector.reflector,
           outOfRange: false,
         },
+        warning: undefined,
         display: {
           ...reflector.display,
           tile: "reflector",
