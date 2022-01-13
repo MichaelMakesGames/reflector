@@ -66,7 +66,7 @@ export default function MainMenu({ goBack, navigateTo }: RouterPageProps) {
         .getLoadPromise()
         .then(load)
         .then((save) => {
-          if (save) {
+          if (save && Array.isArray(save?.tutorials?.completed)) {
             save.tutorials.completed.forEach((tutorial) =>
               dispatch(actions.completeTutorial(tutorial))
             );
