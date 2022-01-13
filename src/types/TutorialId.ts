@@ -3,6 +3,6 @@ export enum TutorialId {
   Combat = "COMBAT",
   JobPriorities = "JOB_PRIORITIES",
   Morale = "MORALE",
-  Deconstruct = "DECONSTRUCT",
   Residence = "RESIDENCE",
+  Rotate = "ROTATE",
 }

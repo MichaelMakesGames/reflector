@@ -32,7 +32,7 @@ const tutorials: Record<TutorialId, Tutorial> = {
           );
         },
         elementHighlightSelectors: [
-          `[data-building-category="${BuildingCategoryCode.Production}"]`,
+          `[data-building-category="${BuildingCategoryCode.Work}"]`,
           `[data-building="BUILDING_FARM"]`,
         ],
       },
@@ -40,32 +40,33 @@ const tutorials: Record<TutorialId, Tutorial> = {
         text: "tutorials.basics.2",
         checkForCompletion: (prevState, nextState, action) => {
           return (
-            nextState.select
-              .entitiesWithTemplate("BUILDING_FARM")
-              .filter((e) => e.jobProvider).length >= 1
+            nextState.select.entitiesWithTemplate("BUILDING_FARM").length >= 1
           );
         },
       },
       {
         text: "tutorials.basics.3",
         checkForCompletion: (prevState, nextState, action) => {
-          return !nextState.select.blueprint();
+          return (
+            nextState.select.entitiesWithTemplate("BUILDING_MINING_SPOT")
+              .length >= 1
+          );
         },
         elementHighlightSelectors: [
-          `[data-section="BOTTOM_MENU"] [data-control-code="${ControlCode.Back}"]`,
+          `[data-building-category="${BuildingCategoryCode.Work}"]`,
+          `[data-building="BUILDING_MINING_SPOT"]`,
         ],
       },
       {
         text: "tutorials.basics.4",
         checkForCompletion: (prevState, nextState, action) => {
           return (
-            nextState.select
-              .entitiesWithTemplate("BUILDING_MINING_SPOT")
-              .filter((e) => e.jobProvider).length >= 1
+            nextState.select.entitiesWithTemplate("BUILDING_MINING_SPOT")
+              .length >= 2
           );
         },
         elementHighlightSelectors: [
-          `[data-building-category="${BuildingCategoryCode.Production}"]`,
+          `[data-building-category="${BuildingCategoryCode.Work}"]`,
           `[data-building="BUILDING_MINING_SPOT"]`,
         ],
       },
@@ -73,20 +74,18 @@ const tutorials: Record<TutorialId, Tutorial> = {
         text: "tutorials.basics.5",
         checkForCompletion: (prevState, nextState, action) => {
           return (
-            nextState.select
-              .entitiesWithTemplate("BUILDING_MINING_SPOT")
-              .filter((e) => e.jobProvider).length >= 2
+            nextState.select.entitiesWithTemplate("BUILDING_TENT").length >= 3
           );
         },
         elementHighlightSelectors: [
-          `[data-building-category="${BuildingCategoryCode.Production}"]`,
-          `[data-building="BUILDING_MINING_SPOT"]`,
+          `[data-building-category="${BuildingCategoryCode.Misc}"]`,
+          `[data-building="BUILDING_TENT"]`,
         ],
       },
       {
         text: "tutorials.basics.6",
         checkForCompletion: (prevState, nextState, action) => {
-          return nextState.select.resource(ResourceCode.Metal) >= 20;
+          return nextState.select.resource(ResourceCode.Metal) >= 8;
         },
         elementHighlightSelectors: [
           `[data-control-code="${ControlCode.Wait}"]`,
@@ -97,18 +96,30 @@ const tutorials: Record<TutorialId, Tutorial> = {
         text: "tutorials.basics.7",
         checkForCompletion: (prevState, nextState, action) => {
           return (
-            nextState.select
-              .entitiesWithTemplate("BUILDING_WINDMILL")
-              .filter((e) => e.production).length >= 1
+            nextState.select.entitiesWithTemplate("BUILDING_WINDMILL").length >=
+            1
           );
         },
         elementHighlightSelectors: [
-          `[data-building-category="${BuildingCategoryCode.Production}"]`,
+          `[data-building-category="${BuildingCategoryCode.Work}"]`,
           `[data-building="BUILDING_WINDMILL"]`,
         ],
       },
       {
         text: "tutorials.basics.8",
+        checkForCompletion: (prevState, nextState, action) => {
+          return (
+            nextState.select.entitiesWithTemplate("BUILDING_PROJECTOR_BASIC")
+              .length >= 1
+          );
+        },
+        elementHighlightSelectors: [
+          `[data-building-category="${BuildingCategoryCode.Defense}"]`,
+          `[data-building="BUILDING_PROJECTOR_BASIC"]`,
+        ],
+      },
+      {
+        text: "tutorials.basics.9",
         checkForCompletion: () => false,
         isDismissible: true,
       },
@@ -245,28 +256,8 @@ const tutorials: Record<TutorialId, Tutorial> = {
     ],
     triggerSelector: (state: RawState) =>
       selectors.areThereMoreJobsThanColonists(state) &&
-      !selectors.isNight(state),
-  },
-  [TutorialId.Deconstruct]: {
-    id: TutorialId.Deconstruct,
-    label: "Deconstruction",
-    steps: [
-      {
-        text: "tutorials.deconstruct.0",
-        checkForCompletion: (prevState, nextState, action) =>
-          action.type === getType(nextState.actions.executeRemoveBuilding),
-        isDismissible: true,
-      },
-      {
-        text: "tutorials.deconstruct.1",
-        checkForCompletion: () => false,
-        isDismissible: true,
-        elementHighlightSelectors: [`[data-section="INSPECTOR"]`],
-      },
-    ],
-    triggerSelector: (state: RawState) => {
-      return false; // disable for now
-    },
+      !selectors.isNight(state) &&
+      selectors.day(state) > 0,
   },
   [TutorialId.Residence]: {
     id: TutorialId.Residence,
@@ -276,10 +267,33 @@ const tutorials: Record<TutorialId, Tutorial> = {
         text: "tutorials.residence.0",
         checkForCompletion: () => false,
         isDismissible: true,
+        elementHighlightSelectors: [
+          `[data-building-category="${BuildingCategoryCode.Misc}"]`,
+          `[data-building="BUILDING_TENT"]`,
+          `[data-building="BUILDING_RESIDENCE"]`,
+        ],
       },
     ],
     triggerSelector: (state: RawState) =>
-      selectors.homelessColonists(state).length > 0 && selectors.isNight(state),
+      selectors.homelessColonists(state).length > 0 &&
+      selectors.isNight(state) &&
+      selectors.day(state) > 0,
+  },
+  [TutorialId.Rotate]: {
+    id: TutorialId.Rotate,
+    label: "Rotatable Buildings",
+    steps: [
+      {
+        text: "tutorials.rotate.0",
+        checkForCompletion: () => false,
+        isDismissible: true,
+        elementHighlightSelectors: [
+          `[data-control-code="${ControlCode.RotateBuilding}"]`,
+        ],
+      },
+    ],
+    triggerSelector: (state: RawState) =>
+      Boolean(selectors.blueprint(state)?.rotatable),
   },
 };
 
