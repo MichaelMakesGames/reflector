@@ -27,17 +27,14 @@ export default function MainMenu({ goBack, navigateTo }: RouterPageProps) {
   const stateDay = useSelector(selectors.day);
   const stateIsNight = useSelector(selectors.isNight);
 
-  const saveTurnOfDay = savedGame ? selectors.turnOfDay(savedGame) : 0;
-  const saveTurnOfNight = savedGame ? selectors.turnOfNight(savedGame) : 0;
-  const saveDay = savedGame ? selectors.day(savedGame) : 0;
-  const saveIsNight = savedGame ? selectors.isNight(savedGame) : false;
+  const { saveTurnOfDay, saveTurnOfNight, saveDay, saveIsNight, saveVersion } =
+    attemptToGetSaveInfo(savedGame);
 
   const turnOfDay = stateIsEmpty ? saveTurnOfDay : stateTurnOfDay;
   const turnOfNight = stateIsEmpty ? saveTurnOfNight : stateTurnOfNight;
   const day = stateIsEmpty ? saveDay : stateDay;
   const isNight = stateIsEmpty ? saveIsNight : stateIsNight;
 
-  const saveVersion = savedGame && selectors.version(savedGame);
   const codeVersion = VERSION;
   const versionIsMismatched = saveVersion !== codeVersion;
   const isUnstable = codeVersion.includes("unstable");
@@ -133,4 +130,30 @@ export default function MainMenu({ goBack, navigateTo }: RouterPageProps) {
       <MenuButton onClick={() => navigateTo("Credits")}>Credits</MenuButton>
     </Menu>
   );
+}
+
+function attemptToGetSaveInfo(savedGame: RawState | null) {
+  let saveTurnOfDay = 0;
+  let saveTurnOfNight = 0;
+  let saveDay = 0;
+  let saveIsNight = false;
+  let saveVersion: string = "UNKNOWN";
+
+  try {
+    saveTurnOfDay = savedGame ? selectors.turnOfDay(savedGame) : 0;
+  } catch {} // eslint-disable-line no-empty
+  try {
+    saveTurnOfNight = savedGame ? selectors.turnOfNight(savedGame) : 0;
+  } catch {} // eslint-disable-line no-empty
+  try {
+    saveDay = savedGame ? selectors.day(savedGame) : 0;
+  } catch {} // eslint-disable-line no-empty
+  try {
+    saveIsNight = savedGame ? selectors.isNight(savedGame) : false;
+  } catch {} // eslint-disable-line no-empty
+  try {
+    saveVersion = savedGame ? selectors.version(savedGame) : "UNKNOWN";
+  } catch {} // eslint-disable-line no-empty
+
+  return { saveTurnOfDay, saveTurnOfNight, saveDay, saveIsNight, saveVersion };
 }
