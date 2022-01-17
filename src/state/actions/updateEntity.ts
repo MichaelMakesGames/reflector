@@ -24,7 +24,7 @@ function updateEntityHandler(
     return;
   }
   const entity = { ...prev, ...partial };
-  const { entitiesByPosition, entitiesByComp } = state;
+  const { entitiesByPosition, entitiesByComp, entities } = state;
 
   for (const key in partial) {
     if (key !== "id" && key !== "template" && key !== "parentTemplate") {
@@ -65,16 +65,7 @@ function updateEntityHandler(
     }
   }
 
-  wrappedState.setRaw({
-    ...state,
-    entitiesByPosition,
-    entities: {
-      ...state.entities,
-      [entity.id]: {
-        ...entity,
-      },
-    },
-  });
+  entities[entity.id] = entity;
 }
 
 registerHandler(updateEntityHandler, updateEntity);

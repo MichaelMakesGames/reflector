@@ -29,22 +29,7 @@ function playerTookTurnHandler(
       [ResourceCode.Machinery]: [],
     },
   });
-  state.setRaw({
-    ...state.raw,
-    startOfLastTurn: {
-      ...(state.raw.startOfThisTurn || state.raw),
-      startOfThisTurn: null,
-      startOfLastTurn: null,
-    },
-  });
-  state.setRaw({
-    ...state.raw,
-    startOfThisTurn: {
-      ...state.raw,
-      startOfThisTurn: null,
-      startOfLastTurn: null,
-    },
-  });
+
   state.save(state.raw);
 }
 

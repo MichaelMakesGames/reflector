@@ -30,9 +30,6 @@ export interface RawState {
   tutorials: TutorialsState;
   lastMoveWasFast: boolean;
   bordersKey: string | null;
-
-  startOfThisTurn: RawState | null;
-  startOfLastTurn: RawState | null;
 }
 
 export interface TimeState {

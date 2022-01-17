@@ -10,11 +10,12 @@ export interface SoundOptions {
 }
 
 export const DEFAULT_OPTIONS: Required<SoundOptions> = {
-  rollOff: 0.75,
+  rollOff: 0.5,
   volume: 1,
 };
 
-const MUSIC_BASE_VOLUME = 0.25;
+const MUSIC_BASE_VOLUME = 0.15;
+const SFX_BASE_VOLUME = 0.25;
 export default class Audio {
   private sounds: Record<string, Howl> = {};
 
@@ -59,7 +60,10 @@ export default class Audio {
   play(soundName: string, options: SoundOptions = DEFAULT_OPTIONS) {
     const sound = this.sounds[soundName];
     const id = sound.play();
-    const volume = (options.volume || DEFAULT_OPTIONS.volume) * this.sfxVolume;
+    const volume =
+      (options.volume || DEFAULT_OPTIONS.volume) *
+      this.sfxVolume *
+      SFX_BASE_VOLUME;
     sound.volume(volume, id);
   }
 
@@ -71,7 +75,10 @@ export default class Audio {
     const sound = this.sounds[soundName];
     const id = sound.play();
 
-    const volume = (options.volume || DEFAULT_OPTIONS.volume) * this.sfxVolume;
+    const volume =
+      (options.volume || DEFAULT_OPTIONS.volume) *
+      this.sfxVolume *
+      SFX_BASE_VOLUME;
     sound.volume(volume, id);
 
     sound.pos(pos.x, pos.y, 0, id);
@@ -81,7 +88,7 @@ export default class Audio {
         refDistance: 1,
         maxDistance: 9999,
         distanceModel: "inverse",
-        panningModel: "HRTF",
+        panningModel: "equalpower",
       },
       id
     );
@@ -120,7 +127,10 @@ export default class Audio {
       const id = sound.play();
       this.positionalLoops[key] = [id, options];
       const volume =
-        (options.volume || DEFAULT_OPTIONS.volume) * this.sfxVolume;
+        (options.volume || DEFAULT_OPTIONS.volume) *
+        this.sfxVolume *
+        SFX_BASE_VOLUME;
+      console.warn(volume);
       sound.volume(volume, id);
       sound.loop(true, id);
       sound.pos(pos.x, pos.y, 0, id);
@@ -130,10 +140,11 @@ export default class Audio {
           refDistance: 1,
           maxDistance: 9999,
           distanceModel: "inverse",
-          panningModel: "HRTF",
+          panningModel: "equalpower",
         },
         id
       );
+      sound.play(id);
     }
   }
 
@@ -155,6 +166,9 @@ export default class Audio {
     Object.values(this.sounds)
       .filter((sound) => stopMusic || sound !== this.currentMusic)
       .forEach((sound) => sound.stop());
+    Object.entries(this.positionalLoops).forEach(([key]) =>
+      this.stopAtPos(...Audio.parsePositionalLoopKey(key))
+    );
   }
 
   playMusic(musicName: "night" | "day") {

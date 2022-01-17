@@ -1,10 +1,16 @@
-import { set, get } from "idb-keyval";
+import * as idb from "idb-keyval";
 import { RawState } from "../types";
 
 export function save(state: RawState): void {
-  set("save", state);
+  idb.setMany([
+    [`save-${state.time.turn}`, state],
+    ["save-latest", state],
+  ]);
 }
 
-export function load(): Promise<RawState | undefined> {
-  return get("save");
+export function load(
+  saveName: string = "save-latest"
+): Promise<RawState | undefined> {
+  console.warn(saveName);
+  return idb.get(saveName);
 }

@@ -78,7 +78,7 @@ function moveHandler(
         "colonist_move_4",
       ]) || "",
       newPosition,
-      { rollOff: 0.75 }
+      { rollOff: 0.5 }
     );
   } else if (entity.id === PLAYER_ID) {
     state.audio.setListenerPos(newPosition);
@@ -99,8 +99,7 @@ function moveHandler(
         "alien_move_3",
         "alien_move_4",
       ]) || "",
-      newPosition,
-      { rollOff: 0.1 }
+      newPosition
     );
   }
 }

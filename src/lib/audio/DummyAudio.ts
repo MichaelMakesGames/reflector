@@ -3,6 +3,8 @@ import { Pos } from "../../types";
 import { DEFAULT_OPTIONS, SoundOptions } from "./Audio";
 
 export default class DummyAudio {
+  public currentMusicName = "";
+
   load() {}
 
   play(soundName: string, options: SoundOptions = DEFAULT_OPTIONS) {}

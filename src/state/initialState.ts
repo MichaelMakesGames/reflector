@@ -59,8 +59,6 @@ export function createInitialState({
     lastAimingDirection: RIGHT,
     cursorPos: null,
     isAutoMoving: false,
-    startOfThisTurn: null,
-    startOfLastTurn: null,
     lastMoveWasFast: false,
     bordersKey: null,
     tutorials: {
@@ -74,12 +72,6 @@ export function createInitialState({
             },
           ],
     },
-  };
-
-  initialState.startOfThisTurn = {
-    ...initialState,
-    startOfThisTurn: null,
-    startOfLastTurn: null,
   };
 
   return initialState;

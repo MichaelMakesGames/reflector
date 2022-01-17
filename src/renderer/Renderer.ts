@@ -106,6 +106,7 @@ export default class Renderer {
       backgroundColor: hexToNumber(backgroundColor),
       antialias: false,
     });
+    this.app.ticker.maxFPS = 30;
   }
 
   public destroy() {

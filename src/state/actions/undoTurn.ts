@@ -3,21 +3,16 @@ import { registerHandler } from "../handleAction";
 import { RawState } from "../../types";
 import WrappedState from "../../types/WrappedState";
 
-const undoTurn = createAction("UNDO_TURN")();
+const undoTurn = createAction("UNDO_TURN")<RawState | null>();
 export default undoTurn;
 
 function undoTurnHandler(
   state: WrappedState,
   action: ReturnType<typeof undoTurn>
 ) {
-  if (state.raw.startOfLastTurn) {
-    const stateToLoad: RawState = {
-      ...state.raw.startOfLastTurn,
-      startOfLastTurn: null,
-      startOfThisTurn: state.raw.startOfLastTurn,
-    };
+  if (action.payload) {
     state.act.loadGame({
-      state: stateToLoad,
+      state: action.payload,
     });
     state.act.logMessage({
       message: "Reset to start of last turn.",

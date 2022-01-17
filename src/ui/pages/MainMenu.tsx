@@ -61,7 +61,7 @@ export default function MainMenu({ goBack, navigateTo }: RouterPageProps) {
     if (stateIsEmpty) {
       renderer
         .getLoadPromise()
-        .then(load)
+        .then(() => load("save-latest"))
         .then((save) => {
           if (save && Array.isArray(save?.tutorials?.completed)) {
             save.tutorials.completed.forEach((tutorial) =>

@@ -27,17 +27,21 @@ function loadGameHandler(
   state.select
     .entitiesWithComps("pos", "display")
     .forEach((entity) => state.renderer.addEntity(entity));
+
+  state.audio.stopAll({ stopMusic: false });
+  const musicName = state.select.isNight() ? "night" : "day";
+  if (state.audio.currentMusicName !== musicName) {
+    state.audio.playMusic(musicName);
+  }
+  if (state.select.entitiesWithComps("laser").length > 0) {
+    state.audio.loop("laser_active", { volume: 0.5 });
+  }
+
   cosmeticSystems.forEach((system) => system(state));
   if (state.select.isNight()) {
     state.renderer.setBackgroundColor(colors.backgroundNight);
   } else {
     state.renderer.setBackgroundColor(colors.backgroundDay);
-  }
-
-  state.audio.stopAll({ stopMusic: false });
-  state.audio.playMusic(state.select.isNight() ? "night" : "day");
-  if (state.select.entitiesWithComps("laser").length > 0) {
-    state.audio.loop("laser_active", { volume: 0.5 });
   }
 }
 

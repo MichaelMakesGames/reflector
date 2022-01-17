@@ -6,6 +6,7 @@ import Modal from "./Modal";
 import HotkeyButton from "./HotkeyButton";
 import { ControlCode } from "../types/ControlCode";
 import { HotkeyGroup } from "./HotkeysProvider";
+import { load } from "../lib/gameSave";
 
 export default function GameOver({
   navigateTo,
@@ -18,6 +19,7 @@ export default function GameOver({
   const player = useSelector(selectors.player);
   const morale = useSelector(selectors.morale);
   const population = useSelector(selectors.population);
+  const turn = useSelector(selectors.turn);
 
   if (!gameOver) return null;
 
@@ -48,7 +50,11 @@ export default function GameOver({
             className="ml-2"
             controlCode={ControlCode.Menu2}
             hotkeyGroup={HotkeyGroup.GameOver}
-            callback={() => dispatch(actions.undoTurn())}
+            callback={() =>
+              load(`save-${turn - 1}`)
+                .catch(() => null)
+                .then((state) => dispatch(actions.undoTurn(state ?? null)))
+            }
           />
         )}
         {victory && (

@@ -16,12 +16,8 @@ function removeEntitiesHandler(
   const { raw: state } = wrappedState;
   const entityIds = action.payload.filter((id) => state.entities[id]);
 
-  const entities = {
-    ...state.entities,
-  };
-
   let isRemovingReflector = false;
-  const { entitiesByPosition, entitiesByComp } = state;
+  const { entitiesByPosition, entitiesByComp, entities } = state;
 
   for (const id of entityIds) {
     const entity = entities[id];
@@ -56,12 +52,6 @@ function removeEntitiesHandler(
 
     delete entities[id];
   }
-
-  wrappedState.setRaw({
-    ...state,
-    entitiesByPosition,
-    entities,
-  });
 
   if (isRemovingReflector) {
     retargetLaserOnReflectorChange(wrappedState);

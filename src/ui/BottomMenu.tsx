@@ -10,6 +10,7 @@ import resources, { ResourceCode } from "../data/resources";
 import { useBoolean } from "../hooks";
 import { noFocusOnClick } from "../lib/controls";
 import { createEntityFromTemplate } from "../lib/entities";
+import { load } from "../lib/gameSave";
 import notifications from "../lib/notifications";
 import actions from "../state/actions";
 import selectors from "../state/selectors";
@@ -33,6 +34,7 @@ export default function BottomMenu() {
   const dispatch = useDispatch();
   const blueprint = useSelector(selectors.blueprint);
   const isWeaponActive = useSelector(selectors.isWeaponActive);
+  const turn = useSelector(selectors.turn);
   const [settings] = useSettings();
 
   const cancel = useCallback(() => {
@@ -219,7 +221,11 @@ export default function BottomMenu() {
       <IconButton
         label="Undo Turn"
         controlCode={ControlCode.Undo}
-        callback={() => dispatch(actions.undoTurn())}
+        callback={() =>
+          load(`save-${turn - 1}`)
+            .catch(() => null)
+            .then((state) => dispatch(actions.undoTurn(state ?? null)))
+        }
         icon={<Icons.Undo />}
       />
       <IconButton

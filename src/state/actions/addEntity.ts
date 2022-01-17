@@ -13,10 +13,9 @@ function addEntityHandler(
   wrappedState: WrappedState,
   action: ReturnType<typeof addEntity>
 ): void {
-  let state = wrappedState.raw;
   const entity = action.payload;
 
-  const { entitiesByPosition, entitiesByComp } = state;
+  const { entities, entitiesByPosition, entitiesByComp } = wrappedState.raw;
 
   for (const key in entity) {
     if (
@@ -42,17 +41,7 @@ function addEntityHandler(
     );
   }
 
-  state = {
-    ...state,
-    entitiesByPosition,
-    entitiesByComp,
-    entities: {
-      ...state.entities,
-      [entity.id]: entity,
-    },
-  };
-
-  wrappedState.setRaw(state);
+  entities[entity.id] = entity;
 
   if (entity.reflector && entity.pos) {
     retargetLaserOnReflectorChange(wrappedState, entity.pos);
