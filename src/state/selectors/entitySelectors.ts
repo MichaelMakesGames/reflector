@@ -18,15 +18,26 @@ export function entitiesWithComps<C extends keyof Entity>(
   state: RawState,
   ...comps: C[]
 ): Required<Entity, C>[] {
-  const byComps = comps
-    .map((comp) => state.entitiesByComp[comp] || new Set())
-    .sort((a, b) => a.size - b.size);
-  const [smallest, ...rest] = byComps;
-  const ids = Array.from(smallest).filter((id) =>
-    rest.every((idSet) => idSet.has(id))
-  );
-  const entities = ids.map((id) => state.entities[id]);
-  return entities as unknown as Required<Entity, C>[];
+  const entities: any[] = [];
+  let ids: string[] = [];
+  if (comps.length === 1) {
+    if (state.entitiesByComp[comps[0]]) {
+      ids = Array.from(state.entitiesByComp[comps[0]]);
+    }
+  } else {
+    const byComps = comps
+      .map((comp) => state.entitiesByComp[comp] || new Set())
+      .sort((a, b) => a.size - b.size);
+    const [smallest, ...rest] = byComps;
+    ids = Array.from(smallest).filter((id) =>
+      rest.every((idSet) => idSet.has(id))
+    );
+  }
+
+  for (let i = 0; i < ids.length; i++) {
+    entities.push(state.entities[ids[i]]);
+  }
+  return entities;
 }
 
 export function entitiesWithTemplate(state: RawState, template: TemplateName) {

@@ -1,6 +1,6 @@
 import Tippy from "@tippyjs/react";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "../GameProvider";
 import { VERSION } from "../../constants";
 import audio from "../../lib/audio";
 import { load } from "../../lib/gameSave";

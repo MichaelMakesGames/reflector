@@ -1,7 +1,7 @@
 import Tippy from "@tippyjs/react";
 import React from "react";
 import { useIntl } from "react-intl";
-import { useSelector } from "react-redux";
+import { useSelector } from "./GameProvider";
 import resources, { Resource } from "../data/resources";
 import selectors from "../state/selectors";
 import { RawState } from "../types";

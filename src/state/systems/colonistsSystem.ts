@@ -2,7 +2,7 @@ import { Required } from "ts-toolbelt/out/Object/Required";
 import { ColonistStatusCode } from "../../data/colonistStatuses";
 import { executeEffect } from "../../data/effects";
 import resources, { ResourceCode } from "../../data/resources";
-import { getDirectionTowardTarget } from "../../lib/ai";
+import { getDirectionAndPathToTarget } from "../../lib/ai";
 import {
   arePositionsEqual,
   getAdjacentPositions,
@@ -15,6 +15,8 @@ import { Entity, JobProvider, Pos } from "../../types";
 import WrappedState from "../../types/WrappedState";
 
 export default function colonistsSystem(state: WrappedState): void {
+  state.setRaw({ ...state.raw, movementCostCache: {} });
+
   if (!state.select.isNight() || state.select.isFirstTurnOfNight()) {
     for (const colonist of state.select.colonists()) {
       clearResidence(state, colonist);
@@ -106,6 +108,8 @@ export default function colonistsSystem(state: WrappedState): void {
       }
     });
   }
+
+  state.setRaw({ ...state.raw, movementCostCache: {} });
 }
 
 function clearResidence(
@@ -210,7 +214,7 @@ function tryToMove(
   colonist: Required<Entity, "colonist" | "pos">,
   pos: Pos
 ): boolean {
-  const direction = getDirectionTowardTarget(
+  const [direction] = getDirectionAndPathToTarget(
     colonist.pos,
     pos,
     colonist,
@@ -222,7 +226,7 @@ function tryToMove(
       colonist.id
     ) as typeof colonist;
     if (state.select.hasRoad(updatedColonist.pos)) {
-      const secondDirection = getDirectionTowardTarget(
+      const [secondDirection] = getDirectionAndPathToTarget(
         updatedColonist.pos,
         pos,
         colonist,

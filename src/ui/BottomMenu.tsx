@@ -1,7 +1,7 @@
 /* global document */
 import Tippy from "@tippyjs/react";
 import React, { useCallback, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "./GameProvider";
 import { TILE_SIZE } from "../constants";
 import buildingCategories, {
   BuildingCategory,

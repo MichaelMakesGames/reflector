@@ -1,6 +1,6 @@
 /* global document */
 import React, { ReactElement, useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
+import { useSelector } from "./GameProvider";
 import { TILE_SIZE } from "../constants";
 import { useBoolean } from "../hooks";
 import renderer from "../renderer";

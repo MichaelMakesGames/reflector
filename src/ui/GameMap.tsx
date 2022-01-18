@@ -1,6 +1,6 @@
 /* global document */
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "./GameProvider";
 // @ts-ignore
 import cursorImages from "../assets/tiles/cursor_*.png";
 import {

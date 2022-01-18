@@ -58,13 +58,15 @@ export default class Audio {
   }
 
   play(soundName: string, options: SoundOptions = DEFAULT_OPTIONS) {
-    const sound = this.sounds[soundName];
-    const id = sound.play();
-    const volume =
-      (options.volume || DEFAULT_OPTIONS.volume) *
-      this.sfxVolume *
-      SFX_BASE_VOLUME;
-    sound.volume(volume, id);
+    delay(10).then(() => {
+      const sound = this.sounds[soundName];
+      const id = sound.play();
+      const volume =
+        (options.volume || DEFAULT_OPTIONS.volume) *
+        this.sfxVolume *
+        SFX_BASE_VOLUME;
+      sound.volume(volume, id);
+    });
   }
 
   playAtPos(
@@ -72,26 +74,28 @@ export default class Audio {
     pos: Pos,
     options: SoundOptions = DEFAULT_OPTIONS
   ) {
-    const sound = this.sounds[soundName];
-    const id = sound.play();
+    delay(10).then(() => {
+      const sound = this.sounds[soundName];
+      const id = sound.play();
 
-    const volume =
-      (options.volume || DEFAULT_OPTIONS.volume) *
-      this.sfxVolume *
-      SFX_BASE_VOLUME;
-    sound.volume(volume, id);
+      const volume =
+        (options.volume || DEFAULT_OPTIONS.volume) *
+        this.sfxVolume *
+        SFX_BASE_VOLUME;
+      sound.volume(volume, id);
 
-    sound.pos(pos.x, pos.y, 0, id);
-    sound.pannerAttr(
-      {
-        rolloffFactor: options.rollOff || DEFAULT_OPTIONS.rollOff,
-        refDistance: 1,
-        maxDistance: 9999,
-        distanceModel: "inverse",
-        panningModel: "equalpower",
-      },
-      id
-    );
+      sound.pos(pos.x, pos.y, 0, id);
+      sound.pannerAttr(
+        {
+          rolloffFactor: options.rollOff || DEFAULT_OPTIONS.rollOff,
+          refDistance: 1,
+          maxDistance: 9999,
+          distanceModel: "inverse",
+          panningModel: "equalpower",
+        },
+        id
+      );
+    });
   }
 
   setListenerPos(pos: Pos) {
@@ -121,31 +125,32 @@ export default class Audio {
     pos: Pos,
     options: SoundOptions = DEFAULT_OPTIONS
   ) {
-    const key = Audio.makePositionalLoopKey(soundName, pos);
-    if (!this.positionalLoops[key]) {
-      const sound = this.sounds[soundName];
-      const id = sound.play();
-      this.positionalLoops[key] = [id, options];
-      const volume =
-        (options.volume || DEFAULT_OPTIONS.volume) *
-        this.sfxVolume *
-        SFX_BASE_VOLUME;
-      console.warn(volume);
-      sound.volume(volume, id);
-      sound.loop(true, id);
-      sound.pos(pos.x, pos.y, 0, id);
-      sound.pannerAttr(
-        {
-          rolloffFactor: options.rollOff || DEFAULT_OPTIONS.rollOff,
-          refDistance: 1,
-          maxDistance: 9999,
-          distanceModel: "inverse",
-          panningModel: "equalpower",
-        },
-        id
-      );
-      sound.play(id);
-    }
+    delay(10).then(() => {
+      const key = Audio.makePositionalLoopKey(soundName, pos);
+      if (!this.positionalLoops[key]) {
+        const sound = this.sounds[soundName];
+        const id = sound.play();
+        this.positionalLoops[key] = [id, options];
+        const volume =
+          (options.volume || DEFAULT_OPTIONS.volume) *
+          this.sfxVolume *
+          SFX_BASE_VOLUME;
+        sound.volume(volume, id);
+        sound.loop(true, id);
+        sound.pos(pos.x, pos.y, 0, id);
+        sound.pannerAttr(
+          {
+            rolloffFactor: options.rollOff || DEFAULT_OPTIONS.rollOff,
+            refDistance: 0,
+            maxDistance: 9999,
+            distanceModel: "inverse",
+            panningModel: "equalpower",
+          },
+          id
+        );
+        sound.play(id);
+      }
+    });
   }
 
   stopAtPos(soundName: string, pos: Pos) {
@@ -288,3 +293,7 @@ Howl.prototype.volume = function volume(...args: number[]) {
 
   return self;
 };
+
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, 10));
+}

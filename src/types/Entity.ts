@@ -67,6 +67,7 @@ export interface AI {
   target: Pos | null;
   plannedAction: "MOVE_OR_ATTACK" | "DIG" | null;
   plannedActionDirection: Direction | null;
+  plannedPath?: Pos[] | null;
 }
 
 export interface DirectionIndicator {}

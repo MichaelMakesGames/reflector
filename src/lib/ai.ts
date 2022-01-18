@@ -14,6 +14,7 @@ import {
   getPosKey,
 } from "./geometry";
 import { sum } from "./math";
+import { EMPTY_DIR, EMPTY_POS } from "../constants";
 
 interface AStarParams {
   from: Pos;
@@ -151,49 +152,13 @@ function isDestructibleNonEnemy(
   );
 }
 
-export function getDirectionTowardTarget(
+export function getDirectionAndPathToTarget(
   from: Pos,
   to: Pos,
   actor: Entity,
   state: WrappedState
-): Direction | null {
-  const aiEntities = state.select.entitiesWithComps("ai", "pos");
-  const aiEntityIds = new Set(aiEntities.map((e) => e.id));
-  const aiPlannedPositions = new Set(
-    aiEntities
-      .map((e) =>
-        e.ai.plannedActionDirection
-          ? getPositionToDirection(e.pos, e.ai.plannedActionDirection)
-          : e.pos
-      )
-      .map(getPosKey)
-  );
-  const getCost = (pos: Pos): number => {
-    const nonAiEntitiesAtPosition = state.select
-      .entitiesAtPosition(pos)
-      .filter((e) => !aiEntityIds.has(e.id));
-    const passable =
-      (getDistance(from, pos) > 2 || !aiPlannedPositions.has(getPosKey(pos))) &&
-      (arePositionsEqual(pos, from) ||
-        arePositionsEqual(pos, to) ||
-        nonAiEntitiesAtPosition.every(
-          (e) =>
-            actorIsNotBlockedByEntity(state, actor, e) ||
-            isDestructibleNonEnemy(state, actor, e)
-        ));
-
-    if (!passable) return Infinity;
-    return (
-      (1 +
-        Math.max(
-          0,
-          ...nonAiEntitiesAtPosition.map((e) =>
-            e.destructible ? e.destructible.movementCost || 1 : 0
-          )
-        )) *
-      (actor.colonist && !nonAiEntitiesAtPosition.some((e) => e.road) ? 2 : 1)
-    );
-  };
+): [Direction, Pos[]] | [null, null] {
+  const getCost = makeCostFn(from, to, actor, state);
   const path = aStar({
     from,
     to,
@@ -201,9 +166,49 @@ export function getDirectionTowardTarget(
     includeStart: false,
   });
   if (path && path.length) {
-    return { dx: path[0].x - from.x, dy: path[0].y - from.y };
+    return [{ dx: path[0].x - from.x, dy: path[0].y - from.y }, path];
   }
-  return null;
+  return [null, null];
+}
+
+function makeCostFn(from: Pos, to: Pos, actor: Entity, state: WrappedState) {
+  const costFn = (pos: Pos): number => {
+    const posKey = getPosKey(pos);
+    if (state.raw.movementCostCache && state.raw.movementCostCache[posKey])
+      return state.raw.movementCostCache[posKey];
+
+    const nonAiEntitiesAtPosition = state.select
+      .entitiesAtPosition(pos)
+      .filter((e) => !e.ai);
+
+    const passable =
+      posKey === getPosKey(from) ||
+      posKey === getPosKey(to) ||
+      nonAiEntitiesAtPosition.every(
+        (e) =>
+          actorIsNotBlockedByEntity(state, actor, e) ||
+          isDestructibleNonEnemy(state, actor, e)
+      );
+
+    if (!passable) return Infinity;
+    const cost =
+      (1 +
+        Math.max(
+          0,
+          ...nonAiEntitiesAtPosition.map((e) =>
+            e.destructible ? e.destructible.movementCost || 1 : 0
+          )
+        )) *
+      (actor.colonist && !nonAiEntitiesAtPosition.some((e) => e.road) ? 2 : 1);
+
+    if (state.raw.movementCostCache) {
+      // eslint-disable-next-line no-param-reassign
+      state.raw.movementCostCache[posKey] = cost;
+    }
+
+    return cost;
+  };
+  return costFn;
 }
 
 export function getPathWithoutCosts(
@@ -255,6 +260,19 @@ export function executePlan(
       state.act.destroyPos({ target: targetPos, from: pos });
     } else {
       state.act.move({ entityId, ...ai.plannedActionDirection });
+      if (
+        ai.plannedPath &&
+        arePositionsEqual(
+          state.select.entityById(entityId).pos,
+          ai.plannedPath[0]
+        )
+      ) {
+        console.warn("shifting planned path");
+        state.act.updateEntity({
+          id: entityId,
+          ai: { ...ai, plannedPath: ai.plannedPath.slice(1) },
+        });
+      }
     }
   } else if (ai.plannedAction === "DIG") {
     if (ai.type === "BURROWED") {
@@ -311,7 +329,12 @@ export function makePlan(
     }
   }
 
-  const direction = getDirectionTowardTarget(entity.pos, target, entity, state);
+  const [direction, path] = getDirectionAndPathWithCache(
+    pos,
+    target,
+    entity,
+    state
+  );
   if (!direction) return;
 
   if (ai.type === "BURROWER" || ai.type === "BURROWED") {
@@ -342,6 +365,34 @@ export function makePlan(
       ...ai,
       plannedAction: "MOVE_OR_ATTACK",
       plannedActionDirection: direction,
+      plannedPath: path,
     },
   });
+}
+
+function getDirectionAndPathWithCache(
+  from: Pos,
+  to: Pos,
+  actor: Entity,
+  state: WrappedState
+): [Direction, Pos[]] | [null, null] {
+  // return getDirectionAndPathToTarget(from, to, actor, state);
+
+  const { ai } = actor;
+  const getCost = makeCostFn(from, to, actor, state);
+  if (
+    ai &&
+    ai.plannedPath &&
+    ai.plannedPath.length &&
+    arePositionsEqual(to, ai.plannedPath[ai.plannedPath.length - 1]) &&
+    Number.isFinite(getCost(ai.plannedPath[0])) &&
+    getDistance(from, ai.plannedPath[0], true) === 1
+  ) {
+    return [
+      { dx: ai.plannedPath[0].x - from.x, dy: ai.plannedPath[0].y - from.y },
+      ai.plannedPath,
+    ];
+  } else {
+    return getDirectionAndPathToTarget(from, to, actor, state);
+  }
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch } from "../GameProvider";
 import audio from "../../lib/audio";
 import actions from "../../state/actions";
 import Menu from "../Menu";

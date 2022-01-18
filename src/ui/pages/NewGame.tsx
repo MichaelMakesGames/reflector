@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
 import { RNG } from "rot-js";
 import mapTypes from "../../data/mapTypes";
 import actions from "../../state/actions";
+import { useDispatch } from "../GameProvider";
 import Menu from "../Menu";
 import MenuButton from "../MenuButton";
 import MenuOptionSelector from "../MenuOptionSelector";

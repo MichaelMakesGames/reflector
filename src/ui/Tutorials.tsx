@@ -3,7 +3,7 @@ import Tippy from "@tippyjs/react";
 import React, { useEffect, useState } from "react";
 import Draggable from "react-draggable";
 import { useIntl } from "react-intl";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "./GameProvider";
 import tutorials from "../data/tutorials";
 import { useBoolean } from "../hooks";
 import { noFocusOnClick } from "../lib/controls";

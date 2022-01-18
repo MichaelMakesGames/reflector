@@ -11,6 +11,5 @@ export function save(state: RawState): void {
 export function load(
   saveName: string = "save-latest"
 ): Promise<RawState | undefined> {
-  console.warn(saveName);
   return idb.get(saveName);
 }

@@ -1,3 +1,5 @@
+import { Direction, Pos } from "./types";
+
 export const VERSION = "alpha-3.0.0-unstable";
 export const PLAYER_ID = "PLAYER";
 export const CURSOR_ID = "UI_CURSOR";
@@ -59,3 +61,6 @@ export const UP = { dx: 0, dy: -1 };
 export const DEMO_PAUSE_MICRO = 10;
 export const DEMO_PAUSE_SHORT = 500;
 export const DEMO_PAUSE_LONG = 1000;
+
+export const EMPTY_POS: Pos = { x: 0, y: 0 };
+export const EMPTY_DIR: Direction = { dx: 0, dy: 0 };

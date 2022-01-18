@@ -11,7 +11,9 @@ export function fromPosKey(posKey: string): Pos {
   return { x, y };
 }
 
-export function arePositionsEqual(pos1: Pos, pos2: Pos) {
+export function arePositionsEqual(pos1?: null | Pos, pos2?: null | Pos) {
+  if (!pos1 && !pos2) return true;
+  if (!pos1 || !pos2) return false;
   return pos1.x === pos2.x && pos1.y === pos2.y;
 }
 

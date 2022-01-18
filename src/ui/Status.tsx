@@ -1,6 +1,6 @@
 import Tippy from "@tippyjs/react";
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector } from "./GameProvider";
 import { NEW_COLONISTS_PER_DAY } from "../constants";
 import selectors from "../state/selectors";
 

@@ -1,5 +1,4 @@
 import React, { useCallback, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Required } from "ts-toolbelt/out/Object/Required";
 import colonistStatuses, { ColonistStatusCode } from "../data/colonistStatuses";
 import resources, { ResourceCode } from "../data/resources";
@@ -11,6 +10,7 @@ import {
 import { getHumanReadablePosition } from "../lib/geometry";
 import selectors from "../state/selectors";
 import { Entity, RawState } from "../types";
+import { useDispatch, useSelector } from "./GameProvider";
 import { HotkeyGroup, useControl } from "./HotkeysProvider";
 import ResourceAmount from "./ResourceAmount";
 import { useSettings } from "./SettingsProvider";

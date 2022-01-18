@@ -1,7 +1,7 @@
 import Tippy from "@tippyjs/react";
 import React, { useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "./GameProvider";
 import colors from "../colors";
 import colonistStatuses, { ColonistStatusCode } from "../data/colonistStatuses";
 import jobTypes, { JobTypeCode } from "../data/jobTypes";

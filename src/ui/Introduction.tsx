@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
 import { useBoolean } from "../hooks";
-import { useControl, HotkeyGroup } from "./HotkeysProvider";
 import selectors from "../state/selectors";
-import Modal from "./Modal";
 import { ControlCode } from "../types/ControlCode";
-import Kbd from "./Kbd";
+import { useSelector } from "./GameProvider";
 import HotkeyButton from "./HotkeyButton";
+import { HotkeyGroup, useControl } from "./HotkeysProvider";
+import Kbd from "./Kbd";
+import Modal from "./Modal";
 
 export default function Introduction() {
   const [isOpen, open, close] = useBoolean(false);

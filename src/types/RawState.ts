@@ -30,6 +30,7 @@ export interface RawState {
   tutorials: TutorialsState;
   lastMoveWasFast: boolean;
   bordersKey: string | null;
+  movementCostCache?: Record<string, number>;
 }
 
 export interface TimeState {
