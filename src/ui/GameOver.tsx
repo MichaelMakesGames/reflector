@@ -26,6 +26,12 @@ export default function GameOver({
   return (
     <Modal isOpen>
       <h2 className="text-xl">{victory ? "Victory!" : "Defeat"}</h2>
+      {victory && (
+        <p>
+          Congratulations, you survived 10 days! You can keep on playing against
+          increasingly difficult waves.
+        </p>
+      )}
       {!player && (
         <p>You died. Don&apos;t let an enemy attack your character.</p>
       )}
