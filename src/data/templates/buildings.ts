@@ -275,7 +275,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     description: {
       name: "Shield Generator",
       description:
-        "Blocks enemies and lasers. Needs 10 power per turn while charging, and 5 power once charged.",
+        "Holds up to 3 charges that block enemies. Uses 10 power while charging, then 5 power to maintain.",
     },
     demo: {
       width: 6,
