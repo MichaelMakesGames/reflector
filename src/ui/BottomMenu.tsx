@@ -360,7 +360,7 @@ function BuildingCategoryMenu({
           type="button"
           onClick={noFocusOnClick(deactivateWeaponAndToggle)}
           style={buttonStyle}
-          className={buttonClassName}
+          className={`${buttonClassName} ${isOpen ? "border-white z-20" : ""}`}
         >
           <Kbd className="text-xs mr-1 pt-0">
             {settings.keybindings[controlCode][0]}

@@ -25,10 +25,10 @@ export default function waveSystem(state: WrappedState): void {
     state.select.turnOfDay() !== 0
   ) {
     const day = state.select.day();
-    const waveSize =
-      WAVE_SIZE_CONSTANT +
-      WAVE_SIZE_POPULATION_MULTIPLIER * state.select.population() +
-      WAVE_SIZE_DAY_MULTIPLIER * day;
+    const waveSize = 50;
+    // WAVE_SIZE_CONSTANT +
+    // WAVE_SIZE_POPULATION_MULTIPLIER * state.select.population() +
+    // WAVE_SIZE_DAY_MULTIPLIER * day;
     const numberOfSpawnTurns =
       TURNS_PER_NIGHT - END_OF_NIGHT_ENEMY_SPAWNING_BUFFER;
     const spawnsThisTurn =
