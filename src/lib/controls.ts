@@ -1,8 +1,9 @@
 /* global navigator */
+import resources from "../data/resources";
 import actions from "../state/actions";
 import selectors from "../state/selectors";
 import wrapState from "../state/wrapState";
-import { Action, Pos, RawState } from "../types";
+import { Action, Pos, RawState, Rebuildable } from "../types";
 import { ControlCode } from "../types/ControlCode";
 import { canPlaceReflector } from "./building";
 import { createEntityFromTemplate } from "./entities";
@@ -75,10 +76,16 @@ export function getQuickAction(
 
   const rubble = entitiesAtPos.find((e) => e.rebuildable);
   if (rubble) {
+    const blueprint = createEntityFromTemplate(
+      (rubble.rebuildable as Rebuildable).blueprint
+    );
+    const cost = blueprint?.blueprint?.cost;
     return {
       action: actions.rebuild(rubble.id),
       cursor: "build",
-      label: "Rebuild",
+      label: `Rebuild${
+        cost ? ` (${cost.amount} ${resources[cost.resource].label})` : ""
+      }`,
     };
   }
 
@@ -130,8 +137,14 @@ function addRebuildAction(state: RawState, pos: Pos, results: ActionControl[]) {
   const entitiesAtPos = selectors.entitiesAtPosition(state, pos);
   const rubble = entitiesAtPos.find((e) => e.rebuildable);
   if (rubble) {
+    const blueprint = createEntityFromTemplate(
+      (rubble.rebuildable as Rebuildable).blueprint
+    );
+    const cost = blueprint?.blueprint?.cost;
     results.push({
-      label: "Rebuild",
+      label: `Rebuild${
+        cost ? ` (${cost.amount} ${resources[cost.resource].label})` : ""
+      }`,
       code: ControlCode.Rebuild,
       action: actions.rebuild(rubble.id),
     });

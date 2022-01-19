@@ -821,6 +821,9 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       attackPriority: 0,
       movementCost: 2,
     },
+    rebuildable: {
+      blueprint: "BLUEPRINT_WALL",
+    },
     stopsLaser: {},
     description: {
       name: "Cracked Wall",
@@ -844,6 +847,9 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     destructible: {
       attackPriority: 0,
+    },
+    rebuildable: {
+      blueprint: "BLUEPRINT_WALL",
     },
     description: {
       name: "Crumbling Wall",
