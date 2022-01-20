@@ -8,7 +8,7 @@ const messages = {
   "tutorials.basics.3":
     "Great! Your colonists need 10 food each per day, and 1 farm should be enough for now.<br></br>Unlike farms, most buildings require resources to build, so let's place a couple mining spots on ore for your other colonists to work at.<br></br><b>Select Work</b>, then <b>Mining Spot</b>, then place two of them on ore <entity>TERRAIN_ORE</entity>. You can hold down <b>Shift</b> when you click to place another.",
   "tutorials.basics.4":
-    "That's one down, but one colonist still needs a job. Place another mining spot on ore <entity>ORE</entity>.",
+    "That's one down, but one colonist still needs a job. Place another mining spot on ore <entity>TERRAIN_ORE</entity>.",
   "tutorials.basics.5":
     "Your colonists will automatically move to your farms and mining spots to work, but remember, they only move when you take a turn (move, build, fire, or wait).<br></br>Your colonists will need somewhere to sleep at night. Build <b>3 Tents</b> from the <b>Misc</b> category.",
   "tutorials.basics.6":

@@ -148,7 +148,6 @@ export default class Audio {
           },
           id
         );
-        sound.play(id);
       }
     });
   }

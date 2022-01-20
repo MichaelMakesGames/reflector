@@ -216,7 +216,10 @@ export default function BottomMenu() {
         controlCode={ControlCode.Wait}
         callback={() => dispatch(actions.playerTookTurn())}
         icon={<Icons.Wait />}
-        controlConfig={{ ctrl: false }}
+        controlConfig={{
+          ctrl: false,
+          allowedGroups: [HotkeyGroup.BuildingSelection],
+        }}
       />
       <IconButton
         label="Undo Turn"

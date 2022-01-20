@@ -32,6 +32,10 @@ function loadGameHandler(
     .forEach((entity) => state.renderer.addEntity(entity));
 
   state.audio.stopAll({ stopMusic: false });
+  const playerPos = state.select.playerPos();
+  if (playerPos) {
+    state.audio.setListenerPos(playerPos);
+  }
   const musicName = state.select.isNight() ? "night" : "day";
   if (state.audio.currentMusicName !== musicName) {
     state.audio.playMusic(musicName);

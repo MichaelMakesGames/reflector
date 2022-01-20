@@ -267,7 +267,6 @@ export function executePlan(
           ai.plannedPath[0]
         )
       ) {
-        console.warn("shifting planned path");
         state.act.updateEntity({
           id: entityId,
           ai: { ...ai, plannedPath: ai.plannedPath.slice(1) },

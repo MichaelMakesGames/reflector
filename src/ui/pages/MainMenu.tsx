@@ -81,10 +81,14 @@ export default function MainMenu({ goBack, navigateTo }: RouterPageProps) {
       <MainTitle />
       {savedGame && stateIsEmpty && (
         <MenuButton
-          onClick={() => {
-            dispatch(actions.loadGame({ state: savedGame }));
-            navigateTo("Game");
-          }}
+          onClick={() =>
+            new Promise((resolve) =>
+              setTimeout(() => {
+                dispatch(actions.loadGame({ state: savedGame }));
+                navigateTo("Game");
+              }, 100)
+            )
+          }
         >
           Continue
         </MenuButton>

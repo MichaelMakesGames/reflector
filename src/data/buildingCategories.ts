@@ -24,9 +24,6 @@ const buildingCategories: BuildingCategory[] = [
       "BLUEPRINT_MINING_SPOT",
       "BLUEPRINT_MINE",
       "BLUEPRINT_FACTORY",
-      "BLUEPRINT_WINDMILL",
-      "BLUEPRINT_SOLAR_PANEL",
-      "BLUEPRINT_REACTOR",
     ],
   },
   {

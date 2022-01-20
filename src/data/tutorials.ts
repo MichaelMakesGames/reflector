@@ -101,7 +101,7 @@ const tutorials: Record<TutorialId, Tutorial> = {
           );
         },
         elementHighlightSelectors: [
-          `[data-building-category="${BuildingCategoryCode.Work}"]`,
+          `[data-building-category="${BuildingCategoryCode.Power}"]`,
           `[data-building="BUILDING_WINDMILL"]`,
         ],
       },

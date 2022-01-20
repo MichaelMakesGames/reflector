@@ -20,7 +20,7 @@ import { TemplateName } from "../../types/TemplateName";
 import { JobTypeCode } from "../jobTypes";
 import { ResourceCode } from "../resources";
 
-const buildingSoundOptions: SoundOptions = {};
+const buildingSoundOptions: SoundOptions = { volume: 0.25, rollOff: 2 };
 
 const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
   REFLECTOR_BASE: {

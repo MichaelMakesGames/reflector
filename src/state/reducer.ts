@@ -47,6 +47,6 @@ export function makeReducer(renderer: Renderer, audio: Audio | DummyAudio) {
       action
     );
 
-    return wrappedState.raw;
+    return { ...wrappedState.raw, entities: { ...wrappedState.raw.entities } };
   };
 }
