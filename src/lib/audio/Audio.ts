@@ -141,7 +141,7 @@ export default class Audio {
         sound.pannerAttr(
           {
             rolloffFactor: options.rollOff || DEFAULT_OPTIONS.rollOff,
-            refDistance: 0,
+            refDistance: 1,
             maxDistance: 9999,
             distanceModel: "inverse",
             panningModel: "equalpower",
@@ -199,6 +199,7 @@ export default class Audio {
       intro.play();
       this.currentMusic = intro;
       this.currentMusicName = musicName;
+      intro.off("end");
       intro.once("end", () => {
         this.currentMusic = loop;
         loop.loop(true);
