@@ -19,6 +19,9 @@ function loadGameHandler(
   const { state: loadedState } = action.payload;
   state.setRaw({
     ...loadedState,
+    entities: {
+      ...loadedState.entities,
+    },
     version: VERSION,
   });
   resetEntitiesByCompAndPos(state);

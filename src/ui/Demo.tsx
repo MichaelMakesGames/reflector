@@ -21,7 +21,12 @@ export default function Demo({ demoComp }: { demoComp: DemoComp }) {
   useEffect(() => {
     const [renderer, wrappedState] = setUpDemo(demoComp);
     setDemoState(wrappedState);
-    setInitialState(wrappedState.raw);
+    setInitialState({
+      ...wrappedState.raw,
+      entities: {
+        ...wrappedState.raw.entities,
+      },
+    });
     setActionIndex(0);
     if (divRef.current) {
       divRef.current.childNodes.forEach((child) =>

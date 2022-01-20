@@ -262,7 +262,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
       entities: {
         [PLAYER_ID]: ["PLAYER", { pos: { x: 6, y: 1 }, projector: undefined }],
         enemy: ["ENEMY_BURROWED", { pos: { x: 1, y: 1 } }],
-        building: ["BUILDING_FACTORY", { pos: { x: 4, y: 2 } }],
+        building: ["BUILDING_SOLAR_PANEL", { pos: { x: 4, y: 1 } }],
       },
       actions: [
         { type: "PLAYER_TOOK_TURN" },
@@ -273,17 +273,15 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
         DEMO_PAUSE_SHORT,
         { type: "PLAYER_TOOK_TURN" },
         DEMO_PAUSE_SHORT,
-        { type: "PLAYER_TOOK_TURN" },
-        DEMO_PAUSE_SHORT,
         {
           type: "TARGET_WEAPON",
           payload: { direction: LEFT, source: PLAYER_ID },
         },
         DEMO_PAUSE_LONG,
-        { type: "FIRE_WEAPON", payload: { source: PLAYER_ID } },
-        DEMO_PAUSE_LONG,
-        { type: "PLAYER_TOOK_TURN" },
+        { type: "DEACTIVATE_WEAPON" },
         DEMO_PAUSE_SHORT,
+        { type: "PLAYER_TOOK_TURN" },
+        DEMO_PAUSE_LONG,
         {
           type: "TARGET_WEAPON",
           payload: { direction: LEFT, source: PLAYER_ID },
