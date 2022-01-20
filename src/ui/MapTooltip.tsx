@@ -14,7 +14,7 @@ interface Props {
   children: ReactElement;
 }
 
-export default function MapTooltip({ children }: Props) {
+const MapTooltip = React.forwardRef(({ children }: Props) => {
   const [isOpen, open, close] = useBoolean(false);
 
   const entitiesAtCursor = useSelector(selectors.entitiesAtCursor);
@@ -85,4 +85,6 @@ export default function MapTooltip({ children }: Props) {
       {children}
     </LazyTippy>
   );
-}
+});
+
+export default MapTooltip;
