@@ -64,3 +64,5 @@ export const DEMO_PAUSE_LONG = 1000;
 
 export const EMPTY_POS: Pos = { x: 0, y: 0 };
 export const EMPTY_DIR: Direction = { dx: 0, dy: 0 };
+
+export const MAX_TURNS_TO_SAVE = 20;
