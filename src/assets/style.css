@@ -7,6 +7,7 @@ body {
   @apply text-white;
   @apply leading-normal;
   @apply h-screen;
+  @apply accent-red;
 }
 
 #map > canvas {

@@ -4,6 +4,7 @@ import { useBoolean } from "../hooks";
 import { noFocusOnClick } from "../lib/controls";
 import { ControlCode } from "../types/ControlCode";
 import { HotkeyGroup, useControl } from "./HotkeysProvider";
+import Icons from "./Icons";
 
 interface Props {
   value: string;
@@ -70,24 +71,30 @@ export default function MenuOptionSelector({
           type="button"
           disabled={isFirstOption}
           className={classNames({
+            "pr-4": true,
             "opacity-50": isFirstOption,
             "cursor-not-allowed": isFirstOption,
           })}
           onClick={noFocusOnClick(selectPrevious)}
         >
-          ◀
+          <span className="inline-block w-4 h-4">
+            <Icons.ChevronLeft />
+          </span>
         </button>
         <div className="flex-grow text-center">{option?.name}</div>
         <button
           type="button"
           disabled={isLastOption}
           className={classNames({
+            "pl-4": true,
             "opacity-50": isLastOption,
             "cursor-not-allowed": isLastOption,
           })}
           onClick={noFocusOnClick(selectNext)}
         >
-          ▶
+          <span className="inline-block w-4 h-4">
+            <Icons.ChevronRight />
+          </span>
         </button>
       </div>
     </div>
