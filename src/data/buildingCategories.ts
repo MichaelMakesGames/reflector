@@ -4,7 +4,8 @@ export enum BuildingCategoryCode {
   Work = "WORK",
   Power = "POWER",
   Defense = "DEFENSE",
-  Misc = "MISC",
+  Housing = "HOUSING",
+  Infrastructure = "Infrastructure",
 }
 
 export interface BuildingCategory {
@@ -51,16 +52,16 @@ const buildingCategories: BuildingCategory[] = [
     ],
   },
   {
-    code: BuildingCategoryCode.Misc,
-    label: "Misc",
-    description: "Housing, storage, and infrastructure.",
-    blueprints: [
-      "BLUEPRINT_TENT",
-      "BLUEPRINT_RESIDENCE",
-      "BLUEPRINT_ROAD",
-      "BLUEPRINT_BATTERY",
-      "BLUEPRINT_WAREHOUSE",
-    ],
+    code: BuildingCategoryCode.Housing,
+    label: "Housing",
+    description: "Places for your colonists to sleep.",
+    blueprints: ["BLUEPRINT_TENT", "BLUEPRINT_RESIDENCE"],
+  },
+  {
+    code: BuildingCategoryCode.Infrastructure,
+    label: "Infrastructure",
+    description: "Roads and storage.",
+    blueprints: ["BLUEPRINT_ROAD", "BLUEPRINT_BATTERY", "BLUEPRINT_WAREHOUSE"],
   },
 ];
 

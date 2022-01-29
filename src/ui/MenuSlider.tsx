@@ -55,6 +55,7 @@ export default function MenuSlider({
       <div className="w-2/5 inline-block">{label}</div>
       <input
         className="w-3/5"
+        type="range"
         value={value}
         min={min}
         max={max}

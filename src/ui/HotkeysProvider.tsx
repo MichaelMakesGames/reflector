@@ -109,6 +109,7 @@ export default function HotkeysProvider({
         ) {
           event.preventDefault();
           event.stopPropagation();
+          event.cancelBubble = true; // eslint-disable-line no-param-reassign
           hotkey.callback();
           return;
         }

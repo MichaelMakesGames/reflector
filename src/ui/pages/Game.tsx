@@ -56,7 +56,7 @@ export default function Game(props: RouterPageProps) {
             width: MAP_CSS_WIDTH,
           }}
         >
-          <GameMap />
+          <GameMap {...props} />
           <BottomMenu />
         </div>
         <div className="flex-none w-64 h-full flex flex-col border-l border-r border-gray z-10">

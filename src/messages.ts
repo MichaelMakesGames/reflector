@@ -1,6 +1,6 @@
 const messages = {
   "tutorials.basics.0":
-    "Reflector is a turn-based game. Colonists <entity>COLONIST</entity> and enemies <entity>ENEMY_DRONE</entity> move when you <entity>PLAYER</entity> move. <br></br>Try moving by <b>clicking the map</b>, or using the <kbd>wasd</kbd> or arrow keys.",
+    "Reflector is a turn-based game. Colonists <entity>COLONIST</entity> and enemies <entity>ENEMY_DRONE</entity> move when you <entity>PLAYER</entity> move. <br></br>Try moving using the <kbd>wasd</kbd> or arrow keys, or by <b>clicking</b> an adjacent square.<br></br>(Note: click to move behavior can be changed in the settings.)",
   "tutorials.basics.1":
     "You need to build places for colonists to work. Let's start by building a farm.<br></br>In the bottom menu, <b>click Work</b> then <b>click Farm</b>, or use the number keys to make your selection.",
   "tutorials.basics.2":
@@ -10,7 +10,7 @@ const messages = {
   "tutorials.basics.4":
     "That's one down, but one colonist still needs a job. Place another mining spot on ore <entity>TERRAIN_ORE</entity>.",
   "tutorials.basics.5":
-    "Your colonists will automatically move to your farms and mining spots to work, but remember, they only move when you take a turn (move, build, fire, or wait).<br></br>Your colonists will need somewhere to sleep at night. Build <b>3 Tents</b> from the <b>Misc</b> category.",
+    "Your colonists will automatically move to your farms and mining spots to work, but remember, they only move when you take a turn (move, build, fire, or wait).<br></br>Your colonists will need somewhere to sleep at night. Build <b>3 Tents</b> from the <b>Housing</b> category.",
   "tutorials.basics.6":
     "You can skip your turn without moving by <b>clicking the wait button</b> at the bottom or pressing <kbd>z</kbd>.<br></br>Move or wait until you have 8 metal. It might take a few turns for your colonists to reach their work places if they haven't arrived already.",
   "tutorials.basics.7":
@@ -50,7 +50,7 @@ const messages = {
     "Colonists will completely ignore jobs at disabled buildings. You can re-enable them the same way you disabled them.<br></br>Use building disabling and job priorities to control where your colonists work.",
 
   "tutorials.residence.0":
-    "You don't have enough housing <entity>BUILDING_TENT</entity><entity>BUILDING_RESIDENCE</entity> for all of your colonists. Your homeless colonists will wander randomly at night.<br></br>If you want to control where your colonists sleep so they're easier to defend, build a <b>Residences or Tents</b> (in the Misc category).",
+    "You don't have enough housing <entity>BUILDING_TENT</entity><entity>BUILDING_RESIDENCE</entity> for all of your colonists. Your homeless colonists will wander randomly at night.<br></br>Build them <b>Residences or Tents</b> (in the <b>Housing</b> category).",
 
   "tutorials.rotate.0":
     "Some buildings, such as the Splitter, are rotatable. Press <kbd>r</kbd> or click the <b>Rotate</b> button at the bottom to rotate before you build.",

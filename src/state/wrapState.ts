@@ -9,11 +9,14 @@ import selectors from "./selectors";
 import defaultRenderer from "../renderer";
 import defaultAudio from "../lib/audio";
 import { save as defaultSave } from "../lib/gameSave";
+import Settings from "../types/Settings";
+import defaultSettings from "../data/defaultSettings";
 
 export default function wrapState(
   state: RawState,
   renderer: Renderer = defaultRenderer,
   audio: Audio | DummyAudio = defaultAudio,
+  settings: Settings = defaultSettings,
   save: (state: RawState) => void = defaultSave
 ): WrappedState {
   const wrappedState: any = {
@@ -23,6 +26,7 @@ export default function wrapState(
     actions,
     renderer,
     audio,
+    settings,
     save,
   };
   wrappedState.setRaw = (newState: RawState) => {

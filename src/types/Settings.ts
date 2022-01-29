@@ -9,4 +9,5 @@ export default interface Settings {
   keybindings: Record<ControlCode, string[]>;
   musicVolume: number;
   sfxVolume: number;
+  clickToMove: "ADJACENT" | "ALWAYS" | "NEVER";
 }

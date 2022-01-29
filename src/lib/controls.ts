@@ -100,7 +100,10 @@ export function getQuickAction(
     };
   }
 
-  if (canPlaceReflector(wrappedState, pos)) {
+  if (
+    wrappedState.select.isWeaponActive() &&
+    canPlaceReflector(wrappedState, pos)
+  ) {
     return {
       action: actions.addEntity(
         createEntityFromTemplate("REFLECTOR_UP_RIGHT", { pos })

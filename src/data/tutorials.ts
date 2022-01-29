@@ -78,7 +78,7 @@ const tutorials: Record<TutorialId, Tutorial> = {
           );
         },
         elementHighlightSelectors: [
-          `[data-building-category="${BuildingCategoryCode.Misc}"]`,
+          `[data-building-category="${BuildingCategoryCode.Housing}"]`,
           `[data-building="BUILDING_TENT"]`,
         ],
       },
@@ -268,7 +268,7 @@ const tutorials: Record<TutorialId, Tutorial> = {
         checkForCompletion: () => false,
         isDismissible: true,
         elementHighlightSelectors: [
-          `[data-building-category="${BuildingCategoryCode.Misc}"]`,
+          `[data-building-category="${BuildingCategoryCode.Housing}"]`,
           `[data-building="BUILDING_TENT"]`,
           `[data-building="BUILDING_RESIDENCE"]`,
         ],

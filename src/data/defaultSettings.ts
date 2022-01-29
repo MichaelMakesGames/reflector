@@ -9,6 +9,7 @@ const defaultSettings: Settings = {
   unmodifiedBuilding: false,
   musicVolume: 50,
   sfxVolume: 50,
+  clickToMove: "ADJACENT",
   keybindings: {
     [ControlCode.Fire]: ["f"],
 
@@ -17,7 +18,7 @@ const defaultSettings: Settings = {
     [ControlCode.Left]: ["a", "left"],
     [ControlCode.Right]: ["d", "right"],
 
-    [ControlCode.Menu]: ["esc"],
+    [ControlCode.Menu]: ["F10"],
     [ControlCode.Menu1]: ["1"],
     [ControlCode.Menu2]: ["2"],
     [ControlCode.Menu3]: ["3"],
@@ -40,7 +41,7 @@ const defaultSettings: Settings = {
     [ControlCode.ToggleJobs]: ["e"],
 
     [ControlCode.Wait]: ["z"],
-    [ControlCode.Back]: ["q"],
+    [ControlCode.Back]: ["q", "esc"],
     [ControlCode.Undo]: ["ctrl+z"],
     [ControlCode.Help]: ["?"],
     [ControlCode.ZoomIn]: ["+", "="],

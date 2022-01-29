@@ -29,7 +29,8 @@ function blueprintMoveHandler(
   const invalidMessage = isValid
     ? ""
     : blueprint.blueprint.validityConditions.filter(
-        (vc) => !areConditionsMet(state, blueprint, vc.condition)
+        (vc) =>
+          !areConditionsMet(state, { ...blueprint, pos: newPos }, vc.condition)
       )[0]?.invalidMessage ?? "";
 
   state.act.updateEntity({

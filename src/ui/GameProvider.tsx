@@ -1,4 +1,4 @@
-import React, { useContext, useReducer } from "react";
+import React, { useContext, useMemo, useReducer } from "react";
 import {
   useDispatch as useReduxDispatch,
   useSelector as useReduxSelector,
@@ -8,8 +8,8 @@ import renderer from "../renderer";
 import { createInitialState } from "../state/initialState";
 import { makeReducer } from "../state/reducer";
 import { Action, RawState } from "../types";
+import { useSettings } from "./SettingsProvider";
 
-const reducer = makeReducer(renderer, audio);
 const initialState = createInitialState({
   completedTutorials: [],
   mapType: "standard",
@@ -25,6 +25,11 @@ export default function GameProvider({
   children: React.ReactNode;
   redux: boolean;
 }) {
+  const [settings] = useSettings();
+  const reducer = useMemo(
+    () => makeReducer(renderer, audio, settings),
+    [settings]
+  );
   const [state, dispatch] = useReducer(reducer, initialState);
   const reduxDispatch = useReduxDispatch();
   const reduxState = useReduxSelector(identity) as RawState;

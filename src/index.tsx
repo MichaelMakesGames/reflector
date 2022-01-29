@@ -17,13 +17,13 @@ import SettingsProvider from "./ui/SettingsProvider";
 const app = (
   <IntlProvider messages={messages} locale="en" defaultLocale="en">
     <Provider store={store}>
-      <GameProvider redux={process.env.NODE_ENV === "development"}>
-        <SettingsProvider>
+      <SettingsProvider>
+        <GameProvider redux={false}>
           <HotkeysProvider>
             <Router defaultPage="MainMenu" pages={pages} />
           </HotkeysProvider>
-        </SettingsProvider>
-      </GameProvider>
+        </GameProvider>
+      </SettingsProvider>
     </Provider>
   </IntlProvider>
 );

@@ -8,6 +8,7 @@ import Audio from "../lib/audio/Audio";
 import Renderer from "../renderer/Renderer";
 import DummyAudio from "../lib/audio/DummyAudio";
 import { save } from "../lib/gameSave";
+import Settings from "../types/Settings";
 
 const GAME_OVER_ALLOW_LIST: string[] = [
   getType(actions.newGame),
@@ -20,7 +21,11 @@ const AUTO_MOVE_ALLOW_LIST: string[] = [
   getType(actions.setCursorPos),
 ];
 
-export function makeReducer(renderer: Renderer, audio: Audio | DummyAudio) {
+export function makeReducer(
+  renderer: Renderer,
+  audio: Audio | DummyAudio,
+  settings: Settings
+) {
   return function reducer(
     state: RawState = createInitialState({
       completedTutorials: [],
@@ -28,7 +33,7 @@ export function makeReducer(renderer: Renderer, audio: Audio | DummyAudio) {
     }),
     action: Action
   ): RawState {
-    const wrappedState = wrapState(state, renderer, audio, save);
+    const wrappedState = wrapState(state, renderer, audio, settings, save);
 
     if (state.gameOver && !GAME_OVER_ALLOW_LIST.includes(action.type)) {
       return state;
@@ -42,7 +47,7 @@ export function makeReducer(renderer: Renderer, audio: Audio | DummyAudio) {
     wrappedState.handle(action);
 
     processTutorials(
-      wrapState(state, renderer, audio, () => {}),
+      wrapState(state, renderer, audio, settings, () => {}),
       wrappedState,
       action
     );

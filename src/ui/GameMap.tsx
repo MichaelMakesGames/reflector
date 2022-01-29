@@ -24,8 +24,9 @@ import ContextMenu from "./ContextMenu";
 import { HotkeyGroup, useControl } from "./HotkeysProvider";
 import MapTooltip from "./MapTooltip";
 import { useSettings } from "./SettingsProvider";
+import { RouterPageProps } from "./Router";
 
-export default function GameMap() {
+export default function GameMap({ navigateTo }: RouterPageProps) {
   useEffect(() => {
     const map = document.getElementById("map");
     if (map) {
@@ -167,10 +168,27 @@ export default function GameMap() {
     code: ControlCode.Back,
     group: HotkeyGroup.Main,
     callback: () => {
-      setContextMenuPos(null);
-      if (cursorPos) dispatch(actions.setCursorPos(null));
+      // try to detect if using mouse for cursor. If so, don't clear cursor
+      if (
+        cursorPos &&
+        (!mousePosRef.current ||
+          !arePositionsEqual(
+            renderer.getPosFromMouse(
+              mousePosRef.current.x,
+              mousePosRef.current.y
+            ),
+            cursorPos
+          ))
+      ) {
+        setContextMenuPos(null);
+        if (cursorPos) dispatch(actions.setCursorPos(null));
+      } else if (contextMenuPos) {
+        setContextMenuPos(null);
+      } else {
+        navigateTo("MainMenu");
+      }
     },
-    disabled: !cursorPos || isWeaponActive || hasActiveBlueprint,
+    disabled: isWeaponActive || hasActiveBlueprint,
   });
 
   useControl({

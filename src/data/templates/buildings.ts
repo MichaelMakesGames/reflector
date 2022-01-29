@@ -371,7 +371,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     },
     housing: {
       capacity: 1,
-      occupancy: 1,
+      occupancy: 0,
     },
     destructible: {
       attackPriority: 1,

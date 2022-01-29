@@ -28,10 +28,13 @@ export default function Credits({ goBack }: RouterPageProps) {
       <ul>
         <li>aonemannnARMY</li>
         <li>Bbwunder</li>
+        <li>Byte Arcane</li>
+        <li>Connor Skehan</li>
         <li>EmperorCU</li>
         <li>
           Gornova | <Link href="https://randomtower.blogspot.com">blog</Link>
         </li>
+        <li>John Turk</li>
         <li>Kyzrati</li>
         <li>ozymoondias (Jonathon Moore)</li>
         <li>Quantumtroll</li>

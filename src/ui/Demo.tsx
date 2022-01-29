@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import colors from "../colors";
 import { TILE_SIZE } from "../constants";
+import defaultSettings from "../data/defaultSettings";
 import DummyAudio from "../lib/audio/DummyAudio";
 import { createEntityFromTemplate } from "../lib/entities";
 import { rangeFromTo, rangeTo } from "../lib/math";
@@ -85,7 +86,7 @@ function setUpDemo(demoComp: DemoComp): [Renderer, WrappedState] {
   });
   const audio = new DummyAudio();
   const save = () => {};
-  const state = wrapState(rawState, renderer, audio, save);
+  const state = wrapState(rawState, renderer, audio, defaultSettings, save);
 
   // add demo entities
   for (const [id, [templateName, additionalComponents]] of Object.entries(

@@ -9,6 +9,7 @@ import MenuSlider from "../MenuSlider";
 import MenuTitle from "../MenuTitle";
 import { RouterPageProps } from "../Router";
 import { useSettings } from "../SettingsProvider";
+import MenuOptionSelector from "../MenuOptionSelector";
 
 export default function Settings({ navigateTo, goBack }: RouterPageProps) {
   const [settings, updateSettings] = useSettings();
@@ -21,6 +22,18 @@ export default function Settings({ navigateTo, goBack }: RouterPageProps) {
       <MenuButton onClick={() => navigateTo("Keybindings")}>
         View Keybindings
       </MenuButton>
+      <MenuOptionSelector
+        label="Click to Move"
+        value={settings.clickToMove}
+        onChange={(value) =>
+          updateSettings((prev) => ({ ...prev, clickToMove: value as any }))
+        }
+        options={[
+          { id: "ADJACENT", name: "Adjacent" },
+          { id: "ALWAYS", name: "Always" },
+          { id: "NEVER", name: "Never" },
+        ]}
+      />
       <MenuSectionHeader>Volume</MenuSectionHeader>
       <MenuSlider
         value={settings.musicVolume}

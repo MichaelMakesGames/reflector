@@ -116,10 +116,7 @@ function clearResidence(
   state: WrappedState,
   colonist: Required<Entity, "colonist" | "pos">
 ) {
-  if (
-    colonist.colonist.residence &&
-    !state.select.entityById(colonist.colonist.residence)
-  ) {
+  if (colonist.colonist.residence) {
     state.act.updateEntity({
       id: colonist.id,
       colonist: {

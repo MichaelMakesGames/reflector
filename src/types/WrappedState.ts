@@ -7,6 +7,7 @@ import type { Entity } from "./Entity";
 import Renderer from "../renderer/Renderer";
 import Audio from "../lib/audio/Audio";
 import DummyAudio from "../lib/audio/DummyAudio";
+import Settings from "./Settings";
 
 type SelectBase = {
   [K in keyof typeof selectors]: (
@@ -35,5 +36,6 @@ export default interface WrappedState {
   handle: (action: Action) => WrappedState;
   renderer: Renderer;
   audio: Audio | DummyAudio;
+  settings: Settings;
   save: (state: RawState) => void;
 }
