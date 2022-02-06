@@ -82,6 +82,8 @@ function setUpDemo(demoComp: DemoComp): [Renderer, WrappedState] {
     gridHeight: demoComp.height,
     tileWidth: TILE_SIZE,
     tileHeight: TILE_SIZE,
+    appWidth: demoComp.width * TILE_SIZE,
+    appHeight: demoComp.height * TILE_SIZE,
     backgroundColor: colors.backgroundDay,
   });
   const audio = new DummyAudio();

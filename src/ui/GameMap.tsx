@@ -31,7 +31,15 @@ export default function GameMap({ navigateTo }: RouterPageProps) {
     const map = document.getElementById("map");
     if (map) {
       renderer.appendView(map);
+      renderer.setAppSize(window.innerWidth, window.innerHeight);
     }
+  }, []);
+
+  useEffect(() => {
+    const resizeListener = () =>
+      renderer.setAppSize(window.innerWidth, window.innerHeight);
+    window.addEventListener("resize", resizeListener);
+    return () => window.removeEventListener("resize", resizeListener);
   }, []);
 
   const dispatch = useDispatch();
@@ -194,8 +202,7 @@ export default function GameMap({ navigateTo }: RouterPageProps) {
   useControl({
     code: ControlCode.ZoomIn,
     group: HotkeyGroup.Main,
-    callback: () =>
-      renderer.zoomTo(playerPos || { x: MAP_WIDTH / 2, y: MAP_HEIGHT / 2 }),
+    callback: () => renderer.zoomIn(),
   });
   useControl({
     code: ControlCode.ZoomOut,
@@ -247,7 +254,7 @@ export default function GameMap({ navigateTo }: RouterPageProps) {
     <ContextMenu pos={contextMenuPos} onClose={() => setContextMenuPos(null)}>
       <MapTooltip>
         <section
-          className="relative"
+          className="relative w-full h-full"
           style={
             quickAction
               ? { cursor: `url(${cursorImages[quickAction.cursor]}), pointer` }
@@ -269,8 +276,8 @@ export default function GameMap({ navigateTo }: RouterPageProps) {
             onWheel={(e) => {
               if (e.nativeEvent.deltaY > 0) {
                 renderer.zoomOut();
-              } else if (e.nativeEvent.deltaY < 0 && playerPos) {
-                renderer.zoomTo(playerPos);
+              } else if (e.nativeEvent.deltaY < 0) {
+                renderer.zoomIn();
               }
               if (mousePosRef.current) {
                 const gamePos = renderer.getPosFromMouse(

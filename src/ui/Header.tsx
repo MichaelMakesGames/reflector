@@ -25,14 +25,11 @@ export default function Header({ navigateTo }: RouterPageProps) {
   });
 
   return (
-    <header className="flex-none bg-darkGray border-b border-gray">
-      <div
-        className="mx-auto py-1 px-2 flex flex-row"
-        style={{ width: HEADER_CSS_WIDTH }}
-      >
-        <h1 className="font-bold flex-1">Reflector: Laser Defense</h1>
+    <header className="flex-none bg-black border-b border-gray">
+      <div className="mx-auto py-1 px-2 flex flex-row">
+        <h1 className="font-bold flex-1 mr-5">Reflector: Laser Defense</h1>
         <button onClick={() => navigateTo("MainMenu")} type="button">
-          <Kbd light>{menuShortcuts[0]}</Kbd> Menu
+          <Kbd>{menuShortcuts[0]}</Kbd> Menu
         </button>
       </div>
     </header>

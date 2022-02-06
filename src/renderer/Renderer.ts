@@ -22,7 +22,10 @@ export interface RendererConfig {
   gridHeight: number;
   tileWidth: number;
   tileHeight: number;
+  appWidth: number;
+  appHeight: number;
   backgroundColor: string;
+  autoCenterEnabled?: boolean;
 }
 
 interface RenderEntity {
@@ -44,6 +47,8 @@ interface RenderGroup {
   removing?: boolean;
 }
 
+const ZOOM_LEVELS = [0.5, 1, 2, 4, 8];
+
 export default class Renderer {
   private gridWidth: number;
 
@@ -53,10 +58,6 @@ export default class Renderer {
 
   private tileWidth: number;
 
-  private appWidth: number;
-
-  private appHeight: number;
-
   private renderEntities: Record<string, RenderEntity> = {};
 
   private emitters: Record<string, particles.Emitter> = {};
@@ -65,13 +66,17 @@ export default class Renderer {
 
   private app: PIXI.Application;
 
-  private zoomedIn: boolean = false;
-
   private layers: Record<number, PIXI.Container> = {};
 
   private groups: Record<string, RenderGroup> = {};
 
   private movementPaths: Map<string, Pos[]> = new Map();
+
+  private center: Pos | null = null;
+
+  private scale: number = 1;
+
+  private autoCenterEnabled: boolean = false;
 
   private previousStage: { scale: number; x: number; y: number } = {
     scale: 1,
@@ -92,21 +97,32 @@ export default class Renderer {
     gridHeight,
     tileWidth,
     tileHeight,
+    appWidth,
+    appHeight,
     backgroundColor,
+    autoCenterEnabled,
   }: RendererConfig) {
     this.gridWidth = gridWidth;
     this.gridHeight = gridHeight;
     this.tileWidth = tileWidth;
     this.tileHeight = tileHeight;
-    this.appWidth = gridWidth * tileWidth;
-    this.appHeight = gridHeight * tileHeight;
     this.app = new PIXI.Application({
-      width: this.appWidth,
-      height: this.appHeight,
+      width: appWidth,
+      height: appHeight,
       backgroundColor: hexToNumber(backgroundColor),
       antialias: false,
     });
     this.app.ticker.maxFPS = 30;
+    this.autoCenterEnabled = Boolean(autoCenterEnabled);
+  }
+
+  public setAppSize(width: number, height: number) {
+    const adjustedWidth = Math.floor(width / 2) * 2; // this fixes some rendering glitches
+    const adjustedHeight = Math.floor(height / 2) * 2; // this fixes some rendering glitches
+    this.app.view.width = adjustedWidth;
+    this.app.view.height = adjustedHeight;
+    this.app.renderer.resize(adjustedWidth, adjustedHeight);
+    this.panTo(this.center || { x: 0, y: 0 });
   }
 
   public destroy() {
@@ -128,19 +144,16 @@ export default class Renderer {
     return this.loadPromise;
   }
 
-  public zoomTo(pos: Pos): void {
-    const X_MIN = 0;
-    const Y_MIN = 0;
-    const X_MAX = this.gridWidth / 2;
-    const Y_MAX = this.gridHeight / 2;
-    const x = Math.max(Math.min(pos.x - this.gridWidth / 4, X_MAX), X_MIN);
-    const y = Math.max(Math.min(pos.y - this.gridHeight / 4, Y_MAX), Y_MIN);
+  public setCenterAndScale(center: Pos, scale: number): void {
+    this.center = center;
+    this.scale = scale;
+    const x =
+      (center.x + 0.5) * this.tileWidth * -scale + this.app.view.width / 2;
+    const y =
+      (center.y + 0.5) * this.tileHeight * -scale + this.app.view.height / 2;
 
-    const desiredStage = {
-      scale: 2,
-      x: -x * this.tileWidth * 2,
-      y: -y * this.tileHeight * 2,
-    };
+    const desiredStage = { scale, x, y };
+
     if (
       desiredStage.scale === this.desiredStage.scale &&
       desiredStage.x === this.desiredStage.x &&
@@ -149,7 +162,6 @@ export default class Renderer {
       return;
     }
 
-    this.zoomedIn = true;
     this.previousStage = {
       scale: this.app.stage.scale.x,
       x: this.app.stage.position.x,
@@ -157,41 +169,38 @@ export default class Renderer {
     };
     this.desiredStage = desiredStage;
     Object.values(this.renderEntities).forEach((e) => this.updateVisibility(e));
+  }
+
+  public panTo(pos: Pos): void {
+    this.setCenterAndScale(pos, this.scale);
+  }
+
+  public zoomIn(): void {
+    const earlyInPreviousZoomIn =
+      this.desiredStage.scale * 0.75 > this.app.stage.scale.x;
+    if (earlyInPreviousZoomIn) return;
+    const currentScaleIndex = ZOOM_LEVELS.indexOf(this.scale);
+    if (
+      currentScaleIndex !== -1 &&
+      currentScaleIndex !== ZOOM_LEVELS.length - 1
+    ) {
+      this.setCenterAndScale(
+        this.center || { x: 0, y: 0 },
+        ZOOM_LEVELS[currentScaleIndex + 1]
+      );
+    }
   }
 
   public zoomOut(): void {
-    const desiredStage = {
-      scale: 1,
-      x: 0,
-      y: 0,
-    };
-    if (
-      desiredStage.scale === this.desiredStage.scale &&
-      desiredStage.x === this.desiredStage.x &&
-      desiredStage.y === this.desiredStage.y
-    ) {
-      return;
-    }
-
-    this.zoomedIn = false;
-    this.previousStage = {
-      scale: this.app.stage.scale.x,
-      x: this.app.stage.position.x,
-      y: this.app.stage.position.y,
-    };
-    this.desiredStage = desiredStage;
-    Object.values(this.renderEntities).forEach((e) => this.updateVisibility(e));
-  }
-
-  public isZoomedIn() {
-    return this.zoomedIn;
-  }
-
-  public toggleZoom(pos: Pos) {
-    if (this.isZoomedIn()) {
-      this.zoomOut();
-    } else {
-      this.zoomTo(pos);
+    const earlyInPreviousZoomOut =
+      this.desiredStage.scale * 1.25 < this.app.stage.scale.x;
+    if (earlyInPreviousZoomOut) return;
+    const currentScaleIndex = ZOOM_LEVELS.indexOf(this.scale);
+    if (currentScaleIndex !== -1 && currentScaleIndex !== 0) {
+      this.setCenterAndScale(
+        this.center || { x: 0, y: 0 },
+        ZOOM_LEVELS[currentScaleIndex - 1]
+      );
     }
   }
 
@@ -234,6 +243,10 @@ export default class Renderer {
       group.entities.add(entity.id);
     }
 
+    if (entity.id === PLAYER_ID && this.autoCenterEnabled) {
+      this.panTo(entity.pos);
+    }
+
     this.updateVisibility(this.renderEntities[entity.id]);
   }
 
@@ -260,8 +273,8 @@ export default class Renderer {
             entity.pos.y * this.tileHeight
           );
         }
-        if (entity.id === PLAYER_ID && this.zoomedIn) {
-          this.zoomTo(entity.pos);
+        if (entity.id === PLAYER_ID && this.autoCenterEnabled) {
+          this.panTo(entity.pos);
         }
       }
 
@@ -482,20 +495,13 @@ export default class Renderer {
   }
 
   private isPosVisible(pos: Pos) {
-    if (this.zoomedIn) {
-      const xMin = this.desiredStage.x / (this.tileWidth * -2);
-      const yMin = this.desiredStage.y / (this.tileHeight * -2);
-      const xMax = xMin + this.gridWidth / 2;
-      const yMax = yMin + this.gridHeight / 2;
-      return pos.x >= xMin && pos.x < xMax && pos.y >= yMin && pos.y < yMax;
-    } else {
-      return (
-        pos.x >= 0 &&
-        pos.x < this.gridWidth &&
-        pos.y >= 0 &&
-        pos.y < this.gridHeight
-      );
-    }
+    const clientRect = this.getClientRectFromPos(pos);
+    return (
+      clientRect.left >= 0 &&
+      clientRect.right <= window.innerWidth &&
+      clientRect.top >= 0 &&
+      clientRect.bottom <= window.innerHeight
+    );
   }
 
   public setBackgroundColor(color: string) {
@@ -973,61 +979,21 @@ export default class Renderer {
   }
 
   public getClientRectFromPos(gamePos: Pos): DOMRect {
-    const canvas = this.app.view;
-    const canvasParent = canvas.parentElement;
-    if (!canvasParent) throw new Error("App canvas is not in document");
-    const scaleX = (this.gridWidth * this.tileWidth) / canvasParent.clientWidth;
-    const scaleY =
-      (this.gridHeight * this.tileHeight) / canvasParent.clientHeight;
-    if (!this.zoomedIn) {
-      const width = this.tileWidth / scaleX;
-      const height = this.tileHeight / scaleY;
-      const x =
-        canvasParent.getBoundingClientRect().left +
-        (gamePos.x * this.tileWidth) / scaleX;
-      const y =
-        canvasParent.getBoundingClientRect().top +
-        (gamePos.y * this.tileHeight) / scaleY;
-      return new DOMRect(x, y, width, height);
-    } else {
-      const stageX = this.desiredStage.x / this.tileWidth / -2;
-      const stageY = this.desiredStage.y / this.tileHeight / -2;
-      const width = (this.tileWidth * 2) / scaleX;
-      const height = (this.tileHeight * 2) / scaleY;
-      const x =
-        canvasParent.getBoundingClientRect().left +
-        ((gamePos.x - stageX) * this.tileWidth * 2) / scaleX;
-      const y =
-        canvasParent.getBoundingClientRect().top +
-        ((gamePos.y - stageY) * this.tileHeight * 2) / scaleY;
-      return new DOMRect(x, y, width, height);
-    }
+    const width = this.tileWidth * this.scale;
+    const height = this.tileHeight * this.scale;
+    const x = this.desiredStage.x + gamePos.x * this.tileWidth * this.scale;
+    const y = this.desiredStage.y + gamePos.y * this.tileHeight * this.scale;
+    return new DOMRect(x, y, width, height);
   }
 
   getPosFromMouse(mouseX: number, mouseY: number): Pos {
-    const canvas = this.app.view;
-    const canvasParent = canvas.parentElement;
-    if (!canvasParent) throw new Error("App canvas is not in document");
-    const scaleX = (this.gridWidth * this.tileWidth) / canvasParent.clientWidth;
-    const scaleY =
-      (this.gridHeight * this.tileHeight) / canvasParent.clientHeight;
-    const scaledMouseX = mouseX * scaleX;
-    const scaledMouseY = mouseY * scaleY;
-    if (!this.zoomedIn) {
-      return {
-        x: Math.floor(scaledMouseX / this.tileWidth),
-        y: Math.floor(scaledMouseY / this.tileHeight),
-      };
-    } else {
-      const offsetX = Math.floor(scaledMouseX / this.tileWidth / 2);
-      const offsetY = Math.floor(scaledMouseY / this.tileHeight / 2);
-      const stageX = this.desiredStage.x / this.tileWidth / -2;
-      const stageY = this.desiredStage.y / this.tileHeight / -2;
-      return {
-        x: stageX + offsetX,
-        y: stageY + offsetY,
-      };
-    }
+    const x = Math.floor(
+      (mouseX - this.desiredStage.x) / (this.tileWidth * this.scale)
+    );
+    const y = Math.floor(
+      (mouseY - this.desiredStage.y) / (this.tileHeight * this.scale)
+    );
+    return { x, y };
   }
 
   public setLoadPromise(promise: Promise<void>) {

@@ -1,6 +1,6 @@
 import { Direction, Pos } from "./types";
 
-export const VERSION = "alpha-3.0.1";
+export const VERSION = "alpha-3.1.0-unstable";
 export const PLAYER_ID = "PLAYER";
 export const CURSOR_ID = "UI_CURSOR";
 
@@ -15,8 +15,8 @@ export const WAVE_SIZE_CONSTANT = 5;
 export const WAVE_SIZE_POPULATION_MULTIPLIER = 2 / 3;
 export const WAVE_SIZE_DAY_MULTIPLIER = 2;
 
-export const MAP_WIDTH = 32;
-export const MAP_HEIGHT = MAP_WIDTH;
+export const MAP_HEIGHT = 48;
+export const MAP_WIDTH = MAP_HEIGHT;
 export const TILE_SIZE = 24;
 export const SIDE_BAR_CSS_WIDTH = "256px";
 export const HEADER_CSS_HEIGHT = "33px";

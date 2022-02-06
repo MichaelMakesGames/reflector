@@ -194,7 +194,7 @@ export default function Tutorials() {
     return (
       <div className="fixed pointer-events-none w-screen h-screen top-0 left-0">
         <Draggable>
-          <div className="border-2 border-lightBlue w-96 mx-auto mt-8 bg-black pointer-events-auto opacity-90">
+          <div className="border-2 border-lightBlue w-96 mx-auto mt-10 bg-black pointer-events-auto opacity-90">
             {header}
             {content}
           </div>

@@ -12,7 +12,10 @@ const renderer = new Renderer({
   gridHeight: MAP_HEIGHT,
   tileWidth: TILE_SIZE,
   tileHeight: TILE_SIZE,
+  appWidth: MAP_WIDTH * TILE_SIZE,
+  appHeight: MAP_HEIGHT * TILE_SIZE,
   backgroundColor: colors.background,
+  autoCenterEnabled: true,
 });
 
 renderer.load(tiles);

@@ -41,25 +41,24 @@ export default function Game(props: RouterPageProps) {
   });
 
   return (
-    <main className="h-full flex flex-col">
-      <Header {...props} />
+    <main className="h-full w-full">
+      <div className="h-full w-full absolute">
+        <GameMap {...props} />
+      </div>
+      <div className="absolute top-0 bg-black left-1/2 translate-x-[-50%] border-gray border-x">
+        <Header {...props} />
+      </div>
       <div className="flex flex-row flex-1 w-full max-w-screen-xl mx-auto">
-        <div className="flex-none w-64 h-full flex flex-col border-l border-r border-gray z-10">
+        <div className="flex-none w-64 flex flex-col border-r border-gray z-10 bg-black absolute left-0">
           <Status />
           <Laser />
           <Resources />
           <Jobs />
         </div>
-        <div
-          className="flex-none h-full border-gray"
-          style={{
-            width: MAP_CSS_WIDTH,
-          }}
-        >
-          <GameMap {...props} />
+        <div className="absolute bottom-0 bg-black left-1/2 translate-x-[-50%] border-gray border-x">
           <BottomMenu />
         </div>
-        <div className="flex-none w-64 h-full flex flex-col border-l border-r border-gray z-10">
+        <div className="flex-none w-64 flex flex-col border-l border-b border-gray z-10 bg-black absolute right-0">
           <Tutorials />
           <Inspector />
         </div>
