@@ -18,7 +18,6 @@ function playerTookTurnHandler(
 
   turnEndSystems.forEach((system) => system(state));
   cosmeticSystems.forEach((system) => system(state));
-  state.act.setAutoMovePathToCursor();
   state.setRaw({
     ...state.raw,
     resourceChanges: state.raw.resourceChangesThisTurn,

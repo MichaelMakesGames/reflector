@@ -54,7 +54,7 @@
       "import/no-unresolved": "off",
       "import/extensions": "off",
       "@typescript-eslint/no-unused-vars": [
-        "error",
+        "warn",
         {
           "args": "none",
           "varsIgnorePattern": "_"
@@ -93,6 +93,7 @@
     "typescript": "^4.3.5"
   },
   "dependencies": {
+    "@pixi/interaction": "^6.2.2",
     "@tippyjs/react": "^4.2.5",
     "autoprefixer": "^10.3.1",
     "classnames": "^2.3.1",
@@ -103,7 +104,8 @@
     "notyf": "^3.7.0",
     "pixi-filters": "^4.1.5",
     "pixi-particles": "^4.3.1",
-    "pixi.js": "^6.2.0",
+    "pixi-viewport": "^4.34.4",
+    "pixi.js": "^6.2.2",
     "postcss": "^8.3.6",
     "postcss-cli": "^8.3.1",
     "priorityqueuejs": "^2.0.0",

@@ -1,5 +1,13 @@
 /* global document */
-import React, { ReactElement, useEffect, useRef } from "react";
+import React, {
+  ReactElement,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useSelector } from "./GameProvider";
 import { TILE_SIZE } from "../constants";
 import { useBoolean } from "../hooks";
@@ -9,6 +17,7 @@ import { Pos } from "../types";
 import Demo from "./Demo";
 import { LazyTippy } from "./LazyTippy";
 import Warning from "./Warning";
+import { CursorContext, useEntitiesAtCursor } from "./CursorProvider";
 
 interface Props {
   children: ReactElement;
@@ -17,7 +26,7 @@ interface Props {
 const MapTooltip = React.forwardRef(({ children }: Props) => {
   const [isOpen, open, close] = useBoolean(false);
 
-  const entitiesAtCursor = useSelector(selectors.entitiesAtCursor);
+  const entitiesAtCursor = useEntitiesAtCursor();
   const entity =
     entitiesAtCursor &&
     entitiesAtCursor
@@ -34,6 +43,28 @@ const MapTooltip = React.forwardRef(({ children }: Props) => {
   const warnings = entitiesAtCursor
     ? entitiesAtCursor.filter((e) => e.warning)
     : [];
+
+  useEffect(() => {
+    const listener = () => {
+      if (document.pointerLockElement) close();
+    };
+    document.addEventListener("pointerlockchange", listener);
+    return () => document.removeEventListener("pointerlockchange", listener);
+  });
+
+  const [counter, setCounter] = useState(0);
+  const rerender = useMemo(() => () => setCounter((prev) => prev + 1), []);
+  useEffect(() => {
+    if (isOpen) {
+      const listener = () => {
+        if (isOpen) rerender();
+      };
+      renderer.onViewportChanged(listener);
+      return () => renderer.offViewportChanged(listener);
+    } else {
+      return undefined;
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     if (

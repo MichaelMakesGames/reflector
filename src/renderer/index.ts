@@ -18,6 +18,8 @@ const renderer = new Renderer({
   autoCenterEnabled: true,
 });
 
+renderer.setAppSize(window.innerWidth, window.innerHeight);
+renderer.zoomIn();
 renderer.load(tiles);
 renderer.start();
 

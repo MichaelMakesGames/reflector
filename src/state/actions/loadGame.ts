@@ -25,7 +25,6 @@ function loadGameHandler(
     version: VERSION,
   });
   resetEntitiesByCompAndPos(state);
-  state.act.setCursorPos(null);
   state.renderer.clear();
   state.select
     .entitiesWithComps("pos", "display")

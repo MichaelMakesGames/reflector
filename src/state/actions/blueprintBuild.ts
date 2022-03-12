@@ -77,7 +77,10 @@ function blueprintBuildHandler(
   state.act.playerTookTurn();
 
   if (action.payload.buildAnother) {
-    state.act.blueprintSelect(blueprint.template);
+    state.act.blueprintSelect({
+      template: blueprint.template,
+      initialPos: pos,
+    });
   }
 
   state.audio.playAtPos("building_built", blueprint.pos);

@@ -24,7 +24,6 @@ export interface RawState {
   >;
   lastAimingDirection: Direction;
   jobPriorities: Record<JobTypeCode, number>;
-  cursorPos: Pos | null;
   isAutoMoving: boolean;
   events: Record<string, number>;
   tutorials: TutorialsState;

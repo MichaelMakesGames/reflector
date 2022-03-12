@@ -35,10 +35,10 @@ const defaultSettings: Settings = {
     [ControlCode.PlaceReflectorA]: ["/"],
     [ControlCode.PlaceReflectorB]: ["\\"],
     [ControlCode.RemoveReflector]: ["x"],
-    [ControlCode.ClearAllReflectors]: ["c"],
+    [ControlCode.ClearAllReflectors]: ["e"],
     [ControlCode.RemoveBuilding]: ["backspace"],
     [ControlCode.Rebuild]: ["r"],
-    [ControlCode.ToggleJobs]: ["e"],
+    [ControlCode.ToggleJobs]: ["j"],
 
     [ControlCode.Wait]: ["z"],
     [ControlCode.Back]: ["q", "esc"],
@@ -46,7 +46,9 @@ const defaultSettings: Settings = {
     [ControlCode.Help]: ["?"],
     [ControlCode.ZoomIn]: ["+", "="],
     [ControlCode.ZoomOut]: ["-", "_"],
-    [ControlCode.FocusJobPriorities]: ["j"],
+    [ControlCode.Center]: ["c"],
+    [ControlCode.Recenter]: ["h"],
+    [ControlCode.FocusJobPriorities]: ["p"],
     [ControlCode.DismissNotifications]: ["`"],
 
     [ControlCode.FocusTutorials]: ["t"],

@@ -1,11 +1,11 @@
 /* global document */
-import Tippy from "@tippyjs/react";
 import React, { ReactElement, useRef } from "react";
 import { useDispatch, useSelector } from "./GameProvider";
 import renderer from "../renderer";
 import selectors from "../state/selectors";
 import { Pos } from "../types";
 import { getActionsAvailableAtPos, noFocusOnClick } from "../lib/controls";
+import { LazyTippy } from "./LazyTippy";
 
 interface Props {
   pos: Pos | null;
@@ -14,18 +14,13 @@ interface Props {
 }
 
 export default function ContextMenu({ pos, onClose, children }: Props) {
-  const dispatch = useDispatch();
-  const state = useSelector(selectors.state);
-
   const posRef = useRef<Pos | null>(pos);
   if (pos) {
     posRef.current = pos;
   }
-  const actionControls = posRef.current
-    ? getActionsAvailableAtPos(state, posRef.current)
-    : [];
+
   return (
-    <Tippy
+    <LazyTippy
       interactive
       visible={Boolean(pos)}
       onClickOutside={onClose}
@@ -35,32 +30,44 @@ export default function ContextMenu({ pos, onClose, children }: Props) {
       }
       offset={[0, 0]}
       appendTo={document.body}
-      content={
-        <div>
-          <ul className="flex flex-col">
-            {actionControls.length === 0 && <li>No actions available</li>}
-            {actionControls.map((a) => (
-              <li key={a.label}>
-                <button
-                  className="w-full text-left"
-                  type="button"
-                  onClick={noFocusOnClick(() => {
-                    const actions = Array.isArray(a.action)
-                      ? a.action
-                      : [a.action];
-                    actions.forEach((action) => dispatch(action));
-                    onClose();
-                  })}
-                >
-                  {a.label}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      }
+      content={<ContextMenuContent pos={posRef.current} onClose={onClose} />}
     >
       {children}
-    </Tippy>
+    </LazyTippy>
+  );
+}
+
+function ContextMenuContent({
+  pos,
+  onClose,
+}: {
+  pos: Pos | null;
+  onClose: () => void;
+}) {
+  const dispatch = useDispatch();
+  const state = useSelector(selectors.state);
+  if (!pos) return null;
+  const actionControls = pos ? getActionsAvailableAtPos(state, pos) : [];
+  return (
+    <div>
+      <ul className="flex flex-col">
+        {actionControls.length === 0 && <li>No actions available</li>}
+        {actionControls.map((a) => (
+          <li key={a.label}>
+            <button
+              className="w-full text-left"
+              type="button"
+              onClick={noFocusOnClick(() => {
+                if (a.action) dispatch(a.action);
+                if (a.callback) a.callback();
+                onClose();
+              })}
+            >
+              {a.label}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }

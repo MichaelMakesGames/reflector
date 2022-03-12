@@ -2,7 +2,10 @@ import WrappedState from "../../types/WrappedState";
 
 export default function buildingSystem(state: WrappedState) {
   const blueprint = state.select.blueprint();
-  if (blueprint) {
-    state.act.blueprintSelect(blueprint.template);
+  if (blueprint && blueprint.pos) {
+    state.act.blueprintSelect({
+      template: blueprint.template,
+      initialPos: blueprint.pos,
+    });
   }
 }

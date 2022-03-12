@@ -45,9 +45,6 @@ function moveHandler(
     pos: newPosition,
   });
   if (entity.id === PLAYER_ID) {
-    if (state.select.cursorPos()) {
-      state.act.moveCursor({ dx: action.payload.dx, dy: action.payload.dy });
-    }
     const isFastMove =
       !state.raw.lastMoveWasFast &&
       state.select.entitiesAtPosition(newPosition).some((e) => e.road) &&

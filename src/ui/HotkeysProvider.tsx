@@ -185,5 +185,5 @@ export function useControl({
 
     hotkeys.forEach(register);
     return () => hotkeys.forEach(unregister);
-  }, [code, shift, alt, ctrl, meta, callback, group, disabled]);
+  });
 }

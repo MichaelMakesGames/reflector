@@ -1,9 +1,10 @@
 /* global document */
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import colors from "../../colors";
 import { MAP_CSS_WIDTH } from "../../constants";
 import { ControlCode } from "../../types/ControlCode";
 import BottomMenu from "../BottomMenu";
+import CursorProvider from "../CursorProvider";
 import GameMap from "../GameMap";
 import GameOver from "../GameOver";
 import Header from "../Header";
@@ -17,7 +18,7 @@ import { RouterPageProps } from "../Router";
 import Status from "../Status";
 import Tutorials from "../Tutorials";
 
-export default function Game(props: RouterPageProps) {
+export function GameBase(props: RouterPageProps) {
   const { navigateTo } = props;
 
   useEffect(() => {
@@ -66,5 +67,15 @@ export default function Game(props: RouterPageProps) {
       <GameOver navigateTo={navigateTo} />
       <Introduction />
     </main>
+  );
+}
+
+const GameBaseMemoized = React.memo(GameBase);
+
+export default function Game(props: RouterPageProps) {
+  return (
+    <CursorProvider>
+      <GameBaseMemoized {...props} />
+    </CursorProvider>
   );
 }

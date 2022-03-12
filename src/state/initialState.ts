@@ -57,7 +57,6 @@ export function createInitialState({
     },
     events: {},
     lastAimingDirection: RIGHT,
-    cursorPos: null,
     isAutoMoving: false,
     lastMoveWasFast: false,
     bordersKey: null,

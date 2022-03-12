@@ -1,5 +1,11 @@
 /* global document */
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useDispatch, useSelector } from "./GameProvider";
 // @ts-ignore
 import cursorImages from "../assets/tiles/cursor_*.png";
@@ -25,6 +31,7 @@ import { HotkeyGroup, useControl } from "./HotkeysProvider";
 import MapTooltip from "./MapTooltip";
 import { useSettings } from "./SettingsProvider";
 import { RouterPageProps } from "./Router";
+import { CursorContext } from "./CursorProvider";
 
 export default function GameMap({ navigateTo }: RouterPageProps) {
   useEffect(() => {
@@ -42,30 +49,36 @@ export default function GameMap({ navigateTo }: RouterPageProps) {
     return () => window.removeEventListener("resize", resizeListener);
   }, []);
 
+  useEffect(() => () => {
+    if (document.pointerLockElement) document.exitPointerLock();
+  });
+
   const dispatch = useDispatch();
   const [settings] = useSettings();
-  const cursorPos = useSelector(selectors.cursorPos);
+  const [cursorIsMouseControlled, setCursorIsMouseControlled] = useState(false);
+  const [cursorPos, setCursorPos] = useContext(CursorContext);
   const [contextMenuPos, setContextMenuPos] = useState<Pos | null>(null);
   const isWeaponActive = useSelector(selectors.isWeaponActive);
   const hasActiveBlueprint = useSelector(selectors.hasActiveBlueprint);
   const playerPos = useSelector(selectors.playerPos);
   const state = useSelector(selectors.state);
   const mousePosRef = useRef<Pos | null>(null);
+  const canvasContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => setContextMenuPos(null), [playerPos]);
 
-  const moveUp = () => {
+  const moveUp = useCallback(() => {
     dispatch(actions.move({ entityId: PLAYER_ID, ...UP }));
-  };
-  const moveRight = () => {
+  }, [dispatch]);
+  const moveRight = useCallback(() => {
     dispatch(actions.move({ entityId: PLAYER_ID, ...RIGHT }));
-  };
-  const moveDown = () => {
+  }, [dispatch]);
+  const moveDown = useCallback(() => {
     dispatch(actions.move({ entityId: PLAYER_ID, ...DOWN }));
-  };
-  const moveLeft = () => {
+  }, [dispatch]);
+  const moveLeft = useCallback(() => {
     dispatch(actions.move({ entityId: PLAYER_ID, ...LEFT }));
-  };
+  }, [dispatch]);
   const moveEnabled =
     !isWeaponActive && (!settings.unmodifiedBuilding || !hasActiveBlueprint);
   useControl({
@@ -109,18 +122,54 @@ export default function GameMap({ navigateTo }: RouterPageProps) {
     meta: false,
   });
 
-  const moveCursorUp = () => {
-    dispatch(actions.moveCursor({ ...UP }));
-  };
-  const moveCursorRight = () => {
-    dispatch(actions.moveCursor({ ...RIGHT }));
-  };
-  const moveCursorDown = () => {
-    dispatch(actions.moveCursor({ ...DOWN }));
-  };
-  const moveCursorLeft = () => {
-    dispatch(actions.moveCursor({ ...LEFT }));
-  };
+  const moveCursorUp = useCallback(() => {
+    setCursorIsMouseControlled(false);
+    setCursorPos((prev) => {
+      if (prev) {
+        return { x: prev.x, y: prev.y - 1 };
+      } else if (playerPos) {
+        return { x: playerPos.x, y: playerPos.y - 1 };
+      } else {
+        return null;
+      }
+    });
+  }, [playerPos]);
+  const moveCursorRight = useCallback(() => {
+    setCursorIsMouseControlled(false);
+    setCursorPos((prev) => {
+      if (prev) {
+        return { x: prev.x + 1, y: prev.y };
+      } else if (playerPos) {
+        return { x: playerPos.x + 1, y: playerPos.y };
+      } else {
+        return null;
+      }
+    });
+  }, [playerPos]);
+  const moveCursorDown = useCallback(() => {
+    setCursorIsMouseControlled(false);
+    setCursorPos((prev) => {
+      if (prev) {
+        return { x: prev.x, y: prev.y + 1 };
+      } else if (playerPos) {
+        return { x: playerPos.x, y: playerPos.y + 1 };
+      } else {
+        return null;
+      }
+    });
+  }, [playerPos]);
+  const moveCursorLeft = useCallback(() => {
+    setCursorIsMouseControlled(false);
+    setCursorPos((prev) => {
+      if (prev) {
+        return { x: prev.x - 1, y: prev.y };
+      } else if (playerPos) {
+        return { x: playerPos.x - 1, y: playerPos.y };
+      } else {
+        return null;
+      }
+    });
+  }, [playerPos]);
 
   useControl({
     code: ControlCode.Up,
@@ -176,20 +225,9 @@ export default function GameMap({ navigateTo }: RouterPageProps) {
     code: ControlCode.Back,
     group: HotkeyGroup.Main,
     callback: () => {
-      // try to detect if using mouse for cursor. If so, don't clear cursor
-      if (
-        cursorPos &&
-        (!mousePosRef.current ||
-          !arePositionsEqual(
-            renderer.getPosFromMouse(
-              mousePosRef.current.x,
-              mousePosRef.current.y
-            ),
-            cursorPos
-          ))
-      ) {
+      if (!cursorIsMouseControlled && !contextMenuPos) {
         setContextMenuPos(null);
-        if (cursorPos) dispatch(actions.setCursorPos(null));
+        if (cursorPos) setCursorPos(null);
       } else if (contextMenuPos) {
         setContextMenuPos(null);
       } else {
@@ -202,7 +240,9 @@ export default function GameMap({ navigateTo }: RouterPageProps) {
   useControl({
     code: ControlCode.ZoomIn,
     group: HotkeyGroup.Main,
-    callback: () => renderer.zoomIn(),
+    callback: () => {
+      renderer.zoomIn();
+    },
   });
   useControl({
     code: ControlCode.ZoomOut,
@@ -237,6 +277,10 @@ export default function GameMap({ navigateTo }: RouterPageProps) {
   useInterval(autoMove, 150);
 
   const onMouseMoveOrEnter = (e: React.MouseEvent) => {
+    if (document.pointerLockElement === canvasContainerRef.current) {
+      renderer.offset(e.movementX, e.movementY);
+      return;
+    }
     const mousePos = {
       x: e.nativeEvent.offsetX,
       y: e.nativeEvent.offsetY,
@@ -244,11 +288,28 @@ export default function GameMap({ navigateTo }: RouterPageProps) {
     mousePosRef.current = mousePos;
     const pos = renderer.getPosFromMouse(mousePos.x, mousePos.y);
     if (!cursorPos || (!arePositionsEqual(cursorPos, pos) && !contextMenuPos)) {
-      dispatch(actions.setCursorPos(pos));
+      setCursorPos(pos);
+      setCursorIsMouseControlled(true);
     }
   };
 
   const quickAction = getQuickAction(state, cursorPos);
+
+  useEffect(() => {
+    const listener = () => {
+      if (cursorIsMouseControlled && mousePosRef.current) {
+        const gamePos = renderer.getPosFromMouse(
+          mousePosRef.current.x,
+          mousePosRef.current.y
+        );
+        if (!arePositionsEqual(gamePos, cursorPos)) {
+          setCursorPos(gamePos);
+        }
+      }
+    };
+    renderer.onViewportChanged(listener);
+    return () => renderer.offViewportChanged(listener);
+  }, [cursorPos, cursorIsMouseControlled]);
 
   return (
     <ContextMenu pos={contextMenuPos} onClose={() => setContextMenuPos(null)}>
@@ -265,28 +326,24 @@ export default function GameMap({ navigateTo }: RouterPageProps) {
           <div
             className="w-full h-full"
             id="map"
+            ref={canvasContainerRef}
             onMouseMove={onMouseMoveOrEnter}
             onMouseEnter={onMouseMoveOrEnter}
             onMouseOut={() => {
               mousePosRef.current = null;
               if (!contextMenuPos && cursorPos) {
-                dispatch(actions.setCursorPos(null));
+                setCursorPos(null);
+                setCursorIsMouseControlled(false);
               }
             }}
-            onWheel={(e) => {
-              if (e.nativeEvent.deltaY > 0) {
-                renderer.zoomOut();
-              } else if (e.nativeEvent.deltaY < 0) {
-                renderer.zoomIn();
+            onMouseDown={(e) => {
+              if (canvasContainerRef.current && e.button === 1) {
+                canvasContainerRef.current.requestPointerLock();
               }
-              if (mousePosRef.current) {
-                const gamePos = renderer.getPosFromMouse(
-                  mousePosRef.current.x,
-                  mousePosRef.current.y
-                );
-                if (!cursorPos || !arePositionsEqual(cursorPos, gamePos)) {
-                  dispatch(actions.setCursorPos(gamePos));
-                }
+            }}
+            onMouseUp={(e) => {
+              if (e.button === 1 && document.pointerLockElement) {
+                document.exitPointerLock();
               }
             }}
             onContextMenu={(e) => {
@@ -299,7 +356,8 @@ export default function GameMap({ navigateTo }: RouterPageProps) {
               mousePosRef.current = mousePos;
               const gamePos = renderer.getPosFromMouse(mousePos.x, mousePos.y);
               if (!cursorPos || !arePositionsEqual(cursorPos, gamePos)) {
-                dispatch(actions.setCursorPos(gamePos));
+                setCursorPos(gamePos);
+                setCursorIsMouseControlled(true);
               }
               if (!contextMenuPos) {
                 setContextMenuPos(gamePos);
@@ -319,7 +377,8 @@ export default function GameMap({ navigateTo }: RouterPageProps) {
               mousePosRef.current = mousePos;
               const gamePos = renderer.getPosFromMouse(mousePos.x, mousePos.y);
               if (!cursorPos || !arePositionsEqual(cursorPos, gamePos)) {
-                dispatch(actions.setCursorPos(gamePos));
+                setCursorPos(gamePos);
+                setCursorIsMouseControlled(true);
               }
               performDefaultAction(gamePos, e.shiftKey);
             })}

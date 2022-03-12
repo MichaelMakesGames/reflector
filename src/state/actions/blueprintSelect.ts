@@ -11,7 +11,11 @@ import { areConditionsMet } from "../../lib/conditions";
 import { arePositionsEqual, getAdjacentPositions } from "../../lib/geometry";
 import { TemplateName } from "../../types/TemplateName";
 
-const blueprintSelect = createAction("BLUEPRINT_SELECT")<TemplateName>();
+const blueprintSelect =
+  createAction("BLUEPRINT_SELECT")<{
+    template: TemplateName;
+    initialPos: Pos;
+  }>();
 export default blueprintSelect;
 
 function blueprintSelectHandler(
@@ -26,10 +30,9 @@ function blueprintSelectHandler(
     state.act.blueprintCancel();
   }
 
-  const targetPos = state.select.cursorPos() || player.pos;
-  const blueprintTemplate = action.payload;
+  const { template: blueprintTemplate, initialPos } = action.payload;
   const blueprint = createEntityFromTemplate(blueprintTemplate, {
-    pos: targetPos,
+    pos: initialPos,
   });
 
   if (!blueprint.blueprint) {
@@ -56,7 +59,7 @@ function blueprintSelectHandler(
   );
 
   const targetPosIsValid = validPositions.some((p) =>
-    arePositionsEqual(p, targetPos)
+    arePositionsEqual(p, initialPos)
   );
   state.act.addEntity({
     ...blueprint,

@@ -27,7 +27,6 @@ import logMessage from "./logMessage";
 import makeMeRich from "./makeMeRich";
 import modifyResource from "./modifyResource";
 import move from "./move";
-import moveCursor from "./moveCursor";
 import newGame from "./newGame";
 import playerTookTurn from "./playerTookTurn";
 import rebuild from "./rebuild";
@@ -39,8 +38,6 @@ import resetTutorials from "./resetTutorials";
 import roadUpdateTile from "./roadUpdateTile";
 import rotateEntity from "./rotateEntity";
 import setAutoMovePath from "./setAutoMovePath";
-import setAutoMovePathToCursor from "./setAutoMovePathToCursor";
-import setCursorPos from "./setCursorPos";
 import setJobPriority from "./setJobPriority";
 import shieldCharge from "./shieldCharge";
 import shieldDischarge from "./shieldDischarge";
@@ -82,7 +79,6 @@ export default {
   makeMeRich,
   modifyResource,
   move,
-  moveCursor,
   newGame,
   playerTookTurn,
   rebuild,
@@ -94,8 +90,6 @@ export default {
   roadUpdateTile,
   rotateEntity,
   setAutoMovePath,
-  setAutoMovePathToCursor,
-  setCursorPos,
   setJobPriority,
   shieldCharge,
   shieldDischarge,

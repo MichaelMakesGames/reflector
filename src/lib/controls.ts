@@ -1,5 +1,6 @@
 /* global navigator */
 import resources from "../data/resources";
+import renderer from "../renderer";
 import actions from "../state/actions";
 import selectors from "../state/selectors";
 import wrapState from "../state/wrapState";
@@ -7,6 +8,7 @@ import { Action, Pos, RawState, Rebuildable } from "../types";
 import { ControlCode } from "../types/ControlCode";
 import { canPlaceReflector } from "./building";
 import { createEntityFromTemplate } from "./entities";
+import { isPositionInMap } from "./geometry";
 
 export function getQuickAction(
   state: RawState,
@@ -120,7 +122,8 @@ export interface ActionControl {
   label: string;
   code: ControlCode;
   doNotRegisterShortcut?: boolean;
-  action: Action;
+  action?: Action;
+  callback?: () => void;
 }
 
 export function getActionsAvailableAtPos(
@@ -133,7 +136,22 @@ export function getActionsAvailableAtPos(
   addReflectorActions(state, pos, results);
   addRemoveBuildingAction(state, pos, results);
   addDisableBuildingActions(state, pos, results);
+  addCenterViewAction(state, pos, results);
   return results;
+}
+
+function addCenterViewAction(
+  state: RawState,
+  pos: Pos,
+  results: ActionControl[]
+) {
+  if (isPositionInMap(pos)) {
+    results.push({
+      label: `Center View`,
+      code: ControlCode.Center,
+      callback: () => renderer.center(pos),
+    });
+  }
 }
 
 function addRebuildAction(state: RawState, pos: Pos, results: ActionControl[]) {

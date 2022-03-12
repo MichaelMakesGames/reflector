@@ -68,6 +68,7 @@ export default function generateMap(mapType: string): Entity[] {
           createEntityFromTemplate("BUILDING_WALL", {
             pos: { x, y },
             destructible: undefined,
+            description: { name: "Map Edge", description: "" },
           })
         );
       } else {

@@ -44,6 +44,7 @@ export const PRIORITY_MARKER = 35;
 export const PRIORITY_LASER = 30;
 export const PRIORITY_BUILDING_HIGH_DETAIL = 25;
 export const PRIORITY_BUILDING_HIGH = 20;
+export const PRIORITY_PLAYER = 16;
 export const PRIORITY_UNIT = 15;
 export const PRIORITY_BUILDING_LOW_DETAIL = 10;
 export const PRIORITY_BUILDING_LOW = 5;

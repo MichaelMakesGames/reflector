@@ -1,21 +1,24 @@
 import { nanoid } from "nanoid";
 import { GlowFilter } from "pixi-filters";
 import * as particles from "pixi-particles";
+import { Viewport } from "pixi-viewport";
 import * as PIXI from "pixi.js";
 import { Required } from "ts-toolbelt/out/Object/Required";
 import colors from "../colors";
 import {
   PLAYER_ID,
-  PRIORITY_BUILDING_HIGH,
   PRIORITY_BUILDING_HIGH_DETAIL,
   PRIORITY_MARKER,
   PRIORITY_UNIT,
+  TILE_SIZE,
   UP,
 } from "../constants";
 import { arePositionsEqual, getPositionToDirection } from "../lib/geometry";
 import { Display, Entity, Pos } from "../types";
 
-const BASE_SPEED = 3;
+PIXI.Renderer.registerPlugin("interaction", PIXI.InteractionManager);
+
+const BASE_SPEED = 2;
 
 export interface RendererConfig {
   gridWidth: number;
@@ -47,7 +50,7 @@ interface RenderGroup {
   removing?: boolean;
 }
 
-const ZOOM_LEVELS = [0.5, 1, 2, 4, 8];
+const ZOOM_LEVELS = [1, 2, 4, 8];
 
 export default class Renderer {
   private gridWidth: number;
@@ -72,25 +75,13 @@ export default class Renderer {
 
   private movementPaths: Map<string, Pos[]> = new Map();
 
-  private center: Pos | null = null;
-
-  private scale: number = 1;
-
   private autoCenterEnabled: boolean = false;
 
-  private previousStage: { scale: number; x: number; y: number } = {
-    scale: 1,
-    x: 0,
-    y: 0,
-  };
-
-  private desiredStage: { scale: number; x: number; y: number } = {
-    scale: 1,
-    x: 0,
-    y: 0,
-  };
-
   private timeouts: Set<ReturnType<typeof setTimeout>> = new Set();
+
+  private viewport = new Viewport();
+
+  private viewportChangedListeners: (() => void)[] = [];
 
   public constructor({
     gridWidth,
@@ -114,6 +105,24 @@ export default class Renderer {
     });
     this.app.ticker.maxFPS = 30;
     this.autoCenterEnabled = Boolean(autoCenterEnabled);
+
+    this.viewport.destroy();
+    this.viewport = new Viewport({
+      screenWidth: appWidth,
+      screenHeight: appHeight,
+      worldWidth: gridWidth * tileWidth,
+      worldHeight: gridHeight * tileHeight,
+      interaction: this.app.renderer.plugins.interaction,
+    });
+    this.viewport.sortableChildren = true;
+    this.app.stage.addChild(this.viewport);
+    if (this.autoCenterEnabled) {
+      this.viewport
+        .wheel({ smooth: 10 })
+        .on("moved", () =>
+          this.viewportChangedListeners.forEach((listener) => listener())
+        );
+    }
   }
 
   public setAppSize(width: number, height: number) {
@@ -122,7 +131,16 @@ export default class Renderer {
     this.app.view.width = adjustedWidth;
     this.app.view.height = adjustedHeight;
     this.app.renderer.resize(adjustedWidth, adjustedHeight);
-    this.panTo(this.center || { x: 0, y: 0 });
+    this.viewport.resize(
+      adjustedWidth,
+      adjustedHeight,
+      this.tileWidth * this.gridWidth,
+      this.tileHeight * this.gridHeight
+    );
+    this.viewport.clampZoom({
+      maxWidth: adjustedWidth,
+      minWidth: adjustedWidth / 8,
+    });
   }
 
   public destroy() {
@@ -144,62 +162,63 @@ export default class Renderer {
     return this.loadPromise;
   }
 
-  public setCenterAndScale(center: Pos, scale: number): void {
-    this.center = center;
-    this.scale = scale;
-    const x =
-      (center.x + 0.5) * this.tileWidth * -scale + this.app.view.width / 2;
-    const y =
-      (center.y + 0.5) * this.tileHeight * -scale + this.app.view.height / 2;
-
-    const desiredStage = { scale, x, y };
-
-    if (
-      desiredStage.scale === this.desiredStage.scale &&
-      desiredStage.x === this.desiredStage.x &&
-      desiredStage.y === this.desiredStage.y
-    ) {
-      return;
-    }
-
-    this.previousStage = {
-      scale: this.app.stage.scale.x,
-      x: this.app.stage.position.x,
-      y: this.app.stage.position.y,
-    };
-    this.desiredStage = desiredStage;
-    Object.values(this.renderEntities).forEach((e) => this.updateVisibility(e));
+  public onViewportChanged(listener: () => void) {
+    this.viewportChangedListeners.push(listener);
   }
 
-  public panTo(pos: Pos): void {
-    this.setCenterAndScale(pos, this.scale);
+  public offViewportChanged(listener: () => void) {
+    const index = this.viewportChangedListeners.indexOf(listener);
+    if (index !== -1) {
+      this.viewportChangedListeners.splice(index, 1);
+    }
+  }
+
+  public offset(movementX: number, movementY: number): void {
+    this.viewport.moveCenter(
+      this.viewport.center.x - movementX / this.viewport.scaled,
+      this.viewport.center.y - movementY / this.viewport.scaled
+    );
   }
 
   public zoomIn(): void {
-    const earlyInPreviousZoomIn =
-      this.desiredStage.scale * 0.75 > this.app.stage.scale.x;
-    if (earlyInPreviousZoomIn) return;
-    const currentScaleIndex = ZOOM_LEVELS.indexOf(this.scale);
-    if (
-      currentScaleIndex !== -1 &&
-      currentScaleIndex !== ZOOM_LEVELS.length - 1
-    ) {
-      this.setCenterAndScale(
-        this.center || { x: 0, y: 0 },
-        ZOOM_LEVELS[currentScaleIndex + 1]
-      );
+    const currentZoom = this.viewport.scaled;
+    const nextZoom = ZOOM_LEVELS.find((zoom) => zoom > currentZoom * 1.25);
+    if (nextZoom) {
+      this.viewport.snapZoom({
+        width: this.app.view.width / nextZoom,
+        removeOnComplete: true,
+        removeOnInterrupt: true,
+        time: 250,
+      });
     }
   }
 
   public zoomOut(): void {
-    const earlyInPreviousZoomOut =
-      this.desiredStage.scale * 1.25 < this.app.stage.scale.x;
-    if (earlyInPreviousZoomOut) return;
-    const currentScaleIndex = ZOOM_LEVELS.indexOf(this.scale);
-    if (currentScaleIndex !== -1 && currentScaleIndex !== 0) {
-      this.setCenterAndScale(
-        this.center || { x: 0, y: 0 },
-        ZOOM_LEVELS[currentScaleIndex - 1]
+    const currentZoom = this.viewport.scaled;
+    const nextZoom = [...ZOOM_LEVELS]
+      .reverse()
+      .find((zoom) => zoom < currentZoom * 0.75);
+    if (nextZoom) {
+      this.viewport.snapZoom({
+        width: this.app.view.width / nextZoom,
+        removeOnComplete: true,
+        removeOnInterrupt: true,
+        time: 250,
+      });
+    }
+  }
+
+  public center(pos?: Pos | null) {
+    if (pos) {
+      this.viewport.snap(
+        (pos.x + 0.5) * this.tileWidth,
+        (pos.y + 0.5) * this.tileWidth,
+        {
+          time: 250,
+          interrupt: true,
+          removeOnInterrupt: true,
+          removeOnComplete: true,
+        }
       );
     }
   }
@@ -244,7 +263,10 @@ export default class Renderer {
     }
 
     if (entity.id === PLAYER_ID && this.autoCenterEnabled) {
-      this.panTo(entity.pos);
+      this.viewport.moveCenter(
+        (pos.x + 0.5) * this.tileWidth,
+        (pos.y + 0.5) * this.tileHeight
+      );
     }
 
     this.updateVisibility(this.renderEntities[entity.id]);
@@ -254,6 +276,7 @@ export default class Renderer {
     const renderEntity = this.renderEntities[entity.id];
     if (renderEntity) {
       if (!arePositionsEqual(renderEntity.pos, entity.pos)) {
+        const oldPos = renderEntity.pos;
         renderEntity.pos = entity.pos;
         if (renderEntity.displayComp.discreteMovement) {
           this.setSpritePosition(
@@ -273,8 +296,15 @@ export default class Renderer {
             entity.pos.y * this.tileHeight
           );
         }
-        if (entity.id === PLAYER_ID && this.autoCenterEnabled) {
-          this.panTo(entity.pos);
+        if (
+          entity.id === PLAYER_ID &&
+          this.autoCenterEnabled &&
+          !this.isPosVisible(oldPos)
+        ) {
+          this.viewport.moveCenter(
+            (oldPos.x + 0.5) * this.tileWidth,
+            (oldPos.y + 0.5) * this.tileHeight
+          );
         }
       }
 
@@ -289,6 +319,14 @@ export default class Renderer {
       }
 
       this.updateVisibility(renderEntity);
+    }
+  }
+
+  addOrUpdateEntity(entity: Required<Entity, "display" | "pos">): void {
+    if (this.renderEntities[entity.id]) {
+      this.updateEntity(entity);
+    } else {
+      this.addEntity(entity);
     }
   }
 
@@ -440,14 +478,10 @@ export default class Renderer {
     }
 
     const layer = new PIXI.Container();
+    layer.zIndex = priority;
     layer.name = priority.toString();
     this.layers[priority] = layer;
-    this.app.stage.addChild(layer);
-    this.app.stage.children.sort((a, b) => {
-      const aPriority = parseFloat(a.name || "0") || 0;
-      const bPriority = parseFloat(b.name || "0") || 0;
-      return aPriority - bPriority;
-    });
+    this.viewport.addChild(layer);
     return layer;
   }
 
@@ -717,7 +751,7 @@ export default class Renderer {
         spawnType: "point",
       };
       new particles.Emitter(
-        this.app.stage,
+        this.viewport,
         [texture],
         config
       ).playOnceAndDestroy();
@@ -865,7 +899,6 @@ export default class Renderer {
         )
       );
       this.app.ticker.add((delta: number) => this.handleMovement(delta));
-      this.app.ticker.add((delta: number) => this.handleStageTransition(delta));
     });
   }
 
@@ -921,78 +954,34 @@ export default class Renderer {
         }
 
         entity.sprite.position.set(newX, newY);
+
+        if (entityId === PLAYER_ID) {
+          const actualDeltaX = newX - oldX;
+          const actualDeltaY = newY - oldY;
+          this.viewport.moveCorner(
+            this.viewport.corner.x + actualDeltaX,
+            this.viewport.corner.y + actualDeltaY
+          );
+          this.viewportChangedListeners.forEach((listener) => listener());
+        }
       }
     }
   }
 
-  private handleStageTransition(delta: number) {
-    const DURATION = 8;
-    const speedScale =
-      Math.abs(this.previousStage.scale - this.desiredStage.scale) / DURATION;
-    const speedX =
-      Math.abs(this.previousStage.x - this.desiredStage.x) / DURATION;
-    const speedY =
-      Math.abs(this.previousStage.y - this.desiredStage.y) / DURATION;
-
-    const oldScale = this.app.stage.scale.x;
-    const oldX = this.app.stage.x;
-    const oldY = this.app.stage.y;
-
-    // const { x: destX, y: destY } = this.calcAppPos(
-    //   path[0],
-    //   entity.displayComp
-    // );
-    const deltaScale = this.desiredStage.scale - oldScale;
-    const deltaX = this.desiredStage.x - oldX;
-    const deltaY = this.desiredStage.y - oldY;
-
-    let newScale = oldScale;
-    let newX = oldX;
-    let newY = oldY;
-
-    if (Math.abs(deltaScale) <= speedScale * delta) {
-      newScale = this.desiredStage.scale;
-    } else if (deltaScale > 0) {
-      newScale = oldScale + speedScale * delta;
-    } else {
-      newScale = oldScale - speedScale * delta;
-    }
-    if (Math.abs(deltaX) <= speedX * delta) {
-      newX = this.desiredStage.x;
-    } else if (deltaX > 0) {
-      newX = oldX + speedX * delta;
-    } else {
-      newX = oldX - speedX * delta;
-    }
-    if (Math.abs(deltaY) <= speedY * delta) {
-      newY = this.desiredStage.y;
-    } else if (deltaY > 0) {
-      newY = oldY + speedY * delta;
-    } else {
-      newY = oldY - speedY * delta;
-    }
-
-    this.app.stage.scale.x = newScale;
-    this.app.stage.scale.y = newScale;
-    this.app.stage.position.x = newX;
-    this.app.stage.position.y = newY;
-  }
-
   public getClientRectFromPos(gamePos: Pos): DOMRect {
-    const width = this.tileWidth * this.scale;
-    const height = this.tileHeight * this.scale;
-    const x = this.desiredStage.x + gamePos.x * this.tileWidth * this.scale;
-    const y = this.desiredStage.y + gamePos.y * this.tileHeight * this.scale;
+    const width = this.tileWidth * this.viewport.scaled;
+    const height = this.tileHeight * this.viewport.scaled;
+    const { x, y } = this.viewport.toScreen(
+      gamePos.x * this.tileWidth,
+      gamePos.y * this.tileHeight
+    );
     return new DOMRect(x, y, width, height);
   }
 
   getPosFromMouse(mouseX: number, mouseY: number): Pos {
-    const x = Math.floor(
-      (mouseX - this.desiredStage.x) / (this.tileWidth * this.scale)
-    );
-    const y = Math.floor(
-      (mouseY - this.desiredStage.y) / (this.tileHeight * this.scale)
-    );
+    const worldPos = this.viewport.toWorld(mouseX, mouseY);
+    const x = Math.floor(worldPos.x / this.tileWidth);
+    const y = Math.floor(worldPos.y / this.tileHeight);
     return { x, y };
   }
 

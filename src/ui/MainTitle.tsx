@@ -21,7 +21,10 @@ export default function MainTitle() {
         gridHeight: HEIGHT,
         tileWidth: TILE_SIZE,
         tileHeight: TILE_SIZE,
+        appWidth: WIDTH * TILE_SIZE,
+        appHeight: HEIGHT * TILE_SIZE,
         backgroundColor: colors.background,
+        autoCenterEnabled: false,
       });
       renderer.start();
       renderer.addEntity(

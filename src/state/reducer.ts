@@ -16,10 +16,7 @@ const GAME_OVER_ALLOW_LIST: string[] = [
   getType(actions.continueVictory),
 ];
 
-const AUTO_MOVE_ALLOW_LIST: string[] = [
-  getType(actions.autoMove),
-  getType(actions.setCursorPos),
-];
+const AUTO_MOVE_ALLOW_LIST: string[] = [getType(actions.autoMove)];
 
 export function makeReducer(
   renderer: Renderer,

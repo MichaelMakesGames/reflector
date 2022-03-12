@@ -111,3 +111,10 @@ export function getHumanReadablePosition(pos: Pos) {
       : `${pos.x - MAP_WIDTH / 2 + 1}E`;
   return `${northSouth}, ${eastWest}`;
 }
+
+export function arePathsEqual(a: Pos[], b: Pos[]) {
+  return (
+    a.length === b.length &&
+    a.every((pos, index) => arePositionsEqual(pos, b[index]))
+  );
+}

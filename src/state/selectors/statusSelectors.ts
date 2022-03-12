@@ -122,10 +122,6 @@ export function jobPriority(state: RawState, jobType: JobTypeCode) {
   return jobPriorities(state)[jobType];
 }
 
-export function cursorPos(state: RawState) {
-  return state.cursorPos;
-}
-
 export function isInProjectorRange(state: RawState, pos?: Pos | null): boolean {
   if (!pos) return false;
   return (
@@ -140,4 +136,14 @@ export function storage(state: RawState, resourceCode: ResourceCode): number {
     (acc, cur) => acc + (cur.storage.resources[resourceCode] || 0),
     0
   );
+}
+
+export function isAutoMoving(state: RawState): boolean {
+  return state.isAutoMoving;
+}
+
+export function autoMovePath(state: RawState) {
+  return entitiesWithComps(state, "pos", "pathPreview")
+    .sort((a, b) => a.pathPreview.index - b.pathPreview.index)
+    .map((e) => e.pos);
 }

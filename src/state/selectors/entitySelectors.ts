@@ -67,11 +67,6 @@ export function entitiesAtPosition(state: RawState, position: Pos) {
   ) as Required<Entity, "pos">[];
 }
 
-export function entitiesAtCursor(state: RawState) {
-  const { cursorPos } = state;
-  return cursorPos && entitiesAtPosition(state, cursorPos);
-}
-
 export function adjacentEntities(state: RawState, position: Pos) {
   return getAdjacentPositions(position).reduce<Entity[]>(
     (entities, adjacentPosition) =>

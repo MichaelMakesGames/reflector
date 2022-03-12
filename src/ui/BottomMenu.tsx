@@ -1,6 +1,6 @@
 /* global document */
 import Tippy from "@tippyjs/react";
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useContext, useEffect } from "react";
 import { useDispatch, useSelector } from "./GameProvider";
 import { TILE_SIZE } from "../constants";
 import buildingCategories, {
@@ -25,6 +25,8 @@ import Kbd from "./Kbd";
 import { LazyTippy } from "./LazyTippy";
 import ResourceAmount from "./ResourceAmount";
 import { useSettings } from "./SettingsProvider";
+import renderer from "../renderer";
+import { CursorContext } from "./CursorProvider";
 
 const buttonStyle: React.CSSProperties = { margin: "-1px -1px -1px 0" };
 const buttonClassName =
@@ -35,6 +37,7 @@ export default function BottomMenu() {
   const blueprint = useSelector(selectors.blueprint);
   const isWeaponActive = useSelector(selectors.isWeaponActive);
   const turn = useSelector(selectors.turn);
+  const playerPos = useSelector(selectors.playerPos);
   const [settings] = useSettings();
 
   const cancel = useCallback(() => {
@@ -206,6 +209,12 @@ export default function BottomMenu() {
         ))}
       <div className="flex-1" />
       <IconButton
+        label="Recenter on Player"
+        controlCode={ControlCode.Recenter}
+        callback={() => renderer.center(playerPos)}
+        icon={<Icons.Recenter />}
+      />
+      <IconButton
         label="Clear All Reflectors"
         controlCode={ControlCode.ClearAllReflectors}
         callback={() => dispatch(actions.clearReflectors())}
@@ -285,6 +294,8 @@ function BuildingCategoryMenu({
   const [settings] = useSettings();
   const dispatch = useDispatch();
   const [isOpen, open, close, toggle] = useBoolean(false);
+  const playerPos = useSelector(selectors.playerPos);
+  const [cursorPos] = useContext(CursorContext);
 
   const deactivateWeaponAndToggle = useCallback(() => {
     dispatch(actions.deactivateWeapon());
@@ -333,15 +344,23 @@ function BuildingCategoryMenu({
       content={
         isOpen ? (
           <div>
-            {category.blueprints.map((blueprintTemplate, i) => {
+            {category.blueprints.map((template, i) => {
               return (
                 <BuildingButton
-                  key={blueprintTemplate}
-                  template={blueprintTemplate}
+                  key={template}
+                  template={template}
                   index={i}
                   callback={() => {
                     close();
-                    dispatch(actions.blueprintSelect(blueprintTemplate));
+                    const initialPos = cursorPos || playerPos;
+                    if (initialPos) {
+                      dispatch(
+                        actions.blueprintSelect({
+                          template,
+                          initialPos,
+                        })
+                      );
+                    }
                   }}
                 />
               );

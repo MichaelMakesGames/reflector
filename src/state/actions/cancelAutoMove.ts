@@ -10,7 +10,6 @@ function cancelAutoMoveHandler(state: WrappedState): void {
     ...state.raw,
     isAutoMoving: false,
   });
-  state.act.setAutoMovePathToCursor();
 }
 
 registerHandler(cancelAutoMoveHandler, cancelAutoMove);

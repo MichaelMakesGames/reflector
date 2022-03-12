@@ -3,6 +3,7 @@ import {
   PLAYER_ID,
   PRIORITY_BUILDING_HIGH_DETAIL,
   PRIORITY_MARKER,
+  PRIORITY_PLAYER,
   PRIORITY_UNIT,
   PROJECTOR_RANGE,
   TILE_SIZE,
@@ -18,7 +19,7 @@ const templates: Partial<Record<TemplateName, Partial<Entity>>> = {
     display: {
       tile: "player",
       color: colors.player,
-      priority: PRIORITY_UNIT,
+      priority: PRIORITY_PLAYER,
     },
     blocking: { moving: true, lasers: true, windmill: false },
     destructible: {

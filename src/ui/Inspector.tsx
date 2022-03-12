@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useContext, useMemo } from "react";
 import { Required } from "ts-toolbelt/out/Object/Required";
 import colonistStatuses, { ColonistStatusCode } from "../data/colonistStatuses";
 import resources, { ResourceCode } from "../data/resources";
@@ -10,6 +10,7 @@ import {
 import { getHumanReadablePosition } from "../lib/geometry";
 import selectors from "../state/selectors";
 import { Entity, RawState } from "../types";
+import { CursorContext, useEntitiesAtCursor } from "./CursorProvider";
 import { useDispatch, useSelector } from "./GameProvider";
 import { HotkeyGroup, useControl } from "./HotkeysProvider";
 import ResourceAmount from "./ResourceAmount";
@@ -17,7 +18,7 @@ import { useSettings } from "./SettingsProvider";
 import Warning from "./Warning";
 
 export default function Inspector() {
-  const entitiesAtCursor = useSelector(selectors.entitiesAtCursor);
+  const entitiesAtCursor = useEntitiesAtCursor();
   const entitiesWithDescription =
     entitiesAtCursor &&
     (
@@ -30,7 +31,7 @@ export default function Inspector() {
       const bSortValue = b.display ? b.display.priority : Infinity;
       return bSortValue - aSortValue;
     });
-  const cursorPos = useSelector(selectors.cursorPos);
+  const [cursorPos] = useContext(CursorContext);
   const state = useSelector(selectors.state);
   const actions = useMemo(
     () => (cursorPos ? getActionsAvailableAtPos(state, cursorPos) : []),
@@ -121,7 +122,10 @@ export default function Inspector() {
 function InspectorAction({ action }: { action: ActionControl }) {
   const [settings] = useSettings();
   const dispatch = useDispatch();
-  const callback = useCallback(() => dispatch(action.action), [action]);
+  const callback = useCallback(() => {
+    if (action.action) dispatch(action.action);
+    if (action.callback) action.callback();
+  }, [action]);
   useControl({
     code: action.code,
     group: HotkeyGroup.Main,
